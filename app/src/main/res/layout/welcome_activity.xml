@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--<layout>
+    <data>
+        <variable
+            name="myClick"
+            type="android.view.View.OnClickListener"/>
+        <variable
+            name="text"
+            type="String"/>
+    </data>-->
+
+    <RelativeLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <VideoView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/welcome_video"
+            android:visibility="gone"/>
+        <android.support.v4.view.ViewPager
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/welcome_viewpage"/>
+        <Button
+            android:id="@+id/btn_start"
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_above="@+id/rl_dots"
+            android:text="@{text}"
+            android:textColor="#ffffff"
+            android:onClick="@{myClick}"
+            android:textSize="20sp"
+            android:typeface="sans"
+            android:textStyle="bold"
+            android:background="@drawable/bg_button_pressed"/>
+
+        <RelativeLayout
+            android:id="@+id/rl_dots"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
+            android:layout_marginBottom="60dp"
+            android:layout_marginTop="10dp">
+
+            <LinearLayout
+                android:id="@+id/linear_layout"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:orientation="horizontal">
+            </LinearLayout>
+
+            <ImageView
+                android:id="@+id/iv_light_dots"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/light_dot"/>
+        </RelativeLayout>
+
+    </RelativeLayout>
+<!--
+</layout>-->

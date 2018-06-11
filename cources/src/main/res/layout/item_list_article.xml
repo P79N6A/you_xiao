@@ -1,0 +1,270 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginLeft="10dp"
+    android:layout_marginRight="10dp"
+    android:background="#FFFFFF"
+    android:orientation="vertical"
+    android:paddingBottom="12dp"
+    android:paddingTop="12dp">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="30dp">
+
+        <ImageView
+            android:id="@+id/imageView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:contentDescription="@string/app_name"
+            android:src="@drawable/item_cources_violin" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:layout_centerVertical="true"
+            android:layout_marginStart="44dp"
+            android:gravity="center"
+            android:text="小提琴-阶梯音乐"
+            android:textColor="#82a6f5"
+            android:textSize="34.67px" />
+
+        <TextView
+            android:id="@+id/item_time_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:gravity="center_vertical"
+            android:text="11:20-12:00"
+            android:textColor="#82a6f5"
+            android:textSize="26.67px" />
+
+    </RelativeLayout>
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="16dp"
+        android:layout_marginStart="40dp"
+        android:layout_marginTop="10dp"
+        android:orientation="horizontal"
+        tools:ignore="RtlHardcoded">
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_weight="1.5">
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="5dp"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/tv_teacher"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:ellipsize="end"
+                    android:textColor="#777777"
+                    android:textSize="32px"
+                    tools:text="老师：" />
+
+                <TextView
+                    android:id="@+id/cources_teacher_name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:ellipsize="end"
+                    android:textColor="#777777"
+                    android:textSize="32px"
+                    tools:text="李老师" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="5dp"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/tv_schedule"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:ellipsize="end"
+                    android:textColor="#777777"
+                    android:textSize="32px"
+                    tools:text="进度：" />
+
+                <TextView
+                    android:id="@+id/cources_progress"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:ellipsize="end"
+                    android:textColor="#777777"
+                    android:textSize="32px"
+                    tools:text="第10节/共25节" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="5dp"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/tv_class_room"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:ellipsize="end"
+                    android:textColor="#777777"
+                    android:textSize="32px"
+                    tools:text="教室：" />
+
+                <TextView
+                    android:id="@+id/cources_violin_room"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:ellipsize="end"
+                    android:textColor="#777777"
+                    android:textSize="32px"
+                    tools:text="小提琴室" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="5dp"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/tv_work"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:ellipsize="end"
+                    android:textColor="#777777"
+                    android:textSize="32px"
+                    tools:text="作业：" />
+
+                <TextView
+                    android:id="@+id/cources_violin_sheet"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:ellipsize="end"
+                    android:textColor="#777777"
+                    android:textSize="32px"
+                    tools:text="小提琴琴谱练习" />
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <ImageView
+            android:id="@+id/cources_statue"
+            android:layout_width="0dp"
+            android:layout_height="100dp"
+            android:layout_gravity="center"
+            android:layout_marginLeft="20dp"
+            android:layout_weight="1"
+            android:src="@drawable/cources_statue_leave" />
+    </LinearLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="25dp"
+        android:layout_marginTop="10dp">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_alignParentEnd="true">
+
+        <RelativeLayout
+            android:id="@+id/cources_rl_hand_work"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            tools:ignore="UselessParent"
+            android:layout_alignParentBottom="true">
+
+            <ImageView
+                android:id="@+id/cources_hand_work"
+                android:layout_width="25dp"
+                android:layout_height="wrap_content"
+                android:src="@drawable/cources_home_work"
+                tools:ignore="ContentDescription" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:layout_toEndOf="@+id/cources_hand_work"
+                android:text="交作业"
+                android:textColor="#777777"
+                android:textSize="26.67px" />
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/cources_rl_leave"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_toEndOf="@+id/cources_rl_hand_work"
+            tools:ignore="UselessParent">
+
+            <ImageView
+                android:id="@+id/cources_leave"
+                android:layout_width="25dp"
+                android:layout_height="wrap_content"
+                android:src="@drawable/cources_leave"
+                tools:ignore="ContentDescription" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:layout_toEndOf="@+id/cources_leave"
+                android:text="请假"
+                android:textColor="#777777"
+                android:textSize="26.67px" />
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/cources_rl_sign_in"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:layout_toEndOf="@+id/cources_rl_leave"
+            tools:ignore="RtlHardcoded,UselessParent">
+
+            <ImageView
+                android:id="@+id/cources_sign_in"
+                android:layout_width="25dp"
+                android:layout_height="wrap_content"
+                android:src="@drawable/cources_sign_in"
+                tools:ignore="ContentDescription" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:layout_toEndOf="@+id/cources_sign_in"
+                android:text="签到"
+                android:textColor="#777777"
+                android:textSize="26.67px" />
+
+        </RelativeLayout>
+
+        </LinearLayout>
+    </RelativeLayout>
+
+
+</LinearLayout>
