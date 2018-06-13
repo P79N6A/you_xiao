@@ -63,6 +63,7 @@ dependencies {
     androidTestImplementation('com.android.support:support-annotations:26.1.0') {
         force = true
     }
+    //compile project (':app')
 }
 apply from: '../script/gradle-jcenter-push.gradle'
 

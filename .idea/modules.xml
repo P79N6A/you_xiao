@@ -3,6 +3,7 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/app-droid.iml" filepath="$PROJECT_DIR$/app-droid.iml" />
       <module fileurl="file://$PROJECT_DIR$/cources/cources.iml" filepath="$PROJECT_DIR$/cources/cources.iml" />
       <module fileurl="file://$PROJECT_DIR$/education/education.iml" filepath="$PROJECT_DIR$/education/education.iml" />
       <module fileurl="file://$PROJECT_DIR$/information/information.iml" filepath="$PROJECT_DIR$/information/information.iml" />
@@ -10,7 +11,6 @@
       <module fileurl="file://$PROJECT_DIR$/mall/mall.iml" filepath="$PROJECT_DIR$/mall/mall.iml" />
       <module fileurl="file://$PROJECT_DIR$/personal_center/personal_center.iml" filepath="$PROJECT_DIR$/personal_center/personal_center.iml" />
       <module fileurl="file://$PROJECT_DIR$/teacher/teacher.iml" filepath="$PROJECT_DIR$/teacher/teacher.iml" />
-      <module fileurl="file://$PROJECT_DIR$/youxiao-droid.iml" filepath="$PROJECT_DIR$/youxiao-droid.iml" />
     </modules>
   </component>
 </project>

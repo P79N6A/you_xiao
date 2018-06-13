@@ -37,11 +37,15 @@ public class HomeFragment extends BaseFragment {
         binding.fragmentHomeImagview.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                List<Drawable> list = new ArrayList<>();
+                List<String> list = new ArrayList<>();
                 PopupWindowFragment popuMenu = new PopupWindowFragment(getContext());
-                Drawable drawable = getContext().getResources().getDrawable(R.drawable.fragment_popumenu);
-                list.add(drawable);
-                popuMenu.showPopupWindows(list, Gravity.NO_GRAVITY, 60, 160);
+                //Drawable drawable = getContext().getResources().getDrawable(R.drawable.fragment_popumenu);
+                list.add("北京大学");
+                list.add("清华大学");
+                list.add("山东大学");
+                list.add("复旦大学");
+                list.add("吉林大学");
+                popuMenu.showPopupWindows(list, Gravity.NO_GRAVITY, 20, 160);
             }
         });
 

@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.runtoinfo.youxiao.R;
 
@@ -20,10 +21,10 @@ import java.util.List;
 
 public class ListViewAdapter extends BaseAdapter implements AdapterView.OnItemClickListener{
 
-    public List<Drawable> list = new ArrayList<>();
+    public List<String> list = new ArrayList<>();
     public Context context;
 
-    public ListViewAdapter(Context context,  List<Drawable> list){
+    public ListViewAdapter(Context context,  List<String> list){
         this.context = context;
         this.list = list;
     }
@@ -34,7 +35,7 @@ public class ListViewAdapter extends BaseAdapter implements AdapterView.OnItemCl
     }
 
     public class ViewHolder{
-        ImageView imageView;
+        TextView imageView;
     }
 
     @Override
@@ -69,7 +70,7 @@ public class ListViewAdapter extends BaseAdapter implements AdapterView.OnItemCl
             holder = (ViewHolder) convertView.getTag();
         }
 
-        holder.imageView.setBackground(list.get(position));
+        holder.imageView.setText(list.get(position));
 
         return convertView;
     }
