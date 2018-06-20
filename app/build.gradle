@@ -9,7 +9,7 @@ android {
         minSdkVersion 18
         targetSdkVersion 26
         versionCode 1
-        versionName "1.1"
+        versionName "1.1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
 
         ndk {
@@ -25,6 +25,19 @@ android {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+
+    applicationVariants.all { variant ->    //批量修改Apk名字
+        variant.outputs.all { output ->
+            def outputFile = output.outputFile
+            if (outputFile != null && outputFile.name.contains('release')) {
+                //获取每个打包产物
+                def variantProd = variant.productFlavors[0]
+                def fileName = "RT_YouXiao_${defaultConfig.versionCode}_${defaultConfig.versionName}.apk"
+                outputFileName = fileName;
+            }
+
         }
     }
 
