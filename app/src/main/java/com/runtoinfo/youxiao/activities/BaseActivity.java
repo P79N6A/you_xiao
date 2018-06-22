@@ -5,6 +5,7 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.os.PersistableBundle;
 import android.support.annotation.Nullable;
+import android.support.v4.app.FragmentActivity;
 
 import com.alibaba.sdk.android.man.MANService;
 import com.alibaba.sdk.android.man.MANServiceProvider;
@@ -13,7 +14,7 @@ import com.alibaba.sdk.android.man.MANServiceProvider;
  * Created by Administrator on 2018/5/8 0008.
  */
 
-public abstract class BaseActivity extends Activity {
+public abstract class BaseActivity extends FragmentActivity {
 
     @Override
     public void onResume() {

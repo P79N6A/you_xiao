@@ -13,6 +13,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 
+import com.alibaba.android.arouter.facade.annotation.Route;
 import com.runto.cources.R;
 import com.runto.cources.adapter.ArticleAdapter;
 import com.runto.cources.bean.Article;
@@ -24,7 +25,7 @@ import com.runto.cources.ui.CalendarView;
 
 import java.util.ArrayList;
 import java.util.List;
-
+@Route(path = "/cources/colorfulActivity")
 public class ColorfulActivity extends BaseActivity implements
         CalendarView.OnDateSelectedListener,
         CalendarView.OnYearChangeListener,

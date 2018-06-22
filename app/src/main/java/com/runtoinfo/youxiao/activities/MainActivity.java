@@ -3,8 +3,8 @@ package com.runtoinfo.youxiao.activities;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.ViewPager;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -19,7 +19,7 @@ import com.runtoinfo.youxiao.fragment.TopicsFragment;
 
 import java.util.ArrayList;
 
-public class MainActivity extends FragmentActivity implements ViewPager.OnPageChangeListener/*, View.OnClickListener*/{
+public class MainActivity extends BaseActivity implements ViewPager.OnPageChangeListener/*, View.OnClickListener*/{
 
     public ActivityMainBinding binding;
 
@@ -29,19 +29,23 @@ public class MainActivity extends FragmentActivity implements ViewPager.OnPageCh
 
     private ArrayList<Fragment> mFragments;
     private FragmentAdapter mMainMenuAdapter;
+    private String TAG = "MainActivity";
+
+    @Override
+    protected int getLayoutId() {
+        return R.layout.activity_main;
+    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        //setContentView(R.layout.activity_main);
-        binding = DataBindingUtil.setContentView(MainActivity.this, R.layout.activity_main);
-        initView();
-        initData();
         initEvent();
     }
 
     // 初始化控件
-    private void initView() {
+    @Override
+    protected void initView() {
+        binding = DataBindingUtil.setContentView(MainActivity.this, R.layout.activity_main);
         tv_menus = new ArrayList<TextView>();
         tv_menus.add(binding.tvBottomMenuChat);
         tv_menus.add(binding.tvBottomMenuAddressbook);
@@ -56,7 +60,8 @@ public class MainActivity extends FragmentActivity implements ViewPager.OnPageCh
     }
 
     // 初始化数据
-    private void initData() {
+    @Override
+    protected void initData() {
         mFragments = new ArrayList<>();
         mFragments.add(new HomeFragment());
         mFragments.add(new FineClassFragment());
@@ -155,5 +160,23 @@ public class MainActivity extends FragmentActivity implements ViewPager.OnPageCh
     @Override
     public void onPointerCaptureChanged(boolean hasCapture) {
 
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        Log.e(TAG, "onPause");
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        Log.e(TAG, "onStop");
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        Log.e(TAG, "onDestroy");
     }
 }

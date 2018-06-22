@@ -5,15 +5,23 @@ import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.SimpleAdapter;
 
+import com.alibaba.android.arouter.launcher.ARouter;
+import com.google.gson.Gson;
 import com.runtoinfo.youxiao.R;
+import com.runtoinfo.youxiao.activities.LoginActivity;
+import com.runtoinfo.youxiao.activities.MainActivity;
 import com.runtoinfo.youxiao.databinding.FragmentPersonalCenterBinding;
 import com.runtoinfo.youxiao.ui.MyGridView;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -34,7 +42,7 @@ public class PersonalCenterFragment extends BaseFragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
-        View view = View.inflate(getActivity(), R.layout.fragment_personal_center, null);
+        //View view = View.inflate(getActivity(), R.layout.fragment_personal_center, null);
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_personal_center, container, false);
         initData();
         return binding.getRoot();
@@ -65,13 +73,33 @@ public class PersonalCenterFragment extends BaseFragment {
         binding.personalGridview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-
+                Log.e("GridView", adapter.getItem(position).toString());
+                String json = new Gson().toJson(adapter.getItem(position));
+                try {
+                    JSONObject object = new JSONObject(json);
+                    switch (object.getString("text").replaceAll("\\s*", ""))
+                    {
+                        case "我的课程":
+                            ARouter.getInstance().build("/cources/colorfulActivity").navigation();
+                            break;
+                        case "上课记录":
+                            break;
+                        case "请假记录":
+                            break;
+                        case "关于我们":
+                            break;
+                        case "意见反馈":
+                            break;
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
             }
         });
         binding.personalSettings.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                ARouter.getInstance().build("/personal/personalMain").navigation();
             }
         });
     }
