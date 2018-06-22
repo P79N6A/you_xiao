@@ -4,7 +4,7 @@
 
     <application
         android:theme="@style/Theme.AppCompat.Light.NoActionBar">
-        <activity android:name=".PersonalMainActivity"/>
+        <activity android:name=".activities.PersonalMainActivity"/>
     </application>
 
 </manifest>

@@ -1,4 +1,4 @@
-package com.runtoinfo.personal_center;
+package com.runtoinfo.personal_center.activities;
 
 import android.app.Application;
 import android.content.Context;

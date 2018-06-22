@@ -4,6 +4,7 @@
     <modules>
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
       <module fileurl="file://$PROJECT_DIR$/app-droid.iml" filepath="$PROJECT_DIR$/app-droid.iml" />
+      <module fileurl="file://$PROJECT_DIR$/cameraview/cameraview.iml" filepath="$PROJECT_DIR$/cameraview/cameraview.iml" />
       <module fileurl="file://$PROJECT_DIR$/citypickerview/citypickerview.iml" filepath="$PROJECT_DIR$/citypickerview/citypickerview.iml" />
       <module fileurl="file://$PROJECT_DIR$/cources/cources.iml" filepath="$PROJECT_DIR$/cources/cources.iml" />
       <module fileurl="file://$PROJECT_DIR$/education/education.iml" filepath="$PROJECT_DIR$/education/education.iml" />
