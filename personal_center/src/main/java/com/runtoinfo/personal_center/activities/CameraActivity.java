@@ -1,55 +1,78 @@
-package com.runtoinfo.personal_center.ui;
+package com.runtoinfo.personal_center.activities;
 
+import android.Manifest;
+import android.app.Activity;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
+import android.os.Bundle;
 import android.os.Environment;
+import android.support.annotation.Nullable;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Toast;
 
+import com.alibaba.android.arouter.facade.annotation.Route;
 import com.runto.cameraview.JCameraView;
 import com.runto.cameraview.listener.ClickListener;
 import com.runto.cameraview.listener.ErrorListener;
 import com.runto.cameraview.listener.JCameraListener;
 import com.runto.cameraview.util.DeviceUtil;
 import com.runto.cameraview.util.FileUtil;
-import com.runto.curry.yulinproject.R;
-import com.runto.curry.yulinproject.base.BaseActivity;
+import com.runtoinfo.personal_center.R;
+import com.runtoinfo.personal_center.databinding.ActivityCameraBinding;
 
 import java.io.File;
+import java.io.IOException;
 
-import butterknife.BindView;
+@Route(path = "/camera/activity")
+public class CameraActivity extends Activity {
 
-public class CameraActivity extends BaseActivity {
 
     private static final String TAG = CameraActivity.class.getSimpleName();
     private static final int RESULT_PHOTO_CODE = 121;
     private static final int RESULT_VIDEO_CODE = 122;
     private static final int RESULT_ERROR_CODE = 123;
     JCameraView cameraView;
-    @Override
+    private ActivityCameraBinding binding;
     public void beforeSetContentView() {
         //无title
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         //全屏
         getWindow().setFlags(WindowManager.LayoutParams. FLAG_FULLSCREEN , WindowManager.LayoutParams. FLAG_FULLSCREEN);
+
     }
 
-    @Override
     public int getLayoutId() {
         return R.layout.activity_camera;
     }
 
-    @Override
     public void initPresenter() {
 
     }
 
     @Override
+    protected void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        beforeSetContentView();
+        setContentView(getLayoutId());
+        //getPermissions();
+        initView();
+    }
+
     public void initView() {
         //设置视频保存路径
-        cameraView.setSaveVideoPath(Environment.getExternalStorageDirectory().getPath() + File.separator + "YuLin");
+        cameraView = findViewById(R.id.jcameraview);
+        String path = Environment.getExternalStorageDirectory().getPath() + File.separator + "YouXiao";
+        File filePath = new File(path);
+        if (!filePath.exists())
+        {
+            filePath = new File(path);
+        }
+        cameraView.setSaveVideoPath(path);
         cameraView.setFeatures(JCameraView.BUTTON_STATE_BOTH);
         cameraView.setTip("轻触拍照,长按录制视频");
         cameraView.setMediaQuality(JCameraView.MEDIA_QUALITY_MIDDLE);
@@ -83,7 +106,7 @@ public class CameraActivity extends BaseActivity {
             @Override
             public void recordSuccess(String url, Bitmap firstFrame) {
                 //获取视频路径
-                String path = FileUtil.saveBitmap("YuLin", firstFrame);
+                String path = FileUtil.saveBitmap("YouXiao", firstFrame);
                 Log.e(TAG, "url = " + url + ", Bitmap = " + path);
                 Intent intent = new Intent();
                 intent.putExtra("path", path);

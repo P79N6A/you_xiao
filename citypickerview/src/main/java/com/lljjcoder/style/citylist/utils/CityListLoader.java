@@ -12,11 +12,6 @@ import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * 作者：liji on 2017/5/21 15:35
- * 邮箱：lijiwork@sina.com
- * QQ ：275137657
- */
 
 public class CityListLoader {
     

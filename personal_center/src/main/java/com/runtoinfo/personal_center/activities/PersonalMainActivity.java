@@ -140,7 +140,7 @@ public class PersonalMainActivity extends Activity {
 
             }
         },calendar.get(Calendar.YEAR),calendar.get(Calendar.MONTH), calendar.get(Calendar.DATE));
-        SimpleDateFormat sdf=new SimpleDateFormat("yyyy年MM月dd日");
+        @SuppressLint("SimpleDateFormat") SimpleDateFormat sdf=new SimpleDateFormat("yyyy年MM月dd日");
         dialog.setTitle(sdf.format(new Date().getTime()));
         dialog.show();
     }
@@ -167,7 +167,7 @@ public class PersonalMainActivity extends Activity {
         view.findViewById(R.id.personal_take_photo).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                ARouter.getInstance().build("/camera/activity").navigation();
             }
         });
         builder.show();

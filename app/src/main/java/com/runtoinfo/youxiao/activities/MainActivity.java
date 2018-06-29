@@ -57,6 +57,8 @@ public class MainActivity extends BaseActivity implements ViewPager.OnPageChange
         imgv_menus.add(binding.imgvBottomMenuDiscovery);
         imgv_menus.add(binding.imgvBottomMenuMe);
         mViewPager = binding.mainViewPager;
+
+        //initEvent();
     }
 
     // 初始化数据

@@ -77,4 +77,5 @@ dependencies {
     annotationProcessor 'com.alibaba:arouter-compiler:1.1.4'
     implementation project(':personal_center')
     implementation project(':cources')
+    compile project(path: ':cameraview')
 }
