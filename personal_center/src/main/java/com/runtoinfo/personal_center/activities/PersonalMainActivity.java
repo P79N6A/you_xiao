@@ -7,9 +7,14 @@ import android.app.DatePickerDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.database.Cursor;
 import android.databinding.DataBindingUtil;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.support.annotation.RequiresApi;
 import android.text.format.DateUtils;
 import android.util.Log;
@@ -23,6 +28,7 @@ import com.lljjcoder.style.citylist.utils.CityListLoader;
 import com.lljjcoder.style.citythreelist.CityBean;
 import com.runtoinfo.personal_center.R;
 import com.runtoinfo.personal_center.databinding.ActivityPersonalMainBinding;
+import com.runtoinfo.personal_center.ui.SelectPictureDialog;
 import com.squareup.leakcanary.RefWatcher;
 
 import java.text.SimpleDateFormat;
@@ -88,13 +94,23 @@ public class PersonalMainActivity extends Activity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == 1001 && data!=null)
         {
-            if (resultCode == RESULT_OK)
+            switch (resultCode)
             {
-                CityBean area = data.getParcelableExtra("area");
-                CityBean city = data.getParcelableExtra("city");
-                CityBean province = data.getParcelableExtra("province");
-
-                binding.personalEditArea.setText(province.getName() + " " + city.getName() + " "+ area.getName());
+                case 1002:
+                    CityBean area = data.getParcelableExtra("area");
+                    CityBean city = data.getParcelableExtra("city");
+                    CityBean province = data.getParcelableExtra("province");
+                    binding.personalEditArea.setText(province.getName() + " " + city.getName() + " "+ area.getName());
+                    break;
+                case 121:
+                    String path = data.getStringExtra("path");
+                    Log.e("PATH", path);
+                    Bitmap bitmap = BitmapFactory.decodeFile(path);
+                    binding.personalEditTx.setImageBitmap(bitmap);
+                    break;
+                case RESULT_OK:
+                    selectPic(data);
+                    break;
             }
         }
     }
@@ -148,29 +164,20 @@ public class PersonalMainActivity extends Activity {
     //性别选择
     //头像选择方式
     public void avatarSelect(){
-        builder = new AlertDialog.Builder(PersonalMainActivity.this);
-        View view = View.inflate(PersonalMainActivity.this, R.layout.personal_avatar_layout, null);
-        builder.setView(view);
-        view.findViewById(R.id.personal_from_pic).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Log.e("TAG", "选择照片");
-            }
-        });
-        TextView cancel = view.findViewById(R.id.personal_cancle);
-        cancel.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+        final SelectPictureDialog dialog = new SelectPictureDialog(this);
+        SelectPictureDialog.ViewHolder viewHolder = new SelectPictureDialog.ViewHolder();
+        dialog.show();
+    }
 
-            }
-        });
-        view.findViewById(R.id.personal_take_photo).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                ARouter.getInstance().build("/camera/activity").navigation();
-            }
-        });
-        builder.show();
+    private void selectPic(Intent intent) {
+        Uri selectImageUri = intent.getData();
+        String[] filePathColumn = {MediaStore.Images.Media.DATA};
+        Cursor cursor = getContentResolver().query(selectImageUri, filePathColumn, null, null, null);
+        cursor.moveToFirst();
+        int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
+        String picturePath = cursor.getString(columnIndex);
+        cursor.close();
+        binding.personalEditTx.setImageBitmap(BitmapFactory.decodeFile(picturePath));
     }
 
 }

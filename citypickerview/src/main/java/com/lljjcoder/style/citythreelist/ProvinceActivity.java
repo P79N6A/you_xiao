@@ -80,7 +80,7 @@ public class ProvinceActivity extends Activity {
             intent.putExtra("province", provinceBean);
             intent.putExtra("city", city);
             intent.putExtra("area", area);
-            setResult(RESULT_OK, intent);
+            setResult(1002, intent);
             finish();
         }
     }

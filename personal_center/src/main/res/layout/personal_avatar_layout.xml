@@ -5,34 +5,37 @@
     android:gravity="center"
     android:padding="10dp">
     <TextView
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/personal_from_pic"
         android:text="从相册中选择"
         android:textSize="16sp"
-        android:textColor="#819ff7"/>
+        android:textColor="#819ff7"
+        android:gravity="center"/>
     <View
         android:layout_width="wrap_content"
         android:layout_height="1dp"
         android:background="#3333"
         android:layout_margin="10dp"/>
     <TextView
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="拍照"
         android:id="@+id/personal_take_photo"
         android:textSize="16sp"
-        android:textColor="#819ff7"/>
+        android:textColor="#819ff7"
+        android:gravity="center"/>
     <View
         android:layout_width="wrap_content"
         android:layout_height="1dp"
         android:background="#3333"
         android:layout_margin="10dp"/>
     <TextView
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textSize="16sp"
         android:text="取消"
-        android:id="@+id/personal_cancle"/>
+        android:id="@+id/personal_cancle"
+        android:gravity="center"/>
 
 </LinearLayout>

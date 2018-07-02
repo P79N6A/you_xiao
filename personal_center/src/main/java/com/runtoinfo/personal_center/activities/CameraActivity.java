@@ -59,8 +59,32 @@ public class CameraActivity extends Activity {
         super.onCreate(savedInstanceState);
         beforeSetContentView();
         setContentView(getLayoutId());
-        //getPermissions();
+
+        checkPermission();
+
         initView();
+    }
+
+    private void checkPermission() {
+
+        if (ContextCompat.checkSelfPermission(this, android.Manifest.permission.CAMERA)!= PackageManager.PERMISSION_GRANTED){
+            ActivityCompat.requestPermissions(this, new String[]{android.Manifest.permission.CAMERA},1);
+        }
+        //检查权限（NEED_PERMISSION）是否被授权 PackageManager.PERMISSION_GRANTED表示同意授权
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                != PackageManager.PERMISSION_GRANTED) {
+            //用户已经拒绝过一次，再次弹出权限申请对话框需要给用户一个解释
+            if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission
+                    .WRITE_EXTERNAL_STORAGE)) {
+                Toast.makeText(this, "请开通相关权限，否则无法正常使用本应用！", Toast.LENGTH_SHORT).show();
+            }
+            //申请权限
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 2);
+
+        } else {
+            //Toast.makeText(this, "授权成功！", Toast.LENGTH_SHORT).show();
+            //Log.e(TAG_SERVICE, "checkPermission: 已经授权！");
+        }
     }
 
     public void initView() {
@@ -70,11 +94,13 @@ public class CameraActivity extends Activity {
         File filePath = new File(path);
         if (!filePath.exists())
         {
-            filePath = new File(path);
+            filePath.mkdirs();
+            //filePath = new File(path);
         }
+        Log.e("PATH-1", path);
         cameraView.setSaveVideoPath(path);
-        cameraView.setFeatures(JCameraView.BUTTON_STATE_BOTH);
-        cameraView.setTip("轻触拍照,长按录制视频");
+        cameraView.setFeatures(JCameraView.BUTTON_STATE_ONLY_CAPTURE);
+        //cameraView.setTip("轻触拍照,长按录制视频");
         cameraView.setMediaQuality(JCameraView.MEDIA_QUALITY_MIDDLE);
         cameraView.setErrorLisenter(new ErrorListener() {
             @Override
@@ -96,7 +122,7 @@ public class CameraActivity extends Activity {
             @Override
             public void captureSuccess(Bitmap bitmap) {
                 //获取图片bitmap
-                String path = FileUtil.saveBitmap("YuLin", bitmap);
+                String path = FileUtil.saveBitmap("YouXiao", bitmap);
                 Intent intent = new Intent();
                 intent.putExtra("path", path);
                 setResult(RESULT_PHOTO_CODE, intent);
