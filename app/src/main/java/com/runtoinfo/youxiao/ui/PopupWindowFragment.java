@@ -37,7 +37,6 @@ public class PopupWindowFragment {
         View v = LayoutInflater.from(context).inflate(R.layout.fragment_home_popupwindow, null);
 
         popupWindow = new PopupWindow(v, 180,270,/*ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT,*/ true);
-        //popupWindow.setBackgroundDrawable(R.drawable.);
         listView = v.findViewById(R.id.fragment_home_item_list);
         adapter = new ListViewAdapter(context, list);
         listView.setAdapter(adapter);

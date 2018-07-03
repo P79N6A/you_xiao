@@ -31,7 +31,6 @@ public class HomeFragment extends BaseFragment {
     public FragmentHomeBinding binding;
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        //View view = View.inflate(getActivity(), R.layout.fragment_home, null);
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_home, container, false);
 
         binding.fragmentHomeImagview.setOnClickListener(new View.OnClickListener() {
@@ -39,7 +38,6 @@ public class HomeFragment extends BaseFragment {
             public void onClick(View v) {
                 List<String> list = new ArrayList<>();
                 PopupWindowFragment popuMenu = new PopupWindowFragment(getContext());
-                //Drawable drawable = getContext().getResources().getDrawable(R.drawable.fragment_popumenu);
                 list.add("北京大学");
                 list.add("清华大学");
                 list.add("山东大学");
