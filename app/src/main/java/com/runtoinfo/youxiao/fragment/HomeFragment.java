@@ -1,10 +1,13 @@
 package com.runtoinfo.youxiao.fragment;
 
 import android.databinding.DataBindingUtil;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.LinearLayoutManager;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,8 +15,10 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 
 import com.runtoinfo.youxiao.R;
+import com.runtoinfo.youxiao.adapter.CoursePunchAdapter;
 import com.runtoinfo.youxiao.databinding.ActivityMainBinding;
 import com.runtoinfo.youxiao.databinding.FragmentHomeBinding;
+import com.runtoinfo.youxiao.entity.CourseEntity;
 import com.runtoinfo.youxiao.ui.PopuMenu;
 import com.runtoinfo.youxiao.ui.PopupWindowFragment;
 
@@ -22,13 +27,15 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by Administrator on 2018/5/24 0024.
+ * Created by qiaojunchao on 2018/5/24 0024.
  */
 
 public class HomeFragment extends BaseFragment {
 
     //public ActivityMainBinding binding;
     public FragmentHomeBinding binding;
+    public CoursePunchAdapter coursePunchAdapter;
+    public List<CourseEntity> list;
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_home, container, false);
@@ -46,6 +53,18 @@ public class HomeFragment extends BaseFragment {
                 popuMenu.showPopupWindows(list, Gravity.NO_GRAVITY, 20, 160);
             }
         });
+        list = new ArrayList<>();
+        CourseEntity courseEntity = new CourseEntity();
+        courseEntity.setCourseName("美术");
+        courseEntity.setCourseTime("7777777");
+        Bitmap bitmap = BitmapFactory.decodeResource(getContext().getResources(), R.drawable.home_taekwondo_img);
+        courseEntity.setBitmap(bitmap);
+        list.add(courseEntity);
+
+        binding.homeRecyclerView.setHasFixedSize(true);
+        binding.homeRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        coursePunchAdapter = new CoursePunchAdapter(getContext(), list);
+        binding.homeRecyclerView.setAdapter(coursePunchAdapter);
 
         return binding.getRoot();
     }

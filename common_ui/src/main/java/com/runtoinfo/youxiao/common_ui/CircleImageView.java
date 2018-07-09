@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.runtoinfo.youxiao.ui;
+package com.runtoinfo.youxiao.common_ui;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
@@ -44,12 +44,11 @@ import android.view.View;
 import android.view.ViewOutlineProvider;
 import android.widget.ImageView;
 
-import com.runtoinfo.youxiao.R;
 
 @SuppressLint("AppCompatCustomView")
 public class CircleImageView extends ImageView {
 
-    private static final ImageView.ScaleType SCALE_TYPE = ScaleType.CENTER_CROP;
+    private static final ScaleType SCALE_TYPE = ScaleType.CENTER_CROP;
 
     private static final Bitmap.Config BITMAP_CONFIG = Bitmap.Config.ARGB_8888;
     private static final int COLORDRAWABLE_DIMENSION = 2;

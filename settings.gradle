@@ -1,1 +1,1 @@
-include ':app', ':teacher', ':education', ':lib_activities', ':information', ':mall', ':personal_center', ':cources', ':citypickerview', ':cameraview'
+include ':app', ':teacher', ':education', ':lib_activities', ':information', ':mall', ':personal_center', ':cources', ':citypickerview', ':cameraview', ':common_ui'

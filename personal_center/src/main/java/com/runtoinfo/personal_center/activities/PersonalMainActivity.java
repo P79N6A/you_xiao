@@ -29,11 +29,14 @@ import com.lljjcoder.style.citythreelist.CityBean;
 import com.runtoinfo.personal_center.R;
 import com.runtoinfo.personal_center.databinding.ActivityPersonalMainBinding;
 import com.runtoinfo.personal_center.ui.SelectPictureDialog;
+import com.runtoinfo.youxiao.common_ui.timepicker.CustomDatePicker;
+import com.squareup.leakcanary.LeakCanary;
 import com.squareup.leakcanary.RefWatcher;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Locale;
 
 @Route(path = "/personal/personalMain")
 public class PersonalMainActivity extends Activity {
@@ -41,13 +44,13 @@ public class PersonalMainActivity extends Activity {
     private ActivityPersonalMainBinding binding;
     //在自己的Application中添加如下代码
     private RefWatcher refWatcher;
-    private AlertDialog.Builder builder;
+    private CustomDatePicker customDatePicker1, customDatePicker2;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        //setContentView(R.layout.activity_personal_main);
         binding = DataBindingUtil.setContentView(PersonalMainActivity.this, R.layout.activity_personal_main);
         initEvent();
+        initDatePicker();
     }
     public void initEvent(){
         //头像
@@ -75,8 +78,8 @@ public class PersonalMainActivity extends Activity {
         binding.personalRelativeBirthday.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                showDateSelect(PersonalMainActivity.this, 3, Calendar.getInstance());
-                //showDateSelect();
+                //showDateSelect(PersonalMainActivity.this, 3, Calendar.getInstance());
+                customDatePicker1.show(binding.personalEditBirth.getText().toString());
             }
         });
         //地区
@@ -129,15 +132,11 @@ public class PersonalMainActivity extends Activity {
     }
 
     public void initCity(){
-        /**
-         * 预先加载一级列表所有城市的数据
-         */
+        // 预先加载一级列表所有城市的数据
         CityListLoader.getInstance().loadCityData(this);
-        /**
-         * 预先加载三级列表显示省市区的数据
-         */
+        //预先加载三级列表显示省市区的数据
         CityListLoader.getInstance().loadProData(this);
-        //refWatcher = LeakCanary.install(getApplication());
+        refWatcher = LeakCanary.install(getApplication());
     }
 
     //在自己的Application中添加如下代码
@@ -146,19 +145,30 @@ public class PersonalMainActivity extends Activity {
         return application.refWatcher;
     }
 
-    //日期选择器
+    //时间选择器
+    private void initDatePicker() {
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.CHINA);
+        String now = sdf.format(new Date());
+        binding.personalEditBirth.setText(now.split(" ")[0]);
+        //currentTime.setText(now);
 
-    public void showDateSelect(Activity activity, int themeId, Calendar calendar){
-
-        DatePickerDialog dialog = new DatePickerDialog(activity, themeId, new DatePickerDialog.OnDateSetListener() {
+        customDatePicker1 = new CustomDatePicker(this, new CustomDatePicker.ResultHandler() {
             @Override
-            public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
-
+            public void handle(String time) { // 回调接口，获得选中的时间
+                binding.personalEditBirth.setText(time.split(" ")[0]);
             }
-        },calendar.get(Calendar.YEAR),calendar.get(Calendar.MONTH), calendar.get(Calendar.DATE));
-        @SuppressLint("SimpleDateFormat") SimpleDateFormat sdf=new SimpleDateFormat("yyyy年MM月dd日");
-        dialog.setTitle(sdf.format(new Date().getTime()));
-        dialog.show();
+        }, "1970-01-01 00:00", now); // 初始化日期格式请用：yyyy-MM-dd HH:mm，否则不能正常运行
+        customDatePicker1.showSpecificTime(false); // 不显示时和分
+        customDatePicker1.setIsLoop(false); // 不允许循环滚动
+
+//        customDatePicker2 = new CustomDatePicker(this, new CustomDatePicker.ResultHandler() {
+//            @Override
+//            public void handle(String time) { // 回调接口，获得选中的时间
+//                currentTime.setText(time);
+//            }
+//        }, "2010-01-01 00:00", now); // 初始化日期格式请用：yyyy-MM-dd HH:mm，否则不能正常运行
+//        customDatePicker2.showSpecificTime(true); // 显示时和分
+//        customDatePicker2.setIsLoop(true); // 允许循环滚动
     }
 
     //性别选择
@@ -179,5 +189,20 @@ public class PersonalMainActivity extends Activity {
         cursor.close();
         binding.personalEditTx.setImageBitmap(BitmapFactory.decodeFile(picturePath));
     }
+
+
+    //日期选择器 （系统控件）
+//    public void showDateSelect(Activity activity, int themeId, Calendar calendar){
+//
+//        DatePickerDialog dialog = new DatePickerDialog(activity, themeId, new DatePickerDialog.OnDateSetListener() {
+//            @Override
+//            public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
+//
+//            }
+//        },calendar.get(Calendar.YEAR),calendar.get(Calendar.MONTH), calendar.get(Calendar.DATE));
+//        @SuppressLint("SimpleDateFormat") SimpleDateFormat sdf=new SimpleDateFormat("yyyy年MM月dd日");
+//        dialog.setTitle(sdf.format(new Date().getTime()));
+//        dialog.show();
+//    }
 
 }

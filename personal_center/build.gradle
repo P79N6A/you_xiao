@@ -45,4 +45,5 @@ dependencies {
     releaseApi 'com.squareup.leakcanary:leakcanary-android-no-op:1.5.4'
     implementation project (':citypickerview')
     implementation project(':cameraview')
+    implementation project(':common_ui')
 }

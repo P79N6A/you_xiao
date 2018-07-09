@@ -56,11 +56,11 @@
                     android:foreground="@drawable/personal_sex"
                     android:foregroundGravity="right|bottom">
 
-                    <com.runtoinfo.youxiao.ui.CircleImageView
+                    <com.runtoinfo.youxiao.common_ui.CircleImageView
                         android:id="@+id/personal_avatar"
                         android:layout_width="60dp"
                         android:layout_height="60dp"
-                        android:background="@drawable/ic_launcher"
+                        android:src="@drawable/ic_launcher"
                         app:civ_border_overlay="true" />
 
                 </FrameLayout>

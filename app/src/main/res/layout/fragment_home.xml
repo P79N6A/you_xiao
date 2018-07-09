@@ -23,7 +23,7 @@
                     android:layout_height="wrap_content"
                     android:src="@drawable/home_head_ground">
 
-                    <com.runtoinfo.youxiao.ui.CircleImageView
+                    <com.runtoinfo.youxiao.common_ui.CircleImageView
                         android:id="@+id/fragment_home_imagview"
                         android:layout_width="40dp"
                         android:layout_height="40dp"
@@ -297,14 +297,17 @@
                         android:textSize="16sp" />
                 </LinearLayout>
 
-                <!---->
-
                 <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:orientation="vertical">
 
-                    <LinearLayout
+                    <android.support.v7.widget.RecyclerView
+                        android:id="@+id/home_recycler_view"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"/>
+
+                   <!-- <LinearLayout
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:orientation="horizontal">
@@ -383,157 +386,11 @@
                                     android:textSize="15.5sp" />
                             </RelativeLayout>
                         </LinearLayout>
-
-
-                    </LinearLayout>
-
-                    <View
+                    </LinearLayout>-->
+                    <!--<View
                         android:layout_width="5dp"
                         android:layout_height="wrap_content"
-                        android:background="#f0f0f0" />
-
-                    <LinearLayout
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:orientation="vertical">
-
-                        <ImageView
-                            android:id="@+id/home_course_sign_2"
-                            android:layout_width="wrap_content"
-                            android:layout_height="0dp"
-                            android:layout_weight="3"
-                            android:src="@drawable/home_canse_img" />
-
-                        <ProgressBar
-                            android:id="@+id/progressBar_2"
-                            style="?android:attr/progressBarStyleHorizontal"
-                            android:layout_width="match_parent"
-                            android:layout_height="2dp"
-                            android:background="@drawable/home_progressbar" />
-
-                        <RelativeLayout
-                            android:layout_width="wrap_content"
-                            android:layout_height="0dp"
-                            android:layout_weight="1">
-
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_centerVertical="true"
-                                android:text="绘画教学班" />
-
-                            <ImageView
-                                android:layout_width="20dp"
-                                android:layout_height="20dp"
-                                android:layout_alignParentEnd="true"
-                                android:layout_centerVertical="true"
-                                android:src="@drawable/home_course_sign_status" />
-                        </RelativeLayout>
-
-                        <RelativeLayout
-                            android:layout_width="wrap_content"
-                            android:layout_height="0dp"
-                            android:layout_weight="0.8">
-
-                            <ImageView
-                                android:id="@+id/home_clock_1"
-                                android:layout_width="12dp"
-                                android:layout_height="12dp"
-                                android:layout_centerVertical="true"
-                                android:src="@drawable/home_course_sign_clock" />
-
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_centerVertical="true"
-                                android:layout_marginStart="2dp"
-                                android:layout_toEndOf="@+id/home_clock_1"
-                                android:text="08-05 09:30"
-                                android:textSize="8sp" />
-
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_alignParentEnd="true"
-                                android:layout_centerVertical="true"
-                                android:text="点击查看详情"
-                                android:textSize="8sp" />
-                        </RelativeLayout>
-                    </LinearLayout>
-
-                    <View
-                        android:layout_width="5dp"
-                        android:layout_height="wrap_content"
-                        android:background="#f0f0f0" />
-
-                    <LinearLayout
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:orientation="vertical">
-
-                        <ImageView
-                            android:id="@+id/home_course_sign_3"
-                            android:layout_width="wrap_content"
-                            android:layout_height="0dp"
-                            android:layout_weight="3"
-                            android:src="@drawable/home_taekwondo_img" />
-
-                        <ProgressBar
-                            android:id="@+id/progressBar_3"
-                            style="?android:attr/progressBarStyleHorizontal"
-                            android:layout_width="match_parent"
-                            android:layout_height="2dp"
-                            android:background="@drawable/home_progressbar" />
-
-                        <RelativeLayout
-                            android:layout_width="wrap_content"
-                            android:layout_height="0dp"
-                            android:layout_weight="1">
-
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_centerVertical="true"
-                                android:text="跆拳道教学班" />
-
-                            <ImageView
-                                android:layout_width="20dp"
-                                android:layout_height="20dp"
-                                android:layout_alignParentEnd="true"
-                                android:layout_centerVertical="true"
-                                android:src="@drawable/home_course_sign_status" />
-                        </RelativeLayout>
-
-                        <RelativeLayout
-                            android:layout_width="wrap_content"
-                            android:layout_height="0dp"
-                            android:layout_weight="0.8">
-
-                            <ImageView
-                                android:id="@+id/home_clock_3"
-                                android:layout_width="12dp"
-                                android:layout_height="12dp"
-                                android:layout_centerVertical="true"
-                                android:src="@drawable/home_course_sign_clock" />
-
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_centerVertical="true"
-                                android:layout_marginStart="2dp"
-                                android:layout_toEndOf="@+id/home_clock_3"
-                                android:text="08-05 09:30"
-                                android:textSize="8sp" />
-
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_alignParentEnd="true"
-                                android:layout_centerVertical="true"
-                                android:text="点击查看详情"
-                                android:textSize="8sp" />
-                        </RelativeLayout>
-                    </LinearLayout>
+                        android:background="#f0f0f0" />-->
                 </LinearLayout>
             </LinearLayout>
 
