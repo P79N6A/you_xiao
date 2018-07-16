@@ -66,7 +66,7 @@ public class WelcomeActivity extends BaseActivity {
 
     @Override
     protected int getLayoutId() {
-        return 0;
+        return R.layout.welcome_activity;
     }
 
     @Override
@@ -121,7 +121,7 @@ public class WelcomeActivity extends BaseActivity {
             @Override
             public void onClick(View v) {
                 //进入主页
-                Intent intent = new Intent(WelcomeActivity.this, MainActivity.class);
+                Intent intent = new Intent(WelcomeActivity.this, LoginActivity.class);
                 startActivity(intent);
             }
         });
@@ -236,7 +236,7 @@ public class WelcomeActivity extends BaseActivity {
         boolean isfirst = application.isFirstLogin();
         if (!isfirst)
         {
-            startActivity(new Intent(WelcomeActivity.this, MainActivity.class));
+            startActivity(new Intent(WelcomeActivity.this, LoginActivity.class));
             this.finish();
         }
         else

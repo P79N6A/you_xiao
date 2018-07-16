@@ -31,4 +31,26 @@
         <item name="android:orientation">vertical</item>
     </style>
 
+    <style name="TextView_15sp">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textSize">15sp</item>
+        <item name="android:maxLines">1</item>
+        <item name="android:ellipsize">end</item>
+        <item name="android:maxEms">10</item>
+        <item name="android:textColor">@color/color_black</item>
+        <item name="android:layout_marginStart">5dp</item>
+    </style>
+
+    <style name="TextView_15sp_Gray">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textSize">15sp</item>
+        <item name="android:maxLines">1</item>
+        <item name="android:ellipsize">end</item>
+        <item name="android:maxEms">10</item>
+        <item name="android:textColor">@color/bg_line_light_gray</item>
+        <item name="android:layout_marginStart">5dp</item>
+    </style>
+
 </resources>

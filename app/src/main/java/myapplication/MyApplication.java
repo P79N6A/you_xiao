@@ -3,6 +3,7 @@ package myapplication;
 import android.app.Application;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -40,7 +41,6 @@ public class MyApplication extends Application {
     }
     public static MsgDisplayListener msgDisplayListener = null;
     public static StringBuilder cacheMsg = new StringBuilder();
-
     @Override
     public void onCreate() {
         super.onCreate();
@@ -51,7 +51,7 @@ public class MyApplication extends Application {
         initHttpDnsService();
         initHotfix();
         initPushService(this);
-        isFirstLogin();
+        //isFirstLogin();
     }
 
     public void initArouter(){

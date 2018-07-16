@@ -5,4 +5,9 @@
     <color name="colorAccent">#FF4081</color>
     <color name="bg_line_light_gray">#999999</color>
     <color name="bg_main_green">#2095e9</color>
+
+    <color name="color_blue">#3aa6fe</color>
+    <color name="color_gray_blue">#8fcafb</color>
+    <color name="color_gray">#e6e6e6</color>
+    <color name="color_black">#333333</color>
 </resources>

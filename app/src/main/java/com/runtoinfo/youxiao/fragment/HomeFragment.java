@@ -55,10 +55,11 @@ public class HomeFragment extends BaseFragment {
         });
         list = new ArrayList<>();
         CourseEntity courseEntity = new CourseEntity();
-        courseEntity.setCourseName("美术");
-        courseEntity.setCourseTime("7777777");
+        courseEntity.setCourseName("布米童艺跆拳道班零基础教育");
+        courseEntity.setCourseTime("05-20 17:32");
         Bitmap bitmap = BitmapFactory.decodeResource(getContext().getResources(), R.drawable.home_taekwondo_img);
-        courseEntity.setBitmap(bitmap);
+        Drawable drawable = getContext().getResources().getDrawable(R.drawable.home_taekwondo_img);
+        courseEntity.setBitmap(drawable);
         list.add(courseEntity);
 
         binding.homeRecyclerView.setHasFixedSize(true);

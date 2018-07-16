@@ -1,6 +1,7 @@
 package com.runtoinfo.youxiao.entity;
 
 import android.graphics.Bitmap;
+import android.graphics.drawable.Drawable;
 import android.widget.ImageView;
 
 /**
@@ -11,7 +12,7 @@ public class CourseEntity {
 
     public String courseName;
     public String courseTime;
-    public Bitmap bitmap;
+    public Drawable bitmap;
 
     public String getCourseName() {
         return courseName;
@@ -29,11 +30,11 @@ public class CourseEntity {
         this.courseTime = courseTime;
     }
 
-    public Bitmap getBitmap() {
+    public Drawable getBitmap() {
         return bitmap;
     }
 
-    public void setBitmap(Bitmap bitmap) {
+    public void setBitmap(Drawable bitmap) {
         this.bitmap = bitmap;
     }
 }

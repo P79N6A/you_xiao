@@ -96,7 +96,7 @@ public class PersonalCenterFragment extends BaseFragment {
                 }
             }
         });
-        binding.personalSettings.setOnClickListener(new View.OnClickListener() {
+        binding.imageView2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 ARouter.getInstance().build("/personal/personalMain").navigation();

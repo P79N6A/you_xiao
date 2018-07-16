@@ -9,6 +9,7 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.alibaba.android.arouter.facade.annotation.Route;
 import com.runtoinfo.youxiao.R;
 import com.runtoinfo.youxiao.adapter.FragmentAdapter;
 import com.runtoinfo.youxiao.databinding.ActivityMainBinding;
@@ -19,6 +20,7 @@ import com.runtoinfo.youxiao.fragment.TopicsFragment;
 
 import java.util.ArrayList;
 
+@Route( path = "/main/mainAcitivity")
 public class MainActivity extends BaseActivity implements ViewPager.OnPageChangeListener/*, View.OnClickListener*/{
 
     public ActivityMainBinding binding;

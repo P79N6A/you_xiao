@@ -7,7 +7,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:id="@+id/view_page1"
-        android:src="@drawable/view_page1"
+        android:src="@drawable/welcome_view_page"
         android:scaleType="fitXY"/>
 
 </LinearLayout>

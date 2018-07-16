@@ -44,7 +44,7 @@ public class CoursePunchAdapter extends RecyclerView.Adapter {
         CourseEntity entity = list.get(position);
         holder.courseName.setText(entity.getCourseName());
         holder.courseTime.setText(entity.getCourseTime());
-        holder.imageView.setImageBitmap(entity.getBitmap());
+        holder.imageView.setBackground(entity.getBitmap());
     }
 
     @Override
