@@ -80,4 +80,9 @@ dependencies {
     implementation project(':cources')
     api project(path: ':cameraview')
     implementation project(':common_ui')
+    api project(path: ':event')
+    implementation project(':information')
+    implementation project(':mall')
+    implementation project(':teacher')
+    implementation project(':education')
 }

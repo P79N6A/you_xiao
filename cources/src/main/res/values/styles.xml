@@ -5,4 +5,42 @@
         <!-- Customize your theme here. -->
     </style>
 
+    <style name="TextView_18sp_title">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textSize">18sp</item>
+        <item name="android:textColor">#333333</item>
+    </style>
+
+    <style name="TextView_15sp_Gray">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textSize">15sp</item>
+        <item name="android:textColor">#999999</item>
+    </style>
+
+    <style name="TextView_Course_999">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textColor">#999999</item>
+        <item name="android:textSize">15sp</item>
+        <item name="android:drawablePadding">5dp</item>
+    </style>
+
+    <style name="TextView_Course_18sp">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textColor">#666666</item>
+        <item name="android:gravity">center</item>
+        <item name="android:textSize">15sp</item>
+        <item name="android:layout_marginStart">5dp</item>
+    </style>
+
+    <style name="time_dialog" parent="android:style/Theme.Dialog">
+        <item name="android:windowFrame">@null</item>
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:windowIsFloating">true</item>
+        <item name="android:windowContentOverlay">@null</item>
+        <item name="android:windowBackground">@color/content_background</item>
+    </style>
 </resources>

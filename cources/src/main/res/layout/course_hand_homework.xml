@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="10dp">
+
+        <ImageView
+            android:id="@+id/activity_img_back"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:src="@drawable/activity_black_back"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:text="交作业"
+            android:textColor="#333333"
+            android:textSize="18sp" />
+    </RelativeLayout>
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        android:id="@+id/course_hand_work_nots"
+        android:layout_margin="20dp"
+        android:textSize="15sp"
+        android:textColor="#333333"
+        android:textColorHint="#999999"
+        android:hint="您有什么想说的..."
+        android:gravity="start"
+        android:background="@drawable/background_edittext"/>
+
+
+    <TextView
+        android:id="@+id/course_add_photo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:drawableTop="@drawable/course_take_photo"
+        android:layout_margin="20dp"
+        android:text="照片/视频/音频"
+        android:textColor="#999999"
+        android:textSize="15sp"
+        android:drawablePadding="5dp"/>
+
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/course_home_work_commit_up"
+        android:background="@drawable/background_button_blue"
+        android:text="提交"
+        android:textColor="#fff"
+        android:textSize="15sp"
+        android:layout_marginStart="20dp"
+        android:paddingTop="10dp"
+        android:paddingBottom="10dp"
+        android:layout_marginEnd="20dp"
+        android:gravity="center"
+        android:layout_marginTop="20dp"
+        android:visibility="gone"/>
+</LinearLayout>

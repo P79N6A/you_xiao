@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.runtoinfo.event">
+
+    <application android:theme="@style/Theme.AppCompat.Light.NoActionBar">
+        <activity android:name=".activity.EnventActivity" />
+        <activity android:name=".activity.ActivitiesEventDetails" />
+        <activity android:name=".activity.ActivitiesSignUp" />
+        <activity
+            android:name=".activity.SignUpAddEntourage"
+            android:label="@string/title_activity_sign_up_add_entourage"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar"></activity>
+    </application>
+
+</manifest>

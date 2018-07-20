@@ -11,7 +11,6 @@ import com.runto.cources.R;
 
 /**
  * 带分组浮动的RecyclerView
- * Created by haibin on 2017/5/15.
  */
 @SuppressWarnings("all")
 public class GroupRecyclerView extends RecyclerView {

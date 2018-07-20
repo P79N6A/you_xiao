@@ -57,8 +57,10 @@ public class PersonalCenterFragment extends BaseFragment {
         dataList.clear();
         String[] from = {"img", "text"};
         int[] to = {R.id.grid_img_view, R.id.grid_text};
-        int[] img = {R.drawable.personal_grid_course, R.drawable.personal_grid_class, R.drawable.personal_grid_leave, R.drawable.personal_grid_ours, R.drawable.personal_grid_feedback};
-        String[] text = {"我的课程","上课记录","请假记录","关于我们","意见反馈"};
+        int[] img = {R.drawable.personal_img_order, R.drawable.personal_shopping_car, R.drawable.personal_img_activity,
+                R.drawable.personal_img_course_nots, R.drawable.personal_img_leave_nots,
+        R.drawable.personal_img_about_us, R.drawable.personal_img_return};
+        String[] text = {"我的订单","购物车","我的活动","上课记录","请假记录","关于我们","意见反馈"};
         for (int i = 0; i < img.length; i++)
         {
             Map<String, Object> map = new HashMap<>();
@@ -96,7 +98,7 @@ public class PersonalCenterFragment extends BaseFragment {
                 }
             }
         });
-        binding.imageView2.setOnClickListener(new View.OnClickListener() {
+        binding.personalSetting.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 ARouter.getInstance().build("/personal/personalMain").navigation();

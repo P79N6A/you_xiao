@@ -15,15 +15,14 @@
         <com.runto.cources.ui.MonthViewPager
             android:id="@+id/vp_calendar"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="41dp" />
+            android:layout_height="wrap_content" />
 
         <com.runto.cources.ui.WeekViewPager
             android:id="@+id/vp_week"
             android:layout_width="match_parent"
             android:layout_height="50dp"
             android:layout_marginTop="41dp"
-            android:visibility="gone" />
+            android:visibility="gone"/>
 
         <View
             android:id="@+id/line"
@@ -32,7 +31,8 @@
             android:layout_marginLeft="16dp"
             android:layout_marginRight="16dp"
             android:layout_marginTop="40dp"
-            android:background="#cfcfcf" />
+            android:background="#cfcfcf"
+            android:visibility="gone"/>
 
     </FrameLayout>
 

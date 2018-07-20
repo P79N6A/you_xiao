@@ -31,13 +31,13 @@ public class ColorfulActivity extends BaseActivity implements
         CalendarView.OnYearChangeListener,
         View.OnClickListener {
 
-    TextView mTextMonthDay;
+    //TextView mTextMonthDay;
 
     TextView mTextYear;
 
-    TextView mTextLunar;
+    //TextView mTextLunar;
 
-    TextView mTextCurrentDay;
+    //TextView mTextCurrentDay;
 
     CalendarView mCalendarView;
 
@@ -66,13 +66,13 @@ public class ColorfulActivity extends BaseActivity implements
     @Override
     protected void initView() {
         setStatusBarDarkMode();
-        mTextMonthDay = (TextView) findViewById(R.id.tv_month_day);
+        //mTextMonthDay = (TextView) findViewById(R.id.tv_month_day);
         mTextYear = (TextView) findViewById(R.id.tv_year);
-        mTextLunar = (TextView) findViewById(R.id.tv_lunar);
+        //mTextLunar = (TextView) findViewById(R.id.tv_lunar);
         mRelativeTool = (RelativeLayout) findViewById(R.id.rl_tool);
         mCalendarView = (CalendarView) findViewById(R.id.calendarView);
-        mTextCurrentDay = (TextView) findViewById(R.id.tv_current_day);
-        mTextMonthDay.setOnClickListener(new View.OnClickListener() {
+        //mTextCurrentDay = (TextView) findViewById(R.id.tv_current_day);
+        mTextYear.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (!mCalendarLayout.isExpand()) {
@@ -80,12 +80,12 @@ public class ColorfulActivity extends BaseActivity implements
                     return;
                 }
                 mCalendarView.showYearSelectLayout(mYear);
-                mTextLunar.setVisibility(View.GONE);
-                mTextYear.setVisibility(View.GONE);
-                mTextMonthDay.setText(String.valueOf(mYear));
+                //mTextLunar.setVisibility(View.GONE);
+                //mTextYear.setVisibility(View.GONE);
+                //mTextMonthDay.setText(String.valueOf(mYear));
             }
         });
-        findViewById(R.id.fl_current).setOnClickListener(new View.OnClickListener() {
+        findViewById(R.id.tv_today).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 mCalendarView.scrollToCurrent();
@@ -96,9 +96,9 @@ public class ColorfulActivity extends BaseActivity implements
         mCalendarView.setOnYearChangeListener(this);
         mTextYear.setText(String.valueOf(mCalendarView.getCurYear()));
         mYear = mCalendarView.getCurYear();
-        mTextMonthDay.setText(mCalendarView.getCurMonth() + "月" + mCalendarView.getCurDay() + "日");
-        mTextLunar.setText("今日");
-        mTextCurrentDay.setText(String.valueOf(mCalendarView.getCurDay()));
+//        mTextMonthDay.setText(mCalendarView.getCurMonth() + "月" + mCalendarView.getCurDay() + "日");
+//        mTextLunar.setText("今日");
+//        mTextCurrentDay.setText(String.valueOf(mCalendarView.getCurDay()));
     }
     @Override
     protected void initData() {
@@ -106,20 +106,20 @@ public class ColorfulActivity extends BaseActivity implements
         int year = mCalendarView.getCurYear();
         int month = mCalendarView.getCurMonth();
 
-        schemes.add(getSchemeCalendar(year, month, 3, 0xFF40db25, "假"));
-        schemes.add(getSchemeCalendar(year, month, 6, 0xFFe69138, "事"));
-        schemes.add(getSchemeCalendar(year, month, 9, 0xFFdf1356, "议"));
-        schemes.add(getSchemeCalendar(year, month, 13, 0xFFedc56d, "记"));
-        schemes.add(getSchemeCalendar(year, month, 14, 0xFFedc56d, "记"));
-        schemes.add(getSchemeCalendar(year, month, 15, 0xFFaacc44, "假"));
-        schemes.add(getSchemeCalendar(year, month, 18, 0xFFbc13f0, "记"));
-        schemes.add(getSchemeCalendar(year, month, 25, 0xFF13acf0, "假"));
-        mCalendarView.setSchemeDate(schemes);
+//        schemes.add(getSchemeCalendar(year, month, 3, 0xFF40db25, "假"));
+//        schemes.add(getSchemeCalendar(year, month, 6, 0xFFe69138, "事"));
+//        schemes.add(getSchemeCalendar(year, month, 9, 0xFFdf1356, "议"));
+//        schemes.add(getSchemeCalendar(year, month, 13, 0xFFedc56d, "记"));
+//        schemes.add(getSchemeCalendar(year, month, 14, 0xFFedc56d, "记"));
+//        schemes.add(getSchemeCalendar(year, month, 15, 0xFFaacc44, "假"));
+//        schemes.add(getSchemeCalendar(year, month, 18, 0xFFbc13f0, "记"));
+//        schemes.add(getSchemeCalendar(year, month, 25, 0xFF13acf0, "假"));
+//        mCalendarView.setSchemeDate(schemes);
 
         mRecyclerView = (GroupRecyclerView) findViewById(R.id.recyclerView);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         mRecyclerView.addItemDecoration(new GroupItemDecoration<String, Article>());
-        mRecyclerView.setAdapter(new ArticleAdapter(this));
+        mRecyclerView.setAdapter(new ArticleAdapter(this, "20"));
         mRecyclerView.notifyDataSetChanged();
     }
 
@@ -157,18 +157,18 @@ public class ColorfulActivity extends BaseActivity implements
     @SuppressLint("SetTextI18n")
     @Override
     public void onDateSelected(Calendar calendar, boolean isClick) {
-        mTextLunar.setVisibility(View.VISIBLE);
+        //mTextLunar.setVisibility(View.VISIBLE);
         mTextYear.setVisibility(View.VISIBLE);
-        mTextMonthDay.setText(calendar.getMonth() + "月" + calendar.getDay() + "日");
-        mTextYear.setText(String.valueOf(calendar.getYear()));
-        mTextLunar.setText(calendar.getLunar());
+        //mTextMonthDay.setText(calendar.getMonth() + "月" + calendar.getDay() + "日");
+        mTextYear.setText(String.valueOf(calendar.getYear()) + "年" + calendar.getMonth() + "月");
+        //mTextLunar.setText(calendar.getLunar());
         mYear = calendar.getYear();
     }
 
 
     @Override
     public void onYearChange(int year) {
-        mTextMonthDay.setText(String.valueOf(year));
+        //mTextMonthDay.setText(String.valueOf(year));
     }
 
 

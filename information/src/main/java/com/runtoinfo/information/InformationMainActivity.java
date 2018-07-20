@@ -3,6 +3,9 @@ package com.runtoinfo.information;
 import android.app.Activity;
 import android.os.Bundle;
 
+import com.alibaba.android.arouter.facade.annotation.Route;
+
+@Route(path = "/information/informationActivity")
 public class InformationMainActivity extends Activity {
 
     @Override

@@ -826,6 +826,7 @@ public class CalendarView extends FrameLayout {
      * 更新周视图
      */
     public void updateWeekBar() {
+
         mWeekBar.onWeekStartChange(mDelegate.getWeekStart());
     }
 

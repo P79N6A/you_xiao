@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="10dp">
+
+        <ImageView
+            android:id="@+id/activity_img_back"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:src="@drawable/activity_black_back"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:text="活动详情"
+            android:textColor="#333333"
+            android:textSize="18sp" />
+    </RelativeLayout>
+
+    <ImageView
+        android:id="@+id/activity_event_img"
+        android:layout_width="match_parent"
+        android:layout_height="192dp"
+        android:background="@drawable/activity_img_event" />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd="20dp"
+        android:orientation="vertical">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="18sp"
+            android:text="小提琴兴趣班报名开始啦！"
+            android:textColor="#333333"
+            android:layout_marginTop="5dp"/>
+
+        <TextView
+            android:id="@+id/activity_event_time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="#999999"
+            android:textSize="15sp"
+            android:layout_marginTop="5dp"
+            android:text="时间：2018-7-17 10:00"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/activity_event_address"
+            android:textSize="15sp"
+            android:textColor="#999999"
+            android:text="地点：济南市历下区"
+            android:layout_marginTop="5dp"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="活动介绍"
+            android:textSize="18sp"
+            android:textColor="#333333"
+            android:layout_marginTop="40dp"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/activity_event_description"
+            android:layout_marginTop="10dp"
+            android:textSize="15sp"
+            android:textColor="#3f3f3f"
+            android:text="你号到哪里跟那个哦我你尴尬了格拉斯那个傻瓜设计公司够两年桑撒个桑桑两三年告诉过你送给你"/>
+
+        <TextView
+            android:id="@+id/activity_sign_up_now"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="40dp"
+            android:background="@drawable/background_button_blue"
+            android:text="立即报名"
+            android:textColor="#fff"
+            android:textSize="18sp"
+            android:padding="10dp"
+            android:gravity="center"/>
+    </LinearLayout>
+
+
+</LinearLayout>

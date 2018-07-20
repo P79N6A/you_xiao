@@ -14,6 +14,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
+import com.alibaba.android.arouter.launcher.ARouter;
 import com.runtoinfo.youxiao.R;
 import com.runtoinfo.youxiao.adapter.CoursePunchAdapter;
 import com.runtoinfo.youxiao.databinding.ActivityMainBinding;
@@ -32,7 +33,6 @@ import java.util.List;
 
 public class HomeFragment extends BaseFragment {
 
-    //public ActivityMainBinding binding;
     public FragmentHomeBinding binding;
     public CoursePunchAdapter coursePunchAdapter;
     public List<CourseEntity> list;
@@ -67,6 +67,26 @@ public class HomeFragment extends BaseFragment {
         coursePunchAdapter = new CoursePunchAdapter(getContext(), list);
         binding.homeRecyclerView.setAdapter(coursePunchAdapter);
 
+        binding.homeEmailImg.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ARouter.getInstance().build("/information/informationActivity").navigation();
+            }
+        });
+
+        binding.homeCourseListLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ARouter.getInstance().build("/cources/colorfulActivity").navigation();
+            }
+        });
+
+        binding.homeActivityListLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ARouter.getInstance().build("/event/eventActivity").navigation();
+            }
+        });
         return binding.getRoot();
     }
 

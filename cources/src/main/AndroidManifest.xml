@@ -12,6 +12,9 @@
                 <action android:name="android.intent.action.MAIN" />
             </intent-filter>
         </activity>
+        <activity android:name=".activities.CourseHandHomeWork" />
+        <activity android:name=".activities.CourseLeaveActivity" />
+        <activity android:name=".activities.LeaveActivity"></activity>
     </application>
 
 </manifest>
