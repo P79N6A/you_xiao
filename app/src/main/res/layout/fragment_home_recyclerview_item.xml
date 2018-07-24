@@ -2,7 +2,16 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="horizontal">
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="10dp"
+        android:paddingStart="5dp"
+        android:paddingEnd="5dp">
 
     <LinearLayout
         android:id="@+id/home_img_linear"
@@ -51,7 +60,8 @@
             android:gravity="center"
             android:text="08-05 09:30"
             android:textColor="#999999"
-            android:textSize="13sp" />
+            android:textSize="13sp"
+            android:drawablePadding="5dp"/>
 
         <RelativeLayout
             android:layout_width="wrap_content"
@@ -80,13 +90,11 @@
                 android:textSize="15.5sp" />
         </RelativeLayout>
     </LinearLayout>
+    </LinearLayout>
 
     <View
-        android:layout_below="@+id/home_img_linear"
         android:layout_width="wrap_content"
-        android:layout_height="5dp"
-        android:layout_margin="5dp"
-        android:background="#f0f0f0"
-        android:visibility="gone"/>
+        android:layout_height="1dp"
+        android:background="#e6eaf2"/>
 
 </LinearLayout>

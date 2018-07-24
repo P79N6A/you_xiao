@@ -59,8 +59,8 @@ public class PersonalCenterFragment extends BaseFragment {
         int[] to = {R.id.grid_img_view, R.id.grid_text};
         int[] img = {R.drawable.personal_img_order, R.drawable.personal_shopping_car, R.drawable.personal_img_activity,
                 R.drawable.personal_img_course_nots, R.drawable.personal_img_leave_nots,
-        R.drawable.personal_img_about_us, R.drawable.personal_img_return};
-        String[] text = {"我的订单","购物车","我的活动","上课记录","请假记录","关于我们","意见反馈"};
+        R.drawable.personal_img_about_us, R.drawable.personal_img_return, R.drawable.background_button};
+        String[] text = {"我的订单","购物车","我的活动","上课记录","请假记录","关于我们","意见反馈", ""};
         for (int i = 0; i < img.length; i++)
         {
             Map<String, Object> map = new HashMap<>();
@@ -87,6 +87,7 @@ public class PersonalCenterFragment extends BaseFragment {
                         case "上课记录":
                             break;
                         case "请假记录":
+                            ARouter.getInstance().build("/course/courseLeaveCode").navigation();
                             break;
                         case "关于我们":
                             break;

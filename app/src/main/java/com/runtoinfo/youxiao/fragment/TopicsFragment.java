@@ -18,7 +18,7 @@ public class TopicsFragment extends BaseFragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
-        View view = View.inflate(getActivity(), R.layout.fragment_topics, null);
+        View view = View.inflate(getActivity(), R.layout.school_movment, null);
         return view;
     }
 }

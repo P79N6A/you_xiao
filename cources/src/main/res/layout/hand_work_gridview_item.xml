@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="10dp">
+    <ImageView
+        android:id="@+id/home_work_grid_image"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_centerHorizontal="true"
+        android:background="@drawable/course_take_photo"/>
+
+    <ImageView
+        android:id="@+id/home_work_grid_deleter"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_margin="10dp"
+        android:src="@drawable/course_deleter"/>
+
+    <TextView
+        android:id="@+id/home_work_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="照片/视频/音频"
+        android:textColor="#999999"
+        android:textSize="15sp"
+        android:layout_below="@+id/home_work_grid_image"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="20dp"/>
+
+</RelativeLayout>

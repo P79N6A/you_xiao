@@ -38,7 +38,8 @@
             android:id="@+id/activity_comment_layout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="15dp">
+            android:layout_margin="15dp"
+            android:background="@drawable/background_dialog">
 
             <ImageView
                 android:id="@+id/activity_comment_imageView"
@@ -55,17 +56,19 @@
                 android:layout_alignParentStart="true"
                 android:layout_below="@+id/activity_comment_imageView"
                 android:text="小提琴兴趣班报名开始啦！"
-                android:textSize="18sp"
+                android:textSize="20sp"
+                android:padding="8dp"
                 android:textColor="#333333"/>
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/activity_name"
-                android:layout_marginTop="5dp"
                 android:textColor="#999999"
                 android:text="2018-7-17至2018-8-17"
                 android:textSize="18sp"
+                android:paddingStart="8dp"
+                android:paddingBottom="8dp"
                 android:id="@+id/activity_time" />
         </RelativeLayout>
 

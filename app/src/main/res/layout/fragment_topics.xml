@@ -6,7 +6,7 @@
 
     <TextView
         style="@style/TextView_18sp"
-        android:text="专题列表" />
+        android:text="动态列表" />
 
     <View
         android:layout_width="match_parent"
@@ -60,13 +60,13 @@
                         android:id="@+id/topics_img_view"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:src="@drawable/topics_2" />
+                        android:background="@drawable/topics_2" />
                 </LinearLayout>
 
                 <LinearLayout
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
-                    android:layout_marginStart="10dp"
+                    android:layout_marginStart="5dp"
                     android:layout_weight="2"
                     android:orientation="vertical">
 
@@ -122,7 +122,7 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="20dp"
+                    android:layout_marginTop="8dp"
                     android:orientation="horizontal">
 
                     <ImageView

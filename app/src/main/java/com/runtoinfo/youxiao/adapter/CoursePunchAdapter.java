@@ -11,6 +11,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.alibaba.android.arouter.launcher.ARouter;
 import com.runtoinfo.youxiao.R;
 import com.runtoinfo.youxiao.entity.CourseEntity;
 
@@ -79,9 +80,12 @@ public class CoursePunchAdapter extends RecyclerView.Adapter {
             {
                 case R.id.home_details:
                     Log.e("TAG", "查看详情");
+                    ARouter.getInstance().build("/cources/colorfulActivity").navigation();
                     break;
                 case R.id.home_course_sign:
                     Log.e("TAG", "签到");
+                    courseSign.setText("已签");
+                    courseSign.setBackgroundResource(R.drawable.home_sign_finish);
                     break;
             }
         }

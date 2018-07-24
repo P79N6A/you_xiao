@@ -20,6 +20,7 @@ import com.alibaba.sdk.android.push.CommonCallback;
 import com.alibaba.sdk.android.push.noonesdk.PushServiceFactory;
 import com.taobao.sophix.SophixManager;
 import com.taobao.sophix.listener.PatchLoadStatusListener;
+import com.tencent.bugly.crashreport.CrashReport;
 import com.ut.mini.internal.UTTeamWork;
 
 import org.json.JSONException;
@@ -52,6 +53,7 @@ public class MyApplication extends Application {
         initHotfix();
         initPushService(this);
         //isFirstLogin();
+        CrashReport.initCrashReport(getApplicationContext(),"446920bced", true);
     }
 
     public void initArouter(){

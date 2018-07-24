@@ -1,5 +1,9 @@
 package com.runtoinfo.youxiao.fragment;
 
+import android.Manifest;
+import android.app.FragmentManager;
+import android.app.ListActivity;
+import android.content.Context;
 import android.databinding.DataBindingUtil;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -7,12 +11,17 @@ import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
+import android.util.DisplayMetrics;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.ImageView;
+import android.widget.PopupWindow;
 
 import com.alibaba.android.arouter.launcher.ARouter;
 import com.runtoinfo.youxiao.R;
@@ -25,7 +34,9 @@ import com.runtoinfo.youxiao.ui.PopupWindowFragment;
 
 import java.lang.invoke.CallSite;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by qiaojunchao on 2018/5/24 0024.
@@ -36,37 +47,60 @@ public class HomeFragment extends BaseFragment {
     public FragmentHomeBinding binding;
     public CoursePunchAdapter coursePunchAdapter;
     public List<CourseEntity> list;
+    public PopupWindowFragment popupWindow;
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_home, container, false);
+        initRecyclerData();
+        initView();
+        return binding.getRoot();
+    }
 
+
+    public void initRecyclerData(){
         binding.fragmentHomeImagview.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                List<String> list = new ArrayList<>();
-                PopupWindowFragment popuMenu = new PopupWindowFragment(getContext());
-                list.add("北京大学");
-                list.add("清华大学");
-                list.add("山东大学");
-                list.add("复旦大学");
-                list.add("吉林大学");
-                popuMenu.showPopupWindows(list, Gravity.NO_GRAVITY, 20, 160);
+                List<Map<String, Object>> list = new ArrayList<>();
+                popupWindow = new PopupWindowFragment(getContext(), getActivity());
+                for (int i = 0; i < 5; i++) {
+                    Map<String, Object> map = new HashMap<>();
+                    map.put("text", "育雅学堂");
+                    map.put("image", BitmapFactory.decodeResource(getActivity().getResources(), R.drawable.login_school_logo));
+                    list.add(map);
+                }
+
+                popupWindow.showPopupWindows(list, binding.fragmentHomeImagview);
+
+                WindowManager.LayoutParams params=getActivity().getWindow().getAttributes();
+                params.alpha=0.7f;
+                getActivity().getWindow().setAttributes(params);
             }
         });
-        list = new ArrayList<>();
-        CourseEntity courseEntity = new CourseEntity();
-        courseEntity.setCourseName("布米童艺跆拳道班零基础教育");
-        courseEntity.setCourseTime("05-20 17:32");
-        Bitmap bitmap = BitmapFactory.decodeResource(getContext().getResources(), R.drawable.home_taekwondo_img);
-        Drawable drawable = getContext().getResources().getDrawable(R.drawable.home_taekwondo_img);
-        courseEntity.setBitmap(drawable);
-        list.add(courseEntity);
 
+        list = new ArrayList<>();
+        for (int i = 0; i < 5; i++){
+            CourseEntity courseEntity = new CourseEntity();
+            courseEntity.setCourseName("布米童艺跆拳道班零基础教育");
+            courseEntity.setCourseTime("05-20 17:32");
+            Drawable drawable = getContext().getResources().getDrawable(R.drawable.home_taekwondo_img);
+            courseEntity.setBitmap(drawable);
+            list.add(courseEntity);
+        }
         binding.homeRecyclerView.setHasFixedSize(true);
         binding.homeRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         coursePunchAdapter = new CoursePunchAdapter(getContext(), list);
         binding.homeRecyclerView.setAdapter(coursePunchAdapter);
 
+        binding.homeRecyclerView.setRecyclerListener(new RecyclerView.RecyclerListener() {
+            @Override
+            public void onViewRecycled(RecyclerView.ViewHolder holder) {
+                //ARouter.getInstance().build("/cources/colorfulActivity").navigation();
+            }
+        });
+    }
+
+    public void initView(){
         binding.homeEmailImg.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -87,13 +121,17 @@ public class HomeFragment extends BaseFragment {
                 ARouter.getInstance().build("/event/eventActivity").navigation();
             }
         });
-        return binding.getRoot();
+
+        binding.homeSchoolMovingStatus.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ARouter.getInstance().build("/main/schoolDynamics").navigation();
+            }
+        });
     }
 
     @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-
+    public void onPause() {
+        super.onPause();
     }
-
 }

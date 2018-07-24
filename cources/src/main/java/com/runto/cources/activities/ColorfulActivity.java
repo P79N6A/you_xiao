@@ -9,11 +9,13 @@ import android.os.PersistableBundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 
 import com.alibaba.android.arouter.facade.annotation.Route;
+import com.alibaba.android.arouter.launcher.ARouter;
 import com.runto.cources.R;
 import com.runto.cources.adapter.ArticleAdapter;
 import com.runto.cources.bean.Article;
@@ -45,6 +47,7 @@ public class ColorfulActivity extends BaseActivity implements
     private int mYear;
     CalendarLayout mCalendarLayout;
     GroupRecyclerView mRecyclerView;
+    public ImageView imgMenu;
 
     public static void show(Context context) {
         context.startActivity(new Intent(context, ColorfulActivity.class));
@@ -72,6 +75,13 @@ public class ColorfulActivity extends BaseActivity implements
         mRelativeTool = (RelativeLayout) findViewById(R.id.rl_tool);
         mCalendarView = (CalendarView) findViewById(R.id.calendarView);
         //mTextCurrentDay = (TextView) findViewById(R.id.tv_current_day);
+        imgMenu = findViewById(R.id.course_message_menu);
+        imgMenu.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ARouter.getInstance().build("/information/informationActivity").navigation();
+            }
+        });
         mTextYear.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

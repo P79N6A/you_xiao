@@ -8,5 +8,6 @@
         android:id="@+id/fragment_home_item_list"
         android:divider="@null"
         android:scrollbars="none"
-        android:padding="2dp"/>
+        android:padding="8dp"
+        android:layout_marginTop="13dp"/>
 </LinearLayout>

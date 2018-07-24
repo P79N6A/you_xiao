@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#555555">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:gravity="center"
+        android:background="@drawable/background_edittext">
+
+        <TextView
+            android:id="@+id/select_type_take_photo"
+            style="@style/TextView_Add_HomeWork"
+            android:text="拍摄" />
+
+        <TextView
+            android:id="@+id/select_type_phone"
+            style="@style/TextView_Add_HomeWork"
+            android:text="从手机中选择"/>
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/select_type_cancel"
+       style="@style/TextView_Add_HomeWork"
+        android:text="取消"
+        android:layout_marginTop="20dp"
+        android:background="@drawable/background_edittext"/>
+
+</LinearLayout>

@@ -35,6 +35,13 @@
                 android:text="我的课程"
                 android:textColor="#fff"
                 android:textSize="18sp" />
+
+            <ImageView
+                android:id="@+id/course_message_menu"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:src="@drawable/course_msg_memu"/>
         </RelativeLayout>
 
 
@@ -176,6 +183,11 @@
             app:year_view_month_text_size="20sp"
             app:year_view_scheme_color="#f17706" />
 
+        <View
+            android:layout_width="wrap_content"
+            android:layout_height="0.1dp"
+            android:background="#cccccc"/>
+
         <com.runto.cources.group.GroupRecyclerView
             android:id="@+id/recyclerView"
             android:layout_width="match_parent"
@@ -188,7 +200,9 @@
             app:group_padding_left="16dp"
             app:group_padding_right="16dp"
             app:group_text_color="#555555"
-            app:group_text_size="14sp" />
+            app:group_text_size="14sp"
+            android:layout_marginTop="10dp"
+            android:paddingBottom="15dp"/>
     </com.runto.cources.ui.CalendarLayout>
 
 
