@@ -18,8 +18,8 @@
             </intent-filter>
         </activity>
         <activity android:name=".activities.CourseHandHomeWork" />
+        <activity android:name=".activities.CourseLeaveCodeActivity" />
         <activity android:name=".activities.CourseLeaveActivity" />
-        <activity android:name=".activities.LeaveActivity"/>
         <activity
             android:name="com.donkingliang.imageselector.ImageSelectorActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
@@ -33,7 +33,7 @@
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
 
-        <!--解决7.0照相机崩溃问题-->
+        <!-- 解决7.0照相机崩溃问题 -->
         <provider
             android:name="android.support.v4.content.FileProvider"
             android:authorities="${applicationId}.fileprovider"
@@ -44,6 +44,9 @@
                 android:resource="@xml/file_paths" />
         </provider>
 
+        <activity android:name=".activities.BoutiqueCourseDetails" />
+        <activity android:name=".activities.ElectronicScore" />
+        <activity android:name=".activities.ElectronicPlayerActivity"></activity>
     </application>
 
 </manifest>

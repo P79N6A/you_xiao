@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.os.PersistableBundle;
 import android.support.annotation.Nullable;
@@ -19,6 +20,7 @@ import com.alibaba.android.arouter.launcher.ARouter;
 import com.runto.cources.R;
 import com.runto.cources.adapter.ArticleAdapter;
 import com.runto.cources.bean.Article;
+import com.runto.cources.databinding.ActivityCourceBinding;
 import com.runto.cources.group.GroupItemDecoration;
 import com.runto.cources.group.GroupRecyclerView;
 import com.runto.cources.ui.Calendar;
@@ -48,7 +50,7 @@ public class ColorfulActivity extends BaseActivity implements
     CalendarLayout mCalendarLayout;
     GroupRecyclerView mRecyclerView;
     public ImageView imgMenu;
-
+    public ActivityCourceBinding binding;
     public static void show(Context context) {
         context.startActivity(new Intent(context, ColorfulActivity.class));
     }
@@ -56,7 +58,7 @@ public class ColorfulActivity extends BaseActivity implements
 //    @Override
 //    public void onCreate(@Nullable Bundle savedInstanceState, @Nullable PersistableBundle persistentState) {
 //        super.onCreate(savedInstanceState, persistentState);
-//        setContentView(R.layout.activity_cource);
+//        binding = DataBindingUtil.setContentView(this, R.layout.activity_cource);
 //        initView();
 //        initData();
 //    }
@@ -109,6 +111,13 @@ public class ColorfulActivity extends BaseActivity implements
 //        mTextMonthDay.setText(mCalendarView.getCurMonth() + "月" + mCalendarView.getCurDay() + "日");
 //        mTextLunar.setText("今日");
 //        mTextCurrentDay.setText(String.valueOf(mCalendarView.getCurDay()));
+
+        findViewById(R.id.activity_img_back).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onBackPressed();
+            }
+        });
     }
     @Override
     protected void initData() {

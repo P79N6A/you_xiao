@@ -51,7 +51,7 @@
         <item name="android:gravity">center</item>
         <item name="android:layout_gravity">center_horizontal</item>
         <item name="android:textColor">@color/text_blue</item>
-        <item name="android:padding">10dp</item>
+        <item name="android:padding">12dp</item>
     </style>
 
     <style name="custom_dialog" parent="@android:style/Theme.Dialog">
@@ -70,5 +70,15 @@
         <item name="android:backgroundDimEnabled">true</item>
         <!-- 遮罩层 -->
         <item name="android:backgroundDimAmount">0.5</item>
+    </style>
+
+    <style name="text_size">
+        <item name="android:textSize">18sp</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+    
+    <style name="popup_animation">
+        <item name="android:layout_height">60dp</item>
+        <item name="android:layout_width">140dp</item>
     </style>
 </resources>

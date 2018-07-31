@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="relative_background_color">#ffffff</color>
+    <color name="personal_information_textview_color">#333333</color>
+    <color name="dialog_button_text_color">#0a79f5</color>
+</resources>

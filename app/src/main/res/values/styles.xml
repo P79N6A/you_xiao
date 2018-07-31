@@ -76,4 +76,8 @@
         <item name="android:layout_marginStart">10dp</item>
     </style>
 
+    <style name="Table_text_style">
+        <item name="android:textSize">18sp</item>
+    </style>
+
 </resources>

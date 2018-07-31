@@ -2,20 +2,25 @@ package com.runtoinfo.event.activity;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.databinding.DataBindingUtil;
 import android.os.Bundle;
+import android.provider.ContactsContract;
 import android.view.View;
 
 import com.runtoinfo.event.R;
+import com.runtoinfo.event.databinding.ActivitySiginUpBinding;
+import com.runtoinfo.event.databinding.ActivitySignUpSuccessBinding;
 import com.runtoinfo.event.dialog.SignUpSuccess;
 
 public class ActivitiesSignUp extends Activity {
 
+    ActivitySiginUpBinding binding;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_sigin_up);
+        binding = DataBindingUtil.setContentView(this, R.layout.activity_sigin_up);
 
-        findViewById(R.id.activity_sign_alone).setOnClickListener(new View.OnClickListener() {
+        binding.activitySignAlone.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 SignUpSuccess signUpSuccess = new SignUpSuccess(ActivitiesSignUp.this);
@@ -23,10 +28,16 @@ public class ActivitiesSignUp extends Activity {
             }
         });
 
-        findViewById(R.id.activity_add_follow).setOnClickListener(new View.OnClickListener() {
+        binding.activityAddFollow.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 startActivity(new Intent(ActivitiesSignUp.this, SignUpAddEntourage.class));
+            }
+        });
+        binding.activityImgBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onBackPressed();
             }
         });
     }

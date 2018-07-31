@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout>
+
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:paddingTop="20dp"
+        android:paddingStart="15dp"
+        android:paddingEnd="15dp">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="#333740"
+            android:textSize="18sp"
+            android:text="课程介绍"/>
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="top"
+            android:layout_marginTop="20dp"
+            android:textColor="#333740"
+            android:textSize="18sp"
+            android:text="文章的基本要素——主题、材料、结构、语言，是文章学的主要研究对象，以往各种写作论著论之甚详，但对其概念内涵的揭示似欠斟酌，定义并不严格。新近出版的写作论著，或沿用旧说，或虽有改动而仍值得商榷。本文拟从严格意义上的定义要求出发，结合有关知识，对这四个要素概念的种种“定义”质疑问难，并试提出自己的修正意见，以就教于写作界同行。"/>
+
+    </LinearLayout>
+</layout>

@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="RelativeLayout_Style">
+        <item name="android:paddingStart">20dp</item>
+        <item name="android:paddingBottom">12dp</item>
+        <item name="android:paddingEnd">20dp</item>
+        <item name="android:paddingTop">12dp</item>
+        <item name="android:background">@color/relative_background_color</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_width">wrap_content</item>
+    </style>
+
+    <style name="RelativeLayout_Style_Settings">
+        <item name="android:paddingStart">30dp</item>
+        <item name="android:paddingEnd">10dp</item>
+        <item name="android:paddingBottom">14dp</item>
+        <item name="android:paddingTop">14dp</item>
+        <item name="android:background">@color/relative_background_color</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_width">wrap_content</item>
+    </style>
+
+    <style name="TextView_PersonlInformation">
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_centerVertical">true</item>
+        <item name="android:textSize">18sp</item>
+        <item name="android:textColor">@color/personal_information_textview_color</item>
+    </style>
+
+    <style name="TextView_Add_HomeWork">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textSize">18sp</item>
+        <item name="android:gravity">center</item>
+        <item name="android:layout_gravity">center_horizontal</item>
+        <item name="android:textColor">@color/dialog_button_text_color</item>
+        <item name="android:padding">12dp</item>
+    </style>
+</resources>

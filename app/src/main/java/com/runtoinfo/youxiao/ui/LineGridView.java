@@ -43,7 +43,7 @@ public class LineGridView extends GridView {
         Paint localPaint;
         localPaint = new Paint();
         localPaint.setStyle(Paint.Style.STROKE);
-        localPaint.setColor(Color.parseColor("#cccccc"));//这个就是设置分割线的颜色
+        localPaint.setColor(Color.parseColor("#ededed"));//这个就是设置分割线的颜色
         for (int i = 0; i < childCount; i++) {
             View cellView = getChildAt(i);
             if ((i + 1) % column == 0) {//每一行最后一个

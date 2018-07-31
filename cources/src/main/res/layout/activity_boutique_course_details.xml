@@ -1,0 +1,213 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:tools="http://schemas.android.com/tools">
+
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:focusable="true"
+        android:focusableInTouchMode="true"
+        android:orientation="vertical"
+        android:background="#fff">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:background="#fff"
+            android:padding="10dp"
+            android:layout_weight="1.25">
+
+            <ImageView
+                android:id="@+id/course_leave_back"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:src="@drawable/activity_black_back" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:layout_centerVertical="true"
+                android:text="课程详情"
+                android:textColor="#333333"
+                android:textSize="20sp" />
+        </RelativeLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_marginTop="10dp"
+            android:orientation="vertical"
+            android:layout_weight="13">
+
+
+            <com.runtoinfo.youxiao.common_ui.MyVideoView
+                android:id="@+id/boutique_course_details_videoView"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_marginTop="10dp"
+                android:layout_weight="3"
+                android:visibility="gone" />
+
+            <ImageView
+                android:id="@+id/boutique_course_details_imageView"
+                android:layout_width="wrap_content"
+                android:layout_height="0dp"
+                android:layout_marginTop="10dp"
+                android:layout_weight="3"
+                android:background="@drawable/boutique_course_details" />
+
+            <com.runtoinfo.youxiao.common_ui.MyScrollView
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="5">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical">
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:paddingBottom="18dp"
+                        android:paddingEnd="15dp"
+                        android:paddingStart="15dp"
+                        android:paddingTop="18dp">
+
+                        <TextView
+                            android:id="@+id/boutique_course_name"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="钢琴在线教学视频零基础初级入门五线谱乐理教学"
+                            android:textColor="#333740"
+                            android:textSize="20sp" />
+
+                        <RelativeLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="10dp">
+
+                            <TextView
+                                android:id="@+id/boutique_course_open_time"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_centerVertical="true"
+                                android:text="7月20日 10:00开课"
+                                android:textColor="#999999"
+                                android:textSize="15sp" />
+
+                            <TextView
+                                android:id="@+id/boutique_course_purchase_number"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_alignParentEnd="true"
+                                android:layout_centerVertical="true"
+                                android:text="525人购买"
+                                android:textColor="#999999"
+                                android:textSize="15sp" />
+                        </RelativeLayout>
+
+                        <TextView
+                            android:id="@+id/boutique_course_price"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="15dp"
+                            android:text="¥139"
+                            android:textColor="#ff4400"
+                            android:textSize="19sp"
+                            android:textStyle="bold" />
+                    </LinearLayout>
+
+                    <View
+                        android:layout_width="wrap_content"
+                        android:layout_height="5dp"
+                        android:background="#f5f5f5" />
+
+                    <android.support.design.widget.TabLayout
+                        android:id="@+id/boutique_course_introduction_tablayout"
+                        android:layout_width="match_parent"
+                        android:layout_height="60dp"
+                        app:tabIndicatorColor="#0095ff"
+                        app:tabPadding="15dp"
+                        app:tabSelectedTextColor="#333740"
+                        app:tabTextAppearance="@style/text_size"
+                        android:layout_marginStart="80dp"
+                        android:layout_marginEnd="80dp"
+                        app:tabTextColor="#333740" />
+
+                    <View
+                        android:layout_width="wrap_content"
+                        android:layout_height="0.1dp"
+                        android:background="#e6eaf2" />
+
+                    <com.runtoinfo.youxiao.common_ui.CustomViewPager
+                        android:id="@+id/boutique_course_introduction_vpager"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent" />
+
+
+                </LinearLayout>
+            </com.runtoinfo.youxiao.common_ui.MyScrollView>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1.5"
+            android:gravity="bottom"
+            android:orientation="horizontal">
+
+            <LinearLayout
+                android:id="@+id/collection_layout"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:layout_weight="1"
+                android:gravity="center"
+                tools:ignore="NestedWeights">
+
+                <ImageView
+                    android:id="@+id/boutique_course_collection_image"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/boutique_course_collection" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="10dp"
+                    android:text="收藏"
+                    android:textColor="#333333"
+                    android:textSize="18sp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/buy_course_layout"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:background="#ff4403">
+
+                <ImageView
+                    android:id="@+id/boutique_course_buy_now"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/boutique_course_buy" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="10dp"
+                    android:text="立即购买"
+                    android:textColor="#fff"
+                    android:textSize="18sp" />
+            </LinearLayout>
+        </LinearLayout>
+    </LinearLayout>
+</layout>

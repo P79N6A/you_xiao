@@ -20,7 +20,7 @@
         <View
             android:layout_width="match_parent"
             android:layout_height="1dp"
-            android:background="@color/bg_line_light_gray" />
+            android:background="#e6eaf2" />
 
         <LinearLayout
             android:layout_width="match_parent"

@@ -79,19 +79,26 @@ public class PersonalCenterFragment extends BaseFragment {
                 String json = new Gson().toJson(adapter.getItem(position));
                 try {
                     JSONObject object = new JSONObject(json);
-                    switch (object.getString("text").replaceAll("\\s*", ""))
+                    String itemObj = object.getString("text").replaceAll("\\s*", "");
+                    switch (position)
                     {
-                        case "我的课程":
-                            ARouter.getInstance().build("/cources/colorfulActivity").navigation();
+                        case 0://我的订单
+
                             break;
-                        case "上课记录":
+                        case 1://购物车
                             break;
-                        case "请假记录":
+                        case 2://我的活动
+                            break;
+                        case 3://上课记录
+                            break;
+                        case 4://"请假记录":
                             ARouter.getInstance().build("/course/courseLeaveCode").navigation();
                             break;
-                        case "关于我们":
+                        case 5://"关于我们":
+                            ARouter.getInstance().build("/personal/aboutUs").navigation();
                             break;
-                        case "意见反馈":
+                        case 6://"意见反馈":
+                            ARouter.getInstance().build("/personal/feedback").navigation();
                             break;
                     }
                 } catch (JSONException e) {
@@ -102,7 +109,14 @@ public class PersonalCenterFragment extends BaseFragment {
         binding.personalSetting.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ARouter.getInstance().build("/personal/personalMain").navigation();
+                ARouter.getInstance().build("/personal/personalSettings").navigation();
+            }
+        });
+
+        binding.personalMyCourses.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ARouter.getInstance().build("/cources/colorfulActivity").navigation();
             }
         });
     }

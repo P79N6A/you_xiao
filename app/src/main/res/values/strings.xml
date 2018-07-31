@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Youxiao</string>
+    <string name="app_name">有校</string>
     <string name="welcome_experience_now">立即体验</string>
     <string name="login_remember_password">记住用户名和密码</string>
     <string name="login_forget_password">忘记密码？</string>

@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout>
+
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#f7f7f7"
+        android:orientation="vertical">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="#fff"
+            android:padding="10dp">
+
+            <ImageView
+                android:id="@+id/personal_feedback_back"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:src="@drawable/activity_black_back" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:layout_centerVertical="true"
+                android:text="意见反馈"
+                android:textColor="#333333"
+                android:textSize="20sp" />
+        </RelativeLayout>
+
+        <View
+            android:layout_width="wrap_content"
+            android:layout_height="0.1dp"
+            android:background="#ebebeb" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingBottom="12dp"
+            android:paddingStart="20dp"
+            android:paddingTop="12dp"
+            android:text="选择反馈类型："
+            android:textSize="15sp" />
+
+        <RadioGroup
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="#fff"
+            android:orientation="horizontal"
+            android:paddingBottom="13dp"
+            android:paddingStart="19dp"
+            android:paddingTop="13dp">
+
+            <RadioButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:button="@drawable/radiobutton_selection"
+                android:paddingLeft="8dp"
+                android:text="功能建议"
+                android:textColor="#333333"
+                android:textSize="18sp" />
+
+            <RadioButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:button="@drawable/radiobutton_selection"
+                android:checked="false"
+                android:paddingLeft="8dp"
+                android:text="课程建议"
+                android:textColor="#333333"
+                android:textSize="18sp" />
+
+            <RadioButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:button="@drawable/radiobutton_selection"
+                android:checked="false"
+                android:paddingLeft="8dp"
+                android:text="程序建议"
+                android:textColor="#333333"
+                android:textSize="18sp" />
+        </RadioGroup>
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="220dp"
+            android:layout_marginTop="10dp"
+            android:background="#fff"
+            android:gravity="top"
+            android:hint="将您想要的功能写在这里，我们可以尽快帮您实现哦~"
+            android:padding="20dp"
+            android:textColorHint="#cccccc"
+            android:textSize="16sp" />
+
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="18dp"
+            android:layout_marginStart="18dp"
+            android:layout_marginTop="20dp"
+            android:background="@drawable/background_button_blue"
+            android:gravity="center"
+            android:padding="15dp"
+            android:text="提交"
+            android:textColor="#fff"
+            android:textSize="18sp" />
+
+    </LinearLayout>
+</layout>

@@ -7,7 +7,11 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
+import android.util.DisplayMetrics;
+import android.view.Gravity;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.TextView;
 
 import com.alibaba.android.arouter.launcher.ARouter;
@@ -31,11 +35,23 @@ public class SelectPictureDialog extends Dialog {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.personal_avatar_layout);
+        requestWindowFeature(Window.FEATURE_NO_TITLE);
+        setContentView(R.layout.course_add_home_work);
+        this.setCancelable(false);
+
+        Window window = activity.getWindow();
+        window.setGravity(Gravity.BOTTOM);
+        WindowManager manager = (WindowManager) activity.getSystemService(Context.WINDOW_SERVICE);
+        DisplayMetrics dm = new DisplayMetrics();
+        manager.getDefaultDisplay().getMetrics(dm);
+        WindowManager.LayoutParams lp = window.getAttributes();
+        lp.width = dm.widthPixels;
+        window.setAttributes(lp);
+
         ViewHolder holder = new ViewHolder();
-        holder.takePhoto = findViewById(R.id.personal_take_photo);
-        holder.selectPhoto = findViewById(R.id.personal_from_pic);
-        holder.cancel = findViewById(R.id.personal_cancle);
+        holder.takePhoto = findViewById(R.id.select_type_take_photo);
+        holder.selectPhoto = findViewById(R.id.select_type_phone);
+        holder.cancel = findViewById(R.id.select_type_cancel);
 
         holder.takePhoto.setOnClickListener(new View.OnClickListener() {
             @Override

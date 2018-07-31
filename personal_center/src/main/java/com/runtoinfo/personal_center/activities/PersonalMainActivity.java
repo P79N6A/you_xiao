@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
+import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -17,8 +18,12 @@ import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.annotation.RequiresApi;
 import android.text.format.DateUtils;
+import android.util.DisplayMetrics;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.DatePicker;
 import android.widget.TextView;
 
@@ -71,7 +76,7 @@ public class PersonalMainActivity extends Activity {
         binding.personalRelativeSex.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                initSexSelectionDialog();
             }
         });
         //生日
@@ -90,6 +95,53 @@ public class PersonalMainActivity extends Activity {
             }
         });
 
+        binding.personalInformationBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onBackPressed();
+            }
+        });
+
+    }
+
+    public void initSexSelectionDialog(){
+        final Dialog dialog = new Dialog(this);
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.setContentView(R.layout.personal_sex_selection);
+        dialog.setCancelable(false);
+
+        Window window = this.getWindow();
+        window.setGravity(Gravity.BOTTOM);
+        WindowManager manager = (WindowManager) this.getSystemService(Context.WINDOW_SERVICE);
+        DisplayMetrics dm = new DisplayMetrics();
+        manager.getDefaultDisplay().getMetrics(dm);
+        WindowManager.LayoutParams lp = window.getAttributes();
+        lp.width = dm.widthPixels;
+        window.setAttributes(lp);
+
+        dialog.findViewById(R.id.personal_sex_man).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+                binding.personalEditSex.setText("男");
+            }
+        });
+
+        dialog.findViewById(R.id.personal_sex_woman).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+                binding.personalEditSex.setText("女");
+            }
+        });
+
+        dialog.findViewById(R.id.personal_sex_cancel).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+                dialog.cancel();
+            }
+        });
     }
 
     @SuppressLint("SetTextI18n")
@@ -175,7 +227,6 @@ public class PersonalMainActivity extends Activity {
     //头像选择方式
     public void avatarSelect(){
         final SelectPictureDialog dialog = new SelectPictureDialog(this);
-        SelectPictureDialog.ViewHolder viewHolder = new SelectPictureDialog.ViewHolder();
         dialog.show();
     }
 

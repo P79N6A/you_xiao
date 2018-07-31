@@ -1,249 +1,262 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:tools="http://schemas.android.com/tools"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+<layout xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
 
 
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical">
-
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:padding="15dp"
-        android:background="#3aa6fe">
-        <ImageView
-            android:layout_width="18dp"
-            android:layout_height="25dp"
-            android:background="@drawable/personal_back"/>
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
-            android:layout_centerHorizontal="true"
-            android:textSize="18sp"
-            android:text="编辑资料"
-            android:textColor="#fff"
-            android:id="@+id/personal_edit_msg_tv"/>
-
-    </RelativeLayout>
-
-    <LinearLayout
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical"
-        android:layout_margin="18dp">
+        android:orientation="vertical">
 
         <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="45dp"
-            android:id="@+id/personal_relative_avatar">
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textSize="14sp"
-                android:text="头像"
-                android:layout_centerVertical="true"/>
-            
-            <com.runtoinfo.youxiao.common_ui.CircleImageView
-                android:layout_width="40dp"
-                android:layout_height="40dp"
-                android:id="@+id/personal_edit_tx"
-                android:layout_centerVertical="true"
-                android:layout_toStartOf="@+id/personal_next"
-                android:src="@drawable/ic_launcher"
-                app:civ_border_overlay="true"/>
+            android:layout_height="wrap_content"
+            android:background="#3aa6fe"
+            android:padding="15dp">
 
             <ImageView
-                android:id="@+id/personal_next"
+                android:id="@+id/personal_information_back"
                 android:layout_width="18dp"
                 android:layout_height="25dp"
-                android:layout_alignParentEnd="true"
-                android:layout_centerVertical="true"
-                android:layout_marginLeft="15dp"
-                android:src="@drawable/personal_next"/>
-        </RelativeLayout>
-        
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:background="#33333333"/>
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="45dp"
-            android:id="@+id/personal_relative_username">
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textSize="14sp"
-                android:text="用户名"
-                android:layout_centerVertical="true"/>
+                android:background="@drawable/personal_back" />
 
             <TextView
+                android:id="@+id/personal_edit_msg_tv"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:id="@+id/personal_user_name"
+                android:layout_centerHorizontal="true"
                 android:layout_centerVertical="true"
-                android:layout_toStartOf="@+id/personal_next_user"
-                android:src="@drawable/persona_avatar"
-                android:text="姑苏城"/>
+                android:text="个人信息"
+                android:textColor="#fff"
+                android:textSize="20sp" />
 
-            <ImageView
-                android:id="@+id/personal_next_user"
-                android:layout_width="18dp"
-                android:layout_height="25dp"
-                android:layout_alignParentEnd="true"
-                android:layout_centerVertical="true"
-                android:layout_marginLeft="15dp"
-                android:src="@drawable/personal_next"/>
         </RelativeLayout>
 
-        <View
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:background="#33333333"/>
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="45dp"
-            android:id="@+id/personal_relative_phone">
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textSize="14sp"
-                android:text="手机号"
-                android:layout_centerVertical="true"
-                android:id="@+id/personal_text_phone"/>
+            android:layout_height="match_parent"
+            android:layout_margin="18dp"
+            android:orientation="vertical">
 
-            <EditText
+            <RelativeLayout
+                android:id="@+id/personal_relative_avatar"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:id="@+id/personal_phone_et"
-                android:background="@android:color/transparent"
-                android:layout_toLeftOf="@+id/personal_next_phone"
-                android:layout_toRightOf="@+id/personal_text_phone"
-                android:gravity="right|center_vertical"
-                android:layout_centerVertical="true"
-                tools:ignore="RtlHardcoded" />
-
-            <ImageView
-                android:id="@+id/personal_next_phone"
-                android:layout_width="18dp"
-                android:layout_height="25dp"
-                android:layout_alignParentEnd="true"
-                android:layout_centerVertical="true"
-                android:layout_marginLeft="15dp"
-                android:src="@drawable/personal_next"/>
-        </RelativeLayout>
-
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:background="#33333333"/>
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="45dp"
-            android:id="@+id/personal_relative_sex">
-            <TextView
-                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textSize="14sp"
-                android:text="性别"
-                android:layout_centerVertical="true"/>
+                android:padding="5dp">
 
-            <TextView
-                android:layout_width="40dp"
-                android:layout_height="40dp"
-                android:id="@+id/personal_edit_sex"
-                android:layout_centerVertical="true"
-                android:gravity="center"
-                android:layout_toStartOf="@+id/personal_next_sex"
-                android:src="@drawable/persona_avatar"
-                android:text="男"/>
+                <TextView
+                    style="@style/TextView_PersonlInformation"
+                    android:text="头像" />
 
-            <ImageView
-                android:id="@+id/personal_next_sex"
-                android:layout_width="18dp"
-                android:layout_height="25dp"
-                android:layout_alignParentEnd="true"
-                android:layout_centerVertical="true"
-                android:layout_marginLeft="15dp"
-                android:src="@drawable/personal_next"/>
-        </RelativeLayout>
+                <com.runtoinfo.youxiao.common_ui.CircleImageView
+                    android:id="@+id/personal_edit_tx"
+                    android:layout_width="60dp"
+                    android:layout_height="60dp"
+                    android:layout_centerVertical="true"
+                    android:layout_toStartOf="@+id/personal_next"
+                    android:src="@drawable/ic_launcher"
+                    app:civ_border_overlay="true" />
 
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:background="#33333333"/>
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="45dp"
-            android:id="@+id/personal_relative_birthday">
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textSize="14sp"
-                android:text="生日"
-                android:layout_centerVertical="true"/>
+                <ImageView
+                    android:id="@+id/personal_next"
+                    android:layout_width="18dp"
+                    android:layout_height="25dp"
+                    android:layout_alignParentEnd="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="15dp"
+                    android:src="@drawable/personal_next" />
+            </RelativeLayout>
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/personal_edit_birth"
-                android:layout_centerVertical="true"
-                android:layout_toStartOf="@+id/personal_next_birth"
-                android:src="@drawable/persona_avatar"
-                android:text="2018-05-19"/>
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="#ededed" />
 
-            <ImageView
-                android:id="@+id/personal_next_birth"
-                android:layout_width="18dp"
-                android:layout_height="25dp"
-                android:layout_alignParentEnd="true"
-                android:layout_centerVertical="true"
-                android:layout_marginLeft="15dp"
-                android:src="@drawable/personal_next"/>
-        </RelativeLayout>
+            <RelativeLayout
+                android:id="@+id/personal_relative_username"
+                android:layout_width="match_parent"
+                android:layout_height="45dp"
+                android:padding="5dp">
 
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:background="#33333333"/>
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="45dp"
-            android:id="@+id/personal_relative_address">
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textSize="14sp"
-                android:text="地区"
-                android:layout_centerVertical="true"/>
+                <TextView
+                    style="@style/TextView_PersonlInformation"
+                    android:text="昵称" />
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/personal_edit_area"
-                android:layout_centerVertical="true"
-                android:layout_toStartOf="@+id/personal_next_ares"
-                android:src="@drawable/persona_avatar"/>
+                <TextView
+                    android:id="@+id/personal_user_name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_toStartOf="@+id/personal_next_user"
+                    android:src="@drawable/persona_avatar"
+                    android:text="姑苏城"
+                    android:textSize="18sp"
+                    android:textColor="#999999"/>
 
-            <ImageView
-                android:id="@+id/personal_next_ares"
-                android:layout_width="18dp"
-                android:layout_height="25dp"
-                android:layout_alignParentEnd="true"
-                android:layout_centerVertical="true"
-                android:layout_marginLeft="15dp"
-                android:src="@drawable/personal_next"/>
-        </RelativeLayout>
+                <ImageView
+                    android:id="@+id/personal_next_user"
+                    android:layout_width="18dp"
+                    android:layout_height="25dp"
+                    android:layout_alignParentEnd="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="15dp"
+                    android:src="@drawable/personal_next" />
+            </RelativeLayout>
 
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:background="#33333333"/>
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="#ededed"
+                android:visibility="gone" />
+
+            <RelativeLayout
+                android:id="@+id/personal_relative_phone"
+                android:layout_width="match_parent"
+                android:layout_height="45dp"
+                android:padding="5dp"
+                android:visibility="gone">
+
+                <TextView
+                    android:id="@+id/personal_text_phone"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:text="手机号"
+                    android:textSize="14sp" />
+
+                <EditText
+                    android:id="@+id/personal_phone_et"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_centerVertical="true"
+                    android:layout_toLeftOf="@+id/personal_next_phone"
+                    android:layout_toRightOf="@+id/personal_text_phone"
+                    android:background="@android:color/transparent"
+                    android:gravity="right|center_vertical"
+                    tools:ignore="RtlHardcoded" />
+
+                <ImageView
+                    android:id="@+id/personal_next_phone"
+                    android:layout_width="18dp"
+                    android:layout_height="25dp"
+                    android:layout_alignParentEnd="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="15dp"
+                    android:src="@drawable/personal_next" />
+            </RelativeLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0.1dp"
+                android:background="#ededed" />
+
+            <RelativeLayout
+                android:id="@+id/personal_relative_sex"
+                android:layout_width="match_parent"
+                android:layout_height="45dp"
+                android:padding="5dp">
+
+                <TextView
+                    style="@style/TextView_PersonlInformation"
+                    android:text="性别" />
+
+                <TextView
+                    android:id="@+id/personal_edit_sex"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_toStartOf="@+id/personal_next_sex"
+                    android:gravity="center"
+                    android:src="@drawable/persona_avatar"
+                    android:text="男"
+                    android:textColor="#999999"
+                    android:textSize="18sp" />
+
+                <ImageView
+                    android:id="@+id/personal_next_sex"
+                    android:layout_width="18dp"
+                    android:layout_height="25dp"
+                    android:layout_alignParentEnd="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="15dp"
+                    android:src="@drawable/personal_next" />
+            </RelativeLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0.1dp"
+                android:background="#ededed" />
+
+            <RelativeLayout
+                android:id="@+id/personal_relative_birthday"
+                android:layout_width="match_parent"
+                android:layout_height="45dp"
+                android:padding="5dp">
+
+                <TextView
+                    style="@style/TextView_PersonlInformation"
+                    android:text="生日" />
+
+                <TextView
+                    android:id="@+id/personal_edit_birth"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_toStartOf="@+id/personal_next_birth"
+                    android:text="2018-05-19"
+                    android:textSize="18sp"
+                    android:textColor="#999999"/>
+
+                <ImageView
+                    android:id="@+id/personal_next_birth"
+                    android:layout_width="18dp"
+                    android:layout_height="25dp"
+                    android:layout_alignParentEnd="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="15dp"
+                    android:src="@drawable/personal_next" />
+            </RelativeLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0.1dp"
+                android:background="#ededed" />
+
+            <RelativeLayout
+                android:id="@+id/personal_relative_address"
+                android:layout_width="match_parent"
+                android:layout_height="45dp"
+                android:padding="5dp">
+
+                <TextView
+                    style="@style/TextView_PersonlInformation"
+                    android:text="地区" />
+
+                <TextView
+                    android:id="@+id/personal_edit_area"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_toStartOf="@+id/personal_next_ares"
+                    android:src="@drawable/persona_avatar"
+                    android:textSize="18sp"
+                    android:textColor="#999999"/>
+
+                <ImageView
+                    android:id="@+id/personal_next_ares"
+                    android:layout_width="18dp"
+                    android:layout_height="25dp"
+                    android:layout_alignParentEnd="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="15dp"
+                    android:src="@drawable/personal_next" />
+            </RelativeLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0.1dp"
+                android:background="#ededed" />
+        </LinearLayout>
+
     </LinearLayout>
-
-</LinearLayout>
 </layout>

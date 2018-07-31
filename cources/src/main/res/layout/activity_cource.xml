@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
+<layout>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
@@ -57,7 +58,7 @@
                 android:layout_centerHorizontal="true"
                 android:layout_centerVertical="true"
                 android:drawableLeft="@drawable/course_years_img_left"
-                android:drawablePadding="5dp"
+                android:drawablePadding="15dp"
                 android:drawableRight="@drawable/course_years_img_right"
                 android:gravity="center"
                 android:text="2018年7月"
@@ -166,7 +167,7 @@
             app:current_month_text_color="#333333"
             app:min_year="2004"
             app:month_view="com.runto.cources.ui.ColorfulMonthView"
-            app:other_month_text_color="#e1e1e1"
+            app:other_month_text_color="#999999"
             app:scheme_lunar_text_color="#fff"
             app:scheme_text="假"
             app:scheme_text_color="#333333"
@@ -174,7 +175,7 @@
             app:selected_lunar_text_color="#fff"
             app:selected_text_color="#fff"
             app:selected_theme_color="#3aa6fe"
-            app:week_background="#819ff7"
+            app:week_background="#3aa6fe"
             app:week_text_color="#fff"
             app:week_view="com.runto.cources.ui.ColorfulWeekView"
             app:year_view_day_text_color="#333333"
@@ -183,27 +184,22 @@
             app:year_view_month_text_size="20sp"
             app:year_view_scheme_color="#f17706" />
 
-        <View
-            android:layout_width="wrap_content"
-            android:layout_height="0.1dp"
-            android:background="#cccccc"/>
-
         <com.runto.cources.group.GroupRecyclerView
             android:id="@+id/recyclerView"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="@color/content_background"
-            app:group_background="@color/content_background"
+            app:group_background="#f7f7f7"
             app:group_center="false"
             app:group_has_header="false"
             app:group_height="42dp"
             app:group_padding_left="16dp"
             app:group_padding_right="16dp"
             app:group_text_color="#555555"
-            app:group_text_size="14sp"
+            app:group_text_size="15sp"
             android:layout_marginTop="10dp"
             android:paddingBottom="15dp"/>
     </com.runto.cources.ui.CalendarLayout>
 
 
 </LinearLayout>
+</layout>
