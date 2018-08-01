@@ -2,6 +2,8 @@ package com.runto.cources.activities;
 
 import android.app.Activity;
 import android.databinding.DataBindingUtil;
+import android.hardware.Sensor;
+import android.hardware.SensorManager;
 import android.location.Location;
 import android.media.MediaPlayer;
 import android.net.Uri;
@@ -22,10 +24,13 @@ import com.runto.cources.fragment.CourseIntroductionFragment;
 import com.runto.cources.fragment.CourseListFragment;
 import com.runtoinfo.youxiao.common_ui.adapter.CommonViewPagerAdapter;
 
-import java.lang.reflect.GenericArrayType;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+
+import cn.jzvd.JZVideoPlayer;
+
+import static cn.jzvd.JZVideoPlayerStandard.*;
 
 @Route(path = "/course/boutiqueCourseDetails")
 public class BoutiqueCourseDetails extends FragmentActivity {
@@ -36,6 +41,8 @@ public class BoutiqueCourseDetails extends FragmentActivity {
     public CommonViewPagerAdapter viewPagerAdapter;
     public int clickCount = 0;
     public View view;
+    public SensorManager sensorManager;
+    JZVideoPlayer.JZAutoFullscreenListener sensorEventListener;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -44,6 +51,10 @@ public class BoutiqueCourseDetails extends FragmentActivity {
     }
 
     public void initData(){
+
+        sensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
+        sensorEventListener = new JZVideoPlayer.JZAutoFullscreenListener();
+
         String[] title = new String[]{"介绍","目录"};
         titles.addAll(Arrays.asList(title));
 
@@ -76,13 +87,13 @@ public class BoutiqueCourseDetails extends FragmentActivity {
             }
         });
 
-        binding.boutiqueCourseDetailsVideoView.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
-            @Override
-            public void onCompletion(MediaPlayer mp) {
-                binding.boutiqueCourseDetailsVideoView.setVisibility(View.GONE);
-                binding.boutiqueCourseDetailsImageView.setVisibility(View.VISIBLE);
-            }
-        });
+//        binding.boutiqueCourseDetailsVideoView.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+//            @Override
+//            public void onCompletion(MediaPlayer mp) {
+//                binding.boutiqueCourseDetailsVideoView.setVisibility(View.GONE);
+//                binding.boutiqueCourseDetailsImageView.setVisibility(View.VISIBLE);
+//            }
+//        });
 
     }
     /**
@@ -91,12 +102,34 @@ public class BoutiqueCourseDetails extends FragmentActivity {
      */
     public void videoView(String url){
         binding.boutiqueCourseDetailsImageView.setVisibility(View.GONE);
-        binding.boutiqueCourseDetailsVideoView.setVisibility(View.VISIBLE);
+        binding.boutiqueJzvideoStandard.setVisibility(View.VISIBLE);
+        binding.boutiqueJzvideoStandard.setUp(url, SCREEN_WINDOW_NORMAL, "视频课程");
+        binding.boutiqueJzvideoStandard.thumbImageView.setImageResource(R.drawable.boutique_course_details);
 
-        Uri uri = Uri.parse(url);
-        binding.boutiqueCourseDetailsVideoView.setVideoURI(uri);
-        binding.boutiqueCourseDetailsVideoView.requestFocus();
-        binding.boutiqueCourseDetailsVideoView.start();
+//        Uri uri = Uri.parse(url);
+//        binding.boutiqueCourseDetailsVideoView.setVideoURI(uri);
+//        binding.boutiqueCourseDetailsVideoView.requestFocus();
+//        binding.boutiqueCourseDetailsVideoView.start();
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (JZVideoPlayer.backPress()) {
+            return;
+        }
+        super.onBackPressed();
+    }
+    @Override
+    protected void onPause() {
+        super.onPause();
+        JZVideoPlayer.releaseAllVideos();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        Sensor accelerometerSensor = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
+        sensorManager.registerListener(sensorEventListener, accelerometerSensor, SensorManager.SENSOR_DELAY_NORMAL);
     }
 
 }

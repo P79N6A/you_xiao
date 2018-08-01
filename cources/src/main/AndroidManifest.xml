@@ -44,7 +44,9 @@
                 android:resource="@xml/file_paths" />
         </provider>
 
-        <activity android:name=".activities.BoutiqueCourseDetails" />
+        <activity android:name=".activities.BoutiqueCourseDetails"
+            android:configChanges="orientation|screenSize|keyboardHidden"
+            android:screenOrientation="portrait"/>
         <activity android:name=".activities.ElectronicScore" />
         <activity android:name=".activities.ElectronicPlayerActivity"></activity>
     </application>

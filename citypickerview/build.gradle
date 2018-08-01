@@ -11,9 +11,6 @@ version = "3.1.8"
 android {
     compileSdkVersion 26
 
-    //资源前缀
-//    resourcePrefix "liji_"
-
     defaultConfig {
         minSdkVersion 14
         targetSdkVersion 26

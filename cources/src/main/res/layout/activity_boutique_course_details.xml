@@ -42,8 +42,8 @@
             android:layout_weight="13">
 
 
-            <com.runtoinfo.youxiao.common_ui.MyVideoView
-                android:id="@+id/boutique_course_details_videoView"
+            <cn.jzvd.JZVideoPlayerStandard
+                android:id="@+id/boutique_jzvideo_standard"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:layout_marginTop="10dp"
