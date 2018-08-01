@@ -33,6 +33,7 @@ import com.runtoinfo.youxiao.adapter.CoursePunchAdapter;
 import com.runtoinfo.youxiao.databinding.ActivityMainBinding;
 import com.runtoinfo.youxiao.databinding.FragmentHomeBinding;
 import com.runtoinfo.youxiao.entity.CourseEntity;
+import com.runtoinfo.youxiao.ui.FloatDragView;
 import com.runtoinfo.youxiao.ui.MyScrollView;
 import com.runtoinfo.youxiao.ui.PopuMenu;
 import com.runtoinfo.youxiao.ui.PopupWindowFragment;
@@ -58,17 +59,22 @@ public class HomeFragment extends BaseFragment implements MyScrollView.ScrollVie
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_home, container, false);
         initRecyclerData();
-        initView();
+        initListener();
         return binding.getRoot();
     }
 
-
+    /**
+     * 选择学校
+     * 切换学校
+     */
     public void initRecyclerData(){
         binding.fragmentHomeImagview.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 List<Map<String, Object>> list = new ArrayList<>();
                 popupWindow = new PopupWindowFragment(getContext(), getActivity());
+
+                //添加学校名称，学校logo
                 for (int i = 0; i < 5; i++) {
                     Map<String, Object> map = new HashMap<>();
                     map.put("text", "育雅学堂");
@@ -85,6 +91,7 @@ public class HomeFragment extends BaseFragment implements MyScrollView.ScrollVie
         });
 
         list = new ArrayList<>();
+        //添加今日课程
         for (int i = 0; i < 5; i++){
             CourseEntity courseEntity = new CourseEntity();
             courseEntity.setCourseName("布米童艺跆拳道班零基础教育");
@@ -106,9 +113,28 @@ public class HomeFragment extends BaseFragment implements MyScrollView.ScrollVie
                 //ARouter.getInstance().build("/cources/colorfulActivity").navigation();
             }
         });
+
+        final int[] startLocation = new int[2];
+        ViewTreeObserver vto = binding.homeHeadImage.getViewTreeObserver();
+        vto.addOnPreDrawListener(new ViewTreeObserver.OnPreDrawListener() {
+            public boolean onPreDraw() {
+                startLocation[1] = binding.homeHeadImage.getMeasuredHeight();
+                startLocation[0] = binding.homeHeadImage.getMeasuredWidth();
+                return true;
+            }
+        });
+
+        //悬浮按钮
+
+        FloatDragView.addFloatDragView(getActivity(), binding.homeFrameLayout, new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        }, startLocation);
     }
 
-    public void initView(){
+    public void initListener(){
         binding.homeEmailImg.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

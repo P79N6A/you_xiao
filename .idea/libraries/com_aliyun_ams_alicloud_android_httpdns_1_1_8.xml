@@ -1,8 +1,8 @@
 <component name="libraryTable">
   <library name="com.aliyun.ams:alicloud-android-httpdns-1.1.8">
     <CLASSES>
-      <root url="file://$USER_HOME$/.gradle/caches/transforms-1/files-1.1/alicloud-android-httpdns-1.1.8.aar/14cd509bc67b018f7b609ad192d6cd1e/res" />
-      <root url="jar://$USER_HOME$/.gradle/caches/transforms-1/files-1.1/alicloud-android-httpdns-1.1.8.aar/14cd509bc67b018f7b609ad192d6cd1e/jars/classes.jar!/" />
+      <root url="jar://$USER_HOME$/.gradle/caches/transforms-1/files-1.1/alicloud-android-httpdns-1.1.8.aar/812d7c72586803ef461151d59d162689/jars/classes.jar!/" />
+      <root url="file://$USER_HOME$/.gradle/caches/transforms-1/files-1.1/alicloud-android-httpdns-1.1.8.aar/812d7c72586803ef461151d59d162689/res" />
     </CLASSES>
     <JAVADOC />
     <SOURCES />

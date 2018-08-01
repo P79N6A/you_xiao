@@ -1,6 +1,7 @@
 package com.runtoinfo.youxiao.fragment;
 
 import android.annotation.SuppressLint;
+import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -31,9 +32,9 @@ import java.util.concurrent.ScheduledExecutorService;
 public class TopicsFragment extends BaseFragment {
 
     public List<View> listView = new ArrayList<>();
-    public ViewPager viewPager;
-    public ImageView mImageView;
-    public LinearLayout mLinear;
+    //public ViewPager viewPager;
+    //public ImageView mImageView;
+    //public LinearLayout mLinear;
     private int mDistance;
     private ImageView mOne_dot;
     private ImageView mTwo_dot;
@@ -44,19 +45,19 @@ public class TopicsFragment extends BaseFragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
-        View view = View.inflate(getActivity(), R.layout.fragment_topics, null);
-        //binding = DataBindingUtil.setContentView(getActivity(), R.layout.fragment_topics);
-        initViewPager(view);
+        //View view = View.inflate(getActivity(), R.layout.fragment_topics, null);
+        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_topics, container, false);
+        //initViewPager(view);
         viewPages();
         setOnClickListener();
         startImageViewScroll();
-        return view;
+        return binding.getRoot();
     }
 
     public void initViewPager(View view){
-        viewPager = view.findViewById(R.id.topics_viewpage);
-        mLinear = view.findViewById(R.id.topics_linear_layout);
-        mImageView = view.findViewById(R.id.topics_iv_light_dots);
+//        viewPager = view.findViewById(R.id.topics_viewpage);
+//        mLinear = view.findViewById(R.id.topics_linear_layout);
+//        mImageView = view.findViewById(R.id.topics_iv_light_dots);
     }
 
 
@@ -74,26 +75,26 @@ public class TopicsFragment extends BaseFragment {
     public Handler mHandler = new Handler(){
         @Override
         public void handleMessage(Message msg) {
-            viewPager.setCurrentItem(currentItem);
+            binding.topicsViewpage.setCurrentItem(currentItem);
         }
     };
     public void setOnClickListener(){
         mOne_dot.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                viewPager.setCurrentItem(0);
+                binding.topicsViewpage.setCurrentItem(0);
             }
         });
         mTwo_dot.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                viewPager.setCurrentItem(1);
+                binding.topicsViewpage.setCurrentItem(1);
             }
         });
         mThree_dot.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                viewPager.setCurrentItem(2);
+                binding.topicsViewpage.setCurrentItem(2);
             }
         });
     }
@@ -102,10 +103,10 @@ public class TopicsFragment extends BaseFragment {
      */
     public void viewPages(){
         initData();
-        viewPager.setAdapter(new ViewPageAdapter(listView));
+        binding.topicsViewpage.setAdapter(new ViewPageAdapter(listView));
         addDots();
         moveDots();
-        viewPager.setPageTransformer(true, new DepthPageTransformer());
+        binding.topicsViewpage.setPageTransformer(true, new DepthPageTransformer());
     }
 
     public void initData(){
@@ -119,31 +120,31 @@ public class TopicsFragment extends BaseFragment {
     }
 
     private void moveDots() {
-        mImageView.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+        binding.topicsIvLightDots.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
             @Override
             public void onGlobalLayout() {
                 //获得两个圆点之间的距离
-                mDistance = mLinear.getChildAt(1).getLeft() - mLinear.getChildAt(0).getLeft();
-                mImageView.getViewTreeObserver().removeOnGlobalLayoutListener(this);
+                mDistance = binding.topicsLinearLayout.getChildAt(1).getLeft() - binding.topicsLinearLayout.getChildAt(0).getLeft();
+                binding.topicsIvLightDots.getViewTreeObserver().removeOnGlobalLayoutListener(this);
             }
         });
-        viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+        binding.topicsViewpage.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
                 //页面滚动时小白点移动的距离，并通过setLayoutParams(params)不断更新其位置
                 float leftMargin = mDistance * (position + positionOffset);
-                RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams) mImageView.getLayoutParams();
+                RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams) binding.topicsIvLightDots.getLayoutParams();
                 params.leftMargin = (int) leftMargin;
-                mImageView.setLayoutParams(params);
+                binding.topicsIvLightDots.setLayoutParams(params);
             }
 
             @Override
             public void onPageSelected(int position) {
                 //页面跳转时，设置小圆点的margin
                 float leftMargin = mDistance * position;
-                RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams) mImageView.getLayoutParams();
+                RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams) binding.topicsIvLightDots.getLayoutParams();
                 params.leftMargin = (int) leftMargin;
-                mImageView.setLayoutParams(params);
+                binding.topicsIvLightDots.setLayoutParams(params);
             }
 
             @Override
@@ -158,13 +159,13 @@ public class TopicsFragment extends BaseFragment {
         mOne_dot.setImageResource(R.drawable.gray_dot);
         LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         layoutParams.setMargins(0, 0, 40, 0);
-        mLinear.addView(mOne_dot, layoutParams);
+        binding.topicsLinearLayout.addView(mOne_dot, layoutParams);
         mTwo_dot = new ImageView(getActivity());
         mTwo_dot.setImageResource(R.drawable.gray_dot);
-        mLinear.addView(mTwo_dot, layoutParams);
+        binding.topicsLinearLayout.addView(mTwo_dot, layoutParams);
         mThree_dot = new ImageView(getActivity());
         mThree_dot.setImageResource(R.drawable.gray_dot);
-        mLinear.addView(mThree_dot, layoutParams);
+        binding.topicsLinearLayout.addView(mThree_dot, layoutParams);
         //setClickListener();
     }
 }

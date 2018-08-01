@@ -7,6 +7,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:focusable="true"
+        android:id="@+id/home_frame_layout"
         android:focusableInTouchMode="true">
 
         <com.runtoinfo.youxiao.ui.MyScrollView

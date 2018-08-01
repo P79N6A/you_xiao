@@ -1,8 +1,8 @@
 <component name="libraryTable">
   <library name="com.aliyun.ams:alicloud-android-hotfix-3.2.2">
     <CLASSES>
-      <root url="file://$USER_HOME$/.gradle/caches/transforms-1/files-1.1/alicloud-android-hotfix-3.2.2.aar/9a3a506ba9627bd32c3a8919ba588aca/res" />
-      <root url="jar://$USER_HOME$/.gradle/caches/transforms-1/files-1.1/alicloud-android-hotfix-3.2.2.aar/9a3a506ba9627bd32c3a8919ba588aca/jars/classes.jar!/" />
+      <root url="file://$USER_HOME$/.gradle/caches/transforms-1/files-1.1/alicloud-android-hotfix-3.2.2.aar/1d7c3140f7c91ae01fd227e2adfc7460/res" />
+      <root url="jar://$USER_HOME$/.gradle/caches/transforms-1/files-1.1/alicloud-android-hotfix-3.2.2.aar/1d7c3140f7c91ae01fd227e2adfc7460/jars/classes.jar!/" />
     </CLASSES>
     <JAVADOC />
     <SOURCES />

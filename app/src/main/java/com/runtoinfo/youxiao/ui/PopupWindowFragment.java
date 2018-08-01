@@ -45,7 +45,8 @@ public class PopupWindowFragment {
         view.getLocationOnScreen(location);
         int[] mScreen = getScreen(context);
         int mHeight = view.getBottom() - view.getTop();//获取控件的高度
-        popupWindow = new PopupWindow(v, ViewGroup.LayoutParams.WRAP_CONTENT, 250);
+        int mWidth = view.getWidth();
+        popupWindow = new PopupWindow(v, view.getWidth()*2/3, 250);
         listView = v.findViewById(R.id.fragment_home_item_list);
         adapter = new ListViewAdapter(context, list);
         listView.setAdapter(adapter);
