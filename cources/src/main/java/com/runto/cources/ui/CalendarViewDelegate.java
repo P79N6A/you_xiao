@@ -299,7 +299,7 @@ final class CalendarViewDelegate {
         mMaxYearMonth = array.getInt(R.styleable.CalendarView_max_year_month, 12);
 
         mDayTextSize = array.getDimensionPixelSize(R.styleable.CalendarView_day_text_size, CalendarUtil.dipToPx(context, 16));
-        mLunarTextSize = array.getDimensionPixelSize(R.styleable.CalendarView_lunar_text_size, CalendarUtil.dipToPx(context, 10));
+        //mLunarTextSize = array.getDimensionPixelSize(R.styleable.CalendarView_lunar_text_size, CalendarUtil.dipToPx(context, 10));
         mCalendarItemHeight = (int) array.getDimension(R.styleable.CalendarView_calendar_height, CalendarUtil.dipToPx(context, 56));
 
         //年视图相关

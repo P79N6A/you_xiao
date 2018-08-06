@@ -16,6 +16,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import myapplication.MyApplication;
+
 /**
  * Created by Administrator on 2018/5/24 0024.
  */
@@ -30,7 +32,6 @@ public class FineClassFragment extends BaseFragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
-        //view = LayoutInflater.from(getActivity()).inflate(R.layout.fragment_fine_class, container, false);
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_fine_class, container, false);
         initTableData();
         return binding.getRoot();
@@ -51,4 +52,5 @@ public class FineClassFragment extends BaseFragment {
     public void initTableView(){
 
     }
+
 }

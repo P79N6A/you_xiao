@@ -11,6 +11,7 @@
             android:id="@+id/course_child_second_tablayout"
             android:layout_width="match_parent"
             android:layout_height="50dp"
+            app:tabBackground="@android:color/transparent"
             android:textSize="18sp"
             app:tabIndicatorColor="#339ef8"
             app:tabMode="scrollable"

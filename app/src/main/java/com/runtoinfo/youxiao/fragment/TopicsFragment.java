@@ -25,6 +25,8 @@ import java.util.List;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 
+import myapplication.MyApplication;
+
 /**
  * Created by Qjc on 2018/5/24 0024.
  */
@@ -32,34 +34,19 @@ import java.util.concurrent.ScheduledExecutorService;
 public class TopicsFragment extends BaseFragment {
 
     public List<View> listView = new ArrayList<>();
-    //public ViewPager viewPager;
-    //public ImageView mImageView;
-    //public LinearLayout mLinear;
-    private int mDistance;
-    private ImageView mOne_dot;
-    private ImageView mTwo_dot;
-    private ImageView mThree_dot;
+
     public ScheduledExecutorService scheduledExecutorService = Executors.newSingleThreadScheduledExecutor();
     public int currentItem;
     public FragmentTopicsBinding binding;
+    public ViewPageAdapter adapter;
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
-        //View view = View.inflate(getActivity(), R.layout.fragment_topics, null);
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_topics, container, false);
-        //initViewPager(view);
         viewPages();
-        setOnClickListener();
         startImageViewScroll();
         return binding.getRoot();
     }
-
-    public void initViewPager(View view){
-//        viewPager = view.findViewById(R.id.topics_viewpage);
-//        mLinear = view.findViewById(R.id.topics_linear_layout);
-//        mImageView = view.findViewById(R.id.topics_iv_light_dots);
-    }
-
 
     public void startImageViewScroll(){
         scheduledExecutorService.scheduleWithFixedDelay(new Runnable() {
@@ -78,94 +65,24 @@ public class TopicsFragment extends BaseFragment {
             binding.topicsViewpage.setCurrentItem(currentItem);
         }
     };
-    public void setOnClickListener(){
-        mOne_dot.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                binding.topicsViewpage.setCurrentItem(0);
-            }
-        });
-        mTwo_dot.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                binding.topicsViewpage.setCurrentItem(1);
-            }
-        });
-        mThree_dot.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                binding.topicsViewpage.setCurrentItem(2);
-            }
-        });
-    }
+
     /**
      * 图片左右滑动引导页
      */
     public void viewPages(){
         initData();
-        binding.topicsViewpage.setAdapter(new ViewPageAdapter(listView));
-        addDots();
-        moveDots();
-        binding.topicsViewpage.setPageTransformer(true, new DepthPageTransformer());
+        adapter = new ViewPageAdapter(listView);
+        binding.topicsViewpage.setAdapter(adapter);
+        binding.topicsIndicator.setViewPager(binding.topicsViewpage);
     }
 
     public void initData(){
-        //LayoutInflater inflater = LayoutInflater.from(getActivity());
+        listView.clear();
         for (int i = 0; i < 3; i++)
         {
             ImageView imageView = new ImageView(getActivity());
             imageView.setImageResource(R.drawable.topics_img_banner);
             listView.add(imageView);
         }
-    }
-
-    private void moveDots() {
-        binding.topicsIvLightDots.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
-            @Override
-            public void onGlobalLayout() {
-                //获得两个圆点之间的距离
-                mDistance = binding.topicsLinearLayout.getChildAt(1).getLeft() - binding.topicsLinearLayout.getChildAt(0).getLeft();
-                binding.topicsIvLightDots.getViewTreeObserver().removeOnGlobalLayoutListener(this);
-            }
-        });
-        binding.topicsViewpage.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
-            @Override
-            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-                //页面滚动时小白点移动的距离，并通过setLayoutParams(params)不断更新其位置
-                float leftMargin = mDistance * (position + positionOffset);
-                RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams) binding.topicsIvLightDots.getLayoutParams();
-                params.leftMargin = (int) leftMargin;
-                binding.topicsIvLightDots.setLayoutParams(params);
-            }
-
-            @Override
-            public void onPageSelected(int position) {
-                //页面跳转时，设置小圆点的margin
-                float leftMargin = mDistance * position;
-                RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams) binding.topicsIvLightDots.getLayoutParams();
-                params.leftMargin = (int) leftMargin;
-                binding.topicsIvLightDots.setLayoutParams(params);
-            }
-
-            @Override
-            public void onPageScrollStateChanged(int state) {
-
-            }
-        });
-    }
-
-    private void addDots() {
-        mOne_dot = new ImageView(getActivity());
-        mOne_dot.setImageResource(R.drawable.gray_dot);
-        LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-        layoutParams.setMargins(0, 0, 40, 0);
-        binding.topicsLinearLayout.addView(mOne_dot, layoutParams);
-        mTwo_dot = new ImageView(getActivity());
-        mTwo_dot.setImageResource(R.drawable.gray_dot);
-        binding.topicsLinearLayout.addView(mTwo_dot, layoutParams);
-        mThree_dot = new ImageView(getActivity());
-        mThree_dot.setImageResource(R.drawable.gray_dot);
-        binding.topicsLinearLayout.addView(mThree_dot, layoutParams);
-        //setClickListener();
     }
 }

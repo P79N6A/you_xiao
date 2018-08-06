@@ -14,6 +14,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.runtoinfo.youxiao.R;
+import com.runtoinfo.youxiao.entity.SelectSchoolEntity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,10 +26,10 @@ import java.util.Map;
 
 public class ListViewAdapter extends BaseAdapter implements AdapterView.OnItemClickListener{
 
-    public List<Map<String, Object>> list = new ArrayList<>();
+    public List<SelectSchoolEntity> list = new ArrayList<>();
     public Context context;
 
-    public ListViewAdapter(Context context,  List<Map<String, Object>> list){
+    public ListViewAdapter(Context context,  List<SelectSchoolEntity> list){
         this.context = context;
         this.list = list;
     }
@@ -76,8 +77,8 @@ public class ListViewAdapter extends BaseAdapter implements AdapterView.OnItemCl
             holder = (ViewHolder) convertView.getTag();
         }
 
-        holder.textView.setText(list.get(position).get("text").toString());
-        holder.imageView.setImageBitmap((Bitmap) list.get(position).get("image"));
+        holder.textView.setText(list.get(position).getSchoolName());
+        holder.imageView.setImageDrawable(list.get(position).getDrawable());
 
         return convertView;
     }

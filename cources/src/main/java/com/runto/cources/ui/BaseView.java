@@ -159,7 +159,7 @@ public abstract class BaseView extends View implements View.OnClickListener, Vie
     private void initPaint(Context context) {
         mCurMonthTextPaint.setAntiAlias(true);
         mCurMonthTextPaint.setTextAlign(Paint.Align.CENTER);
-        mCurMonthTextPaint.setColor(0xFF111111);
+        mCurMonthTextPaint.setColor(Color.parseColor("#CCCCCC"));
         mCurMonthTextPaint.setFakeBoldText(true);
         mCurMonthTextPaint.setTextSize(CalendarUtil.dipToPx(context, TEXT_SIZE));
 

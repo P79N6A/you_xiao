@@ -18,6 +18,8 @@
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.MOUNT_UNMOUNT_FILESYSTEMS" />
     <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
+
+    <uses-permission android:name="android.permission.CALL_PHONE"/>
     <!-- 录音的权限 -->
     <uses-permission android:name="android.permission.RECORD_AUDIO" />
     <!-- 过滤不支持相机的设备 -->
@@ -29,6 +31,7 @@
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
     <uses-permission android:name="android.permission.READ_LOGS" />
+    <uses-permission android:name="android.permission.VIBRATE"/>
 
     <application
         android:name="myapplication.MyApplication"
@@ -40,7 +43,7 @@
         android:theme="@style/Theme.AppCompat.Light.NoActionBar"
         tools:ignore="GoogleAppIndexingWarning"
         tools:replace="android:allowBackup">
-        <activity android:name=".activities.MainActivity">
+        <activity android:name=".activities.LoginActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -49,8 +52,20 @@
         </activity>
         <activity android:name=".activities.BaseActivity" />
         <activity android:name=".activities.WelcomeActivity" />
-        <activity android:name=".activities.LoginActivity" />
+        <activity android:name=".activities.MainActivity" />
         <activity android:name=".activities.SchoolDynamics"/>
+
+        <meta-data
+            android:name="android.support.FILE_PROVIDER_PATHS"
+            android:resource="@xml/provider_paths" />
+
     </application>
+
+    <supports-screens
+        android:smallScreens="true"
+        android:normalScreens="true"
+        android:largeScreens="true"
+        android:resizeable="true"
+        android:anyDensity="true" />
 
 </manifest>

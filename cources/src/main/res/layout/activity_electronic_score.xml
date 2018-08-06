@@ -1,188 +1,191 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent">
-    
-    <LinearLayout
+
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="2"
-        android:background="@drawable/course_electrlnic_score_img"
+        android:layout_height="match_parent"
         android:orientation="vertical">
-
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:padding="10dp">
-
-            <ImageView
-                android:id="@+id/course_leave_back"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
-                android:src="@drawable/activity_back" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerHorizontal="true"
-                android:layout_centerVertical="true"
-                android:text="电子曲谱"
-                android:textColor="#fff"
-                android:textSize="20sp" />
-        </RelativeLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="horizontal"
-            android:paddingTop="18dp"
-            android:paddingStart="15dp"
-            android:paddingEnd="15dp">
+            android:layout_height="0dp"
+            android:layout_weight="2"
+            android:background="@drawable/course_electrlnic_score_img"
+            android:orientation="vertical">
 
-            <ImageView
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="2"
-                android:src="@drawable/course_electronic_logo"/>
-            
             <RelativeLayout
-                android:layout_width="0dp"
-                android:layout_weight="3"
-                android:layout_height="match_parent"
-                android:layout_margin="20dp"
-                android:paddingTop="15dp"
-                android:paddingBottom="20dp">
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="10dp">
+
+                <ImageView
+                    android:id="@+id/course_leave_back"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:src="@drawable/activity_back" />
 
                 <TextView
-                    android:id="@+id/electronic_score_name"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_centerHorizontal="true"
+                    android:layout_centerVertical="true"
+                    android:text="电子曲谱"
                     android:textColor="#fff"
-                    android:textSize="20sp"
-                    android:textStyle="bold"
-                    android:text="告白气球电子曲谱"/>
-                
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textSize="20sp"
-                    android:textColor="#fff"
-                    android:id="@+id/electronic_score_price"
-                    android:layout_below="@+id/electronic_score_name"
-                    android:text="¥10.00"
-                    android:layout_marginTop="10dp"
-                    android:textStyle="bold"/>
-                
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textColor="#fff"
-                    android:textSize="15sp"
-                    android:text="256人购买"
-                    android:layout_alignParentBottom="true"/>
+                    android:textSize="20sp" />
             </RelativeLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal"
+                android:paddingEnd="15dp"
+                android:paddingStart="15dp"
+                android:paddingTop="18dp">
+
+                <ImageView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="2"
+                    android:src="@drawable/course_electronic_logo" />
+
+                <RelativeLayout
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_margin="20dp"
+                    android:layout_weight="3"
+                    android:paddingBottom="20dp"
+                    android:paddingTop="15dp">
+
+                    <TextView
+                        android:id="@+id/electronic_score_name"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="告白气球电子曲谱"
+                        android:textColor="#fff"
+                        android:textSize="20sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/electronic_score_price"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/electronic_score_name"
+                        android:layout_marginTop="10dp"
+                        android:text="¥10.00"
+                        android:textColor="#fff"
+                        android:textSize="20sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentBottom="true"
+                        android:text="256人购买"
+                        android:textColor="#fff"
+                        android:textSize="15sp" />
+                </RelativeLayout>
+            </LinearLayout>
+
         </LinearLayout>
 
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="3.3"
-        android:paddingStart="35dp"
-        android:paddingEnd="35dp"
-        android:paddingTop="20dp"
-        android:orientation="vertical">
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textSize="18sp"
-            android:textColor="#333333"
-            android:text="《告白气球》是由方文山作词，周杰伦作曲并演唱的歌曲，收录于周杰伦2016年6月24日发行的专辑《周杰伦的床边故事》中。"/>
-        
-        <TextView
-            android:id="@+id/ele_buy_after_button"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="60dp"
-            android:textColor="#fff"
-            android:background="@drawable/background_buy_electronic_button"
-            android:text="购买即可学习哦~"
-            android:textSize="18sp"
-            android:layout_gravity="center"
-            android:gravity="center"
-            android:padding="15dp"
-            android:layout_marginStart="30dp"
-            android:layout_marginEnd="30dp"/>
-    </LinearLayout>
-
-
-    <LinearLayout
-        android:id="@+id/electronic_bottom_layout"
-        android:layout_width="match_parent"
-        android:layout_height="60dp"
-        android:gravity="bottom"
-        android:orientation="vertical">
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="0.1dp"
-            android:background="#e6eaf2"/>
-
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="horizontal">
-
-        <LinearLayout
-            android:id="@+id/ele_collection_layout"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_gravity="center"
-            android:layout_weight="1"
-            android:gravity="center">
-
-            <ImageView
-                android:id="@+id/boutique_ele_course_collection_image"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/boutique_course_collection" />
+            android:layout_height="0dp"
+            android:layout_weight="3.3"
+            android:orientation="vertical"
+            android:paddingEnd="35dp"
+            android:paddingStart="35dp"
+            android:paddingTop="20dp">
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="10dp"
-                android:text="收藏"
+                android:text="《告白气球》是由方文山作词，周杰伦作曲并演唱的歌曲，收录于周杰伦2016年6月24日发行的专辑《周杰伦的床边故事》中。"
                 android:textColor="#333333"
                 android:textSize="18sp" />
-        </LinearLayout>
-
-        <LinearLayout
-            android:id="@+id/ele_buy_course_layout"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_gravity="center"
-            android:layout_weight="1"
-            android:gravity="center"
-            android:background="#ff4403">
-
-            <ImageView
-                android:id="@+id/boutique_ele_course_buy_now"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/boutique_course_buy" />
 
             <TextView
-                android:layout_width="wrap_content"
+                android:id="@+id/ele_buy_after_button"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="10dp"
-                android:text="立即购买"
+                android:layout_gravity="center"
+                android:layout_marginEnd="30dp"
+                android:layout_marginStart="30dp"
+                android:layout_marginTop="60dp"
+                android:background="@drawable/background_buy_electronic_button"
+                android:gravity="center"
+                android:padding="15dp"
+                android:text="购买即可学习哦~"
                 android:textColor="#fff"
                 android:textSize="18sp" />
         </LinearLayout>
+
+
+        <LinearLayout
+            android:id="@+id/electronic_bottom_layout"
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:gravity="bottom"
+            android:orientation="vertical">
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0.1dp"
+                android:background="#e6eaf2" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="45dp"
+                android:orientation="horizontal">
+
+                <LinearLayout
+                    android:id="@+id/ele_collection_layout"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center"
+                    android:layout_weight="1"
+                    android:gravity="center">
+
+                    <ImageView
+                        android:id="@+id/boutique_ele_course_collection_image"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/boutique_course_collection" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="10dp"
+                        android:text="收藏"
+                        android:textColor="#333333"
+                        android:textSize="18sp" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/ele_buy_course_layout"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center"
+                    android:layout_weight="1"
+                    android:background="#ff4403"
+                    android:gravity="center">
+
+                    <ImageView
+                        android:id="@+id/boutique_ele_course_buy_now"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/boutique_course_buy" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="10dp"
+                        android:text="立即购买"
+                        android:textColor="#fff"
+                        android:textSize="18sp" />
+                </LinearLayout>
+            </LinearLayout>
         </LinearLayout>
     </LinearLayout>
-</LinearLayout>
 </layout>

@@ -1,8 +1,17 @@
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
 
     <!-- Base application theme. -->
-    <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+    <style name="AppTheme" parent="BaseAppTheme">
         <!-- Customize your theme here. -->
+
+    </style>
+    
+    <style name="AppTheme.Base" parent="Theme.AppCompat.Light.DarkActionBar">
+        <item name="android:windowTranslucentStatus" tools:ignore="NewApi">true</item>
+
+    </style>
+
+    <style name="BaseAppTheme" parent="AppTheme.Base">
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>

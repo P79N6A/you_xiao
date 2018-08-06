@@ -4,10 +4,10 @@
     <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
         xmlns:tools="http://schemas.android.com/tools"
+        android:id="@+id/home_frame_layout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:focusable="true"
-        android:id="@+id/home_frame_layout"
         android:focusableInTouchMode="true">
 
         <com.runtoinfo.youxiao.ui.MyScrollView
@@ -23,241 +23,249 @@
                 <ImageView
                     android:id="@+id/home_head_image"
                     android:layout_width="match_parent"
-                    android:layout_height="200dp"
+                    android:layout_height="0dp"
+                    android:layout_weight="2"
                     android:background="@drawable/home_head_background"
                     android:orientation="vertical" />
 
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:padding="10dp"
-                    android:layout_marginStart="3dp"
-                    android:gravity="center_vertical"
-                    android:orientation="horizontal">
+                    android:layout_height="0dp"
+                    android:layout_weight="7"
+                    android:orientation="vertical">
 
-                    <ImageView
-                        android:id="@+id/home_school_moving_status"
-                        android:layout_width="wrap_content"
+                    <LinearLayout
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:background="@drawable/home_school_status"
-                        tools:ignore="ContentDescription" />
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_marginStart="10dp"
-                        android:orientation="vertical">
-
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="0dp"
-                            android:layout_weight="1"
-                            android:gravity="top"
-                            android:orientation="horizontal">
-
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="系统"
-                                android:textColor="#ea5736"
-                                android:textSize="15sp" />
-
-                            <TextView
-                                android:id="@+id/home_system_content_jm"
-                                style="@style/TextView_15sp"
-                                android:text="加盟" />
-
-                            <TextView
-                                android:id="@+id/home_system_content"
-                                style="@style/TextView_15sp"
-                                android:text="17年专注中小学1对1辅导" />
-
-                            <TextView
-                                android:id="@+id/home_system_content_time"
-                                style="@style/TextView_13sp"
-                                android:text="刚刚" />
-
-                        </LinearLayout>
-
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="0dp"
-                            android:layout_weight="1"
-                            android:gravity="bottom"
-                            android:orientation="horizontal">
-
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:gravity="center_vertical"
-                                android:text="活动"
-                                android:textColor="#ea5736"
-                                android:textSize="15sp" />
-
-                            <TextView
-                                android:id="@+id/home_activity_content_jm"
-                                style="@style/TextView_15sp"
-                                android:text="加盟" />
-
-                            <TextView
-                                android:id="@+id/home_activity_content"
-                                style="@style/TextView_15sp"
-                                android:text="教育培训机构需要有场地的要" />
-
-                            <TextView
-                                android:id="@+id/home_activity_content_time"
-                                style="@style/TextView_13sp"
-                                android:text="刚刚" />
-
-                        </LinearLayout>
-
-                    </LinearLayout>
-
-                </LinearLayout>
-
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="10px"
-                    android:background="#e6eaf2" />
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="120dp"
-                    android:layout_margin="8dp"
-                    android:orientation="horizontal">
-
-                    <LinearLayout
-                        android:id="@+id/home_course_list_layout"
-                        android:layout_width="0dp"
-                        android:layout_height="match_parent"
-                        android:layout_weight="1"
-                        android:gravity="center"
-                        android:orientation="vertical"
-                        tools:ignore="RtlSymmetry">
-
-                        <ImageView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="4dp"
-                            android:background="@drawable/home_img_course" />
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="5dp"
-                            android:text="课程表"
-                            android:textColor="#666666"
-                            android:textSize="18sp"
-                            android:typeface="sans" />
-
-                    </LinearLayout>
-
-                    <View
-                        android:layout_width="0.1dp"
-                        android:layout_height="match_parent"
-                        android:background="#cccccc"/>
-
-                    <LinearLayout
-                        android:id="@+id/home_activity_list_layout"
-                        android:layout_width="0dp"
-                        android:layout_height="match_parent"
-                        android:layout_weight="1"
-                        android:gravity="center"
-                        android:orientation="vertical">
-
-                        <ImageView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="4dp"
-                            android:background="@drawable/home_img_activity" />
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="5dp"
-                            android:text="活动"
-                            android:textColor="#666666"
-                            android:textSize="18sp"
-                            android:typeface="sans" />
-                    </LinearLayout>
-
-                    <View
-                        android:layout_width="0.1dp"
-                        android:layout_height="match_parent"
-                        android:background="#cccccc"/>
-
-                    <LinearLayout
-                        android:id="@+id/home_head_news_layout"
-                        android:layout_width="0dp"
-                        android:layout_height="match_parent"
-                        android:layout_weight="1"
-                        android:gravity="center"
-                        android:orientation="vertical">
-
-                        <ImageView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="4dp"
-                            android:background="@drawable/home_img_head_news" />
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="5dp"
-                            android:text="头条"
-                            android:textColor="#666666"
-                            android:textSize="18sp"
-                            android:typeface="sans" />
-                    </LinearLayout>
-
-
-                </LinearLayout>
-
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="10px"
-                    android:background="#e6eaf2" />
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="500dp"
-                    android:layout_margin="6dp"
-                    android:orientation="vertical"
-                    tools:ignore="PxUsage">
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="40dp"
-                        android:gravity="center"
+                        android:layout_marginStart="3dp"
+                        android:gravity="center_vertical"
                         android:orientation="horizontal"
-                        tools:ignore="UselessParent">
+                        android:padding="10dp">
 
+                        <ImageView
+                            android:id="@+id/home_school_moving_status"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:background="@drawable/home_school_status"
+                            tools:ignore="ContentDescription" />
 
-                        <TextView
+                        <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
-                            android:gravity="center_vertical"
-                            android:text="今日打卡"
-                            android:textColor="#333333"
-                            android:textSize="16sp" />
+                            android:layout_marginStart="10dp"
+                            android:orientation="vertical">
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="0dp"
+                                android:layout_weight="1"
+                                android:gravity="top"
+                                android:orientation="horizontal">
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="系统"
+                                    android:textColor="#ea5736"
+                                    android:textSize="15sp" />
+
+                                <TextView
+                                    android:id="@+id/home_system_content_jm"
+                                    style="@style/TextView_15sp"
+                                    android:text="加盟" />
+
+                                <TextView
+                                    android:id="@+id/home_system_content"
+                                    style="@style/TextView_15sp"
+                                    android:text="17年专注中小学1对1辅导" />
+
+                                <TextView
+                                    android:id="@+id/home_system_content_time"
+                                    style="@style/TextView_13sp"
+                                    android:text="刚刚" />
+
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="0dp"
+                                android:layout_weight="1"
+                                android:gravity="bottom"
+                                android:orientation="horizontal">
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:gravity="center_vertical"
+                                    android:text="活动"
+                                    android:textColor="#ea5736"
+                                    android:textSize="15sp" />
+
+                                <TextView
+                                    android:id="@+id/home_activity_content_jm"
+                                    style="@style/TextView_15sp"
+                                    android:text="加盟" />
+
+                                <TextView
+                                    android:id="@+id/home_activity_content"
+                                    style="@style/TextView_15sp"
+                                    android:text="教育培训机构需要有场地的要" />
+
+                                <TextView
+                                    android:id="@+id/home_activity_content_time"
+                                    style="@style/TextView_13sp"
+                                    android:text="刚刚" />
+
+                            </LinearLayout>
+
+                        </LinearLayout>
+
                     </LinearLayout>
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="10px"
+                        android:background="#e6eaf2" />
 
                     <LinearLayout
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:orientation="vertical">
+                        android:layout_width="match_parent"
+                        android:layout_height="120dp"
+                        android:layout_margin="8dp"
+                        android:orientation="horizontal">
 
-                        <android.support.v7.widget.RecyclerView
-                            android:id="@+id/home_recycler_view"
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent" />
+                        <LinearLayout
+                            android:id="@+id/home_course_list_layout"
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1"
+                            android:gravity="center"
+                            android:orientation="vertical"
+                            tools:ignore="RtlSymmetry">
+
+                            <ImageView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="4dp"
+                                android:background="@drawable/home_img_course" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="5dp"
+                                android:text="课程表"
+                                android:textColor="#666666"
+                                android:textSize="18sp"
+                                android:typeface="sans" />
+
+                        </LinearLayout>
+
+                        <View
+                            android:layout_width="0.1dp"
+                            android:layout_height="match_parent"
+                            android:background="#cccccc" />
+
+                        <LinearLayout
+                            android:id="@+id/home_activity_list_layout"
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1"
+                            android:gravity="center"
+                            android:orientation="vertical">
+
+                            <ImageView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="4dp"
+                                android:background="@drawable/home_img_activity" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="5dp"
+                                android:text="活动"
+                                android:textColor="#666666"
+                                android:textSize="18sp"
+                                android:typeface="sans" />
+                        </LinearLayout>
+
+                        <View
+                            android:layout_width="0.1dp"
+                            android:layout_height="match_parent"
+                            android:background="#cccccc" />
+
+                        <LinearLayout
+                            android:id="@+id/home_head_news_layout"
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1"
+                            android:gravity="center"
+                            android:orientation="vertical">
+
+                            <ImageView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="4dp"
+                                android:background="@drawable/home_img_head_news" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="5dp"
+                                android:text="头条"
+                                android:textColor="#666666"
+                                android:textSize="18sp"
+                                android:typeface="sans" />
+                        </LinearLayout>
+
+
                     </LinearLayout>
-                </LinearLayout>
 
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="10dp"
-                    android:background="#f0f0f0" />
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="10px"
+                        android:background="#e6eaf2" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="500dp"
+                        android:layout_margin="6dp"
+                        android:orientation="vertical"
+                        tools:ignore="PxUsage">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="40dp"
+                            android:gravity="center"
+                            android:orientation="horizontal"
+                            tools:ignore="UselessParent">
+
+
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:gravity="center_vertical"
+                                android:text="今日打卡"
+                                android:textColor="#333333"
+                                android:textSize="16sp" />
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical">
+
+                            <android.support.v7.widget.RecyclerView
+                                android:id="@+id/home_recycler_view"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent" />
+                        </LinearLayout>
+                    </LinearLayout>
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="10dp"
+                        android:background="#f0f0f0" />
+                </LinearLayout>
             </LinearLayout>
         </com.runtoinfo.youxiao.ui.MyScrollView>
 
@@ -265,8 +273,8 @@
             android:id="@+id/home_title_relative"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:padding="10dp"
-            android:background="#0fff">
+            android:background="#0fff"
+            android:padding="10dp">
 
             <com.runtoinfo.youxiao.common_ui.CircleImageView
                 android:id="@+id/fragment_home_imagview"
@@ -293,7 +301,6 @@
                     android:layout_centerVertical="true"
                     android:layout_toEndOf="@+id/home_search_img"
                     android:background="@android:color/transparent"
-                    android:focusable="false"
                     android:hint="请输入关键词"
                     android:lines="1"
                     android:paddingStart="3dp"

@@ -6,7 +6,11 @@ import android.graphics.Point;
 import android.graphics.Rect;
 import android.util.DisplayMetrics;
 import android.view.Display;
+import android.view.View;
+import android.view.ViewGroup;
 import android.view.WindowManager;
+import android.widget.ListAdapter;
+import android.widget.ListView;
 
 import java.lang.reflect.Field;
 
@@ -64,6 +68,30 @@ public class Utils {
             }
         }
         return statusBarHeight;
+    }
+
+    //获取ListView的高度
+    public static int getTotalHeightofListView(ListView listView) {
+        ListAdapter mAdapter = listView.getAdapter();
+        if (mAdapter == null) {
+            return 0;
+        }
+        int totalHeight = 0;
+        for (int i = 0; i < mAdapter.getCount(); i++) {
+            View mView = mAdapter.getView(i, null, listView);
+            mView.measure(
+                    View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED),
+                    View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED));
+            //mView.measure(0, 0);
+            totalHeight += mView.getMeasuredHeight();
+            //LogUtil.d("数据" + i, String.valueOf(totalHeight));
+        }
+        ViewGroup.LayoutParams params = listView.getLayoutParams();
+        params.height = totalHeight + (listView.getDividerHeight() * (mAdapter.getCount() - 1));
+        //LogUtil.d("数据", "listview总高度="+ params.height);
+        listView.setLayoutParams(params);
+        listView.requestLayout();
+        return totalHeight;
     }
 
 }

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout>
+<layout xmlns:app="http://schemas.android.com/apk/res-auto">
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
@@ -53,6 +53,16 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content" />
 
+                <me.relex.circleindicator.CircleIndicator
+                    android:id="@+id/topics_indicator"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_alignBottom="@+id/topics_viewpage"
+                    android:paddingBottom="10dp"
+                    app:ci_gravity="center"
+                    app:ci_drawable="@drawable/gray_unselect_dot"
+                    app:ci_drawable_unselected="@drawable/gray_dot"/>
+
                 <RelativeLayout
                     android:id="@+id/rl_dots"
                     android:layout_width="wrap_content"
@@ -60,7 +70,8 @@
                     android:layout_alignParentBottom="true"
                     android:layout_centerHorizontal="true"
                     android:layout_marginBottom="10dp"
-                    android:layout_marginTop="10dp">
+                    android:layout_marginTop="10dp"
+                    android:visibility="gone">
 
                     <LinearLayout
                         android:id="@+id/topics_linear_layout"

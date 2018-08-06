@@ -167,7 +167,7 @@
             app:current_month_text_color="#333333"
             app:min_year="2004"
             app:month_view="com.runto.cources.ui.ColorfulMonthView"
-            app:other_month_text_color="#999999"
+            app:other_month_text_color="#cccccc"
             app:scheme_lunar_text_color="#fff"
             app:scheme_text="假"
             app:scheme_text_color="#333333"
@@ -196,7 +196,6 @@
             app:group_padding_right="16dp"
             app:group_text_color="#555555"
             app:group_text_size="15sp"
-            android:layout_marginTop="10dp"
             android:paddingBottom="15dp"/>
     </com.runto.cources.ui.CalendarLayout>
 

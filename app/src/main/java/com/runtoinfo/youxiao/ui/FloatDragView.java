@@ -2,9 +2,14 @@ package com.runtoinfo.youxiao.ui;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.content.Context;
 import android.graphics.Point;
+import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewTreeObserver;
+import android.view.WindowManager;
 import android.view.animation.Animation;
 import android.view.animation.TranslateAnimation;
 import android.widget.FrameLayout;
@@ -55,7 +60,7 @@ public class FloatDragView {
     }
 
     // 获取可拖动按钮的实例
-    private ImageView getFloatDragView(View.OnClickListener clickListener) {
+    private ImageView getFloatDragView(final View.OnClickListener clickListener) {
         if (mImageView != null) {
             return mImageView;
         } else {
@@ -63,14 +68,27 @@ public class FloatDragView {
             mImageView.setClickable(true);
             mImageView.setFocusable(true);
             mImageView.setImageResource(R.drawable.home_float_phone);
-            startX = startPosition[0] - (mImageView.getWidth() / 2 * 3);
-            startY = startPosition[1] - mImageView.getHeight() / 2;
             setFloatDragViewParams(mImageView);
             mImageView.setOnClickListener(clickListener);
             setFloatDragViewTouch(mImageView);
             return mImageView;
         }
 
+    }
+
+    /**
+     * 获取手机屏幕高宽像素值
+     * @param context
+     * @return
+     */
+    public int[] getHeiOrWid(Activity context){
+        int[] result = new int[2];
+        WindowManager manager = context.getWindowManager();
+        DisplayMetrics outMetrics = new DisplayMetrics();
+        manager.getDefaultDisplay().getMetrics(outMetrics);
+        result[0] = outMetrics.widthPixels;
+        result[1] = outMetrics.heightPixels;
+        return  result;
     }
 
     // 设置可拖动按钮的位置参数
@@ -84,13 +102,17 @@ public class FloatDragView {
             FrameLayout.LayoutParams lpFeedback = new FrameLayout.LayoutParams(
                     FrameLayout.LayoutParams.WRAP_CONTENT, FrameLayout.LayoutParams.WRAP_CONTENT);
             lpFeedback.setMargins(moveX, moveY, 0, 0);
+            Log.e("view_X", startX + "");
+            Log.e("view_Y", startY + "");
             floatDragView.setLayoutParams(lpFeedback);
         } else {// 初始位置
+
             FrameLayout.LayoutParams lpFeedback = new FrameLayout.LayoutParams(
                     FrameLayout.LayoutParams.WRAP_CONTENT, FrameLayout.LayoutParams.WRAP_CONTENT);
-            lpFeedback.setMargins(startPosition[0] - (mImageView.getWidth() / 2 * 3), startPosition[1] - mImageView.getHeight() / 2, 0, 0);
-            //lpFeedback.addRule(FrameLayout.ALIGN_PARENT_BOTTOM);
-            //lpFeedback.addRule(FrameLayout.ALIGN_PARENT_RIGHT);
+            //lpFeedback.setMargins(900, 536, 0, 0);
+            lpFeedback.setMargins(getHeiOrWid(context)[0] - getHeiOrWid(context)[0] / 6, getHeiOrWid(context)[1] / 7 * 2, 0, 0);
+            Log.e("X", startX + "");
+            Log.e("Y", startY + "");
             floatDragView.setLayoutParams(lpFeedback);
         }
 

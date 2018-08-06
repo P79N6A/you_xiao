@@ -53,6 +53,7 @@
                 app:tabIndicatorColor="#fff"
                 app:tabMode="scrollable"
                 app:tabSelectedTextColor="#fff"
+                app:tabBackground="@android:color/transparent"
                 app:tabTextAppearance="@style/Table_text_style"
                 app:tabTextColor="#fff" />
 

@@ -6,13 +6,22 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.text.Editable;
+import android.text.InputType;
 import android.text.TextWatcher;
+import android.text.method.HideReturnsTransformationMethod;
+import android.text.method.PasswordTransformationMethod;
 import android.view.View;
+import android.widget.AdapterView;
 
 import com.alibaba.android.arouter.launcher.ARouter;
 import com.runtoinfo.youxiao.R;
+import com.runtoinfo.youxiao.adapter.ListViewAdapter;
 import com.runtoinfo.youxiao.databinding.ActivityLoginBinding;
+import com.runtoinfo.youxiao.databinding.LoginSelectSchoolBinding;
+import com.runtoinfo.youxiao.entity.SelectSchoolEntity;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -20,6 +29,8 @@ import java.util.TimerTask;
 public class LoginActivity extends BaseActivity {
 
     public ActivityLoginBinding binding;
+    public List<SelectSchoolEntity> schoolList = new ArrayList<>();//学校集合
+    public ListViewAdapter mAdapter;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -32,11 +43,25 @@ public class LoginActivity extends BaseActivity {
 
     @Override
     protected void initView() {
+
         binding = DataBindingUtil.setContentView(LoginActivity.this, R.layout.activity_login);
+
+        //登录
         binding.loginBt.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ARouter.getInstance().build("/main/mainAcitivity").navigation();
+                switch (schoolList.size()) {
+                    case 1:
+                        ARouter.getInstance().build("/main/mainAcitivity").navigation();
+                        break;
+                        default:
+                            initSelectSchoolData();
+                            binding.loginDefaultNew.setVisibility(View.GONE);
+                            binding.loginInclude.setVisibility(View.VISIBLE);
+                            break;
+
+                }
+
             }
         });
 
@@ -149,11 +174,64 @@ public class LoginActivity extends BaseActivity {
                 timers();
             }
         });
+
+        /**
+         * 选择学校
+         */
+        binding.loginSelectLv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                binding.loginDefaultNew.setVisibility(View.VISIBLE);
+                binding.loginInclude.setVisibility(View.GONE);
+                ARouter.getInstance().build("/main/mainAcitivity").navigation();
+                LoginActivity.this.finish();
+            }
+        });
+
+        binding.loginBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                binding.loginInclude.setVisibility(View.GONE);
+                binding.loginDefaultNew.setVisibility(View.VISIBLE);
+            }
+        });
+
+        binding.loginImgPwVis.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                switch (binding.loginPassword.getTag().toString()){
+                    case "PASSWORD_OFF":
+                        binding.loginImgPwVis.setImageDrawable(getResources().getDrawable(R.drawable.login_password_on));
+                        binding.loginPassword.setTransformationMethod(HideReturnsTransformationMethod.getInstance());
+                        binding.loginPassword.setSelection(binding.loginPassword.getText().length());
+                        binding.loginPassword.setTag("PASSWORD_ON");
+                        break;
+                    case "PASSWORD_ON":
+                        binding.loginImgPwVis.setImageDrawable(getResources().getDrawable(R.drawable.login_password_off));
+                        binding.loginPassword.setTransformationMethod(PasswordTransformationMethod.getInstance());
+                        binding.loginPassword.setSelection(binding.loginPassword.getText().length());
+                        binding.loginPassword.setTag("PASSWORD_OFF");
+                        break;
+                }
+            }
+        });
     }
 
     @Override
     protected void initData() {
 
+    }
+
+    public void initSelectSchoolData() {
+        schoolList.clear();
+        for (int i = 0; i < 4; i++){
+            SelectSchoolEntity schoolEntity = new SelectSchoolEntity();
+            schoolEntity.setSchoolName("育雅学堂");
+            schoolEntity.setDrawable(getResources().getDrawable(R.drawable.login_school_logo));
+            schoolList.add(schoolEntity);
+        }
+        mAdapter = new ListViewAdapter(this, schoolList);
+        binding.loginSelectLv.setAdapter(mAdapter);
     }
 
     /**

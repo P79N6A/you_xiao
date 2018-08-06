@@ -57,10 +57,10 @@ public class PersonalCenterFragment extends BaseFragment {
         dataList.clear();
         String[] from = {"img", "text"};
         int[] to = {R.id.grid_img_view, R.id.grid_text};
-        int[] img = {R.drawable.personal_img_order, R.drawable.personal_shopping_car, R.drawable.personal_img_activity,
+        int[] img = {/*R.drawable.personal_img_order, R.drawable.personal_shopping_car, R.drawable.personal_img_activity,*/
                 R.drawable.personal_img_course_nots, R.drawable.personal_img_leave_nots,
         R.drawable.personal_img_about_us, R.drawable.personal_img_return, R.drawable.background_button};
-        String[] text = {"我的订单","购物车","我的活动","上课记录","请假记录","关于我们","意见反馈", ""};
+        String[] text = {/*"我的订单","购物车","我的活动",*/"上课记录","请假记录","关于我们","意见反馈", ""};
         for (int i = 0; i < img.length; i++)
         {
             Map<String, Object> map = new HashMap<>();
@@ -82,22 +82,21 @@ public class PersonalCenterFragment extends BaseFragment {
                     String itemObj = object.getString("text").replaceAll("\\s*", "");
                     switch (position)
                     {
-                        case 0://我的订单
-
+                        /*case 0://我的订单
                             break;
                         case 1://购物车
                             break;
                         case 2://我的活动
+                            break;*/
+                        case 0://上课记录
                             break;
-                        case 3://上课记录
-                            break;
-                        case 4://"请假记录":
+                        case 1://"请假记录":
                             ARouter.getInstance().build("/course/courseLeaveCode").navigation();
                             break;
-                        case 5://"关于我们":
+                        case 2://"关于我们":
                             ARouter.getInstance().build("/personal/aboutUs").navigation();
                             break;
-                        case 6://"意见反馈":
+                        case 3://"意见反馈":
                             ARouter.getInstance().build("/personal/feedback").navigation();
                             break;
                     }

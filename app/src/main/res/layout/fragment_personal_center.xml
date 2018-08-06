@@ -67,7 +67,17 @@
                         android:layout_weight="1"
                         android:drawableTop="@drawable/personal_car"
                         android:gravity="center"
-                        android:text="物流信息" />
+                        android:text="物流信息"
+                        android:visibility="gone"/>
+
+                    <TextView
+                        android:id="@+id/personal_my_courses"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:drawableTop="@drawable/personal_my_course"
+                        android:gravity="center"
+                        android:text="我的课程" />
 
                     <TextView
                         android:id="@+id/personal_my_information"
@@ -79,13 +89,15 @@
                         android:text="我的消息" />
 
                     <TextView
-                        android:id="@+id/personal_my_courses"
+                        android:id="@+id/personal_my_activity"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:drawableTop="@drawable/personal_my_course"
+                        android:drawableTop="@drawable/personal_car"
                         android:gravity="center"
-                        android:text="我的课程" />
+                        android:text="我的活动"/>
+
+
                 </LinearLayout>
             </RelativeLayout>
 
