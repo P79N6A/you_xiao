@@ -20,7 +20,7 @@ import com.runtoinfo.youxiao.fragment.TopicsFragment;
 
 import java.util.ArrayList;
 
-@Route( path = "/main/mainAcitivity")
+@Route( path = "/main/mainActivity")
 public class MainActivity extends BaseActivity implements ViewPager.OnPageChangeListener/*, View.OnClickListener*/{
 
     public ActivityMainBinding binding;

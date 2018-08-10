@@ -72,6 +72,8 @@ dependencies {
     implementation project(':common_ui')
     implementation project(':imageselector')
     implementation 'cn.jzvd:jiaozivideoplayer:6.2.12'
+    implementation project(':seescore')
+    implementation 'org.wlf:FileDownloader:0.3.1'
 }
 apply from: '../script/gradle-jcenter-push.gradle'
 

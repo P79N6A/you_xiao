@@ -19,8 +19,11 @@ import com.runtoinfo.youxiao.adapter.ListViewAdapter;
 import com.runtoinfo.youxiao.databinding.ActivityLoginBinding;
 import com.runtoinfo.youxiao.databinding.LoginSelectSchoolBinding;
 import com.runtoinfo.youxiao.entity.SelectSchoolEntity;
+import com.runtoinfo.youxiao.utils.Entity;
+import com.runtoinfo.youxiao.utils.SPUtils;
 
 import java.util.ArrayList;
+import java.util.IllegalFormatCodePointException;
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -52,7 +55,7 @@ public class LoginActivity extends BaseActivity {
             public void onClick(View v) {
                 switch (schoolList.size()) {
                     case 1:
-                        ARouter.getInstance().build("/main/mainAcitivity").navigation();
+                        ARouter.getInstance().build(Entity.MAIN_ACTIVITY_PATH).navigation();
                         break;
                         default:
                             initSelectSchoolData();
@@ -181,9 +184,10 @@ public class LoginActivity extends BaseActivity {
         binding.loginSelectLv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                ARouter.getInstance().build(Entity.MAIN_ACTIVITY_PATH).navigation();
                 binding.loginDefaultNew.setVisibility(View.VISIBLE);
                 binding.loginInclude.setVisibility(View.GONE);
-                ARouter.getInstance().build("/main/mainAcitivity").navigation();
+                SPUtils.setBoolean("LOGIN_ON", true);
                 LoginActivity.this.finish();
             }
         });
@@ -283,4 +287,13 @@ public class LoginActivity extends BaseActivity {
             }
         }
     };
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        boolean isLoged = SPUtils.getBoolean("LOGIN_ON");
+        if (isLoged){
+            ARouter.getInstance().build(Entity.MAIN_ACTIVITY_PATH).navigation();
+        }
+    }
 }

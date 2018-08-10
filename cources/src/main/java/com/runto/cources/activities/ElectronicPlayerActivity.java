@@ -1,25 +1,14 @@
 package com.runto.cources.activities;
 
 import android.annotation.SuppressLint;
-import android.app.Activity;
-import android.app.Dialog;
-import android.content.Context;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
-import android.util.DisplayMetrics;
-import android.view.Gravity;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
-import android.view.Window;
-import android.view.WindowManager;
-import android.widget.PopupWindow;
 
 import com.alibaba.android.arouter.facade.annotation.Route;
 import com.runto.cources.R;
 import com.runto.cources.databinding.ActivityElectronicPlayerBinding;
-import com.runto.cources.ui.PopupWindowShowUpView;
 
 @Route(path = "/electronic/playerActivity")
 public class ElectronicPlayerActivity extends FragmentActivity {
@@ -44,8 +33,8 @@ public class ElectronicPlayerActivity extends FragmentActivity {
             @SuppressLint("WrongConstant")
             @Override
             public void onClick(View v) {
-                PopupWindowShowUpView windowShowUpView = new PopupWindowShowUpView(ElectronicPlayerActivity.this);
-                windowShowUpView.showUp(binding.playerTurnSpeed);
+//                PopupWindowShowUpView windowShowUpView = new PopupWindowShowUpView(ElectronicPlayerActivity.this);
+//                windowShowUpView.showUp(binding.playerTurnSpeed);
             }
         });
 

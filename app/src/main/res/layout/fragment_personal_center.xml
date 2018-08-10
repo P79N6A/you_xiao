@@ -93,8 +93,9 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:drawableTop="@drawable/personal_car"
+                        android:drawableTop="@drawable/personal_activity_new"
                         android:gravity="center"
+                        android:drawablePadding="5dp"
                         android:text="我的活动"/>
 
 

@@ -1,5 +1,6 @@
 package myapplication;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.Application;
 import android.content.Context;
@@ -32,6 +33,7 @@ import com.ut.mini.internal.UTTeamWork;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.File;
 import java.util.HashMap;
 import java.util.concurrent.Callable;
 
@@ -48,6 +50,7 @@ public class MyApplication extends Application {
     }
     public static MsgDisplayListener msgDisplayListener = null;
     public static StringBuilder cacheMsg = new StringBuilder();
+    public static SharedPreferences Sp;
     @Override
     public void onCreate() {
         super.onCreate();
@@ -59,14 +62,27 @@ public class MyApplication extends Application {
         initHotfix();
         initPushService(this);
         //isFirstLogin();
+        initSharePreference();
         CrashReport.initCrashReport(getApplicationContext(),"446920bced", true);
     }
 
-    public void initArouter(){
-        ARouter.openLog();     // 打印日志
-        ARouter.openDebug();   // 开启调试模式(如果在InstantRun模式下运行，必须开启调试模式！线上版本需要关闭,否则有安全风险)
-        ARouter.init( this ); // 尽可能早，推荐在Application中初始化
+    @SuppressLint({"WrongConstant", "CommitPrefEdits"})
+    public void initSharePreference(){
+        Sp = getSharedPreferences("YouXiao", Context.MODE_APPEND);
     }
+
+    /**
+     * ARouter 初始化
+     */
+    public void initArouter(){
+        // 打印日志
+        ARouter.openLog();
+        // 开启调试模式(如果在InstantRun模式下运行，必须开启调试模式！线上版本需要关闭,否则有安全风险)
+        ARouter.openDebug();
+        // 尽可能早，推荐在Application中初始化
+        ARouter.init( this );
+    }
+
 
     private void initManService() {
         /**
