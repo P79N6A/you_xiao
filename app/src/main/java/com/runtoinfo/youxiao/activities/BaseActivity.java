@@ -20,6 +20,8 @@ import com.runtoinfo.youxiao.R;
 
 import java.lang.reflect.Field;
 
+import myapplication.MyApplication;
+
 /**
  * Created by Administrator on 2018/5/8 0008.
  */
@@ -36,8 +38,9 @@ public abstract class BaseActivity extends FragmentActivity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(getLayoutId());
         initView();
+        //添加Activity到堆栈
+        MyApplication.getInstance().addActivity(this);
         initData();
     }
 
@@ -52,7 +55,7 @@ public abstract class BaseActivity extends FragmentActivity {
         ImmersionBar.with(this).titleBar(view).init();
     }
 
-    protected abstract int getLayoutId();
+    //protected abstract int getLayoutId();
     protected abstract void initView();
     protected abstract void initData();
 
@@ -95,9 +98,16 @@ public abstract class BaseActivity extends FragmentActivity {
         return 0;
     }
 
+    public void finished(){
+        MyApplication.getInstance().finishAllActivity();
+    }
+
     @Override
     protected void onDestroy() {
         super.onDestroy();
         ImmersionBar.with(this).destroy();
+
+        //结束Activity&从栈中移除该Activity
+        //MyApplication.getInstance().finishAllActivity();
     }
 }

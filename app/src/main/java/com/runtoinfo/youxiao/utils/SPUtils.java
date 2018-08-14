@@ -34,4 +34,5 @@ public class SPUtils {
     public static int getInt(String key){
         return MyApplication.Sp.getInt(key, 0xff);
     }
+
 }

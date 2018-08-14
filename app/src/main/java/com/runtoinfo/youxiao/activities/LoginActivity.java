@@ -1,19 +1,28 @@
 package com.runtoinfo.youxiao.activities;
 
 import android.annotation.SuppressLint;
+import android.app.ProgressDialog;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.text.Editable;
 import android.text.InputType;
+import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.text.method.HideReturnsTransformationMethod;
 import android.text.method.PasswordTransformationMethod;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.ListView;
+import android.widget.Toast;
 
 import com.alibaba.android.arouter.launcher.ARouter;
+import com.google.gson.Gson;
+import com.runtoinfo.teacher.HttpEntity;
+import com.runtoinfo.teacher.bean.HttpLoginHead;
+import com.runtoinfo.teacher.utils.HttpUtils;
 import com.runtoinfo.youxiao.R;
 import com.runtoinfo.youxiao.adapter.ListViewAdapter;
 import com.runtoinfo.youxiao.databinding.ActivityLoginBinding;
@@ -22,11 +31,19 @@ import com.runtoinfo.youxiao.entity.SelectSchoolEntity;
 import com.runtoinfo.youxiao.utils.Entity;
 import com.runtoinfo.youxiao.utils.SPUtils;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.IllegalFormatCodePointException;
 import java.util.List;
+import java.util.Map;
 import java.util.Timer;
 import java.util.TimerTask;
+
+import okhttp3.Response;
 
 
 public class LoginActivity extends BaseActivity {
@@ -34,37 +51,39 @@ public class LoginActivity extends BaseActivity {
     public ActivityLoginBinding binding;
     public List<SelectSchoolEntity> schoolList = new ArrayList<>();//学校集合
     public ListViewAdapter mAdapter;
+    public Map<String, List> dataMap = new HashMap<>();
+    public HttpLoginHead loginHead;
+    public ProgressDialog progressDialog = null;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
     }
 
     @Override
-    protected int getLayoutId() {
-        return R.layout.activity_login;
-    }
-
-    @Override
     protected void initView() {
 
         binding = DataBindingUtil.setContentView(LoginActivity.this, R.layout.activity_login);
+        progressDialog = new ProgressDialog(LoginActivity.this);
 
+        loginHead = new HttpLoginHead();
         //登录
         binding.loginBt.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                //createDialog();
                 switch (schoolList.size()) {
                     case 1:
-                        ARouter.getInstance().build(Entity.MAIN_ACTIVITY_PATH).navigation();
+                        setSelectSchool(schoolList.get(0));
                         break;
-                        default:
-                            initSelectSchoolData();
-                            binding.loginDefaultNew.setVisibility(View.GONE);
-                            binding.loginInclude.setVisibility(View.VISIBLE);
-                            break;
+                    case 0:
+                        Toast.makeText(LoginActivity.this, "账号或密码不正确", Toast.LENGTH_SHORT).show();
+                        break;
+                    default:
+                        binding.loginDefaultNew.setVisibility(View.GONE);
+                        binding.loginInclude.setVisibility(View.VISIBLE);
+                        break;
 
                 }
-
             }
         });
 
@@ -84,6 +103,9 @@ public class LoginActivity extends BaseActivity {
                 String text = binding.loginMobilePhone.getText().toString().replaceAll("\\s*", "");
                 if (text.length() == 11)
                 {
+                    HttpUtils.getAsy(mHandler,dataMap, HttpEntity.MAIN_URL + HttpEntity.GET_ORGANIZATION_INFO, text);
+                    loginHead.setUserName(text);
+                    //initSelectSchoolData();
                     binding.loginGetVerification.setBackgroundResource(R.drawable.background_verification_selected);
                     binding.loginGetVerification.setEnabled(true);
                 }
@@ -129,11 +151,12 @@ public class LoginActivity extends BaseActivity {
                     binding.loginBt.setEnabled(false);
                     binding.loginBt.setBackgroundResource(R.drawable.background_login_button);
                 }
+                loginHead.setPassWord(binding.loginPassword.getText().toString());
             }
         });
 
         /**
-         * 切换验证码登录
+         * 切换为验证码登录
          */
         binding.loginVerificationCode.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -142,6 +165,7 @@ public class LoginActivity extends BaseActivity {
                 binding.passwordLogin.setVisibility(View.VISIBLE);
                 binding.loginGetVerification.setVisibility(View.VISIBLE);
                 binding.loginImgPwVis.setVisibility(View.GONE);
+                binding.loginBt.setTag("VER_CODE");
                 if (binding.loginPassword.length() > 0)
                 {
                     binding.loginPassword.setText("");
@@ -150,7 +174,7 @@ public class LoginActivity extends BaseActivity {
         });
 
         /**
-         * 切换密码登录
+         * 切换为密码登录
          */
         binding.passwordLogin.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -159,6 +183,7 @@ public class LoginActivity extends BaseActivity {
                 binding.loginVerificationCode.setVisibility(View.VISIBLE);
                 binding.loginGetVerification.setVisibility(View.GONE);
                 binding.loginImgPwVis.setVisibility(View.VISIBLE);
+                binding.loginBt.setTag("PASS_WORD");
                 if (binding.loginPassword.length() > 0)
                 {
                     binding.loginPassword.setText("");
@@ -175,6 +200,8 @@ public class LoginActivity extends BaseActivity {
                 binding.loginGetVerification.setBackgroundResource(R.color.color_gray);
                 binding.loginGetVerification.setEnabled(false);
                 timers();
+
+                HttpUtils.get(HttpEntity.MAIN_URL + HttpEntity.GET_CAPTION_CODE, binding.loginMobilePhone.getText().toString());
             }
         });
 
@@ -184,14 +211,17 @@ public class LoginActivity extends BaseActivity {
         binding.loginSelectLv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                ARouter.getInstance().build(Entity.MAIN_ACTIVITY_PATH).navigation();
+                //填入登录需要的参数
+                setSelectSchool(schoolList.get(position));
+
                 binding.loginDefaultNew.setVisibility(View.VISIBLE);
                 binding.loginInclude.setVisibility(View.GONE);
-                SPUtils.setBoolean("LOGIN_ON", true);
-                LoginActivity.this.finish();
             }
         });
 
+        /**
+         * 回退
+         */
         binding.loginBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -200,23 +230,36 @@ public class LoginActivity extends BaseActivity {
             }
         });
 
+        /**
+         * 密码显示与隐藏
+         */
         binding.loginImgPwVis.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 switch (binding.loginPassword.getTag().toString()){
                     case "PASSWORD_OFF":
-                        binding.loginImgPwVis.setImageDrawable(getResources().getDrawable(R.drawable.login_password_on));
-                        binding.loginPassword.setTransformationMethod(HideReturnsTransformationMethod.getInstance());
-                        binding.loginPassword.setSelection(binding.loginPassword.getText().length());
-                        binding.loginPassword.setTag("PASSWORD_ON");
-                        break;
-                    case "PASSWORD_ON":
                         binding.loginImgPwVis.setImageDrawable(getResources().getDrawable(R.drawable.login_password_off));
-                        binding.loginPassword.setTransformationMethod(PasswordTransformationMethod.getInstance());
+                        binding.loginPassword.setTransformationMethod(HideReturnsTransformationMethod.getInstance());
                         binding.loginPassword.setSelection(binding.loginPassword.getText().length());
                         binding.loginPassword.setTag("PASSWORD_OFF");
                         break;
+                    case "PASSWORD_ON":
+                        binding.loginImgPwVis.setImageDrawable(getResources().getDrawable(R.drawable.login_password_on));
+                        binding.loginPassword.setTransformationMethod(PasswordTransformationMethod.getInstance());
+                        binding.loginPassword.setSelection(binding.loginPassword.getText().length());
+                        binding.loginPassword.setTag("PASSWORD_ON");
+                        break;
                 }
+            }
+        });
+        /**
+         * 忘记密码
+         */
+        binding.loginForgetPassword.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                ARouter.getInstance().build(Entity.REST_PASS_WORD).withString("LoginHttpHead", new Gson().toJson(loginHead)).navigation();
             }
         });
     }
@@ -226,13 +269,44 @@ public class LoginActivity extends BaseActivity {
 
     }
 
+    public void createDialog(){
+        if (progressDialog == null)
+            progressDialog = new ProgressDialog(LoginActivity.this);
+        progressDialog.setCanceledOnTouchOutside(false);
+        progressDialog.setMessage("请稍后，正在加载...");
+        progressDialog.show();
+    }
+
+    /**
+     * 选择的学校的实体
+     * @param dynamics
+     */
+    public void setSelectSchool(SelectSchoolEntity dynamics){
+        loginHead.setCampusId(dynamics.getId());
+        loginHead.setTenancyName(dynamics.getTenancyName());
+        loginHead.setTenantId(dynamics.getTenantId());
+        createDialog();
+        mHandler.sendEmptyMessage(0);
+    }
+
     public void initSelectSchoolData() {
         schoolList.clear();
-        for (int i = 0; i < 4; i++){
-            SelectSchoolEntity schoolEntity = new SelectSchoolEntity();
-            schoolEntity.setSchoolName("育雅学堂");
-            schoolEntity.setDrawable(getResources().getDrawable(R.drawable.login_school_logo));
-            schoolList.add(schoolEntity);
+        Log.e("SIZE", dataMap.size() + "");
+        if (dataMap != null && dataMap.size() > 0) {
+            List<List<String>> school = dataMap.get("school");
+            List orgList = dataMap.get("org");
+            List head = dataMap.get("head");
+            List img = dataMap.get("img");
+            for (int i = 0; i < orgList.size(); i++) {
+                SelectSchoolEntity schoolEntity = new SelectSchoolEntity();
+                schoolEntity.setSchoolName(school.get(i));
+                schoolEntity.setOrgName((String) orgList.get(i));
+                schoolEntity.setId(((HttpLoginHead) head.get(i)).getCampusId());
+                schoolEntity.setTenancyName(((HttpLoginHead) head.get(i)).getTenancyName());
+                schoolEntity.setTenantId(((HttpLoginHead) head.get(i)).getTenantId());
+                schoolEntity.setImgPath((String) img.get(i));
+                schoolList.add(schoolEntity);
+            }
         }
         mAdapter = new ListViewAdapter(this, schoolList);
         binding.loginSelectLv.setAdapter(mAdapter);
@@ -274,6 +348,17 @@ public class LoginActivity extends BaseActivity {
         public void handleMessage(Message msg) {
             switch (msg.what)
             {
+                case 0:
+                    switch (binding.loginBt.getTag().toString()){
+                        case "PASS_WORD":
+                            HttpUtils.post(mHandler,HttpEntity.MAIN_URL + HttpEntity.LOGIN_URL_AUTH, loginHead);
+                            break;
+                        case "VER_CODE":
+                            HttpUtils.postCaptcha(mHandler, HttpEntity.MAIN_URL + HttpEntity.LOGIN_URL_CAPTCHA, loginHead);
+                            break;
+                    }
+
+                    break;
                 case 1:
                     binding.loginGetVerification.setText(time + "s");
                     break;
@@ -282,17 +367,53 @@ public class LoginActivity extends BaseActivity {
                     task.cancel();
                     binding.loginGetVerification.setText("重新获取");
                     binding.loginGetVerification.setEnabled(true);
-                    binding.loginGetVerification.setBackgroundResource(R.color.color_blue);
+                    binding.loginGetVerification.setBackgroundResource(R.drawable.background_verification_selected);
                     break;
+                case 3:
+                    Response response = (Response) msg.obj;
+                    if (response != null && response.code() == 200){
+                        if (progressDialog != null) progressDialog.cancel();
+                        getToken(response);
+                        ARouter.getInstance().build(Entity.MAIN_ACTIVITY_PATH).navigation();
+                    }
+                    break;
+                case 4:
+                    if (progressDialog != null) progressDialog.cancel();
+                    Toast.makeText(LoginActivity.this, "登录失败", Toast.LENGTH_SHORT).show();
+                    break;
+                case 5:
+                    initSelectSchoolData();
+
+                    if(progressDialog != null) progressDialog.dismiss();
+                    break;
+
             }
         }
     };
 
+    public void getToken(final Response response){
+        HttpUtils.executorService.execute(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    JSONObject J = new JSONObject(response.body().string());
+                    String token = J.getString("accessToken");
+                    SPUtils.setString(Entity.TOKEN, token);
+                    loginHead.setToken(token);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+    }
+
     @Override
     protected void onStart() {
         super.onStart();
-        boolean isLoged = SPUtils.getBoolean("LOGIN_ON");
-        if (isLoged){
+        String isLoged = SPUtils.getString(Entity.TOKEN);
+        if (!TextUtils.isEmpty(isLoged)){
             ARouter.getInstance().build(Entity.MAIN_ACTIVITY_PATH).navigation();
         }
     }

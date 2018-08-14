@@ -2,28 +2,66 @@ package com.runtoinfo.youxiao.entity;
 
 import android.graphics.drawable.Drawable;
 
+import java.util.List;
+
 /**
  * Created by QiaoJunChao on 2018/8/6.
  */
 
 public class SelectSchoolEntity {
 
-    public Drawable drawable;
-    public String schoolName;
+    public String orgName;
+    public List<String> schoolName;
+    public String tenancyName;
+    public int id;
+    public String tenantId;
+    public String imgPath;
 
-    public Drawable getDrawable() {
-        return drawable;
+    public String getImgPath() {
+        return imgPath;
     }
 
-    public void setDrawable(Drawable drawable) {
-        this.drawable = drawable;
+    public void setImgPath(String imgPath) {
+        this.imgPath = imgPath;
     }
 
-    public String getSchoolName() {
+    public String getTenantId() {
+        return tenantId;
+    }
+
+    public void setTenantId(String tenantId) {
+        this.tenantId = tenantId;
+    }
+
+    public String getTenancyName() {
+        return tenancyName;
+    }
+
+    public void setTenancyName(String tenancyName) {
+        this.tenancyName = tenancyName;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public String getOrgName() {
+        return orgName;
+    }
+
+    public void setOrgName(String orgName) {
+        this.orgName = orgName;
+    }
+
+    public List<String> getSchoolName() {
         return schoolName;
     }
 
-    public void setSchoolName(String schoolName) {
+    public void setSchoolName(List<String> schoolName) {
         this.schoolName = schoolName;
     }
 }

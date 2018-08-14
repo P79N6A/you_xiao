@@ -53,7 +53,7 @@ public class PopupWindowFragment {
         int mWidth = view.getWidth();
 
         listView = v.findViewById(R.id.fragment_home_item_list);
-        adapter = new ListViewAdapter(context, list);
+        adapter = new ListViewAdapter(activity, list);
         listView.setAdapter(adapter);
 
         int y = Utils.getTotalHeightofListView(listView);

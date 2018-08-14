@@ -8,6 +8,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.alibaba.android.arouter.facade.annotation.Route;
 import com.runtoinfo.youxiao.R;
@@ -17,6 +18,8 @@ import com.runtoinfo.youxiao.fragment.FineClassFragment;
 import com.runtoinfo.youxiao.fragment.HomeFragment;
 import com.runtoinfo.youxiao.fragment.PersonalCenterFragment;
 import com.runtoinfo.youxiao.fragment.TopicsFragment;
+import com.runtoinfo.youxiao.utils.Entity;
+import com.runtoinfo.youxiao.utils.SPUtils;
 
 import java.util.ArrayList;
 
@@ -32,11 +35,7 @@ public class MainActivity extends BaseActivity implements ViewPager.OnPageChange
     private ArrayList<Fragment> mFragments;
     private FragmentAdapter mMainMenuAdapter;
     private String TAG = "MainActivity";
-
-    @Override
-    protected int getLayoutId() {
-        return R.layout.activity_main;
-    }
+    private long firstTime = 0;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -105,25 +104,6 @@ public class MainActivity extends BaseActivity implements ViewPager.OnPageChange
         });
     }
 
-//    @Override
-//    public void onClick(View v) {
-//        switch (v.getId()) {
-//            case R.id.ll_bottomMenu_chat:
-//                setMenuSelector(0);
-//                break;
-//            case R.id.ll_bottomMenu_addressBook:
-//                setMenuSelector(1);
-//                break;
-//            case R.id.ll_bottomMenu_discovery:
-//                setMenuSelector(2);
-//                break;
-//            case R.id.ll_bottomMenu_me:
-//                setMenuSelector(3);
-//                break;
-//
-//        }
-//    }
-
     /**
      * 选中指定的菜单项并显示对应的Fragment
      *
@@ -182,5 +162,17 @@ public class MainActivity extends BaseActivity implements ViewPager.OnPageChange
     protected void onDestroy() {
         super.onDestroy();
         Log.e(TAG, "onDestroy");
+    }
+
+    @Override
+    public void onBackPressed() {
+        long secondTime = System.currentTimeMillis();
+        if (secondTime - firstTime < 1000) {
+            SPUtils.setString(Entity.TOKEN, "");
+            finished();
+        } else {
+            Toast.makeText(MainActivity.this, "再按一次退出程序", Toast.LENGTH_SHORT).show();
+            firstTime = System.currentTimeMillis();
+        }
     }
 }

@@ -65,11 +65,6 @@ public class WelcomeActivity extends BaseActivity {
     }
 
     @Override
-    protected int getLayoutId() {
-        return R.layout.welcome_activity;
-    }
-
-    @Override
     protected void initView() {
 
     }

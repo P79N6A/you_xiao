@@ -103,11 +103,15 @@ public class HomeFragment extends BaseFragment implements MyScrollView.ScrollVie
                 List<SelectSchoolEntity> list = new ArrayList<>();
                 popupWindow = new PopupWindowFragment(getContext(), getActivity());
 
+                List<String> listName = new ArrayList<>();
+                listName.add("育雅学堂");
+                listName.add("育雅学堂");
+                listName.add("育雅学堂");
                 //添加学校名称，学校logo
                 for (int i = 0; i < 5; i++) {
                     SelectSchoolEntity schoolEntity = new SelectSchoolEntity();
-                    schoolEntity.setSchoolName("育雅学堂");
-                    schoolEntity.setDrawable(getActivity().getResources().getDrawable(R.drawable.login_school_logo));
+                    schoolEntity.setSchoolName(listName);
+                    schoolEntity.setOrgName("济南");
                     list.add(schoolEntity);
                 }
 

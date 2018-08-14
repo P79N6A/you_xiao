@@ -128,7 +128,7 @@
                             android:layout_toStartOf="@+id/login_get_verification"
                             android:background="@android:color/transparent"
                             android:hint="@string/login_et_pw_hint"
-                            android:inputType="numberPassword"
+                            android:inputType="textPassword"
                             android:paddingStart="8dp"
                             android:textColor="#333333"
                             android:textColorHint="#cccccc"
@@ -157,7 +157,7 @@
                             android:layout_alignParentEnd="true"
                             android:layout_centerVertical="true"
                             android:layout_marginEnd="10dp"
-                            android:src="@drawable/login_password_off" />
+                            android:src="@drawable/login_password_on" />
                     </RelativeLayout>
 
                     <LinearLayout
@@ -177,6 +177,7 @@
                             android:background="@drawable/background_login_button"
                             android:enabled="false"
                             android:text="@string/login_login"
+                            android:tag="PASS_WORD"
                             android:textColor="#fff"
                             android:textSize="18sp" />
                     </LinearLayout>
@@ -188,7 +189,7 @@
                         android:layout_weight="0.8">
 
                         <TextView
-                            android:id="@+id/login_check_box"
+                            android:id="@+id/login_forget_password"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_alignParentEnd="true"
@@ -233,21 +234,23 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical"
-            android:visibility="gone">
+            android:visibility="gone"
+            android:background="#f4f5f7">
 
             <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="30dp"
-                android:layout_marginTop="20dp"
-                android:paddingStart="10dp"
-                tools:ignore="RtlSymmetry">
+                android:layout_height="wrap_content"
+                android:padding="15dp"
+                tools:ignore="RtlSymmetry"
+                android:background="#fff">
 
                 <ImageView
                     android:id="@+id/login_back"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:src="@drawable/activity_black_back"
-                    tools:ignore="ContentDescription" />
+                    tools:ignore="ContentDescription"
+                    android:visibility="gone"/>
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -259,12 +262,22 @@
                     android:textSize="18sp" />
             </RelativeLayout>
 
-            <ListView
-                android:id="@+id/login_select_lv"
+            <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_margin="10dp"
-                android:divider="@null" />
+                android:textColor="#666666"
+                android:text="请选择您要进入的学校"
+                android:padding="12dp"
+                android:textSize="18sp"/>
+
+            <ListView
+                android:id="@+id/login_select_lv"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:divider="@null"
+                android:layout_marginStart="12dp"
+                android:layout_marginEnd="12dp"
+                android:dividerHeight="10dp"/>
 
         </LinearLayout>
 

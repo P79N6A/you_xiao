@@ -6,10 +6,39 @@ package com.runtoinfo.teacher.bean;
 
 public class HttpLoginHead {
 
-    public String token;
-    public String tenancyName;
-    public String client;
-    public int campusId;
+    private int code;
+    private String token;
+    private String tenancyName;
+    private String client;
+    private int campusId;
+    private String userName;
+    private String passWord;
+    private String tenantId;
+    private String newPassWord;
+
+    public String getNewPassWord() {
+        return newPassWord;
+    }
+
+    public void setNewPassWord(String newPassWord) {
+        this.newPassWord = newPassWord;
+    }
+
+    public String getTenantId() {
+        return tenantId;
+    }
+
+    public void setTenantId(String tenantId) {
+        this.tenantId = tenantId;
+    }
+
+    public int getCode() {
+        return code;
+    }
+
+    public void setCode(int code) {
+        this.code = code;
+    }
 
     public String getToken() {
         return token;
@@ -41,5 +70,21 @@ public class HttpLoginHead {
 
     public void setCampusId(int campusId) {
         this.campusId = campusId;
+    }
+
+    public String getUserName() {
+        return userName;
+    }
+
+    public void setUserName(String userName) {
+        this.userName = userName;
+    }
+
+    public String getPassWord() {
+        return passWord;
+    }
+
+    public void setPassWord(String passWord) {
+        this.passWord = passWord;
     }
 }

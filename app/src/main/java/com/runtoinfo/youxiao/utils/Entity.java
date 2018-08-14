@@ -7,4 +7,6 @@ package com.runtoinfo.youxiao.utils;
 public class Entity {
     public final static String LOGIN_ON = "LOGIN_ON";
     public final static String MAIN_ACTIVITY_PATH = "/main/mainActivity";
+    public final static String REST_PASS_WORD = "/main/resetPassword";
+    public final static String TOKEN = "TOKEN";
 }

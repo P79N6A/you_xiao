@@ -1,6 +1,7 @@
 package com.runtoinfo.youxiao.adapter;
 
 import android.Manifest;
+import android.app.Activity;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -13,10 +14,13 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.runtoinfo.teacher.HttpEntity;
+import com.runtoinfo.teacher.utils.HttpUtils;
 import com.runtoinfo.youxiao.R;
 import com.runtoinfo.youxiao.entity.SelectSchoolEntity;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -27,9 +31,10 @@ import java.util.Map;
 public class ListViewAdapter extends BaseAdapter implements AdapterView.OnItemClickListener{
 
     public List<SelectSchoolEntity> list = new ArrayList<>();
-    public Context context;
+    public Activity context;
+    public Map<String, Bitmap> map = new HashMap<>();
 
-    public ListViewAdapter(Context context,  List<SelectSchoolEntity> list){
+    public ListViewAdapter(Activity context,  List<SelectSchoolEntity> list){
         this.context = context;
         this.list = list;
     }
@@ -40,8 +45,9 @@ public class ListViewAdapter extends BaseAdapter implements AdapterView.OnItemCl
     }
 
     public class ViewHolder{
-        ImageView imageView;
-        TextView textView;
+        TextView brandName;
+        TextView schoolName;
+        ImageView orgLogo;
     }
 
     @Override
@@ -68,18 +74,26 @@ public class ListViewAdapter extends BaseAdapter implements AdapterView.OnItemCl
             LayoutInflater inflater = LayoutInflater.from(context);
             convertView = inflater.inflate(R.layout.login_select_lv_item, null);
             holder = new ViewHolder();
-            holder.imageView = convertView.findViewById(R.id.select_lv_img);
-            holder.textView = convertView.findViewById(R.id.select_lv_tv);
+            holder.orgLogo = convertView.findViewById(R.id.select_image);
+            holder.brandName = convertView.findViewById(R.id.select_lv_img);
+            holder.schoolName = convertView.findViewById(R.id.select_lv_tv);
             convertView.setTag(holder);
         }
         else
         {
             holder = (ViewHolder) convertView.getTag();
         }
-
-        holder.textView.setText(list.get(position).getSchoolName());
-        holder.imageView.setImageDrawable(list.get(position).getDrawable());
-
+        List<String> listName = list.get(position).getSchoolName();
+        for (int i = 0; i < listName.size(); i++) {
+            holder.schoolName.setText(listName.get(i));
+            holder.brandName.setText(list.get(position).getOrgName());
+            getImage(list.get(position).getImgPath(), holder);
+        }
         return convertView;
+    }
+
+    private void getImage(String url, ViewHolder holder){
+        HttpUtils.postAsynchronous(context, url, holder.orgLogo);
+        //holder.orgLogo.setImageBitmap(map.get("bitmap"));
     }
 }

@@ -1,6 +1,7 @@
 package com.runtoinfo.youxiao.utils;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.graphics.Point;
 import android.graphics.Rect;
@@ -11,6 +12,8 @@ import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.ListAdapter;
 import android.widget.ListView;
+
+import com.runtoinfo.youxiao.activities.LoginActivity;
 
 import java.lang.reflect.Field;
 
@@ -92,6 +95,13 @@ public class Utils {
         listView.setLayoutParams(params);
         listView.requestLayout();
         return totalHeight;
+    }
+
+    //等待dialog
+    public static void creatDialog(ProgressDialog progressDialog){
+        progressDialog.setCanceledOnTouchOutside(false);
+        progressDialog.setMessage("请稍后，正在加载...");
+        progressDialog.show();
     }
 
 }
