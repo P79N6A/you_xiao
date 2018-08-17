@@ -82,7 +82,6 @@ public class BoutiqueInChildRecyclerAdapter extends RecyclerView.Adapter {
 
         @Override
         public void onClick(View v) {
-            //ARouter.getInstance().build("/course/boutiqueCourseDetails").navigation();
             listener.onItemClick(v, getAdapterPosition());
         }
 

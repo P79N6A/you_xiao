@@ -1,11 +1,7 @@
 package com.runtoinfo.youxiao.adapter;
 
-import android.Manifest;
 import android.app.Activity;
-import android.content.Context;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.drawable.Drawable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,7 +10,6 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.runtoinfo.teacher.HttpEntity;
 import com.runtoinfo.teacher.utils.HttpUtils;
 import com.runtoinfo.youxiao.R;
 import com.runtoinfo.youxiao.entity.SelectSchoolEntity;
@@ -33,6 +28,7 @@ public class ListViewAdapter extends BaseAdapter implements AdapterView.OnItemCl
     public List<SelectSchoolEntity> list = new ArrayList<>();
     public Activity context;
     public Map<String, Bitmap> map = new HashMap<>();
+    public int index = -1;
 
     public ListViewAdapter(Activity context,  List<SelectSchoolEntity> list){
         this.context = context;
@@ -41,13 +37,16 @@ public class ListViewAdapter extends BaseAdapter implements AdapterView.OnItemCl
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-
     }
 
     public class ViewHolder{
         TextView brandName;
         TextView schoolName;
         ImageView orgLogo;
+    }
+
+    public void setIndex(int selected) {
+        index = selected;
     }
 
     @Override
@@ -77,18 +76,30 @@ public class ListViewAdapter extends BaseAdapter implements AdapterView.OnItemCl
             holder.orgLogo = convertView.findViewById(R.id.select_image);
             holder.brandName = convertView.findViewById(R.id.select_lv_img);
             holder.schoolName = convertView.findViewById(R.id.select_lv_tv);
-            convertView.setTag(holder);
+
         }
         else
         {
             holder = (ViewHolder) convertView.getTag();
         }
+
+        if (index == position) {
+            //此处就是设置textview为选中状态，方可以实现效果
+            holder.schoolName.setSelected(false);
+        } else {
+            //没选中的就不用设置了
+            holder.schoolName.setSelected(true);
+        }
+        convertView.setTag(holder);
+
         List<String> listName = list.get(position).getSchoolName();
         for (int i = 0; i < listName.size(); i++) {
             holder.schoolName.setText(listName.get(i));
             holder.brandName.setText(list.get(position).getOrgName());
             getImage(list.get(position).getImgPath(), holder);
+            holder.schoolName.setSelected(true);
         }
+
         return convertView;
     }
 

@@ -212,8 +212,9 @@ public class LoginActivity extends BaseActivity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 //填入登录需要的参数
+                mAdapter.setIndex(position);
+                mAdapter.notifyDataSetChanged();
                 setSelectSchool(schoolList.get(position));
-
                 binding.loginDefaultNew.setVisibility(View.VISIBLE);
                 binding.loginInclude.setVisibility(View.GONE);
             }

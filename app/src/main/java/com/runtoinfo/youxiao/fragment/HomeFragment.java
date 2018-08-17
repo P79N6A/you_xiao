@@ -44,6 +44,7 @@ import com.runtoinfo.youxiao.ui.FloatDragView;
 import com.runtoinfo.youxiao.ui.MyScrollView;
 import com.runtoinfo.youxiao.ui.PopuMenu;
 import com.runtoinfo.youxiao.ui.PopupWindowFragment;
+import com.runtoinfo.youxiao.utils.IntentDataType;
 
 import java.lang.invoke.CallSite;
 import java.util.ArrayList;
@@ -196,7 +197,16 @@ public class HomeFragment extends BaseFragment implements MyScrollView.ScrollVie
         binding.homeSchoolMovingStatus.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ARouter.getInstance().build("/main/schoolDynamics").navigation();
+                ARouter.getInstance().build("/main/schoolDynamics")
+                        .withString(IntentDataType.INTENT_KEY, IntentDataType.SCHOOL_DYNAMICS).navigation();
+            }
+        });
+
+        binding.homeHeadNewsLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ARouter.getInstance().build("/main/schoolDynamics")
+                        .withString(IntentDataType.INTENT_KEY, IntentDataType.HEAD_NEWS).navigation();
             }
         });
 

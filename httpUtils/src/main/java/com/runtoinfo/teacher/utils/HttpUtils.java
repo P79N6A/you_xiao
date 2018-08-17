@@ -1,9 +1,11 @@
 package com.runtoinfo.teacher.utils;
 
 import android.app.Activity;
+import android.app.FragmentManager;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.drawable.Drawable;
 import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
@@ -17,6 +19,8 @@ import org.json.JSONObject;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ExecutorService;
@@ -62,11 +66,13 @@ public class HttpUtils {
                     @Override
                     public void onResponse(Call call, Response response) throws IOException {
                         if (response.isSuccessful()) {
-                            final Bitmap bitmap1 = BitmapFactory.decodeStream(response.body().byteStream());
+                            //final Bitmap bitmap1 = BitmapFactory.decodeStream(response.body().byteStream());
+                            final Drawable drawable = Drawable.createFromStream(response.body().byteStream(), "image");
                             context.runOnUiThread(new Runnable() {
                                 @Override
                                 public void run() {
-                                    imageView.setImageBitmap(bitmap1);
+                                    //imageView.setImageBitmap(bitmap1);
+                                    imageView.setBackground(drawable);
                                 }
                             });
 
@@ -341,6 +347,39 @@ public class HttpUtils {
 
     }
 
+    public static void getSchoolNewsAll(final Handler handler, final String url, final int maxResultCount, final int skipCount){
+        executorService.execute(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    Map<String, Object> object = new HashMap<>();
+                    object.put("Title","");
+                    object.put("Subtitle", "");
+                    object.put("Tag", "");
+                    object.put("Status", "");
+                    object.put("MaxResultCount", maxResultCount);
+                    object.put("SkipCount", skipCount);
+                    object.put("Sorting","");
+                    Request request = new Request.Builder()
+                            .url(url + setUrl(object))
+                            .build();
+                    Response response = client.newCall(request).execute();
+                    if (response.isSuccessful()){
+                        String result = response.body().string();
+                        Message message = new Message();
+                        message.what = 3;
+                        message.obj = result;
+                        handler.sendMessage(message);
+                    }
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+
+
+            }
+        });
+    }
+
     public static String execute(Request request){
         try {
             OkHttpClient client = new OkHttpClient();
@@ -352,5 +391,17 @@ public class HttpUtils {
             e.printStackTrace();
         }
         return "{\"error\":\"fail\"}";
+    }
+
+    public static String setUrl(Map<String, Object> map){
+        StringBuilder builder = new StringBuilder("?");
+        Iterator iterator = map.keySet().iterator();
+        while (iterator.hasNext()){
+            String key =(String) iterator.next();
+            builder.append(key).append("=").append(map.get(key)).append("&");
+        }
+        String s = builder.toString();
+        String str = s.substring(0, s.length() -1);
+        return str;
     }
 }

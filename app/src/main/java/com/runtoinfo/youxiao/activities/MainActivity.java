@@ -168,7 +168,7 @@ public class MainActivity extends BaseActivity implements ViewPager.OnPageChange
     public void onBackPressed() {
         long secondTime = System.currentTimeMillis();
         if (secondTime - firstTime < 1000) {
-            SPUtils.setString(Entity.TOKEN, "");
+            //SPUtils.setString(Entity.TOKEN, "");
             finished();
         } else {
             Toast.makeText(MainActivity.this, "再按一次退出程序", Toast.LENGTH_SHORT).show();

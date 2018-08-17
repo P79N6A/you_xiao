@@ -31,4 +31,12 @@ public class HttpEntity {
      * 验证 验证码
      */
     public final static String CAPTCHA_VALIDATE = "/api/services/app/Captcha/Validate";
+    /**
+     * 获取新闻列表
+     */
+    public final static String SCHOOL_NEWS_ALL = "/api/services/app/News/GetAll";
+    /**
+     * 新闻内容
+     */
+    public final static String SCHOOL_NEWS_CONTENT = "/api/services/app/News/Get";
 }

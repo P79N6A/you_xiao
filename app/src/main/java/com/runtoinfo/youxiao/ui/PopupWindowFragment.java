@@ -43,7 +43,7 @@ public class PopupWindowFragment {
     public PopupWindow popupWindow;
     @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     @SuppressLint("WrongConstant")
-    public void showPopupWindows(List<SelectSchoolEntity> list, /*int gravity, int x, int y,*/ View view){
+    public void showPopupWindows(List<SelectSchoolEntity> list, View view){
 
         View v = LayoutInflater.from(context).inflate(R.layout.fragment_home_popupwindow, null);
         int[] location = new int[2];

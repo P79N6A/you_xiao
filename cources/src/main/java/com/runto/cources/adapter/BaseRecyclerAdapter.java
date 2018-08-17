@@ -51,8 +51,8 @@
 //    }
 //
 //    @Override
-//    public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-//        final RecyclerView.ViewHolder holder = onCreateDefaultViewHolder(parent, viewType);
+//    public RecyclerView.BaseViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+//        final RecyclerView.BaseViewHolder holder = onCreateDefaultViewHolder(parent, viewType);
 //        if (holder != null) {
 //            holder.itemView.setTag(holder);
 //            holder.itemView.setOnClickListener(onClickListener);
@@ -61,13 +61,13 @@
 //    }
 //
 //    @Override
-//    public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
+//    public void onBindViewHolder(RecyclerView.BaseViewHolder holder, int position) {
 //        onBindViewHolder(holder, mItems.get(position), position);
 //    }
 //
-//    protected abstract RecyclerView.ViewHolder onCreateDefaultViewHolder(ViewGroup parent, int type);
+//    protected abstract RecyclerView.BaseViewHolder onCreateDefaultViewHolder(ViewGroup parent, int type);
 //
-//    protected abstract void onBindViewHolder(RecyclerView.ViewHolder holder, T item, int position);
+//    protected abstract void onBindViewHolder(RecyclerView.BaseViewHolder holder, T item, int position);
 //
 //    @Override
 //    public int getItemCount() {
@@ -106,7 +106,7 @@
 //    static abstract class OnClickListener implements View.OnClickListener {
 //        @Override
 //        public void onClick(View v) {
-//            RecyclerView.ViewHolder holder = (RecyclerView.ViewHolder) v.getTag();
+//            RecyclerView.BaseViewHolder holder = (RecyclerView.BaseViewHolder) v.getTag();
 //            onClick(holder.getAdapterPosition(), holder.getItemId());
 //        }
 //

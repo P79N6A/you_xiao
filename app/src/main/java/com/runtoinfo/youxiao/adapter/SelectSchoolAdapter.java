@@ -52,7 +52,7 @@ public class SelectSchoolAdapter extends BaseAdapter {
         return position;
     }
 
-    @SuppressLint({"ViewHolder", "InflateParams"})
+    @SuppressLint({"BaseViewHolder", "InflateParams"})
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         ViewHold viewHold = null;
