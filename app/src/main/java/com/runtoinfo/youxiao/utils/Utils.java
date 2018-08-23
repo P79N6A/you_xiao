@@ -12,6 +12,7 @@ import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.ListAdapter;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import com.runtoinfo.youxiao.activities.LoginActivity;
 
@@ -102,6 +103,10 @@ public class Utils {
         progressDialog.setCanceledOnTouchOutside(false);
         progressDialog.setMessage("请稍后，正在加载...");
         progressDialog.show();
+    }
+
+    public static void showToast(Context context, String msg){
+        Toast.makeText(context, msg, Toast.LENGTH_SHORT).show();
     }
 
 }

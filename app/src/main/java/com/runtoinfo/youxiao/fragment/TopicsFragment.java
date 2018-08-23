@@ -81,7 +81,8 @@ public class TopicsFragment extends BaseFragment {
         for (int i = 0; i < 3; i++)
         {
             ImageView imageView = new ImageView(getActivity());
-            imageView.setImageResource(R.drawable.topics_img_banner);
+            imageView.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT));
+            imageView.setBackgroundResource(R.drawable.topics_img_banner);
             listView.add(imageView);
         }
     }

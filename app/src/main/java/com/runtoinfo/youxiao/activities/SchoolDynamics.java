@@ -10,6 +10,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
+import android.widget.Toast;
 
 import com.alibaba.android.arouter.facade.annotation.Route;
 import com.runtoinfo.teacher.HttpEntity;
@@ -18,14 +19,16 @@ import com.runtoinfo.youxiao.R;
 import com.runtoinfo.youxiao.adapter.SchoolDynamicsRecyclerAdapter;
 import com.runtoinfo.youxiao.databinding.SchoolMovmentBinding;
 import com.runtoinfo.youxiao.entity.SchoolDynamicsEntity;
+import com.runtoinfo.youxiao.utils.Entity;
 import com.runtoinfo.youxiao.utils.IntentDataType;
+import com.runtoinfo.youxiao.utils.SPUtils;
+import com.runtoinfo.youxiao.utils.Utils;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 @Route(path = "/main/schoolDynamics")
@@ -36,6 +39,7 @@ public class SchoolDynamics extends Activity {
     public SchoolDynamicsRecyclerAdapter adapter;
     public String dataType = null;
     public int times = 0;
+    public SchoolDynamicsEntity schoolDynamicsEntity;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -88,7 +92,7 @@ public class SchoolDynamics extends Activity {
     protected void onStart() {
         super.onStart();
         if (dataType != null && !dataType.equals(IntentDataType.TOPICS))
-        HttpUtils.getSchoolNewsAll(handler, HttpEntity.MAIN_URL + HttpEntity.SCHOOL_NEWS_ALL, 10, 0);
+        HttpUtils.getSchoolNewsAll(handler, HttpEntity.MAIN_URL + HttpEntity.SCHOOL_NEWS_ALL, SPUtils.getString(Entity.TOKEN));
     }
 
     @SuppressLint("HandlerLeak")
@@ -99,16 +103,28 @@ public class SchoolDynamics extends Activity {
                 case 0:
                 case 1:
                 case 2:
-                    String html = msg.obj.toString();
+                    schoolDynamicsEntity = (SchoolDynamicsEntity) msg.obj;
                     times ++;
                     hideView(true);
-                    binding.dynamicsWebview.loadData(html, "text/html","utf-8");
+                    binding.dynamicsTitle.setText(schoolDynamicsEntity.getTile());
+                    binding.dynamicsTime .setText(schoolDynamicsEntity.getPublishTime());
+                    HttpUtils.getNewsReadNumber(handler,
+                            HttpEntity.MAIN_URL + HttpEntity.NEWS_READ_NUMBER,
+                            SPUtils.getString(Entity.TOKEN),
+                            schoolDynamicsEntity.getId());
+                    binding.dynamicsWebview.loadData(schoolDynamicsEntity.getContent(), "text/html; charset=UTF-8",null);
                     break;
                 case 3:
                     String json = msg.obj.toString();
                     Log.e("school", json);
                     fromJson(json);
                     initData();
+                    break;
+                case 4:
+                    binding.dynamicsReadNumber.setText(msg.obj.toString());
+                    break;
+                case 500:
+                    Utils.showToast(SchoolDynamics.this, "请检查您的网络");
                     break;
             }
         }
@@ -171,6 +187,7 @@ public class SchoolDynamics extends Activity {
         entity.setVideoPath(childItem.getString("videoPath"));
         entity.setContent(childItem.getString("content"));
         entity.setMessage(childItem.getString("subtitle"));
+        entity.setPublishTime(childItem.getString("publishTime"));
         schoolDynamicsList.add(entity);
     }
 

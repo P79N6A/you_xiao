@@ -1,14 +1,9 @@
 package com.runtoinfo.youxiao.fragment;
 
 import android.Manifest;
-import android.app.FragmentManager;
-import android.app.ListActivity;
-import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.databinding.DataBindingUtil;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
@@ -18,41 +13,30 @@ import android.os.Vibrator;
 import android.support.annotation.Nullable;
 import android.support.annotation.RequiresApi;
 import android.support.v4.app.ActivityCompat;
-import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
-import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.DisplayMetrics;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
 import android.view.WindowManager;
-import android.widget.ImageView;
-import android.widget.PopupWindow;
 
 import com.alibaba.android.arouter.launcher.ARouter;
 import com.runtoinfo.youxiao.R;
 import com.runtoinfo.youxiao.adapter.CoursePunchAdapter;
-import com.runtoinfo.youxiao.databinding.ActivityMainBinding;
 import com.runtoinfo.youxiao.databinding.FragmentHomeBinding;
 import com.runtoinfo.youxiao.entity.CourseEntity;
 import com.runtoinfo.youxiao.entity.SelectSchoolEntity;
 import com.runtoinfo.youxiao.ui.FloatDragView;
 import com.runtoinfo.youxiao.ui.MyScrollView;
-import com.runtoinfo.youxiao.ui.PopuMenu;
 import com.runtoinfo.youxiao.ui.PopupWindowFragment;
+import com.runtoinfo.youxiao.utils.Entity;
 import com.runtoinfo.youxiao.utils.IntentDataType;
+import com.runtoinfo.youxiao.utils.SPUtils;
 
-import java.lang.invoke.CallSite;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-
-import myapplication.MyApplication;
 
 /**
  * Created by qiaojunchao on 2018/5/24 0024.
@@ -190,7 +174,7 @@ public class HomeFragment extends BaseFragment implements MyScrollView.ScrollVie
         binding.homeActivityListLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ARouter.getInstance().build("/event/eventActivity").navigation();
+                ARouter.getInstance().build("/event/eventActivity").withString(Entity.USER_ID, SPUtils.getString(Entity.USER_ID)).navigation();
             }
         });
 

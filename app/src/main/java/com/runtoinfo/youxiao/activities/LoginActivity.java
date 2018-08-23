@@ -7,7 +7,6 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.text.Editable;
-import android.text.InputType;
 import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.text.method.HideReturnsTransformationMethod;
@@ -15,7 +14,6 @@ import android.text.method.PasswordTransformationMethod;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.ListView;
 import android.widget.Toast;
 
 import com.alibaba.android.arouter.launcher.ARouter;
@@ -26,7 +24,6 @@ import com.runtoinfo.teacher.utils.HttpUtils;
 import com.runtoinfo.youxiao.R;
 import com.runtoinfo.youxiao.adapter.ListViewAdapter;
 import com.runtoinfo.youxiao.databinding.ActivityLoginBinding;
-import com.runtoinfo.youxiao.databinding.LoginSelectSchoolBinding;
 import com.runtoinfo.youxiao.entity.SelectSchoolEntity;
 import com.runtoinfo.youxiao.utils.Entity;
 import com.runtoinfo.youxiao.utils.SPUtils;
@@ -37,7 +34,6 @@ import org.json.JSONObject;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.IllegalFormatCodePointException;
 import java.util.List;
 import java.util.Map;
 import java.util.Timer;
@@ -61,7 +57,7 @@ public class LoginActivity extends BaseActivity {
 
     @Override
     protected void initView() {
-
+        //FitStatusUI.setImmersionStateMode(this);
         binding = DataBindingUtil.setContentView(LoginActivity.this, R.layout.activity_login);
         progressDialog = new ProgressDialog(LoginActivity.this);
 
@@ -103,7 +99,7 @@ public class LoginActivity extends BaseActivity {
                 String text = binding.loginMobilePhone.getText().toString().replaceAll("\\s*", "");
                 if (text.length() == 11)
                 {
-                    HttpUtils.getAsy(mHandler,dataMap, HttpEntity.MAIN_URL + HttpEntity.GET_ORGANIZATION_INFO, text);
+                    HttpUtils.getAsy(mHandler, dataMap, HttpEntity.MAIN_URL + HttpEntity.GET_ORGANIZATION_INFO, text);
                     loginHead.setUserName(text);
                     //initSelectSchoolData();
                     binding.loginGetVerification.setBackgroundResource(R.drawable.background_verification_selected);
@@ -373,7 +369,6 @@ public class LoginActivity extends BaseActivity {
                 case 3:
                     Response response = (Response) msg.obj;
                     if (response != null && response.code() == 200){
-                        if (progressDialog != null) progressDialog.cancel();
                         getToken(response);
                         ARouter.getInstance().build(Entity.MAIN_ACTIVITY_PATH).navigation();
                     }
@@ -398,9 +393,18 @@ public class LoginActivity extends BaseActivity {
             public void run() {
                 try {
                     JSONObject J = new JSONObject(response.body().string());
-                    String token = J.getString("accessToken");
+                    JSONObject json = J.getJSONObject("result");
+                    String token = json.getString("accessToken");
                     SPUtils.setString(Entity.TOKEN, token);
+                    SPUtils.setString(Entity.USER_ID, json.getString("userId"));
                     loginHead.setToken(token);
+
+                    LoginActivity.this.runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            if (progressDialog != null) progressDialog.cancel();
+                        }
+                    });
                 } catch (JSONException e) {
                     e.printStackTrace();
                 } catch (IOException e) {

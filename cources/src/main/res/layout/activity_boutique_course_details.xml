@@ -58,7 +58,7 @@
                 android:layout_weight="3"
                 android:background="@drawable/boutique_course_details" />
 
-            <com.runtoinfo.youxiao.common_ui.MyScrollView
+            <com.runtoinfo.youxiao.common_ui.views.MyScrollView
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:layout_weight="5">
@@ -143,14 +143,14 @@
                         android:layout_height="0.1dp"
                         android:background="#e6eaf2" />
 
-                    <com.runtoinfo.youxiao.common_ui.CustomViewPager
+                    <com.runtoinfo.youxiao.common_ui.views.CustomViewPager
                         android:id="@+id/boutique_course_introduction_vpager"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent" />
 
 
                 </LinearLayout>
-            </com.runtoinfo.youxiao.common_ui.MyScrollView>
+            </com.runtoinfo.youxiao.common_ui.views.MyScrollView>
 
         </LinearLayout>
 

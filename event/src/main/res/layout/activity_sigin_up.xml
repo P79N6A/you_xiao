@@ -1,164 +1,251 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent">
+<layout xmlns:tools="http://schemas.android.com/tools">
 
-    <RelativeLayout
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:padding="10dp">
+        android:layout_height="match_parent"
+        android:orientation="vertical">
 
-        <ImageView
-            android:id="@+id/activity_img_back"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
-            android:src="@drawable/activity_black_back"/>
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerHorizontal="true"
-            android:text="报名"
-            android:textColor="#333333"
-            android:textSize="18sp" />
-    </RelativeLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:layout_marginTop="5dp"
-        android:layout_marginStart="30dp"
-        android:layout_marginEnd="30dp">
-        <LinearLayout
+        <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="40dp"
-            android:orientation="horizontal">
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:textSize="18sp"
-                android:textColor="#333333"
-                android:text="姓名:"
-                android:gravity="center"/>
-            <EditText
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_marginStart="5dp"
-                android:gravity="center_vertical"
-                android:background="@android:color/transparent"
-                android:textColor="#333333"
-                android:textSize="18sp"
-                android:imeOptions="actionNext"
-                android:focusable="true"
-                android:text="叶少阳"/>
-        </LinearLayout>
+            android:layout_height="wrap_content"
+            android:padding="10dp">
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="40dp"
-            android:orientation="horizontal">
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:textSize="18sp"
-                android:textColor="#333333"
-                android:text="性别:"
-                android:gravity="center"/>
-            <RadioButton
+            <ImageView
+                android:id="@+id/activity_img_back"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="5dp"
-                android:gravity="center_vertical"
-                android:text="男"
-                android:textSize="18sp"
-                android:button="@drawable/radiobutton_click_return_img"/>
-            <RadioButton
+                android:layout_centerVertical="true"
+                android:src="@drawable/activity_black_back" />
+
+            <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="15dp"
-                android:gravity="center_vertical"
-                android:text="女"
-                android:textSize="18sp"
-                android:button="@drawable/radiobutton_click_return_img"/>
-        </LinearLayout>
+                android:layout_centerHorizontal="true"
+                android:text="报名"
+                android:textColor="#333333"
+                android:textSize="18sp" />
+        </RelativeLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0.1dp"
+            android:background="#e6eaf2" />
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="40dp"
-            android:orientation="horizontal">
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:textSize="18sp"
-                android:textColor="#333333"
-                android:text="年龄:"
-                android:gravity="center"/>
-            <EditText
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="30dp"
+            android:layout_marginStart="30dp"
+            android:layout_marginTop="5dp"
+            android:orientation="vertical">
+
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_marginStart="5dp"
-                android:gravity="center_vertical"
-                android:background="@android:color/transparent"
-                android:textColor="#333333"
-                android:textSize="18sp"
-                android:imeOptions="actionNext"
-                android:focusable="true"
-                android:text="23"/>
-        </LinearLayout>
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="40dp"
-            android:orientation="horizontal">
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:textSize="18sp"
-                android:textColor="#333333"
-                android:text="联系方式:"
-                android:gravity="center"/>
-            <EditText
+                android:layout_height="40dp"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:text="姓名:"
+                    android:textColor="#333333"
+                    android:textSize="18sp" />
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginStart="5dp">
+
+                    <EditText
+                        android:id="@+id/event_student_name"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:layout_marginStart="5dp"
+                        android:background="@android:color/transparent"
+                        android:focusable="true"
+                        android:gravity="center_vertical"
+                        android:imeOptions="actionNext"
+                        android:text="叶少阳"
+                        android:textColor="#333333"
+                        android:textSize="18sp" />
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="0.1dp"
+                        android:layout_alignParentBottom="true"
+                        android:background="#e6eaf2" />
+                </RelativeLayout>
+            </LinearLayout>
+
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_marginStart="5dp"
-                android:gravity="center_vertical"
-                android:background="@android:color/transparent"
-                android:textColor="#333333"
-                android:textSize="18sp"
-                android:imeOptions="actionNext"
-                android:focusable="true"
-                android:hint="请输入您的手机号"
-                android:textColorHint="#999999"/>
+                android:layout_height="40dp"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:text="性别:"
+                    android:textColor="#333333"
+                    android:textSize="18sp" />
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginStart="5dp">
+
+                    <RadioGroup
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:layout_gravity="center"
+                        android:gravity="center"
+                        android:orientation="horizontal">
+
+                        <RadioButton
+                            android:id="@+id/member_man"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="5dp"
+                            android:button="@null"
+                            android:drawableLeft="@drawable/radiobutton_click_return_img"
+                            android:drawablePadding="8dp"
+                            android:gravity="center_vertical"
+                            android:text="男"
+                            android:textSize="18sp" />
+
+                        <RadioButton
+                            android:id="@+id/member_women"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="15dp"
+                            android:button="@null"
+                            android:drawableLeft="@drawable/radiobutton_click_return_img"
+                            android:drawablePadding="8dp"
+                            android:gravity="center_vertical"
+                            android:text="女"
+                            android:textSize="18sp" />
+                    </RadioGroup>
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="0.1dp"
+                        android:layout_alignParentBottom="true"
+                        android:background="#e6eaf2" />
+                </RelativeLayout>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:text="年龄:"
+                    android:textColor="#333333"
+                    android:textSize="18sp" />
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginStart="5dp">
+
+                    <EditText
+                        android:id="@+id/activity_member_age"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_centerVertical="true"
+                        android:layout_marginStart="5dp"
+                        android:background="@android:color/transparent"
+                        android:focusable="true"
+                        android:gravity="center_vertical"
+                        android:imeOptions="actionNext"
+                        android:text="23"
+                        android:textColor="#333333"
+                        android:textSize="18sp" />
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="0.1dp"
+                        android:layout_alignParentBottom="true"
+                        android:background="#e6eaf2" />
+                </RelativeLayout>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="45dp"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:text="联系方式:"
+                    android:textColor="#333333"
+                    android:textSize="18sp" />
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginStart="5dp">
+
+                    <EditText
+                        android:id="@+id/member_phone_number"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_marginStart="5dp"
+                        android:background="@android:color/transparent"
+                        android:focusable="true"
+                        android:gravity="center_vertical"
+                        android:layout_centerVertical="true"
+                        android:hint="请输入您的手机号"
+                        android:imeOptions="actionNext"
+                        android:textColor="#333333"
+                        android:textColorHint="#999999"
+                        android:textSize="18sp"
+                        tools:ignore="TextFields" />
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="0.1dp"
+                        android:layout_alignParentBottom="true"
+                        android:background="#e6eaf2" />
+                </RelativeLayout>
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/activity_sign_alone"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="40dp"
+                android:background="@drawable/background_button_blue"
+                android:gravity="center"
+                android:padding="10dp"
+                android:text="单独报名"
+                android:textColor="#fff"
+                android:textSize="18sp" />
+
+            <TextView
+                android:id="@+id/activity_add_follow"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:background="@drawable/background_button_blue"
+                android:gravity="center"
+                android:padding="10dp"
+                android:text="添加随行人员"
+                android:textColor="#fff"
+                android:textSize="18sp" />
         </LinearLayout>
 
-        <TextView
-            android:id="@+id/activity_sign_alone"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textSize="18sp"
-            android:layout_marginTop="40dp"
-            android:background="@drawable/background_button_blue"
-            android:text="单独报名"
-            android:textColor="#fff"
-            android:gravity="center"
-            android:padding="10dp"/>
 
-        <TextView
-            android:id="@+id/activity_add_follow"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textSize="18sp"
-            android:layout_marginTop="10dp"
-            android:background="@drawable/background_button_blue"
-            android:text="添加随行人员"
-            android:textColor="#fff"
-            android:gravity="center"
-            android:padding="10dp"/>
     </LinearLayout>
-
-
-
-</LinearLayout>
 </layout>

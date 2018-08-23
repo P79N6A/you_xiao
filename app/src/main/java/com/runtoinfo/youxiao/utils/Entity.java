@@ -9,4 +9,5 @@ public class Entity {
     public final static String MAIN_ACTIVITY_PATH = "/main/mainActivity";
     public final static String REST_PASS_WORD = "/main/resetPassword";
     public final static String TOKEN = "TOKEN";
+    public final static String USER_ID = "USER_ID";
 }

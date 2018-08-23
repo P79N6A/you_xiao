@@ -71,12 +71,9 @@ public class ColorfulActivity extends BaseActivity implements
     @Override
     protected void initView() {
         setStatusBarDarkMode();
-        //mTextMonthDay = (TextView) findViewById(R.id.tv_month_day);
         mTextYear = (TextView) findViewById(R.id.tv_year);
-        //mTextLunar = (TextView) findViewById(R.id.tv_lunar);
         mRelativeTool = (RelativeLayout) findViewById(R.id.rl_tool);
         mCalendarView = (CalendarView) findViewById(R.id.calendarView);
-        //mTextCurrentDay = (TextView) findViewById(R.id.tv_current_day);
         imgMenu = findViewById(R.id.course_message_menu);
         imgMenu.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -92,9 +89,6 @@ public class ColorfulActivity extends BaseActivity implements
                     return;
                 }
                 mCalendarView.showYearSelectLayout(mYear);
-                //mTextLunar.setVisibility(View.GONE);
-                //mTextYear.setVisibility(View.GONE);
-                //mTextMonthDay.setText(String.valueOf(mYear));
             }
         });
         findViewById(R.id.tv_today).setOnClickListener(new View.OnClickListener() {
@@ -108,9 +102,6 @@ public class ColorfulActivity extends BaseActivity implements
         mCalendarView.setOnYearChangeListener(this);
         mTextYear.setText(String.valueOf(mCalendarView.getCurYear()));
         mYear = mCalendarView.getCurYear();
-//        mTextMonthDay.setText(mCalendarView.getCurMonth() + "月" + mCalendarView.getCurDay() + "日");
-//        mTextLunar.setText("今日");
-//        mTextCurrentDay.setText(String.valueOf(mCalendarView.getCurDay()));
 
         findViewById(R.id.activity_img_back).setOnClickListener(new View.OnClickListener() {
             @Override

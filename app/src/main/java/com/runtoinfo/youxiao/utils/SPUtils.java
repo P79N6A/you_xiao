@@ -11,6 +11,7 @@ import myapplication.MyApplication;
 
 public class SPUtils {
 
+
     public static void setBoolean(String key, boolean value){
         MyApplication.Sp.edit().putBoolean(key, value).apply();
     }

@@ -207,10 +207,11 @@ public class SchoolDynamicsRecyclerAdapter extends RecyclerView.Adapter {
     }
 
     public void listener(int position, int type){
-        String html = dataList.get(position).getContent();
+        SchoolDynamicsEntity dynamicsEntity = dataList.get(position);
+        //String html = dataList.get(position).getContent();
         Message message = new Message();
         message.what = type;
-        message.obj = html;
+        message.obj = dynamicsEntity;
         handler.sendMessage(message);
     }
 }

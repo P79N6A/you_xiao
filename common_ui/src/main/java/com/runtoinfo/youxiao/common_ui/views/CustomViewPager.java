@@ -1,4 +1,4 @@
-package com.runtoinfo.youxiao.common_ui;
+package com.runtoinfo.youxiao.common_ui.views;
 
 import android.content.Context;
 import android.support.v4.view.ViewPager;

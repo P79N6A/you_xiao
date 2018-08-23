@@ -62,7 +62,7 @@ public class PersonalMainActivity extends Activity {
         binding.personalRelativeAvatar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                avatarSelect();
+                avatarSelect(1);
             }
         });
         //用户名
@@ -105,12 +105,12 @@ public class PersonalMainActivity extends Activity {
     }
 
     public void initSexSelectionDialog(){
-        final Dialog dialog = new Dialog(this);
+        final Dialog dialog = new Dialog(this, R.style.dialog);
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         dialog.setContentView(R.layout.personal_sex_selection);
         dialog.setCancelable(false);
 
-        Window window = this.getWindow();
+        Window window = dialog.getWindow();
         window.setGravity(Gravity.BOTTOM);
         WindowManager manager = (WindowManager) this.getSystemService(Context.WINDOW_SERVICE);
         DisplayMetrics dm = new DisplayMetrics();
@@ -142,6 +142,8 @@ public class PersonalMainActivity extends Activity {
                 dialog.cancel();
             }
         });
+
+        dialog.show();
     }
 
     @SuppressLint("SetTextI18n")
@@ -225,9 +227,14 @@ public class PersonalMainActivity extends Activity {
 
     //性别选择
     //头像选择方式
-    public void avatarSelect(){
-        final SelectPictureDialog dialog = new SelectPictureDialog(this);
-        dialog.show();
+    public void avatarSelect(int type){
+        if (type == 1) {
+            final SelectPictureDialog dialog = new SelectPictureDialog(this, R.style.dialog, R.layout.course_add_home_work, 1);
+            dialog.show();
+        }else{
+            SelectPictureDialog dialog = new SelectPictureDialog(this, R.style.dialog, R.layout.personal_sex_selection, 2);
+            dialog.show();
+        }
     }
 
     private void selectPic(Intent intent) {

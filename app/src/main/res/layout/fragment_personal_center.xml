@@ -28,7 +28,7 @@
                     android:layout_marginTop="15dp"
                     android:src="@drawable/personal_setting" />
 
-                <com.runtoinfo.youxiao.common_ui.CircleImageView
+                <com.runtoinfo.youxiao.common_ui.views.CircleImageView
                     android:id="@+id/personal_avatar"
                     android:layout_width="80dp"
                     android:layout_height="80dp"

@@ -1,16 +1,16 @@
 package com.runtoinfo.teacher.utils;
 
 import android.app.Activity;
-import android.app.FragmentManager;
-import android.content.Context;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
+import android.content.IntentFilter;
 import android.graphics.drawable.Drawable;
 import android.os.Handler;
 import android.os.Message;
+import android.provider.CalendarContract;
 import android.util.Log;
 import android.widget.ImageView;
 
+import com.runtoinfo.teacher.HttpEntity;
+import com.runtoinfo.teacher.bean.AddMemberBean;
 import com.runtoinfo.teacher.bean.HttpLoginHead;
 
 import org.json.JSONArray;
@@ -66,12 +66,10 @@ public class HttpUtils {
                     @Override
                     public void onResponse(Call call, Response response) throws IOException {
                         if (response.isSuccessful()) {
-                            //final Bitmap bitmap1 = BitmapFactory.decodeStream(response.body().byteStream());
                             final Drawable drawable = Drawable.createFromStream(response.body().byteStream(), "image");
                             context.runOnUiThread(new Runnable() {
                                 @Override
                                 public void run() {
-                                    //imageView.setImageBitmap(bitmap1);
                                     imageView.setBackground(drawable);
                                 }
                             });
@@ -79,6 +77,36 @@ public class HttpUtils {
                         }
                     }
                 });
+            }
+        });
+
+    }
+
+    /**
+     *
+     */
+    public static void postPhoto(final Activity context, final String url, final ImageView imageView){
+        executorService.execute(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    Request request = new Request.Builder()
+                            .url(url)
+                            .build();
+
+                    Response response = client.newCall(request).execute();
+                    if (response.isSuccessful()) {
+                        final Drawable drawable = Drawable.createFromStream(response.body().byteStream(), "image");
+                        context.runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                imageView.setBackground(drawable);
+                            }
+                        });
+                    }
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
             }
         });
 
@@ -347,7 +375,13 @@ public class HttpUtils {
 
     }
 
-    public static void getSchoolNewsAll(final Handler handler, final String url, final int maxResultCount, final int skipCount){
+    /**
+     * 新闻检索
+     * @param handler
+     * @param url
+     * @param token 登录后的标识
+     */
+    public static void getSchoolNewsAll(final Handler handler, final String url, final String token){
         executorService.execute(new Runnable() {
             @Override
             public void run() {
@@ -357,10 +391,11 @@ public class HttpUtils {
                     object.put("Subtitle", "");
                     object.put("Tag", "");
                     object.put("Status", "");
-                    object.put("MaxResultCount", maxResultCount);
-                    object.put("SkipCount", skipCount);
+                    object.put("MaxResultCount", 7);
+                    object.put("SkipCount", 0);
                     object.put("Sorting","");
                     Request request = new Request.Builder()
+                            .header("Authorization", "Bearer " + token)
                             .url(url + setUrl(object))
                             .build();
                     Response response = client.newCall(request).execute();
@@ -374,8 +409,142 @@ public class HttpUtils {
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
+            }
+        });
+    }
 
+    /**
+     * 获取新闻阅读数量
+     * @param handler
+     * @param url
+     * @param token
+     * @param id
+     */
+    public static void getNewsReadNumber(final Handler handler, final String url, final String token, final int id){
+        executorService.execute(new Runnable() {
+            @Override
+            public void run() {
+                try {
 
+                    JSONObject jsonObject = new JSONObject();
+                    jsonObject.put("newsId", id);
+                    RequestBody requestBody = RequestBody.create(JSON, jsonObject.toString());
+                    final Request request = new Request.Builder()
+                            .header("Authorization", "Bearer " + token)
+                            .url(url)
+                            .post(requestBody)
+                            .build();
+                    client.newCall(request).enqueue(new Callback(){
+
+                        @Override
+                        public void onFailure(Call call, IOException e) {
+                            handler.sendEmptyMessage(500);
+                        }
+
+                        @Override
+                        public void onResponse(Call call, Response response) throws IOException {
+                            if (response.isSuccessful()){
+                                try{
+                                    JSONObject json = new JSONObject(response.body().string());
+                                    int result = json.getInt("result");
+                                    Message msg = new Message();
+                                    msg.what = 4;
+                                    msg.obj = result;
+                                    handler.sendMessage(msg);
+                                }catch (JSONException E){
+                                    E.printStackTrace();
+                                }
+                            }
+                        }
+                    });
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+    }
+
+    /**
+     * 获取所有的活动
+     * @param handler
+     * @param url
+     */
+    public static void getEventAll(final Handler handler, final String url){
+        executorService.execute(new Runnable() {
+            @Override
+            public void run() {
+                Map<String, Object> urlMap = new HashMap<>();
+                urlMap.put("name", "");
+                urlMap.put("MaxResultCount", "5");
+                urlMap.put("SkipCount", "0");
+                urlMap.put("Sorting", "");
+                String urlString = setUrl(urlMap);
+
+                Request request = new Request.Builder()
+                        .url(url + urlString)
+                        .build();
+                client.newCall(request).enqueue(new Callback() {
+                    @Override
+                    public void onFailure(Call call, IOException e) {
+
+                    }
+
+                    @Override
+                    public void onResponse(Call call, Response response) throws IOException {
+                        if (response.isSuccessful()){
+                            Message msg = new Message();
+                            msg.obj = response.body().string();
+                            msg.what = 0;
+                            handler.sendMessage(msg);
+                        }
+                    }
+                });
+
+            }
+        });
+    }
+
+    /**
+     * 添加报名人员
+     * @param handler
+     * @param url
+     */
+    public static void postAddMember(final Handler handler, final String url, final AddMemberBean addMemberBean){
+        executorService.execute(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    JSONObject json = new JSONObject();
+                    json.put("campaignId", addMemberBean.getCampaignId());
+                    json.put("userId", addMemberBean.getUserId());
+                    json.put("memberType", addMemberBean.getMemberType());
+                    json.put("name", addMemberBean.getName());
+                    json.put("gender", addMemberBean.getGender());
+                    json.put("age", addMemberBean.getAge());
+                    json.put("phoneNumber", addMemberBean.getPhoneNumber());
+
+                    RequestBody body = RequestBody.create(JSON, json.toString());
+
+                    Request request = new Request.Builder()
+                            .url(url)
+                            .post(body)
+                            .build();
+                    client.newCall(request).enqueue(new Callback() {
+                        @Override
+                        public void onFailure(Call call, IOException e) {
+                            handler.sendEmptyMessage(404);
+                        }
+
+                        @Override
+                        public void onResponse(Call call, Response response) throws IOException {
+                            if (response.isSuccessful()) {
+                                handler.sendEmptyMessage(0);
+                            }
+                        }
+                    });
+                }catch (JSONException e){
+                    e.printStackTrace();
+                }
             }
         });
     }
@@ -393,6 +562,11 @@ public class HttpUtils {
         return "{\"error\":\"fail\"}";
     }
 
+    /**
+     * 为get请求拼接参数
+     * @param map
+     * @return
+     */
     public static String setUrl(Map<String, Object> map){
         StringBuilder builder = new StringBuilder("?");
         Iterator iterator = map.keySet().iterator();
@@ -403,5 +577,40 @@ public class HttpUtils {
         String s = builder.toString();
         String str = s.substring(0, s.length() -1);
         return str;
+    }
+
+    /**
+     * 没有完善 暂时不用
+     * @param handler
+     * @param url
+     * @param body
+     * @param token
+     */
+
+    public static void postAll(final Handler handler, final String url, final RequestBody body, final String token){
+        executorService.execute(new Runnable() {
+            @Override
+            public void run() {
+                Request request = new Request.Builder()
+                        .url(url)
+                        .header("Authorization", "Bearer " + token)
+                        .post(body)
+                        .build();
+
+                client.newCall(request).enqueue(new Callback() {
+                    @Override
+                    public void onFailure(Call call, IOException e) {
+                        handler.sendEmptyMessage(500);
+                    }
+
+                    @Override
+                    public void onResponse(Call call, Response response) throws IOException {
+                        if (response.isSuccessful()){
+
+                        }
+                    }
+                });
+            }
+        });
     }
 }

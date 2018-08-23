@@ -35,20 +35,23 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_margin="18dp"
             android:orientation="vertical">
 
             <RelativeLayout
                 android:id="@+id/personal_relative_avatar"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:padding="5dp">
+                android:paddingBottom="5dp"
+                android:paddingEnd="23dp"
+                android:paddingStart="23dp"
+                android:paddingTop="5dp"
+                android:background="#fff">
 
                 <TextView
                     style="@style/TextView_PersonlInformation"
                     android:text="头像" />
 
-                <com.runtoinfo.youxiao.common_ui.CircleImageView
+                <com.runtoinfo.youxiao.common_ui.views.CircleImageView
                     android:id="@+id/personal_edit_tx"
                     android:layout_width="60dp"
                     android:layout_height="60dp"
@@ -69,14 +72,18 @@
 
             <View
                 android:layout_width="match_parent"
-                android:layout_height="1dp"
+                android:layout_height="0.1dp"
                 android:background="#ededed" />
 
             <RelativeLayout
                 android:id="@+id/personal_relative_username"
                 android:layout_width="match_parent"
                 android:layout_height="45dp"
-                android:padding="5dp">
+                android:paddingEnd="23dp"
+                android:paddingTop="5dp"
+                android:paddingBottom="5dp"
+                android:paddingStart="23dp"
+                android:background="#fff">
 
                 <TextView
                     style="@style/TextView_PersonlInformation"
@@ -90,8 +97,8 @@
                     android:layout_toStartOf="@+id/personal_next_user"
                     android:src="@drawable/persona_avatar"
                     android:text="姑苏城"
-                    android:textSize="18sp"
-                    android:textColor="#999999"/>
+                    android:textColor="#999999"
+                    android:textSize="18sp" />
 
                 <ImageView
                     android:id="@+id/personal_next_user"
@@ -154,7 +161,11 @@
                 android:id="@+id/personal_relative_sex"
                 android:layout_width="match_parent"
                 android:layout_height="45dp"
-                android:padding="5dp">
+                android:paddingEnd="23dp"
+                android:paddingTop="5dp"
+                android:paddingBottom="5dp"
+                android:paddingStart="23dp"
+                android:background="#fff">
 
                 <TextView
                     style="@style/TextView_PersonlInformation"
@@ -191,7 +202,11 @@
                 android:id="@+id/personal_relative_birthday"
                 android:layout_width="match_parent"
                 android:layout_height="45dp"
-                android:padding="5dp">
+                android:paddingEnd="23dp"
+                android:paddingTop="5dp"
+                android:paddingBottom="5dp"
+                android:paddingStart="23dp"
+                android:background="#fff">
 
                 <TextView
                     style="@style/TextView_PersonlInformation"
@@ -226,7 +241,11 @@
                 android:id="@+id/personal_relative_address"
                 android:layout_width="match_parent"
                 android:layout_height="45dp"
-                android:padding="5dp">
+                android:paddingEnd="23dp"
+                android:paddingTop="5dp"
+                android:paddingBottom="5dp"
+                android:paddingStart="23dp"
+                android:background="#fff">
 
                 <TextView
                     style="@style/TextView_PersonlInformation"

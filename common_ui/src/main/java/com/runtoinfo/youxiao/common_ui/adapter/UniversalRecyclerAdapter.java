@@ -44,8 +44,24 @@ public abstract class UniversalRecyclerAdapter<T> extends RecyclerView.Adapter<B
         notifyDataSetChanged();
     }
 
+    public List<T> getList(){
+        return  mDatas;
+    }
+
     public void addAll(List<T> data) {
         mDatas.addAll(data);
+        notifyDataSetChanged();
+    }
+
+    public void addItem(T t, int position){
+        mDatas.add(position, t);
+        notifyItemInserted(position);
+        notifyDataSetChanged();
+    }
+
+    public void removeItem(int position){
+        mDatas.remove(position);
+        notifyItemRemoved(position);
         notifyDataSetChanged();
     }
 
@@ -62,7 +78,7 @@ public abstract class UniversalRecyclerAdapter<T> extends RecyclerView.Adapter<B
 
     @Override
     public void onBindViewHolder(BaseViewHolder holder, final int position) {
-        convert(mContext, holder, mDatas.get(position));
+        convert(mContext, holder, mDatas.get(position), position);
         if (mItemClickListener != null) {
             holder.mItemView.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -82,7 +98,7 @@ public abstract class UniversalRecyclerAdapter<T> extends RecyclerView.Adapter<B
         }
     }
 
-    protected abstract void convert(Context mContext, BaseViewHolder holder, T t);
+    protected abstract void convert(Context mContext, BaseViewHolder holder, T t, int position);
 
     public interface OnItemClickListener {
         void onItemClick(View view, int position);

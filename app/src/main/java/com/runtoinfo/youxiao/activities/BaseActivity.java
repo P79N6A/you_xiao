@@ -1,22 +1,15 @@
 package com.runtoinfo.youxiao.activities;
 
-import android.annotation.SuppressLint;
-import android.app.Activity;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.PersistableBundle;
-import android.support.annotation.Nullable;
 import android.support.v4.app.FragmentActivity;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.Window;
 import android.view.WindowManager;
 import android.widget.LinearLayout;
 
 import com.alibaba.sdk.android.man.MANService;
 import com.alibaba.sdk.android.man.MANServiceProvider;
 import com.gyf.barlibrary.ImmersionBar;
-import com.runtoinfo.youxiao.R;
 
 import java.lang.reflect.Field;
 

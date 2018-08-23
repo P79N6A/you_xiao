@@ -645,7 +645,8 @@ CalendarView extends FrameLayout {
      * @param lineBg             线的颜色
      */
     public void setBackground(int yearViewBackground, int weekBackground, int lineBg) {
-        mWeekBar.setBackgroundColor(weekBackground);
+        //mWeekBar.setBackgroundColor(weekBackground);
+        mWeekBar.setBackgroundResource(weekBackground);
         mSelectLayout.setBackgroundColor(yearViewBackground);
         mWeekLine.setBackgroundColor(lineBg);
     }

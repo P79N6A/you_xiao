@@ -24,6 +24,15 @@ public class SchoolDynamicsEntity {
     //发布状态
     public String status;
     public String content;
+    public String publishTime;
+
+    public String getPublishTime() {
+        return publishTime;
+    }
+
+    public void setPublishTime(String publishTime) {
+        this.publishTime = publishTime;
+    }
 
     public String getContent() {
         return content;

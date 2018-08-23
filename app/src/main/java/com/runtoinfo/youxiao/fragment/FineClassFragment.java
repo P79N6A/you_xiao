@@ -11,6 +11,7 @@ import android.view.ViewGroup;
 import com.runtoinfo.youxiao.R;
 import com.runtoinfo.youxiao.adapter.BoutiqueCourseViewPagerAdapter;
 import com.runtoinfo.youxiao.databinding.FragmentFineClassBinding;
+import com.runtoinfo.youxiao.ui.SetTabLayoutWidth;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -38,6 +39,9 @@ public class FineClassFragment extends BaseFragment {
     }
 
     public void initTableData(){
+
+        SetTabLayoutWidth.reflex(binding.boutiqueCourseTablayout);
+
         String[] title = new String[]{"全部","音乐","美术","体育","其他","数学","英语"};
         titles.addAll(Arrays.asList(title));
         for (int i =0; i < title.length; i++){

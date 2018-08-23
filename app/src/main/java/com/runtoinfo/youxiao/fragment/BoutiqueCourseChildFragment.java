@@ -12,6 +12,7 @@ import android.view.ViewGroup;
 import com.runtoinfo.youxiao.R;
 import com.runtoinfo.youxiao.adapter.BoutiqueCourseViewPagerAdapter;
 import com.runtoinfo.youxiao.databinding.FragmentBoutiqueCourseChildBinding;
+import com.runtoinfo.youxiao.ui.SetTabLayoutWidth;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -37,6 +38,7 @@ public class BoutiqueCourseChildFragment extends BaseFragment {
     }
 
     public void initChildData(){
+        SetTabLayoutWidth.reflex(binding.courseChildSecondTablayout);
         String[] title = new String[]{"全部","视频","音频","曲谱","歌词","歌单","书籍","其他"};
         titles.addAll(Arrays.asList(title));
 

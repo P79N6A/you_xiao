@@ -8,6 +8,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:focusable="true"
+        android:fitsSystemWindows="true"
         android:focusableInTouchMode="true">
 
         <com.runtoinfo.youxiao.ui.MyScrollView
@@ -276,7 +277,7 @@
             android:background="#0fff"
             android:padding="10dp">
 
-            <com.runtoinfo.youxiao.common_ui.CircleImageView
+            <com.runtoinfo.youxiao.common_ui.views.CircleImageView
                 android:id="@+id/fragment_home_imagview"
                 android:layout_width="40dp"
                 android:layout_height="40dp"

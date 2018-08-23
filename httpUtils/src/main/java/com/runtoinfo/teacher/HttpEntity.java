@@ -39,4 +39,29 @@ public class HttpEntity {
      * 新闻内容
      */
     public final static String SCHOOL_NEWS_CONTENT = "/api/services/app/News/Get";
+    /**
+     * 新闻阅读量
+     */
+    public final static String NEWS_READ_NUMBER = "/api/services/app/News/ReadNews";
+    /**
+     * 活动中心
+     */
+    public final static String SCHOOL_CAMPAIGN = "/api/services/app/Campaign/GetAll";
+    /**
+     * 添加报名人员
+     */
+    public final static String CAMPAIGN_ADD_MEMBER = "/api/services/app/Campaign/AddMember";
+    /**
+     * 修改报名人员
+     */
+    public final static String UPDATE_MODIFY_MEMBER = "/api/services/app/Campaign/ModifyMember";
+    /**
+     *删除报名人员
+     */
+    public final static String DELETE_MODIFY_MEMBER = "/api/services/app/Campaign/DeleteMember";
+    /**
+     * 获取用户活动
+     */
+    public final static String GET_CAMPAIGN_BY_USER = "/api/services/app/Campaign/GetCampaignByUser";
+
 }
