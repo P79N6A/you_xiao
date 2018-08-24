@@ -7,6 +7,5 @@
     <color name="line_color">#e7e7e7</color>
     <color name="content_background">#ffffff</color>
     <color name="solar_background">#ffffff</color>
-    <color name="week_back_ground" tools:ignore="ReferenceType">@drawable/course_img_week</color>
     <color name="text_blue">#3aa6fe</color>
 </resources>

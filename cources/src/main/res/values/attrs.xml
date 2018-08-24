@@ -2,7 +2,7 @@
 <resources>
     <declare-styleable name="CalendarView">
 
-        <attr name="week_background" format="color" />
+        <attr name="week_background" format="reference" />
         <attr name="week_line_background" format="color" />
         <attr name="week_text_color" format="color" />
         <attr name="week_text_size" format="dimension" />

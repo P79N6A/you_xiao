@@ -6,11 +6,14 @@ import android.graphics.drawable.Drawable;
 import android.os.Handler;
 import android.os.Message;
 import android.provider.CalendarContract;
+import android.text.TextUtils;
 import android.util.Log;
 import android.widget.ImageView;
 
 import com.runtoinfo.teacher.HttpEntity;
 import com.runtoinfo.teacher.bean.AddMemberBean;
+import com.runtoinfo.teacher.bean.ChildContent;
+import com.runtoinfo.teacher.bean.CourseDataEntity;
 import com.runtoinfo.teacher.bean.HttpLoginHead;
 
 import org.json.JSONArray;
@@ -83,7 +86,7 @@ public class HttpUtils {
     }
 
     /**
-     *
+     *获取图片
      */
     public static void postPhoto(final Activity context, final String url, final ImageView imageView){
         executorService.execute(new Runnable() {
@@ -469,7 +472,7 @@ public class HttpUtils {
      * @param handler
      * @param url
      */
-    public static void getEventAll(final Handler handler, final String url){
+    public static void getEventAll(final Handler handler, final String url, final String token){
         executorService.execute(new Runnable() {
             @Override
             public void run() {
@@ -481,6 +484,7 @@ public class HttpUtils {
                 String urlString = setUrl(urlMap);
 
                 Request request = new Request.Builder()
+                        .header("Authorization", "Bearer " + token)
                         .url(url + urlString)
                         .build();
                 client.newCall(request).enqueue(new Callback() {
@@ -509,7 +513,7 @@ public class HttpUtils {
      * @param handler
      * @param url
      */
-    public static void postAddMember(final Handler handler, final String url, final AddMemberBean addMemberBean){
+    public static void postAddMember(final Handler handler, final String url, final AddMemberBean addMemberBean, final String token){
         executorService.execute(new Runnable() {
             @Override
             public void run() {
@@ -526,6 +530,7 @@ public class HttpUtils {
                     RequestBody body = RequestBody.create(JSON, json.toString());
 
                     Request request = new Request.Builder()
+                            .header("Authorization", "Bearer " + token)
                             .url(url)
                             .post(body)
                             .build();
@@ -549,6 +554,171 @@ public class HttpUtils {
         });
     }
 
+    /**
+     * 获取精品课类别
+     * @param url 请求地址
+     * @param mapList 返回的结果集合
+     */
+    public static void getAllCourseType(final Handler handler, final String url, final List<Map<String, Object>> mapList, final String token){
+        executorService.execute(new Runnable() {
+            @Override
+            public void run() {
+                Request request = new Request.Builder()
+                        .header("Authorization", "Bearer " + token)
+                        .url(url + "?CategoryId=2")
+                        .build();
+
+                client.newCall(request).enqueue(new Callback() {
+                    @Override
+                    public void onFailure(Call call, IOException e) {
+                        handler.sendEmptyMessage(404);
+                    }
+
+                    @Override
+                    public void onResponse(Call call, Response response) throws IOException {
+                        if (response.isSuccessful()){
+                            try {
+                                JSONObject json = new JSONObject(response.body().string());
+                                //if (!TextUtils.isEmpty(json.getString("error"))) {handler.sendEmptyMessage(404); return;}
+                                JSONObject result = json.getJSONObject("result");
+                                JSONArray items = result.getJSONArray("items");
+
+                                for (int i = 0; i < items.length(); i++){
+                                    Map<String, Object> dataMap = new HashMap<>();
+                                    JSONObject chileItem = items.getJSONObject(i);
+                                    dataMap.put("name", chileItem.getString("name"));
+                                    dataMap.put("id", chileItem.getInt("id"));
+                                    mapList.add(dataMap);
+                                }
+
+                                handler.sendEmptyMessage(0);
+                            } catch (JSONException e) {
+                                handler.sendEmptyMessage(500);
+                            }
+                        }
+                    }
+                });
+            }
+        });
+    }
+
+    /**
+     *获取子分类
+     */
+    public static void getChildType(final Handler handler, final Map<String, Object> dataMap) {
+        executorService.execute(new Runnable() {
+            @Override
+            public void run() {
+                Request request = new Request.Builder()
+                        .header("Authorization", "Bearer " + dataMap.get("token"))
+                        .url(dataMap.get("url") + "?CourseType=" + dataMap.get("type") +"&MaxResultCount=5&SkipCount=0")
+                        .build();
+
+                client.newCall(request).enqueue(new Callback() {
+                    @Override
+                    public void onFailure(Call call, IOException e) {
+
+                    }
+
+                    @Override
+                    public void onResponse(Call call, Response response) throws IOException {
+                        if (response.isSuccessful()){
+                            try {
+                                JSONArray items = getItems(response.body().string(), handler);
+                                List<Map<String, Object>> mapList = new ArrayList<>();
+                                for (int i =0; i < items.length(); i++){
+                                    JSONObject childItem = items.getJSONObject(i);
+                                    Map<String, Object> map = new HashMap<>();
+                                    map.put("name", childItem.getString("name"));
+                                    map.put("id", childItem.getInt("id"));
+                                    map.put("icon", childItem.getString("icon"));
+                                    mapList.add(map);
+                                }
+                                Message msg = new Message();
+                                msg.what = 0;
+                                msg.obj = mapList;
+                                handler.sendMessage(msg);
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    }
+                });
+            }
+        });
+
+    }
+
+    /**
+     * 获取课程的最终数据
+     * @param handler
+     * @param map  参数集
+     * @param list 接受结果集
+     */
+
+    public static void getInChildData(final Handler handler, final Map<String, Object> map, final List<CourseDataEntity> list){
+        executorService.execute(new Runnable() {
+            @Override
+            public void run() {
+                Map<String, Object> url = new HashMap<>();
+                url.put("CourseType", map.get("CourseType") == null ? "": map.get("CourseType"));
+                url.put("CourseSubject", map.get("CourseSubject") == null ? "" : map.get("CourseSubject"));
+                url.put("MediaType", map.get("MediaType") == null ? "" : map.get("MediaType"));
+                url.put("MaxResultCount", 5);
+                url.put("SkipCount", 0);
+
+                Request request = new Request.Builder()
+                        .header("Authorization", "Bearer " + map.get("token"))
+                        .url(map.get("url") + setUrl(url))
+                        .build();
+                client.newCall(request).enqueue(new Callback() {
+                    @Override
+                    public void onFailure(Call call, IOException e) {
+                        handler.sendEmptyMessage(404);
+                    }
+
+                    @Override
+                    public void onResponse(Call call, Response response) throws IOException {
+                        if (response.isSuccessful()){
+                            try {
+                                JSONArray items = getItems(response.body().string(), handler);
+                                List<Map<String, Object>> dataList = new ArrayList<>();
+                                for (int i = 0; i < items.length(); i++){
+                                    JSONObject childItem = items.getJSONObject(i);
+                                    CourseDataEntity courseDataEntity = new CourseDataEntity();
+                                    courseDataEntity.setName(childItem.getString("name"));
+                                    courseDataEntity.setDescription(childItem.getString("description"));
+                                    courseDataEntity.setPrice(childItem.getInt("price") + "");
+                                    courseDataEntity.setPurchasedNumber(childItem.getInt("purchasedNumber") + "");
+                                    courseDataEntity.setCover(childItem.getString("cover"));
+                                    courseDataEntity.setStartTime(childItem.getString("startTime"));
+                                    courseDataEntity.setMediaType(childItem.getInt("mediaType"));
+                                    JSONObject courseContent = childItem.getJSONObject("courseContents");
+                                    JSONArray childItems = courseContent.getJSONArray("items");
+                                    List<ChildContent> chileList = new ArrayList<>();
+                                    for (int j = 0; j < childItems.length(); j++){
+                                        JSONObject itemss = childItems.getJSONObject(j);
+                                        ChildContent content = new ChildContent();
+                                        content.setLeaf(itemss.getBoolean("isLeaf"));
+                                        content.setMediaType(itemss.getInt("mediaType"));
+                                        content.setTarget(itemss.getString("target"));
+                                        content.setName(itemss.getString("name"));
+                                        chileList.add(content);
+                                    }
+                                    courseDataEntity.setCourseContents(chileList);
+                                    list.add(courseDataEntity);
+                                    handler.sendEmptyMessage(0);
+                                }
+                            } catch (JSONException e) {
+                                handler.sendEmptyMessage(500);
+                            }
+                        }
+                    }
+                });
+            }
+        });
+    }
+
     public static String execute(Request request){
         try {
             OkHttpClient client = new OkHttpClient();
@@ -560,6 +730,15 @@ public class HttpUtils {
             e.printStackTrace();
         }
         return "{\"error\":\"fail\"}";
+    }
+
+
+    public static JSONArray getItems(String body, Handler handler) throws JSONException{
+        JSONObject json = new JSONObject(body);
+        //if (!TextUtils.isEmpty(json.getString("error"))) {handler.sendEmptyMessage(404); return null;}
+        JSONObject result = json.getJSONObject("result");
+        JSONArray items = result.getJSONArray("items");
+        return items;
     }
 
     /**
@@ -575,8 +754,7 @@ public class HttpUtils {
             builder.append(key).append("=").append(map.get(key)).append("&");
         }
         String s = builder.toString();
-        String str = s.substring(0, s.length() -1);
-        return str;
+        return s.substring(0, s.length() -1);
     }
 
     /**

@@ -1,5 +1,6 @@
 package com.runto.cources.fragment;
 
+import android.annotation.SuppressLint;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.annotation.FontRes;
@@ -16,6 +17,7 @@ import com.runto.cources.R;
 import com.runto.cources.activities.BoutiqueCourseDetails;
 import com.runto.cources.adapter.ListViewAdapter;
 import com.runto.cources.databinding.FragmentCourseListBinding;
+import com.runtoinfo.teacher.bean.ChildContent;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -26,11 +28,17 @@ import java.util.Map;
  * Created by Administrator on 2018/7/27 0027.
  */
 
+@SuppressLint("ValidFragment")
 public class CourseListFragment extends Fragment {
 
     public FragmentCourseListBinding binding;
     public ListViewAdapter simpleAdapter;
     public List<String> dataList = new ArrayList<>();
+    public List<ChildContent> msg;
+
+    public CourseListFragment(List<ChildContent> msg){
+        this.msg = msg;
+    }
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -40,8 +48,9 @@ public class CourseListFragment extends Fragment {
     }
 
     public void initData(){
-        for (int i = 0; i < 10; i++){
-            dataList.add("学习钢琴前必须知道的五件事");
+        for (int i = 0; i < msg.size(); i++){
+            ChildContent content = new ChildContent();
+            dataList.add(content.getName());
         }
         simpleAdapter = new ListViewAdapter(getContext(), dataList);
         binding.boutiqueCourseListListView.setAdapter(simpleAdapter);

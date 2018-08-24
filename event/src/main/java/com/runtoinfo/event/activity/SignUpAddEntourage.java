@@ -29,6 +29,7 @@ import com.runtoinfo.teacher.HttpEntity;
 import com.runtoinfo.teacher.bean.AddMemberBean;
 import com.runtoinfo.teacher.utils.HttpUtils;
 import com.runtoinfo.youxiao.common_ui.utils.DialogMessage;
+import com.runtoinfo.youxiao.common_ui.utils.Entity;
 
 import org.w3c.dom.Text;
 
@@ -77,7 +78,7 @@ public class SignUpAddEntourage extends EventBaseActivity {
                     }
                 }
                 DialogMessage.createDialog(SignUpAddEntourage.this, progressDialog, "正在上传信息...");
-                HttpUtils.postAddMember(handler, HttpEntity.MAIN_URL + HttpEntity.CAMPAIGN_ADD_MEMBER, intentBean);
+                HttpUtils.postAddMember(handler, HttpEntity.MAIN_URL + HttpEntity.CAMPAIGN_ADD_MEMBER, intentBean, spUtils.getString(Entity.TOKEN));
             }
         });
 
@@ -105,7 +106,7 @@ public class SignUpAddEntourage extends EventBaseActivity {
                         upIndex = 0;
                         index = 0;
                     } else {
-                        HttpUtils.postAddMember(handler, HttpEntity.MAIN_URL + HttpEntity.CAMPAIGN_ADD_MEMBER, adapter.getList().get(upIndex));
+                        HttpUtils.postAddMember(handler, HttpEntity.MAIN_URL + HttpEntity.CAMPAIGN_ADD_MEMBER, adapter.getList().get(upIndex), spUtils.getString(Entity.TOKEN));
                         upIndex++;
                     }
                     break;

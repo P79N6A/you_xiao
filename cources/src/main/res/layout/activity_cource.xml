@@ -175,7 +175,7 @@
             app:selected_lunar_text_color="#fff"
             app:selected_text_color="#fff"
             app:selected_theme_color="#3aa6fe"
-            app:week_background="#3aa6fe"
+            app:week_background="@drawable/course_img_week"
             app:week_text_color="#fff"
             app:week_view="com.runto.cources.ui.ColorfulWeekView"
             app:year_view_day_text_color="#333333"

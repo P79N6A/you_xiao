@@ -63,5 +63,17 @@ public class HttpEntity {
      * 获取用户活动
      */
     public final static String GET_CAMPAIGN_BY_USER = "/api/services/app/Campaign/GetCampaignByUser";
+    /**
+     * 获取精品课类别
+     */
+    public final static String GET_COURSE_TYPE = "/api/services/app/DictItem/GetAll";
+    /**
+     * 课程分类 子类
+     */
+    public final static String GET_COURSE_CHILD_TYPE = "/api/services/app/CourseSubject/GetAll";
+    /**
+     * 获取所有的课程内容
+     */
+    public final static String GET_COURSE_CHILD_ALL = "/api/services/app/OnlineCourse/GetAll";
 
 }

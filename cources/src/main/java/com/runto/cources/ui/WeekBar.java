@@ -47,7 +47,7 @@ public class WeekBar extends LinearLayout {
         if ("com.runto.cources.ui.WeekBar".equalsIgnoreCase(getClass().getName())) {
             setTextSize(mDelegate.getWeekTextSize());
             setTextColor(delegate.getWeekTextColor());
-            setBackgroundColor(delegate.getWeekBackground());
+            setBackgroundResource(delegate.getWeekBackground());
         }
     }
 

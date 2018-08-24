@@ -13,6 +13,15 @@ public class BoutiqueRecycler {
     public String time;
     public String price;
     public String number;
+    public String picPath;
+
+    public String getPicPath() {
+        return picPath;
+    }
+
+    public void setPicPath(String picPath) {
+        this.picPath = picPath;
+    }
 
     public Drawable getDrawable() {
         return drawable;

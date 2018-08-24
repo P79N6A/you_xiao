@@ -13,6 +13,8 @@ import android.view.ViewGroup;
 import com.alibaba.sdk.android.man.MANService;
 import com.alibaba.sdk.android.man.MANServiceProvider;
 import com.gyf.barlibrary.ImmersionBar;
+import com.runtoinfo.youxiao.common_ui.utils.SPUtils;
+import com.runtoinfo.youxiao.entity.CourseTypeEntity;
 
 /**
  * Created by Administrator on 2018/5/25 0025.
@@ -38,11 +40,21 @@ public class BaseFragment extends Fragment {
 //
 //    protected ImmersionBar mImmersionBar;
 
+    public SPUtils spUtils;
+    public CourseTypeEntity courseTypeEntity;
+
     @Override
     public void onResume() {
         super.onResume();
         MANService manService = MANServiceProvider.getService();
         manService.getMANPageHitHelper().pageAppear(getActivity());
+    }
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        spUtils = new SPUtils(getContext());
+        courseTypeEntity = new CourseTypeEntity();
     }
 
     @Nullable

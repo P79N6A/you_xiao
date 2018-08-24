@@ -395,8 +395,8 @@ public class LoginActivity extends BaseActivity {
                     JSONObject J = new JSONObject(response.body().string());
                     JSONObject json = J.getJSONObject("result");
                     String token = json.getString("accessToken");
-                    SPUtils.setString(Entity.TOKEN, token);
-                    SPUtils.setString(Entity.USER_ID, json.getString("userId"));
+                    spUtils.setString(Entity.TOKEN, token);
+                    spUtils.setString(Entity.USER_ID, json.getString("userId"));
                     loginHead.setToken(token);
 
                     LoginActivity.this.runOnUiThread(new Runnable() {
@@ -417,7 +417,7 @@ public class LoginActivity extends BaseActivity {
     @Override
     protected void onStart() {
         super.onStart();
-        String isLoged = SPUtils.getString(Entity.TOKEN);
+        String isLoged = spUtils.getString(Entity.TOKEN);
         if (!TextUtils.isEmpty(isLoged)){
             ARouter.getInstance().build(Entity.MAIN_ACTIVITY_PATH).navigation();
         }

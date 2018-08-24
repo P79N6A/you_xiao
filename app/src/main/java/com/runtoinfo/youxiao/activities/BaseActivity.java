@@ -10,6 +10,7 @@ import android.widget.LinearLayout;
 import com.alibaba.sdk.android.man.MANService;
 import com.alibaba.sdk.android.man.MANServiceProvider;
 import com.gyf.barlibrary.ImmersionBar;
+import com.runtoinfo.youxiao.common_ui.utils.SPUtils;
 
 import java.lang.reflect.Field;
 
@@ -20,6 +21,8 @@ import myapplication.MyApplication;
  */
 
 public abstract class BaseActivity extends FragmentActivity {
+
+    public SPUtils spUtils;
 
     @Override
     public void onResume() {
@@ -32,6 +35,7 @@ public abstract class BaseActivity extends FragmentActivity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         initView();
+        initShared();
         //添加Activity到堆栈
         MyApplication.getInstance().addActivity(this);
         initData();
@@ -52,6 +56,9 @@ public abstract class BaseActivity extends FragmentActivity {
     protected abstract void initView();
     protected abstract void initData();
 
+    public void initShared(){
+        spUtils = new SPUtils(this);
+    }
 
     public void initState(LinearLayout linear_bar) {
 

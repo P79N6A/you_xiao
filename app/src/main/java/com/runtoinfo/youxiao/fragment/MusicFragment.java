@@ -1,8 +1,12 @@
 package com.runtoinfo.youxiao.fragment;
 
+import android.annotation.SuppressLint;
 import android.databinding.DataBindingUtil;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
+import android.os.Message;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
@@ -12,20 +16,26 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.runtoinfo.teacher.HttpEntity;
+import com.runtoinfo.teacher.utils.HttpUtils;
 import com.runtoinfo.youxiao.R;
 import com.runtoinfo.youxiao.adapter.BoutiqueCourseChildPagerAdapter;
 import com.runtoinfo.youxiao.adapter.BoutiqueCourseViewPagerAdapter;
+import com.runtoinfo.youxiao.common_ui.utils.Entity;
 import com.runtoinfo.youxiao.databinding.FragmentBoutiqueCourseMusicBinding;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 
 /**
  * Created by Administrator on 2018/7/26 0026.
  */
 
+@SuppressLint("ValidFragment")
 public class MusicFragment extends BaseFragment{
 
     public View view;
@@ -33,35 +43,60 @@ public class MusicFragment extends BaseFragment{
     public BoutiqueCourseChildPagerAdapter viewPagerAdapter;
     public List<String> titles = new ArrayList<>();
     public List<Fragment> fragmentList = new ArrayList<>();
+    public List<String> iconPath = new ArrayList<>();
     public TextView textView;
     public ImageView imageView;
+    public int type;
+
+    public MusicFragment(int type){
+        this.type = type;
+    }
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_boutique_course_music, container, false);
-        initTalLayoutData();
+        initTalLayoutView();
         return binding.getRoot();
     }
 
-    public void initTalLayoutData(){
-        String[] title = new String[]{"钢琴","小提琴","鼓","吉他","其他","琵琶","唢呐","二胡"};
-        int[] drawable = new int[]{R.drawable.boutique_music_piano, R.drawable.boutique_music_violin,
-                R.drawable.boutique_music_drum, R.drawable.boutique_music_guitar,
-                R.drawable.boutique_music_other, R.drawable.boutique_music_piano,
-                R.drawable.boutique_music_piano, R.drawable.boutique_music_piano,};
-        titles.addAll(Arrays.asList(title));
+    public void initTalLayoutView(){
 
-        for (int j = 0; j< title.length; j++){
-            //BoutiqueCourseChildFragment fragment = new BoutiqueCourseChildFragment();
-            fragmentList.add(new BoutiqueCourseChildFragment());
+        if (type == -1) {
+            binding.boutiqueCourseChildTablayout.setVisibility(View.GONE);
+            fragmentList.add(new BoutiqueCourseChildFragment(-1));
+            initTalLayoutData();
+        } else {
+            binding.boutiqueCourseChildTablayout.setVisibility(View.VISIBLE);
+            courseTypeEntity.setCourseType(String.valueOf(type));
+            Map<String, Object> map = new HashMap<>();
+            map.put("type", type);
+            map.put("token", spUtils.getString(Entity.TOKEN));
+            map.put("url", HttpEntity.MAIN_URL + HttpEntity.GET_COURSE_CHILD_TYPE);
+
+            HttpUtils.getChildType(handler, map);
         }
 
-        viewPagerAdapter = new BoutiqueCourseChildPagerAdapter(getFragmentManager(), fragmentList);
+    }
+
+    public void initTalLayoutData(){
+//        String[] title = new String[]{"钢琴","小提琴","鼓","吉他","其他","琵琶","唢呐","二胡"};
+//        int[] drawable = new int[]{R.drawable.boutique_music_piano, R.drawable.boutique_music_violin,
+//                R.drawable.boutique_music_drum, R.drawable.boutique_music_guitar,
+//                R.drawable.boutique_music_other, R.drawable.boutique_music_piano,
+//                R.drawable.boutique_music_piano, R.drawable.boutique_music_piano,};
+//        titles.addAll(Arrays.asList(title));
+//
+//        for (int j = 0; j< title.length; j++){
+//            //BoutiqueCourseChildFragment fragment = new BoutiqueCourseChildFragment();
+//            //fragmentList.add(new BoutiqueCourseChildFragment());
+//        }
+
+        viewPagerAdapter = new BoutiqueCourseChildPagerAdapter(getChildFragmentManager(), fragmentList);
         binding.boutiqueMusicChildViewpager.setAdapter(viewPagerAdapter);
-        binding.boutiqueMusicChildViewpager.setOffscreenPageLimit(title.length);
+        binding.boutiqueMusicChildViewpager.setOffscreenPageLimit(titles.size());
         binding.boutiqueCourseChildTablayout.setupWithViewPager(binding.boutiqueMusicChildViewpager);
 
-        for (int i = 0; i < title.length; i++) {
+        for (int i = 0; i < titles.size(); i++) {
             TabLayout.Tab tab = binding.boutiqueCourseChildTablayout.getTabAt(i);
             assert tab != null;
             tab.setCustomView(R.layout.boutique_tablayout_item);
@@ -70,9 +105,10 @@ public class MusicFragment extends BaseFragment{
             }
             textView = tab.getCustomView().findViewById(R.id.table_layout_item_textView);
             imageView = tab.getCustomView().findViewById(R.id.table_layout_item_imageView);
-            textView.setText(title[i]);
-            //textView.setTextColor(Color.parseColor("#339ef8"));
-            imageView.setImageResource(drawable[i]);
+            if (titles.size() > 0 && iconPath.size() > 0) {
+                textView.setText(titles.get(i));
+                HttpUtils.postPhoto(getActivity(), iconPath.get(i), imageView);
+            }
         }
 
 
@@ -95,5 +131,28 @@ public class MusicFragment extends BaseFragment{
             }
         });
     }
+
+    public Handler handler = new Handler(Looper.getMainLooper()){
+        @Override
+        public void handleMessage(Message msg) {
+            switch (msg.what){
+                case 0:
+                    List<Map<String, Object>> dataList = (List<Map<String, Object>>) msg.obj;
+                    if (dataList.size() > 0) {
+                        for (int i = 0; i < dataList.size(); i++) {
+                            titles.add(dataList.get(i).get("name").toString());
+                            fragmentList.add(new BoutiqueCourseChildFragment((int) dataList.get(i).get("id")));
+                            iconPath.add(dataList.get(i).get("icon").toString());
+                        }
+                    }else{
+                        fragmentList.add(new BoutiqueCourseChildFragment(-1));
+                    }
+                    initTalLayoutData();
+                    break;
+                case 404:
+                    break;
+            }
+        }
+    };
 
 }

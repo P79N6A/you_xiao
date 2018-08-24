@@ -74,6 +74,8 @@ dependencies {
     implementation 'cn.jzvd:jiaozivideoplayer:6.2.12'
     implementation project(':seescore')
     implementation 'org.wlf:FileDownloader:0.3.1'
+    implementation project(':httpUtils')
+    implementation 'com.google.code.gson:gson:2.8.2'
 }
 apply from: '../script/gradle-jcenter-push.gradle'
 

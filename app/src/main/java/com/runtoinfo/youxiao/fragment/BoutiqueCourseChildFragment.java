@@ -1,5 +1,7 @@
 package com.runtoinfo.youxiao.fragment;
 
+import android.annotation.SuppressLint;
+import android.content.Context;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -23,12 +25,18 @@ import java.util.List;
  * Created by Administrator on 2018/7/26 0026.
  */
 
+@SuppressLint("ValidFragment")
 public class BoutiqueCourseChildFragment extends BaseFragment {
 
     public FragmentBoutiqueCourseChildBinding binding;
     public List<String> titles = new ArrayList<>();
     public List<Fragment> fragmentList = new ArrayList<>();
     public BoutiqueCourseViewPagerAdapter viewPagerAdapter;
+    public int type;
+    public BoutiqueCourseChildFragment(int type){
+        this.type = type;
+    }
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
@@ -39,11 +47,12 @@ public class BoutiqueCourseChildFragment extends BaseFragment {
 
     public void initChildData(){
         SetTabLayoutWidth.reflex(binding.courseChildSecondTablayout);
-        String[] title = new String[]{"全部","视频","音频","曲谱","歌词","歌单","书籍","其他"};
+        courseTypeEntity.setCourseSubject(String.valueOf(type));
+        String[] title = new String[]{"全部","视频","音频","曲谱"};
         titles.addAll(Arrays.asList(title));
 
         for (int i = 0; i < title.length; i++){
-            BoutiqueCourseInChildFragment fragment = new BoutiqueCourseInChildFragment();
+            BoutiqueCourseInChildFragment fragment = new BoutiqueCourseInChildFragment(i-1);
             fragmentList.add(fragment);
         }
 

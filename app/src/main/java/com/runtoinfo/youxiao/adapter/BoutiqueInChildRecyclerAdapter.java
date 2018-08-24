@@ -1,5 +1,7 @@
 package com.runtoinfo.youxiao.adapter;
 
+import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -11,6 +13,8 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.alibaba.android.arouter.launcher.ARouter;
+import com.runtoinfo.teacher.bean.CourseDataEntity;
+import com.runtoinfo.teacher.utils.HttpUtils;
 import com.runtoinfo.youxiao.R;
 import com.runtoinfo.youxiao.entity.BoutiqueRecycler;
 
@@ -23,12 +27,12 @@ import java.util.List;
 
 public class BoutiqueInChildRecyclerAdapter extends RecyclerView.Adapter {
 
-    public Context context;
+    public Activity context;
     public LayoutInflater inflater;
-    public List<BoutiqueRecycler> recyclerList = new ArrayList<>();
+    public List<CourseDataEntity> recyclerList = new ArrayList<>();
     public OnItemClickListener onItemClickListener;
 
-    public BoutiqueInChildRecyclerAdapter(Context context, List<BoutiqueRecycler> recyclerList){
+    public BoutiqueInChildRecyclerAdapter(Activity context, List<CourseDataEntity> recyclerList){
         this.context = context;
         this.recyclerList = recyclerList;
     }
@@ -42,15 +46,17 @@ public class BoutiqueInChildRecyclerAdapter extends RecyclerView.Adapter {
         return new ViewHolder(view, onItemClickListener);
     }
 
+    @SuppressLint("SetTextI18n")
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
         ViewHolder viewHolder = (ViewHolder) holder;
-        BoutiqueRecycler recycler = recyclerList.get(position);
-        viewHolder.imageView.setBackground(recycler.getDrawable());
-        viewHolder.title.setText(recycler.getTitle());
-        viewHolder.time.setText(recycler.getTime());
-        viewHolder.price.setText(recycler.getPrice());
-        viewHolder.number.setText(recycler.getNumber());
+        CourseDataEntity recycler = recyclerList.get(position);
+        //viewHolder.imageView.setBackground(recycler.getDrawable());
+        HttpUtils.postPhoto(context, recycler.getCover(), viewHolder.imageView);
+        viewHolder.title.setText(recycler.getName());
+        viewHolder.time.setText(recycler.getStartTime().split("T")[0]);
+        viewHolder.price.setText("¥" + recycler.getPrice());
+        viewHolder.number.setText(recycler.getPurchasedNumber() + "人购买");
 
     }
 

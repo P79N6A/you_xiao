@@ -22,6 +22,8 @@ import com.runtoinfo.event.entity.EventEntity;
 import com.runtoinfo.teacher.HttpEntity;
 import com.runtoinfo.teacher.utils.HttpUtils;
 import com.runtoinfo.youxiao.common_ui.adapter.UniversalRecyclerAdapter;
+import com.runtoinfo.youxiao.common_ui.utils.Entity;
+import com.runtoinfo.youxiao.common_ui.utils.SPUtils;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -55,13 +57,13 @@ public class EnventActivity extends EventBaseActivity{
             }
         });
 
-        HttpUtils.getEventAll(mHandler, HttpEntity.MAIN_URL + HttpEntity.SCHOOL_CAMPAIGN);
+        HttpUtils.getEventAll(mHandler, HttpEntity.MAIN_URL + HttpEntity.SCHOOL_CAMPAIGN, spUtils.getString(Entity.TOKEN));
     }
 
     @Override
     protected void initData() {
-        String userId = getIntent().getExtras().getString("USER_ID", null);
-        sp.edit().putString("USER_ID", userId).apply();
+        String userId = getIntent().getExtras().getString(Entity.USER_ID, null);
+        spUtils.setString(Entity.USER_ID, userId);
     }
 
     @Override

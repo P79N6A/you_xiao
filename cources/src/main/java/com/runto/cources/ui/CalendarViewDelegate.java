@@ -276,7 +276,7 @@ final class CalendarViewDelegate {
         mWeekStart = array.getInt(R.styleable.CalendarView_week_start_with, WEEK_START_WITH_SUN);
         //mSelectMode = array.getInt(R.styleable.CalendarView_select_mode, SELECT_MODE_DEFAULT);
 
-        mWeekBackground = array.getColor(R.styleable.CalendarView_week_background, Color.WHITE);
+        mWeekBackground = array.getResourceId(R.styleable.CalendarView_week_background, R.drawable.course_img_week);
         mWeekLineBackground = array.getColor(R.styleable.CalendarView_week_line_background, Color.TRANSPARENT);
         mYearViewBackground = array.getColor(R.styleable.CalendarView_year_view_background, Color.WHITE);
         mWeekTextColor = array.getColor(R.styleable.CalendarView_week_text_color, 0xFF333333);
