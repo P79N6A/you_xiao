@@ -11,14 +11,15 @@
             <option value="$PROJECT_DIR$/app" />
             <option value="$PROJECT_DIR$/cameraview" />
             <option value="$PROJECT_DIR$/citypickerview" />
-            <option value="$PROJECT_DIR$/common_ui" />
             <option value="$PROJECT_DIR$/cources" />
             <option value="$PROJECT_DIR$/education" />
             <option value="$PROJECT_DIR$/event" />
+            <option value="$PROJECT_DIR$/globalTools" />
             <option value="$PROJECT_DIR$/httpUtils" />
             <option value="$PROJECT_DIR$/imageselector" />
             <option value="$PROJECT_DIR$/information" />
             <option value="$PROJECT_DIR$/mall" />
+            <option value="$PROJECT_DIR$/mediapicker" />
             <option value="$PROJECT_DIR$/personal_center" />
             <option value="$PROJECT_DIR$/seescore" />
           </set>

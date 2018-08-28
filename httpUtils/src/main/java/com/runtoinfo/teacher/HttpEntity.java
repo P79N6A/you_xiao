@@ -75,5 +75,20 @@ public class HttpEntity {
      * 获取所有的课程内容
      */
     public final static String GET_COURSE_CHILD_ALL = "/api/services/app/OnlineCourse/GetAll";
-
+    /**
+     * 获取主页今日卡中的课程列表
+     */
+    public final static String GET_HOME_COURSE_DATA = "/api/services/app/CourseSchedule/GetPunchedCourseList";
+    /**
+     * 签到
+     */
+    public final static String  POST_SIGNIN_COURSE = "/api/services/app/CourseSchedule/SignInCourse";
+    /**
+     * 提交作业
+     */
+    public final static String HAND_HOME_WORK = "/api/services/app/CourseSchedule/HandinHomework";
+    /**
+     * 上传文件
+     */
+    public final static String POST_ALI_SERVER = "/api/services/app/File/UploadMore";
 }

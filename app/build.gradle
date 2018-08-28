@@ -79,7 +79,7 @@ dependencies {
     implementation project(':personal_center')
     implementation project(':cources')
     api project(path: ':cameraview')
-    implementation project(':common_ui')
+    implementation project(':globalTools')
     api project(path: ':event')
     implementation project(':information')
     implementation project(':mall')

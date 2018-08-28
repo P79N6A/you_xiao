@@ -6,20 +6,27 @@ import android.graphics.drawable.Drawable;
 import android.os.Handler;
 import android.os.Message;
 import android.provider.CalendarContract;
+import android.provider.MediaStore;
+import android.support.v4.content.MimeTypeFilter;
 import android.text.TextUtils;
 import android.util.Log;
 import android.widget.ImageView;
 
+import com.dmcbig.mediapicker.entity.Media;
+import com.google.gson.Gson;
 import com.runtoinfo.teacher.HttpEntity;
 import com.runtoinfo.teacher.bean.AddMemberBean;
 import com.runtoinfo.teacher.bean.ChildContent;
 import com.runtoinfo.teacher.bean.CourseDataEntity;
+import com.runtoinfo.teacher.bean.HandWorkEntity;
+import com.runtoinfo.teacher.bean.HomeCourseEntity;
 import com.runtoinfo.teacher.bean.HttpLoginHead;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -33,6 +40,7 @@ import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.FormBody;
 import okhttp3.MediaType;
+import okhttp3.MultipartBody;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
@@ -46,6 +54,7 @@ public class HttpUtils {
 
     public static final ExecutorService executorService = Executors.newScheduledThreadPool(7);
     public static final MediaType JSON = MediaType.parse("application/json; charset=utf-8");
+    private static final MediaType PICTURE = MediaType.parse("text/x-markdown; charset=utf-8");
     public static final OkHttpClient client = new OkHttpClient();
 
     /**
@@ -719,6 +728,212 @@ public class HttpUtils {
         });
     }
 
+    /**
+     * 首页今日打卡的课程
+     * @param handler
+     * @param dataMap 参数集
+     * @param courseData 数据集
+     */
+    public static void getCourseDataList(final Handler handler,  final Map<String, Object> dataMap, final List<HomeCourseEntity> courseData){
+        executorService.execute(new Runnable() {
+            @Override
+            public void run() {
+
+                final Request request = new Request.Builder()
+                        .header("Authorization", "Bearer " + dataMap.get("token"))
+                        .url(dataMap.get("url").toString() + "?studentId=18&date=2018-08-17")
+                        .build();
+                client.newCall(request).enqueue(new Callback() {
+                    @Override
+                    public void onFailure(Call call, IOException e) {
+                        handler.sendEmptyMessage(404);
+                    }
+
+                    @Override
+                    public void onResponse(Call call, Response response) throws IOException {
+                        if (response.isSuccessful()){
+                            try{
+                                JSONObject json = new JSONObject(response.body().string());
+                                if (TextUtils.isEmpty(json.getString("error"))){
+                                    handler.sendEmptyMessage(404);
+                                    return;
+                                }
+                                JSONArray result = json.getJSONArray("result");
+                                for (int i = 0; i < result.length(); i++){
+                                    JSONObject childResult = result.getJSONObject(i);
+                                    HomeCourseEntity homeCourseEntity = new HomeCourseEntity();
+                                    homeCourseEntity.setBeginTime(childResult.getString("beginTime"));
+                                    homeCourseEntity.setClassId(childResult.getInt("classId"));
+                                    homeCourseEntity.setClassName(childResult.getString("className"));
+                                    homeCourseEntity.setCourseId(childResult.getInt("courseId"));
+                                    homeCourseEntity.setCourseName(childResult.getString("courseName"));
+                                    homeCourseEntity.setCourseInstId(childResult.getInt("courseInstId"));
+                                    homeCourseEntity.setCoverPhoto(childResult.getString("coverPhoto"));
+                                    homeCourseEntity.setSignIn(childResult.getBoolean("isSignIn"));
+                                    homeCourseEntity.setToken(dataMap.get("token").toString());
+                                    courseData.add(homeCourseEntity);
+                                }
+
+                                handler.sendEmptyMessage(0);
+                            }catch (JSONException e){
+                                e.printStackTrace();
+                            }
+                        }
+                    }
+                });
+            }
+        });
+    }
+
+    /**
+     * 签到
+     */
+    public static void postSignIn(final Handler handler, final Map<String, Object> map){
+        executorService.execute(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    JSONObject json = new JSONObject();
+                    json.put("CourseInstId", map.get("CourseInstId"));
+                    RequestBody body = RequestBody.create(JSON, json.toString());
+                    Request request = new Request.Builder()
+                            .header("Authorization", "Bearer " + map.get("token"))
+                            .url(map.get("url").toString())
+                            .post(body)
+                            .build();
+                    client.newCall(request).enqueue(new Callback() {
+                        @Override
+                        public void onFailure(Call call, IOException e) {
+                            handler.sendEmptyMessage(404);
+                        }
+
+                        @Override
+                        public void onResponse(Call call, Response response) throws IOException {
+                            if (response.isSuccessful()){
+                                try {
+                                    JSONObject json = new JSONObject(response.body().string());
+                                    if (!TextUtils.isEmpty(json.getString("error"))){
+                                        handler.sendEmptyMessage(404);
+                                        return;
+                                    }
+                                    handler.sendEmptyMessage(1);
+                                } catch (JSONException e) {
+                                    e.printStackTrace();
+                                }
+                            }
+                        }
+                    });
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+            }
+        });
+    }
+
+    /**
+     * 上传图片文件
+     * @param handler
+     * @param map
+     * @param list
+     */
+    public static void postVideoPhoto(final Handler handler, final Map<String, Object> map, final List<Media> list, final List<String> filePathList){
+        executorService.execute(new Runnable() {
+            @Override
+            public void run() {
+                MultipartBody.Builder builder = new MultipartBody.Builder();
+                builder.setType(MultipartBody.FORM);
+                for (int i = 0; i < list.size()-1; i++){
+                    File file = new File(list.get(i).path);
+                    builder.addFormDataPart("file", file.getPath(), RequestBody.create(MediaType.parse("application/octet-stream"), file));
+                }
+                MultipartBody body = builder.build();
+                final Request request = new Request.Builder()
+                        .header("Authorization", "Bearer " + map.get("token"))
+                        .url(map.get("url").toString())
+                        .post(body)
+                        .build();
+                client.newCall(request).enqueue(new Callback() {
+                    @Override
+                    public void onFailure(Call call, IOException e) {
+                        handler.sendEmptyMessage(404);
+                    }
+
+                    @Override
+                    public void onResponse(Call call, Response response) throws IOException {
+                        if (response.isSuccessful()){
+                            try {
+                                JSONObject jsonObject = new JSONObject(response.body().string());
+                                JSONArray result = jsonObject.getJSONArray("result");
+                                for (int i = 0; i < result.length(); i++){
+                                    JSONObject childResult = result.getJSONObject(i);
+                                    String filePath = childResult.getString("filePath");
+                                    filePathList.add(filePath);
+                                }
+
+                                handler.sendEmptyMessage(0);
+                            } catch (JSONException e) {
+                                handler.sendEmptyMessage(300);
+                            }
+                        }
+                    }
+                });
+            }
+        });
+    }
+
+    /**
+     * 提交作业
+     * @param
+     * @return
+     */
+    public static void postHomeWork(final Handler handler, final Map<String, Object> dataMap, final List<Map<String, Object>> filePathList){
+        executorService.execute(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    HandWorkEntity workEntity = new HandWorkEntity();
+                    workEntity.setCourseId(Integer.parseInt(dataMap.get("courseId").toString()));
+                    workEntity.setCourseInsId(Integer.parseInt(dataMap.get("courseInsId").toString()));
+                    workEntity.setStudentId(18);
+                    workEntity.setUserId(Integer.parseInt(dataMap.get("userId").toString()));
+                    workEntity.setRemark(dataMap.get("remark").toString());
+                    List<HandWorkEntity.WorkItems> object = new ArrayList<>();
+                    for (int i = 0; i < filePathList.size(); i++){
+                        HandWorkEntity.WorkItems workItems = new HandWorkEntity.WorkItems();
+                        workItems.setPath(filePathList.get(i).get("path").toString());
+                        workItems.setType((int) filePathList.get(i).get("type"));
+                        object.add(workItems);
+                    }
+                    workEntity.setWorkItems(object);
+                    String json = new Gson().toJson(workEntity);
+                    RequestBody body = RequestBody.create(JSON, json);
+                    Request request = new Request.Builder()
+                            .header("Authorization", "Bearer " + dataMap.get("token"))
+                            .url(dataMap.get("url").toString())
+                            .post(body)
+                            .build();
+
+                    client.newCall(request).enqueue(new Callback() {
+                        @Override
+                        public void onFailure(Call call, IOException e) {
+                            Log.e("result", "请求失败");
+                        }
+
+                        @Override
+                        public void onResponse(Call call, Response response) throws IOException {
+                            if (response.isSuccessful()){
+                                Log.e("result", "上传成功");
+                            }
+                        }
+                    });
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+    }
+
     public static String execute(Request request){
         try {
             OkHttpClient client = new OkHttpClient();
@@ -733,10 +948,17 @@ public class HttpUtils {
     }
 
 
+    /**
+     * 公共解析返回结果
+     * @param body
+     * @param handler
+     * @return
+     * @throws JSONException
+     */
     public static JSONArray getItems(String body, Handler handler) throws JSONException{
         JSONObject json = new JSONObject(body);
-        //if (!TextUtils.isEmpty(json.getString("error"))) {handler.sendEmptyMessage(404); return null;}
         JSONObject result = json.getJSONObject("result");
+        if (!TextUtils.isEmpty(result.getString("error"))) {handler.sendEmptyMessage(404); return null;}
         JSONArray items = result.getJSONArray("items");
         return items;
     }

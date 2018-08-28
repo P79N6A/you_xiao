@@ -1,6 +1,10 @@
 package com.runtoinfo.youxiao.adapter;
 
+import android.app.Activity;
 import android.content.Context;
+import android.os.Handler;
+import android.os.Looper;
+import android.os.Message;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -12,82 +16,92 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.alibaba.android.arouter.launcher.ARouter;
+import com.runtoinfo.teacher.HttpEntity;
+import com.runtoinfo.teacher.bean.HomeCourseEntity;
+import com.runtoinfo.teacher.utils.HttpUtils;
 import com.runtoinfo.youxiao.R;
+import com.runtoinfo.youxiao.common_ui.adapter.BaseViewHolder;
+import com.runtoinfo.youxiao.common_ui.adapter.UniversalRecyclerAdapter;
+import com.runtoinfo.youxiao.common_ui.utils.DialogMessage;
+import com.runtoinfo.youxiao.common_ui.utils.SPUtils;
 import com.runtoinfo.youxiao.entity.CourseEntity;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by qiaojunchao on 2018/7/4 0004.
  */
 
-public class CoursePunchAdapter extends RecyclerView.Adapter {
+public class CoursePunchAdapter extends UniversalRecyclerAdapter<HomeCourseEntity> {
 
-    public Context context;
-    public List<CourseEntity> list;
+    public Activity context;
+    public List<HomeCourseEntity> list;
+    private int layoutId;
+    private View.OnClickListener mOnClickListener;
+    private TextView tSignIn;
 
-    public CoursePunchAdapter(Context context, List<CourseEntity> list){
-        this.context = context;
-        this.list = list;
+
+    public CoursePunchAdapter(Activity mContext, List<HomeCourseEntity> mDatas, int mLayoutId) {
+        super(mContext, mDatas, mLayoutId);
+        this.context = mContext;
+        this.list = mDatas;
+        this.layoutId = mLayoutId;
     }
 
     @Override
-    public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(context).inflate(R.layout.fragment_home_recyclerview_item, null);
-        LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-        view.setLayoutParams(lp);
-        return new CourseHolder(view);
-    }
-
-    @Override
-    public void onBindViewHolder(RecyclerView.ViewHolder viewHolder, int position) {
-        CourseHolder holder = (CourseHolder) viewHolder;
-        CourseEntity entity = list.get(position);
-        holder.courseName.setText(entity.getCourseName());
-        holder.courseTime.setText(entity.getCourseTime());
-        holder.imageView.setBackground(entity.getBitmap());
-    }
-
-    @Override
-    public int getItemCount() {
-        return list.size();
-    }
-
-    class CourseHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
-
-        public ImageView imageView;
-        public TextView courseName;//课程名称
-        public TextView courseTime;//上课时间
-        public TextView courseDetails;//查看详情
-        public TextView courseSign;//签到
-
-        public CourseHolder(View itemView) {
-            super(itemView);
-
-            imageView =(ImageView) itemView.findViewById(R.id.home_img_course);
-            courseName =(TextView) itemView.findViewById(R.id.home_course_name);
-            courseTime =(TextView) itemView.findViewById(R.id.home_course_time);
-            courseDetails =(TextView) itemView.findViewById(R.id.home_details);
-            courseSign =(TextView) itemView.findViewById(R.id.home_course_sign);
-
-            courseDetails.setOnClickListener(this);
-            courseSign.setOnClickListener(this);
+    protected void convert(Context mContext, final BaseViewHolder holder, final HomeCourseEntity homeCourseEntity, int position) {
+        holder.setText(R.id.home_course_name, homeCourseEntity.getCourseName());
+        holder.setText(R.id.home_course_time, homeCourseEntity.getBeginTime());
+        HttpUtils.postPhoto(context, homeCourseEntity.getCoverPhoto(),(ImageView) holder.getView(R.id.home_img_course));
+        holder.getView(R.id.home_details).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ARouter.getInstance().build("/cources/colorfulActivity").navigation();
+            }
+        });
+        tSignIn = holder.getView(R.id.home_course_sign);
+        if (homeCourseEntity.isSignIn){
+            tSignIn.setText("已签");
+            tSignIn.setBackgroundResource(R.drawable.home_sign_finish);
+            tSignIn.setEnabled(false);
+        }else{
+            tSignIn.setText("签到");
+            tSignIn.setBackgroundResource(R.drawable.home_sign_in);
+            tSignIn.setEnabled(true);
         }
 
+        holder.setOnClickListener(R.id.home_course_sign, new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Map<String, Object> map = new HashMap<>();
+                map.put("CourseInstId", homeCourseEntity.getCourseInstId());
+                map.put("url", HttpEntity.MAIN_URL + HttpEntity.POST_SIGNIN_COURSE);
+                map.put("token", homeCourseEntity.getToken());
+                HttpUtils.postSignIn(handler, map);
+            }
+        });
+    }
+
+    public void setOnClickListener(View.OnClickListener listener){
+        this.mOnClickListener = listener;
+    }
+
+    public Handler handler = new Handler(Looper.getMainLooper()){
         @Override
-        public void onClick(View v) {
-            switch (v.getId())
-            {
-                case R.id.home_details:
-                    Log.e("TAG", "查看详情");
-                    ARouter.getInstance().build("/cources/colorfulActivity").navigation();
+        public void handleMessage(Message msg) {
+            switch (msg.what){
+                case 0:
+                    tSignIn.setText("已签");
+                    tSignIn.setBackgroundResource(R.drawable.home_sign_finish);
+                    tSignIn.setEnabled(false);
                     break;
-                case R.id.home_course_sign:
-                    Log.e("TAG", "签到");
-                    courseSign.setText("已签");
-                    courseSign.setBackgroundResource(R.drawable.home_sign_finish);
+                case 404:
+                    DialogMessage.showToast(context, "签到失败");
                     break;
             }
         }
-    }
+    };
+
 }

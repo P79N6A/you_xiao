@@ -1,14 +1,17 @@
 package com.runtoinfo.youxiao.fragment;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.databinding.DataBindingUtil;
 import android.graphics.Color;
-import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
+import android.os.Message;
 import android.os.Vibrator;
 import android.support.annotation.Nullable;
 import android.support.annotation.RequiresApi;
@@ -21,39 +24,85 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
 import android.view.WindowManager;
+import android.widget.TextView;
 
 import com.alibaba.android.arouter.launcher.ARouter;
+import com.runtoinfo.teacher.HttpEntity;
+import com.runtoinfo.teacher.bean.HomeCourseEntity;
+import com.runtoinfo.teacher.utils.HttpUtils;
 import com.runtoinfo.youxiao.R;
 import com.runtoinfo.youxiao.adapter.CoursePunchAdapter;
+import com.runtoinfo.youxiao.common_ui.utils.DialogMessage;
+import com.runtoinfo.youxiao.common_ui.utils.Entity;
 import com.runtoinfo.youxiao.databinding.FragmentHomeBinding;
-import com.runtoinfo.youxiao.entity.CourseEntity;
 import com.runtoinfo.youxiao.entity.SelectSchoolEntity;
 import com.runtoinfo.youxiao.ui.FloatDragView;
 import com.runtoinfo.youxiao.ui.MyScrollView;
 import com.runtoinfo.youxiao.ui.PopupWindowFragment;
-import com.runtoinfo.youxiao.utils.Entity;
 import com.runtoinfo.youxiao.utils.IntentDataType;
-import com.runtoinfo.youxiao.utils.SPUtils;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by qiaojunchao on 2018/5/24 0024.
  */
 
+@SuppressLint("ValidFragment")
 public class HomeFragment extends BaseFragment implements MyScrollView.ScrollViewListener{
 
     public FragmentHomeBinding binding;
     public CoursePunchAdapter coursePunchAdapter;
-    public List<CourseEntity> list;
+    public List<HomeCourseEntity> getCourseList = new ArrayList<>();
     public PopupWindowFragment popupWindow;
     public int mHeight = 0;
+    public List<SelectSchoolEntity> schoolSelectList;
+    public TextView tSignUp;
+
+    public HomeFragment(List<SelectSchoolEntity> schoolSelectList){
+        this.schoolSelectList = schoolSelectList;
+    }
+
+    public View.OnClickListener listener = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            tSignUp = (TextView) v;
+            tSignUp.setText("已签");
+            tSignUp.setBackgroundResource(R.drawable.home_sign_finish);
+            tSignUp.setEnabled(false);
+        }
+    };
+
+    public Handler handler = new Handler(Looper.getMainLooper()){
+        @Override
+        public void handleMessage(Message msg) {
+            switch (msg.what){
+                case 0:
+                    initCourseData();
+                    /**
+                     * 暂时使用
+                     */
+                    for(int i = 0; i < getCourseList.size(); i++){
+                        HomeCourseEntity entity = getCourseList.get(i);
+                        spUtils.setInt(com.runtoinfo.youxiao.common_ui.utils.Entity.COURSE_ID, entity.getCourseId());
+                        spUtils.setInt(com.runtoinfo.youxiao.common_ui.utils.Entity.COURSE_INST_ID,entity.getCourseInstId());
+                    }
+                    break;
+                case 404:
+                    DialogMessage.showToast(getContext(), "请求数据失败");
+                    break;
+            }
+        }
+    };
+
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_home, container, false);
         requestPermission();
-        initRecyclerData();
+        initCourseDataList();
+        initFloatWindow();
         initListener();
         return binding.getRoot();
     }
@@ -71,56 +120,12 @@ public class HomeFragment extends BaseFragment implements MyScrollView.ScrollVie
         }
     }
 
-    /**
-     * 选择学校
-     * 切换学校
-     */
-    public void initRecyclerData(){
-        binding.fragmentHomeImagview.setOnLongClickListener(new View.OnLongClickListener() {
-            @RequiresApi(api = Build.VERSION_CODES.KITKAT)
-            @Override
-            public boolean onLongClick(View v) {
 
-                //实现手机振动
-                Vibrator vibrator = (Vibrator) getActivity().getSystemService(getActivity().VIBRATOR_SERVICE);
-                vibrator.vibrate(100);
+    public void initCourseData(){
 
-                List<SelectSchoolEntity> list = new ArrayList<>();
-                popupWindow = new PopupWindowFragment(getContext(), getActivity());
-
-                List<String> listName = new ArrayList<>();
-                listName.add("育雅学堂");
-                listName.add("育雅学堂");
-                listName.add("育雅学堂");
-                //添加学校名称，学校logo
-                for (int i = 0; i < 5; i++) {
-                    SelectSchoolEntity schoolEntity = new SelectSchoolEntity();
-                    schoolEntity.setSchoolName(listName);
-                    schoolEntity.setOrgName("济南");
-                    list.add(schoolEntity);
-                }
-
-                popupWindow.showPopupWindows(list, binding.fragmentHomeImagview);
-                WindowManager.LayoutParams params=getActivity().getWindow().getAttributes();
-                params.alpha=0.7f;
-                getActivity().getWindow().setAttributes(params);
-                return true;
-            }
-        });
-
-        list = new ArrayList<>();
-        //添加今日课程
-        for (int i = 0; i < 5; i++){
-            CourseEntity courseEntity = new CourseEntity();
-            courseEntity.setCourseName("布米童艺跆拳道班零基础教育");
-            courseEntity.setCourseTime("05-20 17:32");
-            Drawable drawable = getContext().getResources().getDrawable(R.drawable.home_taekwondo_img);
-            courseEntity.setBitmap(drawable);
-            list.add(courseEntity);
-        }
         binding.homeRecyclerView.setHasFixedSize(true);
         binding.homeRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        coursePunchAdapter = new CoursePunchAdapter(getContext(), list);
+        coursePunchAdapter = new CoursePunchAdapter(getActivity(), getCourseList, R.layout.fragment_home_recyclerview_item);
         binding.homeRecyclerView.setAdapter(coursePunchAdapter);
 
         binding.homeRecyclerView.setNestedScrollingEnabled(false);
@@ -132,7 +137,23 @@ public class HomeFragment extends BaseFragment implements MyScrollView.ScrollVie
 
             }
         });
+        coursePunchAdapter.setOnClickListener(listener);
+    }
 
+    /**
+     * 请求接口获取今日课程
+     */
+    public void initCourseDataList(){
+        Map<String, Object> map = new HashMap<>();
+        map.put("url", HttpEntity.MAIN_URL + HttpEntity.GET_HOME_COURSE_DATA);
+        map.put("token", spUtils.getString(com.runtoinfo.youxiao.common_ui.utils.Entity.TOKEN));
+        HttpUtils.getCourseDataList(handler, map, getCourseList);
+    }
+
+    /**
+     * 悬浮按钮
+     */
+    public void initFloatWindow(){
         final int[] startLocation = new int[2];
         ViewTreeObserver vto = binding.homeHeadImage.getViewTreeObserver();
         vto.addOnPreDrawListener(new ViewTreeObserver.OnPreDrawListener() {
@@ -155,8 +176,29 @@ public class HomeFragment extends BaseFragment implements MyScrollView.ScrollVie
             }
         }, startLocation);
     }
-
     public void initListener(){
+
+        /**
+         * 选择学校
+         * 切换学校
+         */
+        binding.fragmentHomeImagview.setOnLongClickListener(new View.OnLongClickListener() {
+            @RequiresApi(api = Build.VERSION_CODES.KITKAT)
+            @Override
+            public boolean onLongClick(View v) {
+                //实现手机振动
+                Vibrator vibrator = (Vibrator) getActivity().getSystemService(getActivity().VIBRATOR_SERVICE);
+                vibrator.vibrate(100);
+
+                List<SelectSchoolEntity> list = new ArrayList<>();
+                popupWindow = new PopupWindowFragment(getContext(), getActivity());
+                popupWindow.showPopupWindows(schoolSelectList, binding.fragmentHomeImagview);
+                WindowManager.LayoutParams params=getActivity().getWindow().getAttributes();
+                params.alpha=0.7f;
+                getActivity().getWindow().setAttributes(params);
+                return true;
+            }
+        });
         binding.homeEmailImg.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -174,7 +216,7 @@ public class HomeFragment extends BaseFragment implements MyScrollView.ScrollVie
         binding.homeActivityListLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ARouter.getInstance().build("/event/eventActivity").withString(Entity.USER_ID, SPUtils.getString(Entity.USER_ID)).navigation();
+                ARouter.getInstance().build("/event/eventActivity").withString(Entity.USER_ID, spUtils.getString(Entity.USER_ID)).navigation();
             }
         });
 

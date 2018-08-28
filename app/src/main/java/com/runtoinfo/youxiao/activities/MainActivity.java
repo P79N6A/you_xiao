@@ -11,17 +11,19 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.alibaba.android.arouter.facade.annotation.Route;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.runtoinfo.youxiao.R;
 import com.runtoinfo.youxiao.adapter.FragmentAdapter;
 import com.runtoinfo.youxiao.databinding.ActivityMainBinding;
+import com.runtoinfo.youxiao.entity.SelectSchoolEntity;
 import com.runtoinfo.youxiao.fragment.FineClassFragment;
 import com.runtoinfo.youxiao.fragment.HomeFragment;
 import com.runtoinfo.youxiao.fragment.PersonalCenterFragment;
 import com.runtoinfo.youxiao.fragment.TopicsFragment;
-import com.runtoinfo.youxiao.utils.Entity;
-import com.runtoinfo.youxiao.utils.SPUtils;
 
 import java.util.ArrayList;
+import java.util.List;
 
 @Route( path = "/main/mainActivity")
 public class MainActivity extends BaseActivity implements ViewPager.OnPageChangeListener/*, View.OnClickListener*/{
@@ -37,6 +39,8 @@ public class MainActivity extends BaseActivity implements ViewPager.OnPageChange
     private String TAG = "MainActivity";
     private long firstTime = 0;
 
+    public List<SelectSchoolEntity> schoolSelectList;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -47,6 +51,7 @@ public class MainActivity extends BaseActivity implements ViewPager.OnPageChange
     @Override
     protected void initView() {
         binding = DataBindingUtil.setContentView(MainActivity.this, R.layout.activity_main);
+        schoolSelectList = new Gson().fromJson(getIntent().getExtras().getString("json"), new TypeToken<List<SelectSchoolEntity>>(){}.getType());
         tv_menus = new ArrayList<TextView>();
         tv_menus.add(binding.tvBottomMenuChat);
         tv_menus.add(binding.tvBottomMenuAddressbook);
@@ -66,7 +71,7 @@ public class MainActivity extends BaseActivity implements ViewPager.OnPageChange
     @Override
     protected void initData() {
         mFragments = new ArrayList<>();
-        mFragments.add(new HomeFragment());
+        mFragments.add(new HomeFragment(schoolSelectList));
         mFragments.add(new FineClassFragment());
         mFragments.add(new TopicsFragment());
         mFragments.add(new PersonalCenterFragment());
@@ -146,29 +151,14 @@ public class MainActivity extends BaseActivity implements ViewPager.OnPageChange
 
     }
 
-    @Override
-    public void onPause() {
-        super.onPause();
-        Log.e(TAG, "onPause");
-    }
-
-    @Override
-    protected void onStop() {
-        super.onStop();
-        Log.e(TAG, "onStop");
-    }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        Log.e(TAG, "onDestroy");
-    }
+   public List<SelectSchoolEntity> getSchoolList(){
+        return schoolSelectList;
+   }
 
     @Override
     public void onBackPressed() {
         long secondTime = System.currentTimeMillis();
         if (secondTime - firstTime < 1000) {
-            //SPUtils.setString(Entity.TOKEN, "");
             finished();
         } else {
             Toast.makeText(MainActivity.this, "再按一次退出程序", Toast.LENGTH_SHORT).show();

@@ -52,7 +52,8 @@
             android:gravity="center"
             android:text="照片/视频/音频"
             android:textColor="#999999"
-            android:textSize="15sp"/>
+            android:textSize="15sp"
+            android:visibility="gone"/>
 
         <GridView
             android:id="@+id/course_homework_grid"
@@ -66,7 +67,7 @@
         <android.support.v7.widget.RecyclerView
             android:id="@+id/rv_image"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:layout_below="@+id/btn_unlimited"
             android:layout_marginTop="10dp" />
 
@@ -84,7 +85,6 @@
             android:paddingTop="10dp"
             android:text="提交"
             android:textColor="#fff"
-            android:textSize="15sp"
-            android:visibility="gone" />
+            android:textSize="15sp" />
     </LinearLayout>
 </layout>

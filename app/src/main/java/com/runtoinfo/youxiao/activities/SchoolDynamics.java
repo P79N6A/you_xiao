@@ -1,27 +1,23 @@
 package com.runtoinfo.youxiao.activities;
 
 import android.annotation.SuppressLint;
-import android.app.Activity;
 import android.databinding.DataBindingUtil;
-import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v7.widget.LinearLayoutManager;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
-import android.widget.Toast;
 
 import com.alibaba.android.arouter.facade.annotation.Route;
 import com.runtoinfo.teacher.HttpEntity;
 import com.runtoinfo.teacher.utils.HttpUtils;
 import com.runtoinfo.youxiao.R;
 import com.runtoinfo.youxiao.adapter.SchoolDynamicsRecyclerAdapter;
+import com.runtoinfo.youxiao.common_ui.utils.Entity;
 import com.runtoinfo.youxiao.databinding.SchoolMovmentBinding;
 import com.runtoinfo.youxiao.entity.SchoolDynamicsEntity;
-import com.runtoinfo.youxiao.utils.Entity;
 import com.runtoinfo.youxiao.utils.IntentDataType;
-import com.runtoinfo.youxiao.utils.SPUtils;
 import com.runtoinfo.youxiao.utils.Utils;
 
 import org.json.JSONArray;
@@ -31,8 +27,10 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.List;
 
+import SevenZip.Compression.LZMA.Base;
+
 @Route(path = "/main/schoolDynamics")
-public class SchoolDynamics extends Activity {
+public class SchoolDynamics extends BaseActivity {
 
     public SchoolMovmentBinding binding;
     public List<SchoolDynamicsEntity> schoolDynamicsList = new ArrayList<>();
@@ -40,12 +38,15 @@ public class SchoolDynamics extends Activity {
     public String dataType = null;
     public int times = 0;
     public SchoolDynamicsEntity schoolDynamicsEntity;
+
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.school_movment);
+    protected void initView() {
         binding = DataBindingUtil.setContentView(this, R.layout.school_movment);
         changeView();
+        initEvent();
+    }
+
+    public void initEvent(){
         binding.activityImgBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -78,21 +79,24 @@ public class SchoolDynamics extends Activity {
     }
 
     public void initData(){
+
+    }
+    public void initRecyclerData(){
         adapter = new SchoolDynamicsRecyclerAdapter(SchoolDynamics.this, schoolDynamicsList, handler);
         binding.topicsRecyclerview.setLayoutManager(new LinearLayoutManager(this));
         binding.topicsRecyclerview.setAdapter(adapter);
     }
 
     @Override
-    protected void onResume() {
+    public void onResume() {
         super.onResume();
     }
 
     @Override
-    protected void onStart() {
+    public void onStart() {
         super.onStart();
         if (dataType != null && !dataType.equals(IntentDataType.TOPICS))
-        HttpUtils.getSchoolNewsAll(handler, HttpEntity.MAIN_URL + HttpEntity.SCHOOL_NEWS_ALL, SPUtils.getString(Entity.TOKEN));
+        HttpUtils.getSchoolNewsAll(handler, HttpEntity.MAIN_URL + HttpEntity.SCHOOL_NEWS_ALL, spUtils.getString(Entity.TOKEN));
     }
 
     @SuppressLint("HandlerLeak")
@@ -110,7 +114,7 @@ public class SchoolDynamics extends Activity {
                     binding.dynamicsTime .setText(schoolDynamicsEntity.getPublishTime());
                     HttpUtils.getNewsReadNumber(handler,
                             HttpEntity.MAIN_URL + HttpEntity.NEWS_READ_NUMBER,
-                            SPUtils.getString(Entity.TOKEN),
+                            spUtils.getString(Entity.TOKEN),
                             schoolDynamicsEntity.getId());
                     binding.dynamicsWebview.loadData(schoolDynamicsEntity.getContent(), "text/html; charset=UTF-8",null);
                     break;
@@ -118,7 +122,7 @@ public class SchoolDynamics extends Activity {
                     String json = msg.obj.toString();
                     Log.e("school", json);
                     fromJson(json);
-                    initData();
+                    initRecyclerData();
                     break;
                 case 4:
                     binding.dynamicsReadNumber.setText(msg.obj.toString());

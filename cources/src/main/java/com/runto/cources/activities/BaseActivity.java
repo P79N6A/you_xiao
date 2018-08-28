@@ -10,6 +10,7 @@ import android.view.Window;
 import android.view.WindowManager;
 
 import com.alibaba.android.arouter.launcher.ARouter;
+import com.runtoinfo.youxiao.common_ui.utils.SPUtils;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
@@ -22,12 +23,12 @@ import java.lang.reflect.Method;
 public abstract class BaseActivity extends Activity {
 
     private static boolean isMiUi = false;
+    public SPUtils spUtils;
 
     protected void initWindow() {
 
     }
 
-    protected abstract int getLayoutId();
 
     protected abstract void initView();
 
@@ -37,10 +38,11 @@ public abstract class BaseActivity extends Activity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         initWindow();
-        setContentView(getLayoutId());
+        spUtils = new SPUtils(this);
         initView();
         initData();
     }
+
 
     /**
      * 设置小米黑色状态栏字体

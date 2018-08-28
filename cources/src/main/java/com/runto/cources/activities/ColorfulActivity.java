@@ -64,12 +64,8 @@ public class ColorfulActivity extends BaseActivity implements
 //    }
 
     @Override
-    protected int getLayoutId() {
-        return R.layout.activity_cource;
-    }
-
-    @Override
     protected void initView() {
+        setContentView(R.layout.activity_cource);
         setStatusBarDarkMode();
         mTextYear = (TextView) findViewById(R.id.tv_year);
         mRelativeTool = (RelativeLayout) findViewById(R.id.rl_tool);

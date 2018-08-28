@@ -1,24 +1,35 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:layout_gravity="center"
-    android:layout_margin="1dp">
+    android:layout_height="130dp">
 
-    <com.donkingliang.imageselector.view.SquareImageView
-        android:id="@+id/iv_image"
-        android:layout_width="match_parent"
+    <ImageView
+        android:id="@+id/home_work_image"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:background="#fff"
-        android:scaleType="centerCrop" />
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="24dp"
+        android:background="@drawable/course_take_photo" />
+
+    <VideoView
+        android:id="@+id/home_work_video"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"
+        android:visibility="gone"/>
+
+
     <TextView
         android:id="@+id/home_work_tv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_below="@+id/home_work_image"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="9dp"
         android:text="照片/视频/音频"
         android:textColor="#999999"
-        android:textSize="15sp"
-        android:layout_gravity="bottom|center_horizontal"/>
+        android:textSize="15sp" />
 
-</FrameLayout>
+</RelativeLayout>

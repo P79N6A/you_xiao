@@ -1,14 +1,10 @@
 package com.runtoinfo.youxiao.activities;
 
 import android.annotation.SuppressLint;
-import android.app.Activity;
 import android.app.ProgressDialog;
-import android.content.SharedPreferences;
 import android.databinding.DataBindingUtil;
 import android.os.Handler;
 import android.os.Message;
-import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
@@ -24,9 +20,8 @@ import com.runtoinfo.teacher.HttpEntity;
 import com.runtoinfo.teacher.bean.HttpLoginHead;
 import com.runtoinfo.teacher.utils.HttpUtils;
 import com.runtoinfo.youxiao.R;
+import com.runtoinfo.youxiao.common_ui.utils.Entity;
 import com.runtoinfo.youxiao.databinding.LoginResetPasswordBinding;
-import com.runtoinfo.youxiao.utils.Entity;
-import com.runtoinfo.youxiao.utils.SPUtils;
 import com.runtoinfo.youxiao.utils.Utils;
 
 import java.util.ArrayList;
@@ -65,7 +60,7 @@ public class ForgetPassWordActivity extends BaseActivity {
             public void onClick(View v) {
                 binding.resetGetVerificationCode.setBackgroundResource(R.color.color_gray);
                 binding.resetGetVerificationCode.setEnabled(false);
-                SPUtils.setString("phoneNumber", binding.resetPasswordPhone.getText().toString());
+                spUtils.setString(Entity.PHONE_NUMBER, binding.resetPasswordPhone.getText().toString());
                 timers();
                 HttpUtils.get(HttpEntity.MAIN_URL + HttpEntity.GET_CAPTION_CODE, binding.resetPasswordPhone.getText().toString());
             }
@@ -196,7 +191,7 @@ public class ForgetPassWordActivity extends BaseActivity {
 //                        case "reset":
 //                            break;
 //                    }
-                    if (!SPUtils.getString("phoneNumber").equals(binding.resetPasswordPhone.getText().toString())){
+                    if (!spUtils.getString(Entity.PHONE_NUMBER).equals(binding.resetPasswordPhone.getText().toString())){
                         Toast.makeText(ForgetPassWordActivity.this, "手机号码已更换，请重新获取验证码", Toast.LENGTH_SHORT).show();
                         return;
                     }

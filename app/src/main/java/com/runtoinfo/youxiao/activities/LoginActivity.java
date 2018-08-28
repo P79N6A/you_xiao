@@ -23,10 +23,10 @@ import com.runtoinfo.teacher.bean.HttpLoginHead;
 import com.runtoinfo.teacher.utils.HttpUtils;
 import com.runtoinfo.youxiao.R;
 import com.runtoinfo.youxiao.adapter.ListViewAdapter;
+import com.runtoinfo.youxiao.common_ui.utils.DialogMessage;
+import com.runtoinfo.youxiao.common_ui.utils.Entity;
 import com.runtoinfo.youxiao.databinding.ActivityLoginBinding;
 import com.runtoinfo.youxiao.entity.SelectSchoolEntity;
-import com.runtoinfo.youxiao.utils.Entity;
-import com.runtoinfo.youxiao.utils.SPUtils;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -60,8 +60,16 @@ public class LoginActivity extends BaseActivity {
         //FitStatusUI.setImmersionStateMode(this);
         binding = DataBindingUtil.setContentView(LoginActivity.this, R.layout.activity_login);
         progressDialog = new ProgressDialog(LoginActivity.this);
-
         loginHead = new HttpLoginHead();
+        initEvent();
+    }
+
+    @Override
+    protected void initData() {
+        setUserName();
+    }
+
+    public void initEvent(){
         //登录
         binding.loginBt.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -101,7 +109,7 @@ public class LoginActivity extends BaseActivity {
                 {
                     HttpUtils.getAsy(mHandler, dataMap, HttpEntity.MAIN_URL + HttpEntity.GET_ORGANIZATION_INFO, text);
                     loginHead.setUserName(text);
-                    //initSelectSchoolData();
+                    spUtils.setString(com.runtoinfo.youxiao.common_ui.utils.Entity.PHONE_NUMBER, text);
                     binding.loginGetVerification.setBackgroundResource(R.drawable.background_verification_selected);
                     binding.loginGetVerification.setEnabled(true);
                 }
@@ -261,18 +269,20 @@ public class LoginActivity extends BaseActivity {
         });
     }
 
-    @Override
-    protected void initData() {
-
+    public void setUserName(){
+        //
+        if (!TextUtils.isEmpty(spUtils.getString(com.runtoinfo.youxiao.common_ui.utils.Entity.PHONE_NUMBER))){
+            String phone = spUtils.getString(com.runtoinfo.youxiao.common_ui.utils.Entity.PHONE_NUMBER);
+            binding.loginMobilePhone.setText(phone);
+            if (phone.length() == 11){
+                HttpUtils.getAsy(mHandler, dataMap, HttpEntity.MAIN_URL + HttpEntity.GET_ORGANIZATION_INFO, phone);
+                loginHead.setUserName(phone);
+                binding.loginGetVerification.setBackgroundResource(R.drawable.background_verification_selected);
+                binding.loginGetVerification.setEnabled(true);
+            }
+        }
     }
 
-    public void createDialog(){
-        if (progressDialog == null)
-            progressDialog = new ProgressDialog(LoginActivity.this);
-        progressDialog.setCanceledOnTouchOutside(false);
-        progressDialog.setMessage("请稍后，正在加载...");
-        progressDialog.show();
-    }
 
     /**
      * 选择的学校的实体
@@ -282,7 +292,7 @@ public class LoginActivity extends BaseActivity {
         loginHead.setCampusId(dynamics.getId());
         loginHead.setTenancyName(dynamics.getTenancyName());
         loginHead.setTenantId(dynamics.getTenantId());
-        createDialog();
+        DialogMessage.createDialog(LoginActivity.this, progressDialog, "正在接收数据，请稍后...");
         mHandler.sendEmptyMessage(0);
     }
 
@@ -370,6 +380,7 @@ public class LoginActivity extends BaseActivity {
                     Response response = (Response) msg.obj;
                     if (response != null && response.code() == 200){
                         getToken(response);
+                        String json = new Gson().toJson(schoolList);
                         ARouter.getInstance().build(Entity.MAIN_ACTIVITY_PATH).navigation();
                     }
                     break;

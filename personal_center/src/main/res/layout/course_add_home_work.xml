@@ -30,7 +30,7 @@
 
     <TextView
         android:id="@+id/select_type_cancel"
-       style="@style/TextView_Add_HomeWork"
+        style="@style/TextView_Add_HomeWork"
         android:text="取消"
         android:layout_marginTop="15dp"
         android:background="@drawable/background_edittext"/>
