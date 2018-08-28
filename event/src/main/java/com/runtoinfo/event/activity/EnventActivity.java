@@ -1,16 +1,11 @@
 package com.runtoinfo.event.activity;
 
 import android.annotation.SuppressLint;
-import android.app.Activity;
-import android.content.Intent;
 import android.databinding.DataBindingUtil;
-import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v7.widget.LinearLayoutManager;
-import android.view.Gravity;
 import android.view.View;
-import android.view.ViewGroup;
 
 import com.alibaba.android.arouter.facade.annotation.Route;
 import com.alibaba.android.arouter.launcher.ARouter;
@@ -21,9 +16,8 @@ import com.runtoinfo.event.databinding.ActivityActivitiesMainBinding;
 import com.runtoinfo.event.entity.EventEntity;
 import com.runtoinfo.teacher.HttpEntity;
 import com.runtoinfo.teacher.utils.HttpUtils;
-import com.runtoinfo.youxiao.common_ui.adapter.UniversalRecyclerAdapter;
-import com.runtoinfo.youxiao.common_ui.utils.Entity;
-import com.runtoinfo.youxiao.common_ui.utils.SPUtils;
+import com.runtoinfo.youxiao.globalTools.adapter.UniversalRecyclerAdapter;
+import com.runtoinfo.youxiao.globalTools.utils.Entity;
 
 import org.json.JSONArray;
 import org.json.JSONException;

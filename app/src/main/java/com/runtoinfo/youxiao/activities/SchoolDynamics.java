@@ -14,7 +14,7 @@ import com.runtoinfo.teacher.HttpEntity;
 import com.runtoinfo.teacher.utils.HttpUtils;
 import com.runtoinfo.youxiao.R;
 import com.runtoinfo.youxiao.adapter.SchoolDynamicsRecyclerAdapter;
-import com.runtoinfo.youxiao.common_ui.utils.Entity;
+import com.runtoinfo.youxiao.globalTools.utils.Entity;
 import com.runtoinfo.youxiao.databinding.SchoolMovmentBinding;
 import com.runtoinfo.youxiao.entity.SchoolDynamicsEntity;
 import com.runtoinfo.youxiao.utils.IntentDataType;
@@ -26,8 +26,6 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import SevenZip.Compression.LZMA.Base;
 
 @Route(path = "/main/schoolDynamics")
 public class SchoolDynamics extends BaseActivity {

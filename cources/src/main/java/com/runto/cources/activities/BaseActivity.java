@@ -9,8 +9,7 @@ import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 
-import com.alibaba.android.arouter.launcher.ARouter;
-import com.runtoinfo.youxiao.common_ui.utils.SPUtils;
+import com.runtoinfo.youxiao.globalTools.utils.SPUtils;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;

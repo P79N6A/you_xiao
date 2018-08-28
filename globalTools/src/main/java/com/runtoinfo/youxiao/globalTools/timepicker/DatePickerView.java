@@ -1,4 +1,4 @@
-package com.runtoinfo.youxiao.common_ui.timepicker;
+package com.runtoinfo.youxiao.globalTools.timepicker;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
@@ -15,7 +15,7 @@ import android.view.MotionEvent;
 import android.view.View;
 
 
-import com.runtoinfo.youxiao.common_ui.R;
+import com.runtoinfo.youxiao.globalTools.R;
 
 import java.util.ArrayList;
 import java.util.List;

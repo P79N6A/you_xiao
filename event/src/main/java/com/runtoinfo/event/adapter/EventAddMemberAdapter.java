@@ -8,10 +8,9 @@ import android.view.View;
 import android.widget.EditText;
 
 import com.runtoinfo.event.R;
-import com.runtoinfo.event.entity.AddMemberEntity;
 import com.runtoinfo.teacher.bean.AddMemberBean;
-import com.runtoinfo.youxiao.common_ui.adapter.BaseViewHolder;
-import com.runtoinfo.youxiao.common_ui.adapter.UniversalRecyclerAdapter;
+import com.runtoinfo.youxiao.globalTools.adapter.BaseViewHolder;
+import com.runtoinfo.youxiao.globalTools.adapter.UniversalRecyclerAdapter;
 
 import java.util.ArrayList;
 import java.util.List;

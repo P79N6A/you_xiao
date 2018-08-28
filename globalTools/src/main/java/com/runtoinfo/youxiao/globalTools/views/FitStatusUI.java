@@ -1,4 +1,4 @@
-package com.runtoinfo.youxiao.common_ui.views;
+package com.runtoinfo.youxiao.globalTools.views;
 
 import android.app.Activity;
 import android.graphics.Color;

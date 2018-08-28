@@ -10,7 +10,7 @@ import android.widget.LinearLayout;
 import com.alibaba.sdk.android.man.MANService;
 import com.alibaba.sdk.android.man.MANServiceProvider;
 import com.gyf.barlibrary.ImmersionBar;
-import com.runtoinfo.youxiao.common_ui.utils.SPUtils;
+import com.runtoinfo.youxiao.globalTools.utils.SPUtils;
 
 import java.lang.reflect.Field;
 

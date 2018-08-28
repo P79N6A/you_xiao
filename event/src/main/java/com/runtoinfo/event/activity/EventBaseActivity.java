@@ -2,13 +2,9 @@ package com.runtoinfo.event.activity;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
-import android.content.Context;
-import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.os.PersistableBundle;
-import android.support.annotation.Nullable;
 
-import com.runtoinfo.youxiao.common_ui.utils.SPUtils;
+import com.runtoinfo.youxiao.globalTools.utils.SPUtils;
 
 /**
  * Created by QiaoJunChao on 2018/8/21.

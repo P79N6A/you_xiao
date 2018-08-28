@@ -2,7 +2,6 @@ package com.runtoinfo.youxiao.fragment;
 
 import android.annotation.SuppressLint;
 import android.databinding.DataBindingUtil;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
@@ -20,12 +19,10 @@ import com.runtoinfo.teacher.HttpEntity;
 import com.runtoinfo.teacher.utils.HttpUtils;
 import com.runtoinfo.youxiao.R;
 import com.runtoinfo.youxiao.adapter.BoutiqueCourseChildPagerAdapter;
-import com.runtoinfo.youxiao.adapter.BoutiqueCourseViewPagerAdapter;
-import com.runtoinfo.youxiao.common_ui.utils.Entity;
+import com.runtoinfo.youxiao.globalTools.utils.Entity;
 import com.runtoinfo.youxiao.databinding.FragmentBoutiqueCourseMusicBinding;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;

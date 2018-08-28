@@ -1,4 +1,4 @@
-package com.runtoinfo.youxiao.common_ui;
+package com.runtoinfo.youxiao.globalTools;
 
 import android.content.Context;
 import android.support.test.InstrumentationRegistry;

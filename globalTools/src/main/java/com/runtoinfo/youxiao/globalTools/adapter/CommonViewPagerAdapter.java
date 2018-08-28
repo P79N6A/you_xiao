@@ -1,4 +1,4 @@
-package com.runtoinfo.youxiao.common_ui.adapter;
+package com.runtoinfo.youxiao.globalTools.adapter;
 
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;

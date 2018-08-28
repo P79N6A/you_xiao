@@ -1,4 +1,4 @@
-package com.runtoinfo.youxiao.common_ui.timepicker;
+package com.runtoinfo.youxiao.globalTools.timepicker;
 
 import android.animation.ObjectAnimator;
 import android.animation.PropertyValuesHolder;
@@ -12,7 +12,7 @@ import android.view.WindowManager;
 import android.widget.TextView;
 
 
-import com.runtoinfo.youxiao.common_ui.R;
+import com.runtoinfo.youxiao.globalTools.R;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;

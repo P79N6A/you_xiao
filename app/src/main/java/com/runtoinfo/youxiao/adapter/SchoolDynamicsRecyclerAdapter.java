@@ -1,7 +1,6 @@
 package com.runtoinfo.youxiao.adapter;
 
 import android.app.Activity;
-import android.content.Context;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v7.widget.RecyclerView;
@@ -13,8 +12,6 @@ import android.widget.TextView;
 
 import com.runtoinfo.teacher.utils.HttpUtils;
 import com.runtoinfo.youxiao.R;
-import com.runtoinfo.youxiao.common_ui.adapter.BaseViewHolder;
-import com.runtoinfo.youxiao.common_ui.adapter.UniversalRecyclerAdapter;
 import com.runtoinfo.youxiao.entity.SchoolDynamicsEntity;
 
 import java.util.ArrayList;

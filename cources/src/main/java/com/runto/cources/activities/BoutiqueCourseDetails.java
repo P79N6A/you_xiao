@@ -1,33 +1,24 @@
 package com.runto.cources.activities;
 
 import android.annotation.SuppressLint;
-import android.app.Activity;
 import android.databinding.DataBindingUtil;
 import android.hardware.Sensor;
 import android.hardware.SensorManager;
-import android.location.Location;
-import android.media.MediaPlayer;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
-import android.support.v4.app.FragmentManager;
-import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.AdapterView;
 
 import com.alibaba.android.arouter.facade.annotation.Route;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.runto.cources.R;
 import com.runto.cources.databinding.ActivityBoutiqueCourseDetailsBinding;
-import com.runto.cources.databinding.FragmentCourseListBinding;
 import com.runto.cources.fragment.CourseIntroductionFragment;
 import com.runto.cources.fragment.CourseListFragment;
 import com.runtoinfo.teacher.bean.CourseDataEntity;
 import com.runtoinfo.teacher.utils.HttpUtils;
-import com.runtoinfo.youxiao.common_ui.adapter.CommonViewPagerAdapter;
+import com.runtoinfo.youxiao.globalTools.adapter.CommonViewPagerAdapter;
 
 import java.util.ArrayList;
 import java.util.Arrays;

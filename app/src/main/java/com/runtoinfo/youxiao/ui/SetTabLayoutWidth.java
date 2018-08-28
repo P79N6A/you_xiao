@@ -9,7 +9,7 @@ import android.widget.TextView;
 
 import java.lang.reflect.Field;
 
-import static com.runtoinfo.youxiao.common_ui.utils.DensityUtil.dip2px;
+import static com.runtoinfo.youxiao.globalTools.utils.DensityUtil.dip2px;
 
 /**
  * Created by QiaoJunChao on 2018/8/17.

@@ -32,8 +32,9 @@ import com.runtoinfo.teacher.bean.HomeCourseEntity;
 import com.runtoinfo.teacher.utils.HttpUtils;
 import com.runtoinfo.youxiao.R;
 import com.runtoinfo.youxiao.adapter.CoursePunchAdapter;
-import com.runtoinfo.youxiao.common_ui.utils.DialogMessage;
-import com.runtoinfo.youxiao.common_ui.utils.Entity;
+import com.runtoinfo.youxiao.globalTools.adapter.UniversalRecyclerAdapter;
+import com.runtoinfo.youxiao.globalTools.utils.DialogMessage;
+import com.runtoinfo.youxiao.globalTools.utils.Entity;
 import com.runtoinfo.youxiao.databinding.FragmentHomeBinding;
 import com.runtoinfo.youxiao.entity.SelectSchoolEntity;
 import com.runtoinfo.youxiao.ui.FloatDragView;
@@ -86,8 +87,8 @@ public class HomeFragment extends BaseFragment implements MyScrollView.ScrollVie
                      */
                     for(int i = 0; i < getCourseList.size(); i++){
                         HomeCourseEntity entity = getCourseList.get(i);
-                        spUtils.setInt(com.runtoinfo.youxiao.common_ui.utils.Entity.COURSE_ID, entity.getCourseId());
-                        spUtils.setInt(com.runtoinfo.youxiao.common_ui.utils.Entity.COURSE_INST_ID,entity.getCourseInstId());
+                        spUtils.setInt(com.runtoinfo.youxiao.globalTools.utils.Entity.COURSE_ID, entity.getCourseId());
+                        spUtils.setInt(com.runtoinfo.youxiao.globalTools.utils.Entity.COURSE_INST_ID,entity.getCourseInstId());
                     }
                     break;
                 case 404:
@@ -130,14 +131,12 @@ public class HomeFragment extends BaseFragment implements MyScrollView.ScrollVie
 
         binding.homeRecyclerView.setNestedScrollingEnabled(false);
 
-        binding.homeRecyclerView.setRecyclerListener(new RecyclerView.RecyclerListener() {
+        coursePunchAdapter.setOnItemClickListener(new UniversalRecyclerAdapter.OnItemClickListener() {
             @Override
-            public void onViewRecycled(RecyclerView.ViewHolder holder) {
-                //ARouter.getInstance().build("/cources/colorfulActivity").navigation();
-
+            public void onItemClick(View view, int position) {
+                ARouter.getInstance().build("/cources/colorfulActivity").navigation();
             }
         });
-        coursePunchAdapter.setOnClickListener(listener);
     }
 
     /**
@@ -146,7 +145,7 @@ public class HomeFragment extends BaseFragment implements MyScrollView.ScrollVie
     public void initCourseDataList(){
         Map<String, Object> map = new HashMap<>();
         map.put("url", HttpEntity.MAIN_URL + HttpEntity.GET_HOME_COURSE_DATA);
-        map.put("token", spUtils.getString(com.runtoinfo.youxiao.common_ui.utils.Entity.TOKEN));
+        map.put("token", spUtils.getString(com.runtoinfo.youxiao.globalTools.utils.Entity.TOKEN));
         HttpUtils.getCourseDataList(handler, map, getCourseList);
     }
 

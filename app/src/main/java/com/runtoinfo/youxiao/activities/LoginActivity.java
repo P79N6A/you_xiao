@@ -23,8 +23,8 @@ import com.runtoinfo.teacher.bean.HttpLoginHead;
 import com.runtoinfo.teacher.utils.HttpUtils;
 import com.runtoinfo.youxiao.R;
 import com.runtoinfo.youxiao.adapter.ListViewAdapter;
-import com.runtoinfo.youxiao.common_ui.utils.DialogMessage;
-import com.runtoinfo.youxiao.common_ui.utils.Entity;
+import com.runtoinfo.youxiao.globalTools.utils.DialogMessage;
+import com.runtoinfo.youxiao.globalTools.utils.Entity;
 import com.runtoinfo.youxiao.databinding.ActivityLoginBinding;
 import com.runtoinfo.youxiao.entity.SelectSchoolEntity;
 
@@ -109,7 +109,7 @@ public class LoginActivity extends BaseActivity {
                 {
                     HttpUtils.getAsy(mHandler, dataMap, HttpEntity.MAIN_URL + HttpEntity.GET_ORGANIZATION_INFO, text);
                     loginHead.setUserName(text);
-                    spUtils.setString(com.runtoinfo.youxiao.common_ui.utils.Entity.PHONE_NUMBER, text);
+                    spUtils.setString(com.runtoinfo.youxiao.globalTools.utils.Entity.PHONE_NUMBER, text);
                     binding.loginGetVerification.setBackgroundResource(R.drawable.background_verification_selected);
                     binding.loginGetVerification.setEnabled(true);
                 }
@@ -271,8 +271,8 @@ public class LoginActivity extends BaseActivity {
 
     public void setUserName(){
         //
-        if (!TextUtils.isEmpty(spUtils.getString(com.runtoinfo.youxiao.common_ui.utils.Entity.PHONE_NUMBER))){
-            String phone = spUtils.getString(com.runtoinfo.youxiao.common_ui.utils.Entity.PHONE_NUMBER);
+        if (!TextUtils.isEmpty(spUtils.getString(com.runtoinfo.youxiao.globalTools.utils.Entity.PHONE_NUMBER))){
+            String phone = spUtils.getString(com.runtoinfo.youxiao.globalTools.utils.Entity.PHONE_NUMBER);
             binding.loginMobilePhone.setText(phone);
             if (phone.length() == 11){
                 HttpUtils.getAsy(mHandler, dataMap, HttpEntity.MAIN_URL + HttpEntity.GET_ORGANIZATION_INFO, phone);

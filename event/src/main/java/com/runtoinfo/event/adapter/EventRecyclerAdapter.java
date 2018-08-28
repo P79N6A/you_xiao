@@ -7,8 +7,8 @@ import android.widget.ImageView;
 import com.runtoinfo.event.R;
 import com.runtoinfo.event.entity.EventEntity;
 import com.runtoinfo.teacher.utils.HttpUtils;
-import com.runtoinfo.youxiao.common_ui.adapter.BaseViewHolder;
-import com.runtoinfo.youxiao.common_ui.adapter.UniversalRecyclerAdapter;
+import com.runtoinfo.youxiao.globalTools.adapter.BaseViewHolder;
+import com.runtoinfo.youxiao.globalTools.adapter.UniversalRecyclerAdapter;
 
 import java.util.List;
 

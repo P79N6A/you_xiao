@@ -1,9 +1,6 @@
 package com.runtoinfo.youxiao.fragment;
 
-import android.app.Activity;
-import android.content.Context;
 import android.os.Bundle;
-import android.support.annotation.IdRes;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -12,8 +9,7 @@ import android.view.ViewGroup;
 
 import com.alibaba.sdk.android.man.MANService;
 import com.alibaba.sdk.android.man.MANServiceProvider;
-import com.gyf.barlibrary.ImmersionBar;
-import com.runtoinfo.youxiao.common_ui.utils.SPUtils;
+import com.runtoinfo.youxiao.globalTools.utils.SPUtils;
 import com.runtoinfo.youxiao.entity.CourseTypeEntity;
 
 /**

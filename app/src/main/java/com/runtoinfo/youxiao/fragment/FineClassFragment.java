@@ -15,17 +15,14 @@ import com.runtoinfo.teacher.HttpEntity;
 import com.runtoinfo.teacher.utils.HttpUtils;
 import com.runtoinfo.youxiao.R;
 import com.runtoinfo.youxiao.adapter.BoutiqueCourseViewPagerAdapter;
-import com.runtoinfo.youxiao.common_ui.utils.DialogMessage;
-import com.runtoinfo.youxiao.common_ui.utils.Entity;
+import com.runtoinfo.youxiao.globalTools.utils.DialogMessage;
+import com.runtoinfo.youxiao.globalTools.utils.Entity;
 import com.runtoinfo.youxiao.databinding.FragmentFineClassBinding;
 import com.runtoinfo.youxiao.ui.SetTabLayoutWidth;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
-
-import myapplication.MyApplication;
 
 /**
  * Created by Administrator on 2018/5/24 0024.
@@ -71,7 +68,6 @@ public class FineClassFragment extends BaseFragment {
         public void handleMessage(Message msg) {
             switch (msg.what){
                 case 0:
-
                     titles.add("全部");
                     fragments.add(new MusicFragment(-1));
                     if (dataList.size() > 0){

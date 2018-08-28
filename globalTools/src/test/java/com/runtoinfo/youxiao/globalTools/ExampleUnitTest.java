@@ -1,4 +1,4 @@
-package com.runtoinfo.youxiao.common_ui;
+package com.runtoinfo.youxiao.globalTools;
 
 import org.junit.Test;
 

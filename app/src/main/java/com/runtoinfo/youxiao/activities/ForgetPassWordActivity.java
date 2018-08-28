@@ -20,7 +20,7 @@ import com.runtoinfo.teacher.HttpEntity;
 import com.runtoinfo.teacher.bean.HttpLoginHead;
 import com.runtoinfo.teacher.utils.HttpUtils;
 import com.runtoinfo.youxiao.R;
-import com.runtoinfo.youxiao.common_ui.utils.Entity;
+import com.runtoinfo.youxiao.globalTools.utils.Entity;
 import com.runtoinfo.youxiao.databinding.LoginResetPasswordBinding;
 import com.runtoinfo.youxiao.utils.Utils;
 
@@ -28,8 +28,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
-
-import okhttp3.Response;
 
 @Route(path = "/main/resetPassword")
 public class ForgetPassWordActivity extends BaseActivity {

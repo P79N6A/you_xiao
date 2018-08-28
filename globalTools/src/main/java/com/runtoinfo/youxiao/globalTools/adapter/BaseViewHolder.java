@@ -1,7 +1,6 @@
-package com.runtoinfo.youxiao.common_ui.adapter;
+package com.runtoinfo.youxiao.globalTools.adapter;
 
 import android.annotation.SuppressLint;
-import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
 import android.os.Build;

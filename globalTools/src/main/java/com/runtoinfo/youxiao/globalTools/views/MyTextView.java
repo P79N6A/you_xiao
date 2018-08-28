@@ -1,4 +1,4 @@
-package com.runtoinfo.youxiao.common_ui.views;
+package com.runtoinfo.youxiao.globalTools.views;
 
 import android.annotation.SuppressLint;
 import android.content.Context;

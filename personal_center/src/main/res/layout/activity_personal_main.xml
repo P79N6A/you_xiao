@@ -51,7 +51,7 @@
                     style="@style/TextView_PersonlInformation"
                     android:text="头像" />
 
-                <com.runtoinfo.youxiao.common_ui.views.CircleImageView
+                <com.runtoinfo.youxiao.globalTools.views.CircleImageView
                     android:id="@+id/personal_edit_tx"
                     android:layout_width="60dp"
                     android:layout_height="60dp"

@@ -1,42 +1,35 @@
 package com.runto.cources.activities;
 
-import android.app.Activity;
 import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
-import android.net.Uri;
-import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
 import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
-import android.widget.AdapterView;
 
 import com.alibaba.android.arouter.facade.annotation.Route;
 import com.dmcbig.mediapicker.PickerActivity;
 import com.dmcbig.mediapicker.PickerConfig;
 import com.dmcbig.mediapicker.TakePhotoActivity;
 import com.dmcbig.mediapicker.entity.Media;
-import com.donkingliang.imageselector.utils.ImageSelector;
 import com.runto.cources.R;
 import com.runto.cources.adapter.GridViewAdapter;
 import com.runto.cources.adapter.ImageAdapter;
 import com.runto.cources.databinding.CourseHandHomeworkBinding;
 import com.runtoinfo.teacher.HttpEntity;
 import com.runtoinfo.teacher.utils.HttpUtils;
-import com.runtoinfo.youxiao.common_ui.adapter.BaseViewHolder;
-import com.runtoinfo.youxiao.common_ui.adapter.UniversalRecyclerAdapter;
-import com.runtoinfo.youxiao.common_ui.utils.DialogMessage;
-import com.runtoinfo.youxiao.common_ui.utils.Entity;
+import com.runtoinfo.youxiao.globalTools.adapter.UniversalRecyclerAdapter;
+import com.runtoinfo.youxiao.globalTools.utils.DialogMessage;
+import com.runtoinfo.youxiao.globalTools.utils.Entity;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -54,11 +47,11 @@ public class CourseHandHomeWork extends BaseActivity {
     public List<Media> dataList = new ArrayList<>();
     public ArrayList<Media> select = new ArrayList<>();
     public List<String> filePathList = new ArrayList<>();
-    public ProgressDialog progressDialog;
+    public Dialog progressDialog;
 
     public void initView(){
         binding = DataBindingUtil.setContentView(this, R.layout.course_hand_homework);
-        progressDialog = new ProgressDialog(this);
+        progressDialog = new Dialog(this, R.style.dialog);
         initDialog();
     }
 
@@ -67,7 +60,8 @@ public class CourseHandHomeWork extends BaseActivity {
         public void handleMessage(Message msg) {
             switch (msg.what){
                 case 0:
-                    if (progressDialog != null) progressDialog.dismiss();
+                    //if (progressDialog != null) progressDialog.dismiss();
+                    DialogMessage.showLoading(CourseHandHomeWork.this, progressDialog, false);
                     postHomeWork();
                     break;
                 case 404:
@@ -143,7 +137,8 @@ public class CourseHandHomeWork extends BaseActivity {
                 Map<String, Object> dataMap = new HashMap<>();
                 dataMap.put("url", HttpEntity.MAIN_URL + HttpEntity.POST_ALI_SERVER);
                 dataMap.put("token",spUtils.getString(Entity.TOKEN));
-                DialogMessage.createDialog(CourseHandHomeWork.this, progressDialog, "正在上传，请稍后...");
+                //DialogMessage.createDialog(CourseHandHomeWork.this, progressDialog, "正在上传，请稍后...");
+                DialogMessage.showLoading(CourseHandHomeWork.this, progressDialog, true);
                 HttpUtils.postVideoPhoto(handler, dataMap, mAdapter.dataList, filePathList);
             }
         });

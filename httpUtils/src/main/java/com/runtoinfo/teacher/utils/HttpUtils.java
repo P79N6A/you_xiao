@@ -812,7 +812,7 @@ public class HttpUtils {
                             if (response.isSuccessful()){
                                 try {
                                     JSONObject json = new JSONObject(response.body().string());
-                                    if (!TextUtils.isEmpty(json.getString("error"))){
+                                    if (TextUtils.isEmpty(json.getString("error"))){
                                         handler.sendEmptyMessage(404);
                                         return;
                                     }
@@ -958,7 +958,7 @@ public class HttpUtils {
     public static JSONArray getItems(String body, Handler handler) throws JSONException{
         JSONObject json = new JSONObject(body);
         JSONObject result = json.getJSONObject("result");
-        if (!TextUtils.isEmpty(result.getString("error"))) {handler.sendEmptyMessage(404); return null;}
+        if (TextUtils.isEmpty(json.getString("error"))) {handler.sendEmptyMessage(404); return null;}
         JSONArray items = result.getJSONArray("items");
         return items;
     }

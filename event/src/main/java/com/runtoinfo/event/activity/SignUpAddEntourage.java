@@ -1,19 +1,14 @@
 package com.runtoinfo.event.activity;
 
 import android.annotation.SuppressLint;
-import android.app.Activity;
 import android.app.ProgressDialog;
-import android.content.Context;
 import android.databinding.DataBindingUtil;
-import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v7.widget.LinearLayoutManager;
-import android.text.Layout;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.EditText;
 import android.widget.Toast;
 
 import com.alibaba.android.arouter.facade.annotation.Route;
@@ -22,16 +17,12 @@ import com.google.gson.reflect.TypeToken;
 import com.runtoinfo.event.R;
 import com.runtoinfo.event.adapter.EventAddMemberAdapter;
 import com.runtoinfo.event.databinding.ActivityAddEntourageBinding;
-import com.runtoinfo.event.databinding.ActivityAddItemLayoutBinding;
 import com.runtoinfo.event.dialog.SignUpSuccess;
-import com.runtoinfo.event.entity.AddMemberEntity;
 import com.runtoinfo.teacher.HttpEntity;
 import com.runtoinfo.teacher.bean.AddMemberBean;
 import com.runtoinfo.teacher.utils.HttpUtils;
-import com.runtoinfo.youxiao.common_ui.utils.DialogMessage;
-import com.runtoinfo.youxiao.common_ui.utils.Entity;
-
-import org.w3c.dom.Text;
+import com.runtoinfo.youxiao.globalTools.utils.DialogMessage;
+import com.runtoinfo.youxiao.globalTools.utils.Entity;
 
 import java.util.ArrayList;
 import java.util.List;

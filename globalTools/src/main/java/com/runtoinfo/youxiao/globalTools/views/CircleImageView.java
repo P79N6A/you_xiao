@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.runtoinfo.youxiao.common_ui.views;
+package com.runtoinfo.youxiao.globalTools.views;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
@@ -44,7 +44,7 @@ import android.view.View;
 import android.view.ViewOutlineProvider;
 import android.widget.ImageView;
 
-import com.runtoinfo.youxiao.common_ui.R;
+import com.runtoinfo.youxiao.globalTools.R;
 
 
 @SuppressLint("AppCompatCustomView")

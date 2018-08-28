@@ -5,26 +5,18 @@ import android.content.Context;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
-import android.support.v7.widget.RecyclerView;
-import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.alibaba.android.arouter.launcher.ARouter;
 import com.runtoinfo.teacher.HttpEntity;
 import com.runtoinfo.teacher.bean.HomeCourseEntity;
 import com.runtoinfo.teacher.utils.HttpUtils;
 import com.runtoinfo.youxiao.R;
-import com.runtoinfo.youxiao.common_ui.adapter.BaseViewHolder;
-import com.runtoinfo.youxiao.common_ui.adapter.UniversalRecyclerAdapter;
-import com.runtoinfo.youxiao.common_ui.utils.DialogMessage;
-import com.runtoinfo.youxiao.common_ui.utils.SPUtils;
-import com.runtoinfo.youxiao.entity.CourseEntity;
+import com.runtoinfo.youxiao.globalTools.adapter.BaseViewHolder;
+import com.runtoinfo.youxiao.globalTools.adapter.UniversalRecyclerAdapter;
+import com.runtoinfo.youxiao.globalTools.utils.DialogMessage;
 
 import java.util.HashMap;
 import java.util.List;
@@ -53,7 +45,7 @@ public class CoursePunchAdapter extends UniversalRecyclerAdapter<HomeCourseEntit
     @Override
     protected void convert(Context mContext, final BaseViewHolder holder, final HomeCourseEntity homeCourseEntity, int position) {
         holder.setText(R.id.home_course_name, homeCourseEntity.getCourseName());
-        holder.setText(R.id.home_course_time, homeCourseEntity.getBeginTime());
+        holder.setText(R.id.home_course_time, homeCourseEntity.getBeginTime().split("T")[0]);
         HttpUtils.postPhoto(context, homeCourseEntity.getCoverPhoto(),(ImageView) holder.getView(R.id.home_img_course));
         holder.getView(R.id.home_details).setOnClickListener(new View.OnClickListener() {
             @Override
@@ -92,7 +84,7 @@ public class CoursePunchAdapter extends UniversalRecyclerAdapter<HomeCourseEntit
         @Override
         public void handleMessage(Message msg) {
             switch (msg.what){
-                case 0:
+                case 1:
                     tSignIn.setText("已签");
                     tSignIn.setBackgroundResource(R.drawable.home_sign_finish);
                     tSignIn.setEnabled(false);

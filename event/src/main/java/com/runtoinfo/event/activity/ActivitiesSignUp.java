@@ -17,7 +17,7 @@ import com.runtoinfo.event.dialog.SignUpSuccess;
 import com.runtoinfo.teacher.HttpEntity;
 import com.runtoinfo.teacher.bean.AddMemberBean;
 import com.runtoinfo.teacher.utils.HttpUtils;
-import com.runtoinfo.youxiao.common_ui.utils.Entity;
+import com.runtoinfo.youxiao.globalTools.utils.Entity;
 
 public class ActivitiesSignUp extends EventBaseActivity {
 
@@ -46,7 +46,7 @@ public class ActivitiesSignUp extends EventBaseActivity {
                     addMember.setAge(binding.activityMemberAge.getText().toString());
                     addMember.setName(binding.eventStudentName.getText().toString());
                     addMember.setPhoneNumber(binding.memberPhoneNumber.getText().toString());
-                    addMember.setUserId(spUtils.getString(com.runtoinfo.youxiao.common_ui.utils.Entity.USER_ID));
+                    addMember.setUserId(spUtils.getString(com.runtoinfo.youxiao.globalTools.utils.Entity.USER_ID));
                     addMember.setGender(gender);
                     HttpUtils.postAddMember(mHandler, HttpEntity.MAIN_URL + HttpEntity.CAMPAIGN_ADD_MEMBER, addMember, spUtils.getString(Entity.TOKEN));
                 }else{

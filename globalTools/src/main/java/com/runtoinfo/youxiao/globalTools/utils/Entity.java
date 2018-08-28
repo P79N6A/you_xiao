@@ -1,4 +1,4 @@
-package com.runtoinfo.youxiao.common_ui.utils;
+package com.runtoinfo.youxiao.globalTools.utils;
 
 /**
  * Created by QiaoJunChao on 2018/8/23.
