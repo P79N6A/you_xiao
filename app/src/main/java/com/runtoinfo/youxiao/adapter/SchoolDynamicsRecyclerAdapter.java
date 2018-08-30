@@ -17,6 +17,9 @@ import com.runtoinfo.youxiao.entity.SchoolDynamicsEntity;
 import java.util.ArrayList;
 import java.util.List;
 
+import cn.jzvd.JZVideoPlayer;
+import cn.jzvd.JZVideoPlayerStandard;
+
 /**
  * Created by QiaoJunChao on 2018/8/15.
  */
@@ -101,7 +104,8 @@ public class SchoolDynamicsRecyclerAdapter extends RecyclerView.Adapter {
         if (type == ONE_PIC_TYPE){
             ViewHolder viewHolder =(ViewHolder) holder;
             viewHolder.oneTitle.setText(schoolDynamicsEntity.getTile());
-            HttpUtils.postAsynchronous(context, schoolDynamicsEntity.getImagList().get(0), viewHolder.one_img);
+            viewHolder.video.setUp(schoolDynamicsEntity.getVideoPath(), JZVideoPlayer.SCREEN_WINDOW_NORMAL,"");
+            HttpUtils.postAsynchronous(context, schoolDynamicsEntity.getImagList().get(0), viewHolder.video.thumbImageView);
             viewHolder.onReader.setText(schoolDynamicsEntity.getReadNumber());
         }else if (type == SECOND_PIC_TYPE){
             SecondViewHolder secondViewHolder = (SecondViewHolder) holder;
@@ -140,14 +144,15 @@ public class SchoolDynamicsRecyclerAdapter extends RecyclerView.Adapter {
         ImageView one_img;
         TextView oneTitle, onReader;
         OnItemClickListener oneListener;
+        JZVideoPlayerStandard video;
 
         public ViewHolder(View itemView, OnItemClickListener listener) {
             super(itemView);
             this.oneListener = listener;
-            one_img = itemView.findViewById(R.id.school_one_image);
+            //one_img = itemView.findViewById(R.id.school_one_image);
             oneTitle = itemView.findViewById(R.id.school_one_title);
             onReader = itemView.findViewById(R.id.school_one_reader);
-
+            video = itemView.findViewById(R.id.school_dynamics_video);
             itemView.setOnClickListener(this);
         }
 

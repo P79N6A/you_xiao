@@ -64,10 +64,8 @@ public class BoutiqueCourseDetails extends FragmentActivity {
         String[] title = new String[]{"介绍","目录"};
         titles.addAll(Arrays.asList(title));
 
-        CourseIntroductionFragment introductionFragment = new CourseIntroductionFragment(courseDataEntity.getIntroduction());
-        CourseListFragment listFragment = new CourseListFragment(courseDataEntity.getCourseContents());
-        fragmentList.add(introductionFragment);
-        fragmentList.add(listFragment);
+        fragmentList.add(new CourseIntroductionFragment(courseDataEntity.getIntroduction()));
+        fragmentList.add(new CourseListFragment(courseDataEntity.getCourseContents()));
 
         viewPagerAdapter = new CommonViewPagerAdapter(getSupportFragmentManager(), fragmentList, titles);
         binding.boutiqueCourseIntroductionVpager.setAdapter(viewPagerAdapter);

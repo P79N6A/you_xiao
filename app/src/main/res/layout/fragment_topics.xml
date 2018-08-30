@@ -94,96 +94,12 @@
                 android:src="@drawable/topics_img_banner"
                 android:visibility="gone"/>
 
-            <LinearLayout
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/topics_recyclerview"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="20dp"
-                android:orientation="horizontal">
-
-                <LinearLayout
-                    android:id="@+id/home_img_linear"
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="3"
-                    android:orientation="vertical">
-
-                    <ImageView
-                        android:id="@+id/topics_img_view"
-                        android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
-                        android:background="@drawable/topics_img_1" />
-
-                </LinearLayout>
-
-
-                <LinearLayout
-                    android:layout_width="0dp"
-                    android:layout_height="98dp"
-                    android:layout_marginStart="10dp"
-                    android:layout_weight="5"
-                    android:orientation="vertical">
-
-                    <TextView
-                        android:id="@+id/topics_name"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="周末带孩子培养兴趣爱好是限制了他的自由吗"
-                        android:textColor="#333333"
-                        android:textSize="15sp" />
-
-                    <TextView
-                        android:id="@+id/topics_announcer"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="2dp"
-                        android:layout_marginTop="5dp"
-                        android:gravity="center"
-                        android:text="发布者：XXX"
-                        android:textColor="#999999"
-                        android:textSize="13sp" />
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_gravity="bottom"
-                        android:gravity="bottom"
-                        android:orientation="horizontal">
-
-                        <TextView
-                            android:id="@+id/topics_comment"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:drawableLeft="@drawable/topics_img_comment"
-                            android:drawablePadding="2dp"
-                            android:text="50"
-                            android:textColor="#999999"
-                            android:textSize="15sp" />
-
-                        <TextView
-                            android:id="@+id/topics_praise"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:drawableLeft="@drawable/topics_praise"
-                            android:drawablePadding="2dp"
-                            android:text="50"
-                            android:textColor="#999999"
-                            android:textSize="15sp" />
-
-                        <TextView
-                            android:id="@+id/topics_readed"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:drawableLeft="@drawable/topics_img_reade"
-                            android:drawablePadding="2dp"
-                            android:text="1000+"
-                            android:textColor="#999999"
-                            android:textSize="15sp" />
-                    </LinearLayout>
-                </LinearLayout>
-            </LinearLayout>
+                android:layout_height="match_parent"
+                android:layout_marginTop="20dp">
+            </android.support.v7.widget.RecyclerView>
         </LinearLayout>
     </ScrollView>
 </LinearLayout>

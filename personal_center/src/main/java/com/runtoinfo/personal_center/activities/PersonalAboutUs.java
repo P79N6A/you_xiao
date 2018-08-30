@@ -10,12 +10,16 @@ import com.runtoinfo.personal_center.R;
 import com.runtoinfo.personal_center.databinding.ActivityPersonalAboutUsBinding;
 
 @Route(path = "/personal/aboutUs")
-public class PersonalAboutUs extends Activity {
+public class PersonalAboutUs extends BaseActivity {
 
     ActivityPersonalAboutUsBinding binding;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+    }
+
+    @Override
+    protected void initView() {
         binding = DataBindingUtil.setContentView(this, R.layout.activity_personal_about_us);
 
         binding.activityImgBack.setOnClickListener(new View.OnClickListener() {

@@ -9,9 +9,10 @@ import com.alibaba.android.arouter.facade.annotation.Route;
 import com.alibaba.android.arouter.launcher.ARouter;
 import com.runtoinfo.personal_center.R;
 import com.runtoinfo.personal_center.databinding.ActivityPersonalSettingsBinding;
+import com.runtoinfo.youxiao.globalTools.utils.Entity;
 
 @Route(path = "/personal/personalSettings")
-public class PersonalSettings extends Activity {
+public class PersonalSettings extends BaseActivity {
 
     public ActivityPersonalSettingsBinding binding;
     @Override
@@ -32,6 +33,14 @@ public class PersonalSettings extends Activity {
             @Override
             public void onClick(View v) {
                 onBackPressed();
+            }
+        });
+        binding.exitNowSystem.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v) {
+                spUtils.setString(Entity.TOKEN, "");
+                ARouter.getInstance().build("/main/LoginActivity").navigation();
+                PersonalSettings.this.finish();
             }
         });
     }

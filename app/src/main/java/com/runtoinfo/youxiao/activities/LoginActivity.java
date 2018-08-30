@@ -1,6 +1,7 @@
 package com.runtoinfo.youxiao.activities;
 
 import android.annotation.SuppressLint;
+import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
@@ -16,6 +17,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Toast;
 
+import com.alibaba.android.arouter.facade.annotation.Route;
 import com.alibaba.android.arouter.launcher.ARouter;
 import com.google.gson.Gson;
 import com.runtoinfo.teacher.HttpEntity;
@@ -27,6 +29,7 @@ import com.runtoinfo.youxiao.globalTools.utils.DialogMessage;
 import com.runtoinfo.youxiao.globalTools.utils.Entity;
 import com.runtoinfo.youxiao.databinding.ActivityLoginBinding;
 import com.runtoinfo.youxiao.entity.SelectSchoolEntity;
+import com.runtoinfo.youxiao.utils.IntentDataType;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -41,7 +44,7 @@ import java.util.TimerTask;
 
 import okhttp3.Response;
 
-
+@Route(path = "/main/LoginActivity")
 public class LoginActivity extends BaseActivity {
 
     public ActivityLoginBinding binding;
@@ -50,6 +53,7 @@ public class LoginActivity extends BaseActivity {
     public Map<String, List> dataMap = new HashMap<>();
     public HttpLoginHead loginHead;
     public ProgressDialog progressDialog = null;
+    public Dialog dialog;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -60,6 +64,7 @@ public class LoginActivity extends BaseActivity {
         //FitStatusUI.setImmersionStateMode(this);
         binding = DataBindingUtil.setContentView(LoginActivity.this, R.layout.activity_login);
         progressDialog = new ProgressDialog(LoginActivity.this);
+        dialog = new Dialog(this, R.style.dialog);
         loginHead = new HttpLoginHead();
         initEvent();
     }
@@ -317,6 +322,7 @@ public class LoginActivity extends BaseActivity {
         }
         mAdapter = new ListViewAdapter(this, schoolList);
         binding.loginSelectLv.setAdapter(mAdapter);
+        mHandler.sendEmptyMessage(6);
     }
 
     /**
@@ -381,7 +387,7 @@ public class LoginActivity extends BaseActivity {
                     if (response != null && response.code() == 200){
                         getToken(response);
                         String json = new Gson().toJson(schoolList);
-                        ARouter.getInstance().build(Entity.MAIN_ACTIVITY_PATH).navigation();
+                        ARouter.getInstance().build(Entity.MAIN_ACTIVITY_PATH).withString(IntentDataType.DATA, json).navigation();
                     }
                     break;
                 case 4:
@@ -390,8 +396,14 @@ public class LoginActivity extends BaseActivity {
                     break;
                 case 5:
                     initSelectSchoolData();
-
                     if(progressDialog != null) progressDialog.dismiss();
+                    break;
+                case 6:
+                    if (dialog != null)
+                    DialogMessage.showLoading(LoginActivity.this, dialog, false);
+                    String json = new Gson().toJson(schoolList);
+                    if (!TextUtils.isEmpty(spUtils.getString(Entity.TOKEN)))
+                    ARouter.getInstance().build(Entity.MAIN_ACTIVITY_PATH).withString(IntentDataType.DATA, json).navigation();
                     break;
 
             }
@@ -430,7 +442,7 @@ public class LoginActivity extends BaseActivity {
         super.onStart();
         String isLoged = spUtils.getString(Entity.TOKEN);
         if (!TextUtils.isEmpty(isLoged)){
-            ARouter.getInstance().build(Entity.MAIN_ACTIVITY_PATH).navigation();
+            DialogMessage.showLoading(this, dialog, true);
         }
     }
 }

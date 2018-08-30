@@ -1,26 +1,25 @@
 package com.runtoinfo.teacher.utils;
 
 import android.app.Activity;
-import android.content.IntentFilter;
 import android.graphics.drawable.Drawable;
 import android.os.Handler;
 import android.os.Message;
-import android.provider.CalendarContract;
-import android.provider.MediaStore;
-import android.support.v4.content.MimeTypeFilter;
 import android.text.TextUtils;
 import android.util.Log;
 import android.widget.ImageView;
 
 import com.dmcbig.mediapicker.entity.Media;
 import com.google.gson.Gson;
-import com.runtoinfo.teacher.HttpEntity;
+import com.google.gson.reflect.TypeToken;
 import com.runtoinfo.teacher.bean.AddMemberBean;
 import com.runtoinfo.teacher.bean.ChildContent;
 import com.runtoinfo.teacher.bean.CourseDataEntity;
 import com.runtoinfo.teacher.bean.HandWorkEntity;
 import com.runtoinfo.teacher.bean.HomeCourseEntity;
 import com.runtoinfo.teacher.bean.HttpLoginHead;
+import com.runtoinfo.teacher.bean.LeaveEntity;
+import com.runtoinfo.teacher.bean.RequestDataEntity;
+import com.runtoinfo.teacher.bean.TopiceHttpResultEntity;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -29,6 +28,7 @@ import org.json.JSONObject;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -56,6 +56,8 @@ public class HttpUtils {
     public static final MediaType JSON = MediaType.parse("application/json; charset=utf-8");
     private static final MediaType PICTURE = MediaType.parse("text/x-markdown; charset=utf-8");
     public static final OkHttpClient client = new OkHttpClient();
+    private static final String Authorization = "Authorization";
+    private static final String Bearer = "Bearer ";
 
     /**
      * POST 异步加载网络图片
@@ -691,7 +693,6 @@ public class HttpUtils {
                         if (response.isSuccessful()){
                             try {
                                 JSONArray items = getItems(response.body().string(), handler);
-                                List<Map<String, Object>> dataList = new ArrayList<>();
                                 for (int i = 0; i < items.length(); i++){
                                     JSONObject childItem = items.getJSONObject(i);
                                     CourseDataEntity courseDataEntity = new CourseDataEntity();
@@ -930,6 +931,106 @@ public class HttpUtils {
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
+            }
+        });
+    }
+
+    /**
+     * 提交请假
+     * @param handler
+     * @param dataEntity 请求所需要的参数
+     */
+    public static void postLeave(final Handler handler, final RequestDataEntity dataEntity){
+        executorService.execute(new Runnable() {
+            @Override
+            public void run() {
+                LeaveEntity leaveEntity = new LeaveEntity();
+                leaveEntity.setUserId(dataEntity.getUserId());
+                leaveEntity.setScheduledCourseId(dataEntity.getCourseId());
+                leaveEntity.setReason(dataEntity.getMsg());
+                String json = new Gson().toJson(leaveEntity);
+                RequestBody body = RequestBody.create(JSON, json);
+                Request request = new Request.Builder()
+                        .header(Authorization, Bearer + dataEntity.getToken())
+                        .post(body)
+                        .build();
+
+                client.newCall(request).enqueue(new Callback() {
+                    @Override
+                    public void onFailure(Call call, IOException e) {
+                        handler.sendEmptyMessage(500);
+                    }
+
+                    @Override
+                    public void onResponse(Call call, Response response) throws IOException {
+                        if (response.isSuccessful()){
+                            handler.sendEmptyMessage(0);
+                        }else handler.sendEmptyMessage(404);
+                    }
+                });
+            }
+        });
+    }
+
+    /**
+     * 检索专题
+     * @param handler
+     * @param dataEntity
+     */
+    public static void getTopics(final Handler handler, final RequestDataEntity dataEntity, final List<TopiceHttpResultEntity> resultList){
+        executorService.execute(new Runnable() {
+            @Override
+            public void run() {
+                Request request = new Request.Builder()
+                        .header(Authorization, Bearer + dataEntity.getToken())
+                        .url(dataEntity.getUrl() /*+ "?MaxResultCount=5&SkipCount=0"*/)
+                        .build();
+
+                client.newCall(request).enqueue(new Callback() {
+                    @Override
+                    public void onFailure(Call call, IOException e) {
+
+                    }
+
+                    @Override
+                    public void onResponse(Call call, Response response) throws IOException {
+                        if (response.isSuccessful()){
+                            try {
+                                String data = response.body().string();
+                                Log.e("data", data);
+                                JSONArray items = getItems(data, handler);
+                                Gson gson = new Gson();
+                                for (int i = 0; i < items.length(); i++){
+                                    JSONObject childItem = items.getJSONObject(i);
+                                    TopiceHttpResultEntity entity = new TopiceHttpResultEntity();//gson.fromJson(childItem.toString(), new TypeToken<TopiceHttpResultEntity>(){}.getType());
+                                    entity.setCampusId(String.valueOf(childItem.get("campusId")));
+                                    entity.setCommentNumber(childItem.getString("commentNumber"));
+                                    entity.setContentpublic(childItem.getString("content"));
+                                    entity.setCoverType(childItem.getString("coverType"));
+                                    List<String> imgList = new ArrayList<>();
+                                    JSONArray paths = childItem.getJSONArray("coverImgs");
+                                    for (int j = 0; j < paths.length(); j++){
+                                        imgList.add(paths.get(j).toString());
+                                    }
+                                    entity.setCoverImgs(imgList);
+                                    entity.setPageView(childItem.getString("pageView"));
+                                    entity.setId(childItem.getInt("id"));
+                                    entity.setPraiseNumber(childItem.getString("praiseNumber"));
+                                    entity.setPublisher(childItem.getString("publisher"));
+                                    entity.setPublishTime(childItem.getString("publishTime"));
+                                    entity.setReplyNumber(childItem.getString("replyNumber"));
+                                    entity.setTitle(childItem.getString("title"));
+                                    //entity.setSubtitle(childItem.getString("subTitle"));
+                                    resultList.add(entity);
+                                }
+                                handler.sendEmptyMessage(200);
+                            } catch (JSONException e) {
+                                handler.sendEmptyMessage(400);
+                                e.printStackTrace();
+                            }
+                        }
+                    }
+                });
             }
         });
     }

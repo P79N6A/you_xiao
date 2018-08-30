@@ -14,4 +14,6 @@ public class IntentDataType {
 
     public final static String TOPICS = "TOPICS";
 
+    public final static String DATA = "DATA";
+
 }

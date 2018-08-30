@@ -11,19 +11,20 @@ import com.runtoinfo.personal_center.databinding.ActivityPersonalFeedBackBinding
 import com.runtoinfo.personal_center.databinding.ActivityPersonalSettingsBinding;
 
 @Route(path = "/personal/feedback")
-public class PersonalFeedBack extends Activity {
+public class PersonalFeedBack extends BaseActivity {
 
     public ActivityPersonalFeedBackBinding binding;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         //setContentView(R.layout.activity_personal_feed_back);
-        binding = DataBindingUtil.setContentView(this, R.layout.activity_personal_feed_back);
 
-        initView();
+
+        //initView();
     }
 
     public void initView(){
+        binding = DataBindingUtil.setContentView(this, R.layout.activity_personal_feed_back);
         binding.personalFeedbackBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

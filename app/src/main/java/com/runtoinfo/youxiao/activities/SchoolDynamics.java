@@ -10,6 +10,8 @@ import android.util.Log;
 import android.view.View;
 
 import com.alibaba.android.arouter.facade.annotation.Route;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.runtoinfo.teacher.HttpEntity;
 import com.runtoinfo.teacher.utils.HttpUtils;
 import com.runtoinfo.youxiao.R;
@@ -36,6 +38,7 @@ public class SchoolDynamics extends BaseActivity {
     public String dataType = null;
     public int times = 0;
     public SchoolDynamicsEntity schoolDynamicsEntity;
+    public int type;
 
     @Override
     protected void initView() {
@@ -81,8 +84,8 @@ public class SchoolDynamics extends BaseActivity {
     }
     public void initRecyclerData(){
         adapter = new SchoolDynamicsRecyclerAdapter(SchoolDynamics.this, schoolDynamicsList, handler);
-        binding.topicsRecyclerview.setLayoutManager(new LinearLayoutManager(this));
-        binding.topicsRecyclerview.setAdapter(adapter);
+        binding.schoolRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+        binding.schoolRecyclerView.setAdapter(adapter);
     }
 
     @Override
@@ -94,7 +97,17 @@ public class SchoolDynamics extends BaseActivity {
     public void onStart() {
         super.onStart();
         if (dataType != null && !dataType.equals(IntentDataType.TOPICS))
-        HttpUtils.getSchoolNewsAll(handler, HttpEntity.MAIN_URL + HttpEntity.SCHOOL_NEWS_ALL, spUtils.getString(Entity.TOKEN));
+            HttpUtils.getSchoolNewsAll(handler, HttpEntity.MAIN_URL + HttpEntity.SCHOOL_NEWS_ALL, spUtils.getString(Entity.TOKEN));
+        else{
+            SchoolDynamicsEntity schoolEntity =
+                    new Gson().fromJson(getIntent().getExtras().getString(IntentDataType.DATA),
+                            new TypeToken<SchoolDynamicsEntity>(){}.getType());
+            binding.dynamicsTitle.setText(schoolEntity.getTile());
+            binding.dynamicsTime.setText(schoolEntity.getPublishTime());
+            binding.dynamicsReadNumber.setText(schoolEntity.getReadNumber());
+
+            binding.dynamicsWebview.loadData(schoolEntity.getContent(), "text/html; charset=UTF-8",null);
+        }
     }
 
     @SuppressLint("HandlerLeak")
@@ -141,7 +154,10 @@ public class SchoolDynamics extends BaseActivity {
                 JSONObject childItem = items.getJSONObject(item);
                 //得到动态头条标识
                 //默认为0：动态，1：头条。
-                int type = childItem.getInt("type");
+                String typeString = childItem.get("type").toString();
+                if (typeString.equals("null") || typeString.equals("")) {
+                    type = 0;
+                }
                 switch (dataType){
                     case IntentDataType.SCHOOL_DYNAMICS:
                         if (type == 0){
@@ -164,27 +180,34 @@ public class SchoolDynamics extends BaseActivity {
         schoolDynamicsList = new ArrayList<>();
         JSONArray images = childItem.getJSONArray("coverImgs");
         SchoolDynamicsEntity entity = new SchoolDynamicsEntity();
+        int coverType = 0;//childItem.getInt("coverType");
         List<String> imageList = new ArrayList<>();
         for (int i = 0; i < images.length(); i++){
             imageList.add(images.getString(i));
         }
-        switch (images.length()){
-            case 1:
+        switch (coverType){
+            case 0://图片
+                switch (images.length()){
+                    case 1:
+                    case 2:
+                        entity.setType(1);
+                        break;
+                    case 3:
+                    default:
+                        entity.setType(2);
+                        break;
+                }
+                break;
+            case 1://视频
                 entity.setType(0);
-                break;
-            case 2:
-                entity.setType(1);
-                break;
-            case 3:
-                entity.setType(2);
                 break;
         }
 
         entity.setTile(childItem.getString("title"));
         entity.setId(childItem.getInt("id"));
         entity.setImagList(imageList);
-        entity.setCoverType(childItem.getInt("coverType"));
-        entity.setReadNumber(childItem.getInt("pageView"));
+        entity.setCoverType(0/*childItem.getInt("coverType")*/);
+        //entity.setReadNumber(childItem.getInt("pageView"));
         entity.setStatus(childItem.getString("status"));
         entity.setVideoPath(childItem.getString("videoPath"));
         entity.setContent(childItem.getString("content"));
@@ -195,10 +218,10 @@ public class SchoolDynamics extends BaseActivity {
 
     public void hideView(boolean flag){
         if (flag) {
-            binding.topicsRecyclerview.setVisibility(View.GONE);
+            binding.schoolRecyclerView.setVisibility(View.GONE);
             binding.dynamicsWebViewLayout.setVisibility(View.VISIBLE);
         }else{
-            binding.topicsRecyclerview.setVisibility(View.VISIBLE);
+            binding.schoolRecyclerView.setVisibility(View.VISIBLE);
             binding.dynamicsWebViewLayout.setVisibility(View.GONE);
         }
 

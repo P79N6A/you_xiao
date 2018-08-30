@@ -35,7 +35,7 @@ import java.util.Date;
 import java.util.Locale;
 
 @Route(path = "/personal/personalMain")
-public class PersonalMainActivity extends Activity {
+public class PersonalMainActivity extends BaseActivity {
 
     private ActivityPersonalMainBinding binding;
     //在自己的Application中添加如下代码
@@ -44,10 +44,16 @@ public class PersonalMainActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+    }
+
+    @Override
+    protected void initView() {
         binding = DataBindingUtil.setContentView(PersonalMainActivity.this, R.layout.activity_personal_main);
         initEvent();
         initDatePicker();
     }
+
     public void initEvent(){
         //头像
         binding.personalRelativeAvatar.setOnClickListener(new View.OnClickListener() {

@@ -29,7 +29,7 @@ import java.io.File;
 import java.io.IOException;
 
 @Route(path = "/camera/activity")
-public class CameraActivity extends Activity {
+public class CameraActivity extends BaseActivity {
 
 
     private static final String TAG = CameraActivity.class.getSimpleName();

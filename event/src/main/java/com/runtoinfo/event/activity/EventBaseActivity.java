@@ -17,8 +17,8 @@ public abstract class EventBaseActivity extends Activity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        initView();
         initShared();
+        initView();
         initData();
         initEvent();
 

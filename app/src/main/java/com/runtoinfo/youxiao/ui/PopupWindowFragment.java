@@ -56,7 +56,7 @@ public class PopupWindowFragment {
         adapter = new ListViewAdapter(activity, list);
         listView.setAdapter(adapter);
 
-        int y = Utils.getTotalHeightofListView(listView);
+        int y = Utils.getTotalHeightofListView(listView) + 20;
 
         popupWindow = new PopupWindow(v, ViewGroup.LayoutParams.WRAP_CONTENT, y);
 

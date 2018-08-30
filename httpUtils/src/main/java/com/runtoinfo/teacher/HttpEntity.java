@@ -91,4 +91,24 @@ public class HttpEntity {
      * 上传文件
      */
     public final static String POST_ALI_SERVER = "/api/services/app/File/UploadMore";
+    /**
+     * 请假
+     */
+    public final static String COURSE_LEAVE = "/api/services/app/Leave/Create";
+    /**
+     * 专题
+     */
+    public final static String COURSE_TOPICS = "/api/services/app/SpecialTopic/GetAll";
+    /**
+     * 创建评论、回复、赞、收藏
+     */
+    public final static String COURSE_COMMENT_CREATE = "/api/services/app/Comment/Create";
+    /**
+     * 删除评论
+     */
+    public final static String DELETE_COMMENT_CREATE = "/api/services/app/Comment/Delete";
+    /**
+     * 获取评论
+     */
+    public final static String GET_COMMENT_ALL = "/api/services/app/Comment/GetAll";
 }

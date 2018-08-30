@@ -36,7 +36,7 @@ public class DialogMessage {
             dialog.setCanceledOnTouchOutside(false);
             dialog.show();
             rotateLoading.start();
-        } else{
+        } else if (rotateLoading != null){
             rotateLoading.stop();
             dialog.dismiss();
         }
