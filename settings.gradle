@@ -1,1 +1,1 @@
-include ':app', ':httpUtils', ':education', ':event', ':information', ':mall', ':personal_center', ':cources', ':citypickerview', ':cameraview', ':globalTools', ':imageselector', ':seescore', ':mediapicker'
+include ':app', ':httpUtils', ':education', ':event', ':information', ':mall', ':personal_center', ':cources', ':citypickerview', ':cameraview', ':globalTools', ':imageselector', ':seescore', ':mediapicker', ':comment-praise-reply'

@@ -6,10 +6,12 @@
       <module fileurl="file://$PROJECT_DIR$/app-droid.iml" filepath="$PROJECT_DIR$/app-droid.iml" />
       <module fileurl="file://$PROJECT_DIR$/cameraview/cameraview.iml" filepath="$PROJECT_DIR$/cameraview/cameraview.iml" />
       <module fileurl="file://$PROJECT_DIR$/citypickerview/citypickerview.iml" filepath="$PROJECT_DIR$/citypickerview/citypickerview.iml" />
+      <module fileurl="file://$PROJECT_DIR$/comment-praise-reply/comment-praise-reply.iml" filepath="$PROJECT_DIR$/comment-praise-reply/comment-praise-reply.iml" />
+      <module fileurl="file://F:\work\youxiao\app-droid\globalTools\common_ui.iml" filepath="F:\work\youxiao\app-droid\globalTools\common_ui.iml" />
       <module fileurl="file://$PROJECT_DIR$/cources/cources.iml" filepath="$PROJECT_DIR$/cources/cources.iml" />
       <module fileurl="file://$PROJECT_DIR$/education/education.iml" filepath="$PROJECT_DIR$/education/education.iml" />
       <module fileurl="file://$PROJECT_DIR$/event/event.iml" filepath="$PROJECT_DIR$/event/event.iml" />
-      <module fileurl="file://$PROJECT_DIR$/globalTools/common_ui.iml" filepath="$PROJECT_DIR$/globalTools/common_ui.iml" />
+      <module fileurl="file://$PROJECT_DIR$/globalTools/globalTools.iml" filepath="$PROJECT_DIR$/globalTools/globalTools.iml" />
       <module fileurl="file://$PROJECT_DIR$/httpUtils/httpUtils.iml" filepath="$PROJECT_DIR$/httpUtils/httpUtils.iml" />
       <module fileurl="file://$PROJECT_DIR$/imageselector/imageselector.iml" filepath="$PROJECT_DIR$/imageselector/imageselector.iml" />
       <module fileurl="file://$PROJECT_DIR$/information/information.iml" filepath="$PROJECT_DIR$/information/information.iml" />
