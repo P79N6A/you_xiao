@@ -76,10 +76,10 @@ dependencies {
     //implementation project(':cources')
     implementation 'com.alibaba:arouter-api:1.3.1'
     annotationProcessor 'com.alibaba:arouter-compiler:1.1.4'
-    implementation project(':personal_center')
+    implementation project(':personal-center')
     implementation project(':cources')
     api project(path: ':cameraview')
-    implementation project(':globalTools')
+    implementation project(':global-tools')
     api project(path: ':event')
     implementation project(':information')
     implementation project(':mall')

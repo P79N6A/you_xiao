@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout>
+
+    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#fff"
+        android:orientation="vertical">
+
+        <RelativeLayout
+            android:id="@+id/comment_header"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingBottom="10dp"
+            android:paddingTop="10dp">
+
+            <ImageView
+                android:id="@+id/reset_password_back"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:src="@drawable/activity_black_back" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:layout_centerVertical="true"
+                android:text="发表评论"
+                android:textColor="#333333"
+                android:textSize="18sp" />
+        </RelativeLayout>
+
+        <View
+            android:id="@+id/comment_view1"
+            android:layout_width="match_parent"
+            android:layout_height="0.2dp"
+            android:layout_below="@+id/comment_header"
+            android:background="#ebebeb" />
+
+        <TextView
+            android:id="@+id/comment_all_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/comment_view1"
+            android:layout_gravity="center_vertical"
+            android:layout_marginStart="5dp"
+            android:drawableLeft="@drawable/comment_details"
+            android:drawablePadding="8dp"
+            android:padding="10dp"
+            android:text="全部评论"
+            android:textColor="#333333"
+            android:textSize="18sp" />
+
+        <View
+            android:id="@+id/comment_view2"
+            android:layout_width="match_parent"
+            android:layout_height="0.2dp"
+            android:layout_below="@+id/comment_all_title"
+            android:background="#ebebeb" />
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/comment_publish_recycle"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_above="@+id/comment_bottom_layout"
+            android:layout_below="@+id/comment_view2"
+            android:padding="15dp" />
+
+        <RelativeLayout
+            android:id="@+id/comment_bottom_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:gravity="center">
+
+            <View
+                android:layout_width="wrap_content"
+                android:layout_height="1dp"
+                android:layout_above="@+id/comment_layout"
+                android:background="#ebebeb" />
+
+            <LinearLayout
+                android:id="@+id/comment_layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="10dp"
+                android:layout_marginEnd="30dp"
+                android:layout_marginStart="30dp"
+                android:layout_marginTop="10dp"
+                android:background="@drawable/comment_publish_bt_back"
+                android:gravity="center">
+
+                <TextView
+                    android:id="@+id/comment_publish_submit"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_margin="10dp"
+                    android:drawableLeft="@drawable/dynamics_coment"
+                    android:gravity="center"
+                    android:text="发表评论" />
+            </LinearLayout>
+        </RelativeLayout>
+    </RelativeLayout>
+</layout>
