@@ -6,16 +6,12 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.annotation.Nullable;
-import android.support.v4.view.ViewPager;
 import android.support.v7.widget.LinearLayoutManager;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.ViewTreeObserver;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 
 import com.alibaba.android.arouter.launcher.ARouter;
 import com.google.gson.Gson;
@@ -31,15 +27,12 @@ import com.runtoinfo.youxiao.entity.SchoolDynamicsEntity;
 import com.runtoinfo.youxiao.globalTools.adapter.UniversalRecyclerAdapter;
 import com.runtoinfo.youxiao.globalTools.utils.DialogMessage;
 import com.runtoinfo.youxiao.globalTools.utils.Entity;
-import com.runtoinfo.youxiao.ui.DepthPageTransformer;
-import com.runtoinfo.youxiao.utils.IntentDataType;
+import com.runtoinfo.youxiao.globalTools.utils.IntentDataType;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
-
-import myapplication.MyApplication;
 
 /**
  * Created by Qjc on 2018/5/24 0024.
@@ -155,7 +148,7 @@ public class TopicsFragment extends BaseFragment {
     public void getAllArticle(){
         RequestDataEntity requestDataEntity = new RequestDataEntity();
         requestDataEntity.setToken(spUtils.getString(Entity.TOKEN));
-        requestDataEntity.setUserId(Integer.parseInt(spUtils.getString(Entity.USER_ID)));
+        requestDataEntity.setUserId(spUtils.getInt(Entity.USER_ID));
         requestDataEntity.setCourseId(spUtils.getInt(Entity.COURSE_ID));
         requestDataEntity.setUrl(HttpEntity.MAIN_URL + HttpEntity.COURSE_TOPICS);
 

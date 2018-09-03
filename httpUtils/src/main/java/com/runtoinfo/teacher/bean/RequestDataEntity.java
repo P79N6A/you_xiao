@@ -12,6 +12,7 @@ public class RequestDataEntity {
     public int courseId;
     public String msg;
 
+
     public String getMsg() {
         return msg;
     }

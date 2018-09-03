@@ -7,7 +7,7 @@ package com.runtoinfo.teacher.bean;
 public class AddMemberBean {
     public String gender;
     public String campaignId;
-    public String userId;
+    public int userId;
     public String memberType;
     public String name;
     public String phoneNumber;
@@ -46,11 +46,11 @@ public class AddMemberBean {
         this.campaignId = campaignId;
     }
 
-    public String getUserId() {
+    public int getUserId() {
         return userId;
     }
 
-    public void setUserId(String userId) {
+    public void setUserId(int userId) {
         this.userId = userId;
     }
 

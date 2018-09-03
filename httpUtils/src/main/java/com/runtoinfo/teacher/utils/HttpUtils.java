@@ -10,8 +10,8 @@ import android.widget.ImageView;
 
 import com.dmcbig.mediapicker.entity.Media;
 import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
 import com.runtoinfo.teacher.bean.AddMemberBean;
+import com.runtoinfo.teacher.CPRCBean.CPRCDataEntity;
 import com.runtoinfo.teacher.bean.ChildContent;
 import com.runtoinfo.teacher.bean.CourseDataEntity;
 import com.runtoinfo.teacher.bean.HandWorkEntity;
@@ -28,7 +28,6 @@ import org.json.JSONObject;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -1028,6 +1027,49 @@ public class HttpUtils {
                                 handler.sendEmptyMessage(400);
                                 e.printStackTrace();
                             }
+                        }
+                    }
+                });
+            }
+        });
+    }
+
+    /**
+     * 评论、赞、回复、收藏
+     * type：评论：0；回复：1；赞：2；收藏：3；
+     * parentId：评论或者回复的id；
+     * parentType：回复类型：评论：0；回复：1；
+     * target：新闻或专题中文章id；
+     * targetType：新闻：0； 专题：1；评论：1； 回复：3；
+     * level：层级
+     * @param handler
+     * @param entity
+     */
+    public static void postComment(final Handler handler, final RequestDataEntity entity, final CPRCDataEntity cprcDataEntity){
+        executorService.execute(new Runnable() {
+            @Override
+            public void run() {
+                cprcDataEntity.setUserId(entity.getUserId());
+                cprcDataEntity.setContent(entity.getMsg());
+
+                RequestBody body = RequestBody.create(JSON, new Gson().toJson(cprcDataEntity));
+                Request request = new Request.Builder()
+                        .header(Authorization, Bearer + entity.getToken())
+                        .url(entity.getUrl())
+                        .post(body)
+                        .build();
+
+                client.newCall(request).enqueue(new Callback() {
+                    @Override
+                    public void onFailure(Call call, IOException e) {
+                        handler.sendEmptyMessage(500);
+                    }
+
+                    @Override
+                    public void onResponse(Call call, Response response) throws IOException {
+                        if (response.isSuccessful()){
+                            Log.e("result", response.body().string());
+                            handler.sendEmptyMessage(0);
                         }
                     }
                 });

@@ -18,7 +18,6 @@ import android.support.annotation.RequiresApi;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -40,7 +39,7 @@ import com.runtoinfo.youxiao.entity.SelectSchoolEntity;
 import com.runtoinfo.youxiao.ui.FloatDragView;
 import com.runtoinfo.youxiao.ui.MyScrollView;
 import com.runtoinfo.youxiao.ui.PopupWindowFragment;
-import com.runtoinfo.youxiao.utils.IntentDataType;
+import com.runtoinfo.youxiao.globalTools.utils.IntentDataType;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -215,7 +214,7 @@ public class HomeFragment extends BaseFragment implements MyScrollView.ScrollVie
         binding.homeActivityListLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ARouter.getInstance().build("/event/eventActivity").withString(Entity.USER_ID, spUtils.getString(Entity.USER_ID)).navigation();
+                ARouter.getInstance().build("/event/eventActivity").withInt(Entity.USER_ID, spUtils.getInt(Entity.USER_ID)).navigation();
             }
         });
 

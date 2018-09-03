@@ -93,7 +93,7 @@ public class CourseHandHomeWork extends BaseActivity {
         pra.put("courseId", spUtils.getInt(Entity.COURSE_ID));
         pra.put("courseInsId", spUtils.getInt(Entity.COURSE_INST_ID));
         pra.put("token", spUtils.getString(Entity.TOKEN));
-        pra.put("userId", spUtils.getString(Entity.USER_ID));
+        pra.put("userId", spUtils.getInt(Entity.USER_ID));
         pra.put("remark", binding.courseHandWorkNots.getText().toString());
 
         HttpUtils.postHomeWork(handler, pra, listMap);

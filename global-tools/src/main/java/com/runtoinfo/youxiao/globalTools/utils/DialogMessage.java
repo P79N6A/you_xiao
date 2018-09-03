@@ -3,12 +3,20 @@ package com.runtoinfo.youxiao.globalTools.utils;
 import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.os.Handler;
+import android.os.Message;
+import android.util.DisplayMetrics;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
+import android.widget.EditText;
 import android.widget.Toast;
 
 import com.runtoinfo.youxiao.globalTools.R;
 import com.victor.loading.rotate.RotateLoading;
+
 
 /**
  * Created by QiaoJunChao on 2018/8/21.
@@ -17,6 +25,7 @@ import com.victor.loading.rotate.RotateLoading;
 public class DialogMessage {
 
     public static RotateLoading rotateLoading;
+    public static Dialog bottomDialog;
 
 
     //等待dialog
@@ -27,6 +36,12 @@ public class DialogMessage {
         progressDialog.show();
     }
 
+    /**
+     * 等待加载dialog
+     * @param context
+     * @param dialog
+     * @param isShow
+     */
     public static void showLoading(Context context, Dialog dialog, boolean isShow){
         if (dialog == null) dialog = new Dialog(context);
         if (isShow) {
@@ -44,5 +59,41 @@ public class DialogMessage {
 
     public static void showToast(Context context, String msg){
         Toast.makeText(context, msg, Toast.LENGTH_SHORT).show();
+    }
+
+    public static void showBottomDialog(final Handler handler, final Context context, boolean flag){
+        if (flag) {
+            bottomDialog = new Dialog(context, R.style.inputDialog);
+            bottomDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+            bottomDialog.setContentView(R.layout.dialog_comment_layout);
+            setWindowBottom(bottomDialog, context);
+            bottomDialog.show();
+
+
+            bottomDialog.findViewById(R.id.comment_submit).setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    EditText editText = (EditText) bottomDialog.findViewById(R.id.comment_msg_edit);
+                    Message msg= new Message();
+                    msg.what = 1;
+                    msg.obj = editText.getText().toString();
+                    handler.sendMessage(msg);
+                }
+            });
+        }else{
+            if (bottomDialog != null && bottomDialog.isShowing())
+            bottomDialog.dismiss();
+        }
+    }
+
+    public static void setWindowBottom(Dialog dialog, Context context){
+        Window window = dialog.getWindow();
+        window.setGravity(Gravity.BOTTOM);
+        WindowManager manager = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
+        DisplayMetrics dm = new DisplayMetrics();
+        manager.getDefaultDisplay().getMetrics(dm);
+        WindowManager.LayoutParams lp = window.getAttributes();
+        lp.width = dm.widthPixels;
+        window.setAttributes(lp);
     }
 }

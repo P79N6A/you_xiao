@@ -10,6 +10,7 @@ import android.util.Log;
 import android.view.View;
 
 import com.alibaba.android.arouter.facade.annotation.Route;
+import com.alibaba.android.arouter.launcher.ARouter;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.runtoinfo.teacher.HttpEntity;
@@ -19,7 +20,7 @@ import com.runtoinfo.youxiao.adapter.SchoolDynamicsRecyclerAdapter;
 import com.runtoinfo.youxiao.globalTools.utils.Entity;
 import com.runtoinfo.youxiao.databinding.SchoolMovmentBinding;
 import com.runtoinfo.youxiao.entity.SchoolDynamicsEntity;
-import com.runtoinfo.youxiao.utils.IntentDataType;
+import com.runtoinfo.youxiao.globalTools.utils.IntentDataType;
 import com.runtoinfo.youxiao.utils.Utils;
 
 import org.json.JSONArray;
@@ -39,7 +40,7 @@ public class SchoolDynamics extends BaseActivity {
     public int times = 0;
     public SchoolDynamicsEntity schoolDynamicsEntity;
     public int type;
-
+    public int targetType;
     @Override
     protected void initView() {
         binding = DataBindingUtil.setContentView(this, R.layout.school_movment);
@@ -59,6 +60,15 @@ public class SchoolDynamics extends BaseActivity {
                 }
             }
         });
+
+        binding.detailsComment.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ARouter.getInstance().build("/comment/publishComment")
+                        .withInt(IntentDataType.ARTICLE, schoolDynamicsEntity.getId())
+                        .withInt(IntentDataType.TARGET_TYPE, targetType).navigation();
+            }
+        });
     }
 
     public void changeView(){
@@ -67,12 +77,15 @@ public class SchoolDynamics extends BaseActivity {
             switch (dataType){
                 case IntentDataType.SCHOOL_DYNAMICS:
                     binding.schoolDynamicsActivityTitle.setText("学校动态");
+                    targetType = 0;
                     break;
                 case IntentDataType.HEAD_NEWS:
                     binding.schoolDynamicsActivityTitle.setText("新闻头条");
+                    targetType = 0;
                     break;
                 case IntentDataType.TOPICS:
                     binding.schoolDynamicsActivityTitle.setText("专题详情");
+                    targetType = 1;
                     hideView(true);
                     break;
             }

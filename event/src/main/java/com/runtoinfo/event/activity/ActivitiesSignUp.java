@@ -46,7 +46,7 @@ public class ActivitiesSignUp extends EventBaseActivity {
                     addMember.setAge(binding.activityMemberAge.getText().toString());
                     addMember.setName(binding.eventStudentName.getText().toString());
                     addMember.setPhoneNumber(binding.memberPhoneNumber.getText().toString());
-                    addMember.setUserId(spUtils.getString(com.runtoinfo.youxiao.globalTools.utils.Entity.USER_ID));
+                    addMember.setUserId(spUtils.getInt(com.runtoinfo.youxiao.globalTools.utils.Entity.USER_ID));
                     addMember.setGender(gender);
                     HttpUtils.postAddMember(mHandler, HttpEntity.MAIN_URL + HttpEntity.CAMPAIGN_ADD_MEMBER, addMember, spUtils.getString(Entity.TOKEN));
                 }else{
@@ -63,7 +63,7 @@ public class ActivitiesSignUp extends EventBaseActivity {
                     addMember.setAge(binding.activityMemberAge.getText().toString());
                     addMember.setName(binding.eventStudentName.getText().toString());
                     addMember.setPhoneNumber(binding.memberPhoneNumber.getText().toString());
-                    addMember.setUserId(spUtils.getString(Entity.USER_ID));
+                    addMember.setUserId(spUtils.getInt(Entity.USER_ID));
                     addMember.setGender(gender);
                     String json = new Gson().toJson(addMember);
                     ARouter.getInstance().build("/event/signUpAddMember").withString("json", json).navigation();

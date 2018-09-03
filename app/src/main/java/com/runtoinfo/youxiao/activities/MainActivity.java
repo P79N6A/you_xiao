@@ -4,7 +4,6 @@ import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
-import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -21,7 +20,7 @@ import com.runtoinfo.youxiao.fragment.FineClassFragment;
 import com.runtoinfo.youxiao.fragment.HomeFragment;
 import com.runtoinfo.youxiao.fragment.PersonalCenterFragment;
 import com.runtoinfo.youxiao.fragment.TopicsFragment;
-import com.runtoinfo.youxiao.utils.IntentDataType;
+import com.runtoinfo.youxiao.globalTools.utils.IntentDataType;
 
 import java.util.ArrayList;
 import java.util.List;

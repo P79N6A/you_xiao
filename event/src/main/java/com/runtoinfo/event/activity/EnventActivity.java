@@ -56,8 +56,8 @@ public class EnventActivity extends EventBaseActivity{
 
     @Override
     protected void initData() {
-        String userId = getIntent().getExtras().getString(Entity.USER_ID, null);
-        spUtils.setString(Entity.USER_ID, userId);
+        int userId = getIntent().getExtras().getInt(Entity.USER_ID, -1);
+        spUtils.setInt(Entity.USER_ID, userId);
     }
 
     @Override

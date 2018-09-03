@@ -6,6 +6,7 @@ import android.app.ProgressDialog;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Looper;
 import android.os.Message;
 import android.text.Editable;
 import android.text.TextUtils;
@@ -29,7 +30,7 @@ import com.runtoinfo.youxiao.globalTools.utils.DialogMessage;
 import com.runtoinfo.youxiao.globalTools.utils.Entity;
 import com.runtoinfo.youxiao.databinding.ActivityLoginBinding;
 import com.runtoinfo.youxiao.entity.SelectSchoolEntity;
-import com.runtoinfo.youxiao.utils.IntentDataType;
+import com.runtoinfo.youxiao.globalTools.utils.IntentDataType;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -356,7 +357,7 @@ public class LoginActivity extends BaseActivity {
     }
 
     @SuppressLint("HandlerLeak")
-    public Handler mHandler = new Handler(){
+    public Handler mHandler = new Handler(Looper.getMainLooper()){
         @Override
         public void handleMessage(Message msg) {
             switch (msg.what)
@@ -417,9 +418,10 @@ public class LoginActivity extends BaseActivity {
                 try {
                     JSONObject J = new JSONObject(response.body().string());
                     JSONObject json = J.getJSONObject("result");
+                    Log.e("LoginUserId", json.toString());
                     String token = json.getString("accessToken");
                     spUtils.setString(Entity.TOKEN, token);
-                    spUtils.setString(Entity.USER_ID, json.getString("userId"));
+                    spUtils.setInt(Entity.USER_ID, json.getInt("userId"));
                     loginHead.setToken(token);
 
                     LoginActivity.this.runOnUiThread(new Runnable() {
