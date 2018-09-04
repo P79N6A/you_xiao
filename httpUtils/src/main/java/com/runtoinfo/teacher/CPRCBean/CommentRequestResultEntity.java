@@ -4,7 +4,7 @@ package com.runtoinfo.teacher.CPRCBean;
  * Created by QiaoJunChao on 2018/8/31.
  */
 
-public class CommentRequstResultEntity {
+public class CommentRequestResultEntity {
 
        public int tenantId;
        public int campusId;
@@ -21,10 +21,19 @@ public class CommentRequstResultEntity {
        public String approvedTime;
        public int replyNumber;
        public String userAvatar;
-       public int nickName;
+       public String nickName;
        public boolean hasPraise;
        public int praiseId;
        public int id;
+       public int cr;//评论文章：0；回复的评论：1；回复的回复：2；
+
+       public int getCr() {
+              return cr;
+       }
+
+       public void setCr(int cr) {
+              this.cr = cr;
+       }
 
        public int getTenantId() {
               return tenantId;
@@ -146,11 +155,11 @@ public class CommentRequstResultEntity {
               this.userAvatar = userAvatar;
        }
 
-       public int getNickName() {
+       public String getNickName() {
               return nickName;
        }
 
-       public void setNickName(int nickName) {
+       public void setNickName(String nickName) {
               this.nickName = nickName;
        }
 

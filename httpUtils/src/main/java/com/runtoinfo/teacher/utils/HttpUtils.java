@@ -10,6 +10,10 @@ import android.widget.ImageView;
 
 import com.dmcbig.mediapicker.entity.Media;
 import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+import com.runtoinfo.teacher.CPRCBean.CommentRequestResultEntity;
+import com.runtoinfo.teacher.CPRCBean.GetAllCPC;
+import com.runtoinfo.teacher.HttpEntity;
 import com.runtoinfo.teacher.bean.AddMemberBean;
 import com.runtoinfo.teacher.CPRCBean.CPRCDataEntity;
 import com.runtoinfo.teacher.bean.ChildContent;
@@ -122,7 +126,34 @@ public class HttpUtils {
                 }
             }
         });
+    }
+    /**
+     * 类似src
+     */
+    public static void postSrcPhoto(final Activity context, final String url, final ImageView imageView){
+        executorService.execute(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    Request request = new Request.Builder()
+                            .url(url)
+                            .build();
 
+                    Response response = client.newCall(request).execute();
+                    if (response.isSuccessful()) {
+                        final Drawable drawable = Drawable.createFromStream(response.body().byteStream(), "image");
+                        context.runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                imageView.setImageDrawable(drawable);
+                            }
+                        });
+                    }
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
     }
 
     /**
@@ -415,7 +446,7 @@ public class HttpUtils {
                     if (response.isSuccessful()){
                         String result = response.body().string();
                         Message message = new Message();
-                        message.what = 3;
+                        message.what = 5;
                         message.obj = result;
                         handler.sendMessage(message);
                     }
@@ -1036,26 +1067,23 @@ public class HttpUtils {
 
     /**
      * 评论、赞、回复、收藏
-     * type：评论：0；回复：1；赞：2；收藏：3；
+     * type：评论：0；回复：1 ；赞：2；收藏：3；
      * parentId：评论或者回复的id；
      * parentType：回复类型：评论：0；回复：1；
      * target：新闻或专题中文章id；
-     * targetType：新闻：0； 专题：1；评论：1； 回复：3；
+     * targetType：新闻：0；专题：1；评论：2； 回复：3；
      * level：层级
      * @param handler
-     * @param entity
      */
-    public static void postComment(final Handler handler, final RequestDataEntity entity, final CPRCDataEntity cprcDataEntity){
+    public static void postComment(final Handler handler, final CPRCDataEntity cprcDataEntity){
         executorService.execute(new Runnable() {
             @Override
             public void run() {
-                cprcDataEntity.setUserId(entity.getUserId());
-                cprcDataEntity.setContent(entity.getMsg());
 
                 RequestBody body = RequestBody.create(JSON, new Gson().toJson(cprcDataEntity));
-                Request request = new Request.Builder()
-                        .header(Authorization, Bearer + entity.getToken())
-                        .url(entity.getUrl())
+                final Request request = new Request.Builder()
+                        .header(Authorization, Bearer + cprcDataEntity.getToken())
+                        .url(HttpEntity.MAIN_URL + HttpEntity.COURSE_COMMENT_CREATE)
                         .post(body)
                         .build();
 
@@ -1068,14 +1096,121 @@ public class HttpUtils {
                     @Override
                     public void onResponse(Call call, Response response) throws IOException {
                         if (response.isSuccessful()){
-                            Log.e("result", response.body().string());
-                            handler.sendEmptyMessage(0);
+                            try {
+                                JSONObject json = new JSONObject(response.body().string());
+                                JSONObject result = json.getJSONObject("result");
+                                Message msg = new Message();
+                                if (cprcDataEntity.getType() == 1 && cprcDataEntity.getTargetType() == 3) msg.what = 2;
+                                else msg.what = cprcDataEntity.getType();
+                                msg.obj = result;
+                                handler.sendMessage(msg);
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+
                         }
                     }
                 });
             }
         });
     }
+
+    /**
+     * 获取全部评论或者回复
+     * @param handler
+     * @param cpc
+     */
+    public static void getCommentAll(final Handler handler, final GetAllCPC cpc){
+        executorService.execute(new Runnable() {
+            @Override
+            public void run() {
+                /*Map<String, Object> map = new HashMap<>();
+                map.put("UserId", cpc.getUserId());
+                map.put("Type", cpc.getType());
+                map.put("Target", cpc.getTarget());
+                map.put("TargetType", cpc.getTargetType());
+                map.put("ParentType", cpc.getParentType());
+                map.put("ParentId", cpc.getParentId());
+                map.put("IsEmptyContent", cpc.isEmptyContent());
+                map.put("MaxResultCount", cpc.getMaxResultCount());
+                map.put("SkipCount", cpc.getSkipCount());*/
+
+                String json = new Gson().toJson(cpc);
+
+               RequestBody body = RequestBody.create(JSON, json);
+
+
+                Request request = new Request.Builder()
+                        .header(Authorization, Bearer + cpc.getToken())
+                        .url(HttpEntity.MAIN_URL + HttpEntity.GET_COMMENT_ALL + "?Type=" + cpc.getType())
+                        .build();
+                client.newCall(request).enqueue(new Callback() {
+                    @Override
+                    public void onFailure(Call call, IOException e) {
+
+                    }
+
+                    @Override
+                    public void onResponse(Call call, Response response) throws IOException {
+                        if (response.isSuccessful()){
+                            try {
+                                JSONObject json = new JSONObject(response.body().string());
+                                JSONObject result = json.getJSONObject("result");
+                                Message message = new Message();
+                                message.what = 20;
+                                message.obj = result;
+                                handler.sendMessage(message);
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    }
+                });
+            }
+        });
+    }
+
+    /**
+     * 更新评论、赞、回复内容状态
+     * @param handler
+     * @param id
+     * @param token
+     */
+    public static void putAllStatue(final Handler handler, final int id, final String token){
+        executorService.execute(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    JSONObject json = new JSONObject();
+                    json.put("id", id);
+                    RequestBody body = RequestBody.create(JSON, json.toString());
+
+                    Request request = new Request.Builder()
+                            .header(Authorization, Bearer + token)
+                            .url(HttpEntity.MAIN_URL + HttpEntity.DELETE_COMMENT_CREATE)
+                            .delete(body)
+                            .build();
+                    client.newCall(request).enqueue(new Callback() {
+                        @Override
+                        public void onFailure(Call call, IOException e) {
+
+                        }
+
+                        @Override
+                        public void onResponse(Call call, Response response) throws IOException {
+                            if (response.isSuccessful()){
+                                handler.sendEmptyMessage(30);
+                            }
+                        }
+                    });
+                }catch (JSONException e){
+                    e.printStackTrace();
+                }
+            }
+        });
+    }
+
+
 
     public static String execute(Request request){
         try {

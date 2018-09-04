@@ -11,8 +11,7 @@
             android:id="@+id/comment_header"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:paddingBottom="10dp"
-            android:paddingTop="10dp">
+            android:padding="10dp">
 
             <ImageView
                 android:id="@+id/reset_password_back"
@@ -99,6 +98,8 @@
                     android:layout_margin="10dp"
                     android:drawableLeft="@drawable/dynamics_coment"
                     android:gravity="center"
+                    android:textSize="18sp"
+                    android:drawablePadding="8dp"
                     android:text="发表评论" />
             </LinearLayout>
         </RelativeLayout>

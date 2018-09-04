@@ -5,16 +5,33 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
+import android.support.v7.widget.LinearLayoutManager;
 import android.view.View;
 
 import com.alibaba.android.arouter.facade.annotation.Route;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.runtoinfo.teacher.CPRCBean.CPRCDataEntity;
 import com.runtoinfo.teacher.CPRCBean.CPRCTypeEntity;
+import com.runtoinfo.teacher.CPRCBean.CommentPublishItemEntity;
+import com.runtoinfo.teacher.CPRCBean.CommentRequestResultEntity;
+import com.runtoinfo.teacher.CPRCBean.GetAllCPC;
 import com.runtoinfo.teacher.utils.HttpUtils;
 import com.runtoinfo.youxiao.globalTools.utils.DialogMessage;
+import com.runtoinfo.youxiao.globalTools.utils.Entity;
 import com.runtoinfo.youxiao.globalTools.utils.IntentDataType;
+import com.runtoinfo.youxiao.globalTools.utils.RecyclerViewDecoration;
 import com.youxiao.comment.R;
+import com.youxiao.comment.adapter.CommentPublishAdapter;
 import com.youxiao.comment.databinding.CommentPublishBinding;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.lang.reflect.Type;
+import java.util.ArrayList;
+import java.util.List;
 
 @Route(path = "/comment/publishComment")
 public class PublishComment extends BaseActivity {
@@ -22,12 +39,15 @@ public class PublishComment extends BaseActivity {
     public CommentPublishBinding binding;
     public int articleId;
     public int targetType;
+    public CommentPublishAdapter mAdapter;
+    public List<CommentRequestResultEntity> dataList = new ArrayList<>();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         binding = DataBindingUtil.setContentView(PublishComment.this, R.layout.comment_publish);
         initData();
         initEvent();
+        getCommentAll();
     }
 
     public void initData(){
@@ -36,10 +56,16 @@ public class PublishComment extends BaseActivity {
     }
 
     public void initEvent(){
-        binding.commentPublishSubmit.setOnClickListener(new View.OnClickListener() {
+        binding.commentLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                DialogMessage.showBottomDialog(mHandler, PublishComment.this, true);
+                DialogMessage.showBottomDialog(mHandler, 0, PublishComment.this, true);
+            }
+        });
+        binding.resetPasswordBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onBackPressed();
             }
         });
     }
@@ -47,19 +73,44 @@ public class PublishComment extends BaseActivity {
     public Handler mHandler = new Handler(Looper.getMainLooper()){
         @Override
         public void handleMessage(Message msg) {
+            String result = msg.obj.toString();
             switch (msg.what){
                 case 0:
-                    DialogMessage.showToast(PublishComment.this, "请求成功");
+                    DialogMessage.showToast(PublishComment.this, "评论成功");
+
+                    CommentRequestResultEntity resultEntity =
+                            new Gson().fromJson(result, new TypeToken<CommentRequestResultEntity>(){}.getType());
+                    mAdapter.addItem(resultEntity, 0);
                     break;
-                case 1:
-                    DialogMessage.showBottomDialog(mHandler, PublishComment.this, false);
-                    String content = msg.obj.toString();
+                case 10:
+                    DialogMessage.showBottomDialog(mHandler,0, PublishComment.this, false);
+//                    CommentRequestResultEntity resultEntity1 =
+//                            new Gson().fromJson(result, new TypeToken<CommentRequestResultEntity>(){}.getType());
                     CPRCDataEntity cprcDataEntity = new CPRCDataEntity();
                     cprcDataEntity.setType(CPRCTypeEntity.COMMENT);
                     cprcDataEntity.setTarget(articleId);
                     cprcDataEntity.setTargetType(targetType);
-
-                    HttpUtils.postComment(mHandler, setEntity(content), cprcDataEntity);
+                    cprcDataEntity.setUserId(spUtils.getInt(Entity.USER_ID));
+                    cprcDataEntity.setContent(result);
+                    cprcDataEntity.setToken(spUtils.getString(Entity.TOKEN));
+                    HttpUtils.postComment(mHandler, cprcDataEntity);
+                    break;
+                case 20:
+                    try {
+                        JSONObject object = (JSONObject) msg.obj;
+                        JSONArray array = object.getJSONArray("items");
+                        Type type = new TypeToken<CommentRequestResultEntity>(){}.getType();
+                        Gson gson = new Gson();
+                        for (int i =0; i < array.length(); i++){
+                            String item = array.getJSONObject(i).toString();
+                            /*CommentRequestResultEntity requestResultEntity = new Gson().fromJson(item,
+                                    new TypeToken<CommentRequestResultEntity>(){}.getType());*/
+                            dataList.add((CommentRequestResultEntity) gson.fromJson(item, type));
+                        }
+                        setDataToAdapter();
+                    }catch (JSONException e){
+                        e.printStackTrace();
+                    }
                     break;
                 case 500:
                     DialogMessage.showToast(PublishComment.this, "请求失败");
@@ -68,5 +119,25 @@ public class PublishComment extends BaseActivity {
         }
     };
 
+    public void setDataToAdapter(){
+        mAdapter = new CommentPublishAdapter(mHandler, PublishComment.this, dataList, R.layout.comment_publish_items);
+        binding.commentPublishRecycle.setHasFixedSize(true);
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(PublishComment.this, LinearLayoutManager.VERTICAL, true);
+        binding.commentPublishRecycle.setLayoutManager(linearLayoutManager);
+        binding.commentPublishRecycle.setAdapter(mAdapter);
+        binding.commentPublishRecycle.addItemDecoration(new RecyclerViewDecoration(PublishComment.this, RecyclerViewDecoration.VERTICAL_LIST));
+    }
+
+    public void getCommentAll(){
+        GetAllCPC cpc = new GetAllCPC();
+        cpc.setToken(spUtils.getString(Entity.TOKEN));
+        cpc.setType(CPRCTypeEntity.COMMENT);
+//        cpc.setTarget(articleId);
+//        cpc.setTargetType(targetType);
+        cpc.setMaxResultCount(10);
+        cpc.setSkipCount(0);
+
+        HttpUtils.getCommentAll(mHandler, cpc);
+    }
 
 }

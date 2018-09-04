@@ -33,6 +33,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 /**
  * Created by Qjc on 2018/5/24 0024.
@@ -64,7 +65,7 @@ public class TopicsFragment extends BaseFragment {
                 currentItem = (currentItem + 1) % listView.size();
                 mHandler.sendEmptyMessage(0);
             }
-        }, 2, 2, java.util.concurrent.TimeUnit.SECONDS);
+        }, 2, 2, TimeUnit.MINUTES);
     }
 
     @SuppressLint("HandlerLeak")
@@ -118,6 +119,16 @@ public class TopicsFragment extends BaseFragment {
                     case "1"://视频
                         break;
                     case "null":
+                        SchoolDynamicsEntity schoolEntity1 = new SchoolDynamicsEntity();
+                        schoolEntity1.setPublishTime(topics.getPublishTime());
+                        schoolEntity1.setContent(topics.getContentpublic());
+                        //schoolEntity1.setReadNumber(Integer.valueOf(topics.getReplyNumber()));
+                        schoolEntity1.setTile(topics.getTitle());
+                        schoolEntity1.setId(topics.getId());
+                        String data1 = new Gson().toJson(schoolEntity1);
+
+                        ARouter.getInstance().build("/main/schoolDynamics").withString(IntentDataType.INTENT_KEY, IntentDataType.TOPICS)
+                                .withString(IntentDataType.DATA, data1).navigation();
                         break;
                 }
             }

@@ -1,6 +1,7 @@
 package com.runtoinfo.youxiao.globalTools.adapter;
 
 import android.content.Context;
+import android.os.Handler;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -19,6 +20,7 @@ public abstract class UniversalRecyclerAdapter<T> extends RecyclerView.Adapter<B
     private int mLayoutId;
     private OnItemClickListener mItemClickListener;
     private onLongItemClickListener mLongItemClickListener;
+    private Handler handler;
 
     public final static int ONE_PIC_TYPE = 1;
     public final static int SECOND_PIC_TYPE = 2;
@@ -26,6 +28,13 @@ public abstract class UniversalRecyclerAdapter<T> extends RecyclerView.Adapter<B
 
     public UniversalRecyclerAdapter(Context mContext, List<T> mDatas, int mLayoutId) {
         this.mContext = mContext;
+        this.mDatas = mDatas;
+        this.mLayoutId = mLayoutId;
+    }
+
+    public UniversalRecyclerAdapter(Handler handler, Context context, List<T> mDatas, int mLayoutId){
+        this.mContext = context;
+        this.handler = handler;
         this.mDatas = mDatas;
         this.mLayoutId = mLayoutId;
     }

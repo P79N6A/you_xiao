@@ -13,10 +13,13 @@ import com.alibaba.android.arouter.facade.annotation.Route;
 import com.alibaba.android.arouter.launcher.ARouter;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+import com.runtoinfo.teacher.CPRCBean.CPRCDataEntity;
+import com.runtoinfo.teacher.CPRCBean.CPRCTypeEntity;
 import com.runtoinfo.teacher.HttpEntity;
 import com.runtoinfo.teacher.utils.HttpUtils;
 import com.runtoinfo.youxiao.R;
 import com.runtoinfo.youxiao.adapter.SchoolDynamicsRecyclerAdapter;
+import com.runtoinfo.youxiao.globalTools.utils.DialogMessage;
 import com.runtoinfo.youxiao.globalTools.utils.Entity;
 import com.runtoinfo.youxiao.databinding.SchoolMovmentBinding;
 import com.runtoinfo.youxiao.entity.SchoolDynamicsEntity;
@@ -41,6 +44,7 @@ public class SchoolDynamics extends BaseActivity {
     public SchoolDynamicsEntity schoolDynamicsEntity;
     public int type;
     public int targetType;
+    public int returnType;
     @Override
     protected void initView() {
         binding = DataBindingUtil.setContentView(this, R.layout.school_movment);
@@ -69,6 +73,32 @@ public class SchoolDynamics extends BaseActivity {
                         .withInt(IntentDataType.TARGET_TYPE, targetType).navigation();
             }
         });
+        binding.detailsCollection.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v) {
+                returnType = 1;
+                CPRCDataEntity dataEntity = new CPRCDataEntity();
+                dataEntity.setToken(spUtils.getString(Entity.TOKEN));
+                dataEntity.setType(CPRCTypeEntity.COLLECTION);
+                dataEntity.setTarget(schoolDynamicsEntity.getId());
+                dataEntity.setTargetType(targetType);
+                dataEntity.setUserId(spUtils.getInt(Entity.USER_ID));
+                HttpUtils.postComment(handler, dataEntity);
+            }
+        });
+
+        binding.detailsPraise.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v) {
+                CPRCDataEntity dataEntity = new CPRCDataEntity();
+                dataEntity.setToken(spUtils.getString(Entity.TOKEN));
+                dataEntity.setType(CPRCTypeEntity.PRAISE);
+                dataEntity.setTarget(schoolDynamicsEntity.getId());
+                dataEntity.setTargetType(targetType);
+                dataEntity.setUserId(spUtils.getInt(Entity.USER_ID));
+                HttpUtils.postComment(handler, dataEntity);
+            }
+        });
     }
 
     public void changeView(){
@@ -86,6 +116,8 @@ public class SchoolDynamics extends BaseActivity {
                 case IntentDataType.TOPICS:
                     binding.schoolDynamicsActivityTitle.setText("专题详情");
                     targetType = 1;
+                    String result = getIntent().getStringExtra(IntentDataType.DATA);
+                    schoolDynamicsEntity = new Gson().fromJson(result, new TypeToken<SchoolDynamicsEntity>(){}.getType());
                     hideView(true);
                     break;
             }
@@ -117,7 +149,7 @@ public class SchoolDynamics extends BaseActivity {
                             new TypeToken<SchoolDynamicsEntity>(){}.getType());
             binding.dynamicsTitle.setText(schoolEntity.getTile());
             binding.dynamicsTime.setText(schoolEntity.getPublishTime());
-            binding.dynamicsReadNumber.setText(schoolEntity.getReadNumber());
+            //binding.dynamicsReadNumber.setText(schoolEntity.getReadNumber());
 
             binding.dynamicsWebview.loadData(schoolEntity.getContent(), "text/html; charset=UTF-8",null);
         }
@@ -131,18 +163,27 @@ public class SchoolDynamics extends BaseActivity {
                 case 0:
                 case 1:
                 case 2:
-                    schoolDynamicsEntity = (SchoolDynamicsEntity) msg.obj;
-                    times ++;
-                    hideView(true);
-                    binding.dynamicsTitle.setText(schoolDynamicsEntity.getTile());
-                    binding.dynamicsTime .setText(schoolDynamicsEntity.getPublishTime());
-                    HttpUtils.getNewsReadNumber(handler,
-                            HttpEntity.MAIN_URL + HttpEntity.NEWS_READ_NUMBER,
-                            spUtils.getString(Entity.TOKEN),
-                            schoolDynamicsEntity.getId());
-                    binding.dynamicsWebview.loadData(schoolDynamicsEntity.getContent(), "text/html; charset=UTF-8",null);
+                    if (returnType == 1){
+                        binding.detailsPraiseImagView.setBackgroundResource(R.drawable.comment_praised);
+                    }else {
+                        schoolDynamicsEntity = (SchoolDynamicsEntity) msg.obj;
+                        times++;
+                        hideView(true);
+                        binding.dynamicsTitle.setText(schoolDynamicsEntity.getTile());
+                        binding.dynamicsTime.setText(schoolDynamicsEntity.getPublishTime());
+                        HttpUtils.getNewsReadNumber(handler,
+                                HttpEntity.MAIN_URL + HttpEntity.NEWS_READ_NUMBER,
+                                spUtils.getString(Entity.TOKEN),
+                                schoolDynamicsEntity.getId());
+                        binding.dynamicsWebview.loadData(schoolDynamicsEntity.getContent(), "text/html; charset=UTF-8", null);
+                    }
                     break;
                 case 3:
+                    binding.detailsCollectionImagView.setBackgroundResource(R.drawable.boutique_course_collectioned);
+                    DialogMessage.showToast(SchoolDynamics.this, "收藏成功");
+                    break;
+
+                case 5:
                     String json = msg.obj.toString();
                     Log.e("school", json);
                     fromJson(json);

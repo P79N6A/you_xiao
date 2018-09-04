@@ -43,17 +43,16 @@
 
         </android.support.v7.widget.RecyclerView>
 
-        <ScrollView
+        <RelativeLayout
             android:id="@+id/dynamics_webView_layout"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_marginTop="20dp"
             android:visibility="gone">
 
-            <LinearLayout
+            <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="vertical">
+                android:layout_height="match_parent">
 
                 <TextView
                     android:id="@+id/dynamics_title"
@@ -66,12 +65,14 @@
                     android:textStyle="bold" />
 
                 <LinearLayout
+                    android:id="@+id/dynamics_read_layout"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="15dp"
                     android:layout_marginStart="15dp"
                     android:layout_marginTop="15dp"
-                    android:orientation="horizontal">
+                    android:orientation="horizontal"
+                    android:layout_below="@+id/dynamics_title">
 
                     <TextView
                         android:id="@+id/dynamics_time"
@@ -100,36 +101,48 @@
                 <org.xwalk.core.XWalkView
                     android:id="@+id/dynamics_webview"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_below="@+id/dynamics_read_layout"
                     android:layout_marginEnd="15dp"
                     android:layout_marginStart="15dp"
-                    android:layout_marginTop="20dp"/>
+                    android:layout_marginTop="20dp"
+                    android:layout_above="@+id/dynamics_view1"/>
 
                 <View
+                    android:id="@+id/dynamics_view1"
                     android:layout_width="wrap_content"
                     android:layout_height="0.1dp"
-                    android:background="#e7ebf3" />
+                    android:background="#e7ebf3"
+                    android:layout_above="@+id/dynamics_comment_layout"/>
 
                 <LinearLayout
+                    android:id="@+id/dynamics_comment_layout"
                     android:layout_width="match_parent"
                     android:layout_height="45dp"
-                    android:layout_gravity="center"
-                    android:gravity="bottom"
+                    android:layout_alignParentBottom="true"
                     android:orientation="horizontal">
 
 
                     <LinearLayout
+                        android:id="@+id/details_collection"
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
                         android:layout_weight="1"
+                        android:orientation="horizontal"
                         android:gravity="center">
 
+                        <ImageView
+                            android:id="@+id/details_collection_imagView"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:background="@drawable/dynamics_collection"/>
+
                         <TextView
+                            android:id="@+id/details_collection_text"
                             android:layout_width="wrap_content"
                             android:layout_height="match_parent"
                             android:layout_gravity="center"
-                            android:drawableLeft="@drawable/dynamics_colltion"
-                            android:drawablePadding="5dp"
+                            android:layout_marginStart="5dp"
                             android:gravity="center"
                             android:text="收藏"
                             android:textSize="15sp" />
@@ -163,23 +176,30 @@
                         android:background="#e7ebf3" />
 
                     <LinearLayout
+                        android:id="@+id/details_praise"
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
                         android:layout_weight="1"
+                        android:orientation="horizontal"
                         android:gravity="center">
+
+                        <ImageView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:id="@+id/details_praise_imagView"
+                            android:background="@drawable/dynamics_z"/>
 
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="match_parent"
-                            android:drawableLeft="@drawable/dynamics_z"
-                            android:drawablePadding="5dp"
                             android:gravity="center"
+                            android:layout_marginStart="5dp"
                             android:text="点赞"
                             android:textSize="15sp" />
                     </LinearLayout>
                 </LinearLayout>
-            </LinearLayout>
-        </ScrollView>
+            </RelativeLayout>
+        </RelativeLayout>
 
         <ScrollView
             android:layout_width="match_parent"

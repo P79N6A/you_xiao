@@ -20,4 +20,6 @@ public class IntentDataType {
 
     public final static String TARGET_TYPE = "TARGET_TYPE";
 
+    public final static String TARGET = "TARGET";
+
 }

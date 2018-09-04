@@ -61,7 +61,7 @@ public class DialogMessage {
         Toast.makeText(context, msg, Toast.LENGTH_SHORT).show();
     }
 
-    public static void showBottomDialog(final Handler handler, final Context context, boolean flag){
+    public static void showBottomDialog(final Handler handler,final int type, final Context context, boolean flag){
         if (flag) {
             bottomDialog = new Dialog(context, R.style.inputDialog);
             bottomDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -69,13 +69,22 @@ public class DialogMessage {
             setWindowBottom(bottomDialog, context);
             bottomDialog.show();
 
-
             bottomDialog.findViewById(R.id.comment_submit).setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     EditText editText = (EditText) bottomDialog.findViewById(R.id.comment_msg_edit);
                     Message msg= new Message();
-                    msg.what = 1;
+                    switch (type){
+                        case 0:
+                            msg.what = 10;//直接评论
+                            break;
+                        case 1:
+                            msg.what = 11;//直接回复
+                            break;
+                        case 2:
+                            msg.what = 12;//回复回复
+                            break;
+                    }
                     msg.obj = editText.getText().toString();
                     handler.sendMessage(msg);
                 }
@@ -83,6 +92,7 @@ public class DialogMessage {
         }else{
             if (bottomDialog != null && bottomDialog.isShowing())
             bottomDialog.dismiss();
+            bottomDialog = null;
         }
     }
 

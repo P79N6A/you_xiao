@@ -3,7 +3,8 @@
     package="com.youxiao.comment">
 
     <application android:theme="@style/Theme.AppCompat.Light.NoActionBar">
-        <activity android:name=".activity.PublishComment"></activity>
+        <activity android:name=".activity.PublishComment" />
+        <activity android:name=".activity.ReplyComment"></activity>
     </application>
 
 </manifest>

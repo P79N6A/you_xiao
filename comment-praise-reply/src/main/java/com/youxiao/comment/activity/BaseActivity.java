@@ -4,6 +4,8 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 
+import com.runtoinfo.teacher.CPRCBean.CPRCDataEntity;
+import com.runtoinfo.teacher.CPRCBean.CPRCTypeEntity;
 import com.runtoinfo.teacher.HttpEntity;
 import com.runtoinfo.teacher.bean.RequestDataEntity;
 import com.runtoinfo.youxiao.globalTools.utils.Entity;
@@ -30,4 +32,6 @@ public class BaseActivity extends Activity {
         requestDataEntity.setMsg(msg);
         return requestDataEntity;
     }
+
+
 }

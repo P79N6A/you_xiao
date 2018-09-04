@@ -7,6 +7,10 @@ package com.runtoinfo.teacher;
 public class HttpEntity {
 
     public final static String MAIN_URL = "http://api.11youxiao.com";
+
+    public final static String IMAGE_HEAD = "http://image.11youxiao.com/";
+
+    public final static String FILE_HEAD = "http://file.11youxiao.com/";
     /**
      * 获取手机号下的信息
      */
@@ -111,4 +115,9 @@ public class HttpEntity {
      * 获取评论
      */
     public final static String GET_COMMENT_ALL = "/api/services/app/Comment/GetAll";
+    /**
+     * 更新状态
+     */
+    public final static String UPDATE_COMMENT_ALL = "/api/services/app/Comment/Update";
+
 }
