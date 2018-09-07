@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">personal_center</string>
+    <string name="title_activity_my_some_record">MySomeRecord</string>
 </resources>

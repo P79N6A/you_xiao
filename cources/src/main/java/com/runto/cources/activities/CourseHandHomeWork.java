@@ -1,7 +1,6 @@
 package com.runto.cources.activities;
 
 import android.app.Dialog;
-import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
@@ -25,8 +24,8 @@ import com.runto.cources.R;
 import com.runto.cources.adapter.GridViewAdapter;
 import com.runto.cources.adapter.ImageAdapter;
 import com.runto.cources.databinding.CourseHandHomeworkBinding;
-import com.runtoinfo.teacher.HttpEntity;
-import com.runtoinfo.teacher.utils.HttpUtils;
+import com.runtoinfo.httpUtils.HttpEntity;
+import com.runtoinfo.httpUtils.utils.HttpUtils;
 import com.runtoinfo.youxiao.globalTools.adapter.UniversalRecyclerAdapter;
 import com.runtoinfo.youxiao.globalTools.utils.DialogMessage;
 import com.runtoinfo.youxiao.globalTools.utils.Entity;

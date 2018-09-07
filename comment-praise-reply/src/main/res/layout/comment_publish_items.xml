@@ -9,7 +9,7 @@
         android:id="@+id/comment_publish_item_img"
         android:layout_width="50dp"
         android:layout_height="50dp"
-        android:background="@drawable/default_back_ground"
+        android:src="@drawable/default_back_ground"
         app:civ_border_overlay="true" />
 
     <LinearLayout

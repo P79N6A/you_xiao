@@ -8,7 +8,7 @@ import android.view.View;
 import android.widget.EditText;
 
 import com.runtoinfo.event.R;
-import com.runtoinfo.teacher.bean.AddMemberBean;
+import com.runtoinfo.httpUtils.bean.AddMemberBean;
 import com.runtoinfo.youxiao.globalTools.adapter.BaseViewHolder;
 import com.runtoinfo.youxiao.globalTools.adapter.UniversalRecyclerAdapter;
 

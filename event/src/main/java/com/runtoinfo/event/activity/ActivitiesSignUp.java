@@ -14,9 +14,9 @@ import com.google.gson.Gson;
 import com.runtoinfo.event.R;
 import com.runtoinfo.event.databinding.ActivitySiginUpBinding;
 import com.runtoinfo.event.dialog.SignUpSuccess;
-import com.runtoinfo.teacher.HttpEntity;
-import com.runtoinfo.teacher.bean.AddMemberBean;
-import com.runtoinfo.teacher.utils.HttpUtils;
+import com.runtoinfo.httpUtils.HttpEntity;
+import com.runtoinfo.httpUtils.bean.AddMemberBean;
+import com.runtoinfo.httpUtils.utils.HttpUtils;
 import com.runtoinfo.youxiao.globalTools.utils.Entity;
 
 public class ActivitiesSignUp extends EventBaseActivity {

@@ -2,21 +2,18 @@ package com.runtoinfo.youxiao.adapter;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
-import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.alibaba.android.arouter.launcher.ARouter;
-import com.runtoinfo.teacher.bean.CourseDataEntity;
-import com.runtoinfo.teacher.utils.HttpUtils;
+import com.runtoinfo.httpUtils.bean.CourseDataEntity;
+import com.runtoinfo.httpUtils.utils.HttpUtils;
 import com.runtoinfo.youxiao.R;
-import com.runtoinfo.youxiao.entity.BoutiqueRecycler;
 
 import java.util.ArrayList;
 import java.util.List;

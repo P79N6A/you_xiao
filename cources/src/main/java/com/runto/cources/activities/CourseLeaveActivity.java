@@ -1,10 +1,8 @@
 package com.runto.cources.activities;
 
-import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
 import android.databinding.DataBindingUtil;
-import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
@@ -13,14 +11,13 @@ import android.view.Gravity;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
-import android.widget.EditText;
 
 import com.alibaba.android.arouter.facade.annotation.Route;
 import com.runto.cources.R;
 import com.runto.cources.databinding.FragmentCourseLeaveBinding;
-import com.runtoinfo.teacher.HttpEntity;
-import com.runtoinfo.teacher.bean.RequestDataEntity;
-import com.runtoinfo.teacher.utils.HttpUtils;
+import com.runtoinfo.httpUtils.HttpEntity;
+import com.runtoinfo.httpUtils.bean.RequestDataEntity;
+import com.runtoinfo.httpUtils.utils.HttpUtils;
 import com.runtoinfo.youxiao.globalTools.timepicker.DatePickerView;
 import com.runtoinfo.youxiao.globalTools.utils.DialogMessage;
 import com.runtoinfo.youxiao.globalTools.utils.Entity;

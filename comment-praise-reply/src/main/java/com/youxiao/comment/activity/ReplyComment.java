@@ -1,6 +1,5 @@
 package com.youxiao.comment.activity;
 
-import android.content.ContentProviderClient;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.os.Handler;
@@ -13,12 +12,12 @@ import android.view.View;
 import com.alibaba.android.arouter.facade.annotation.Route;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
-import com.runtoinfo.teacher.CPRCBean.CPRCDataEntity;
-import com.runtoinfo.teacher.CPRCBean.CPRCTypeEntity;
-import com.runtoinfo.teacher.CPRCBean.CommentRequestResultEntity;
-import com.runtoinfo.teacher.CPRCBean.GetAllCPC;
-import com.runtoinfo.teacher.HttpEntity;
-import com.runtoinfo.teacher.utils.HttpUtils;
+import com.runtoinfo.httpUtils.CPRCBean.CPRCDataEntity;
+import com.runtoinfo.httpUtils.CPRCBean.CPRCTypeEntity;
+import com.runtoinfo.httpUtils.CPRCBean.CommentRequestResultEntity;
+import com.runtoinfo.httpUtils.CPRCBean.GetAllCPC;
+import com.runtoinfo.httpUtils.HttpEntity;
+import com.runtoinfo.httpUtils.utils.HttpUtils;
 import com.runtoinfo.youxiao.globalTools.utils.DialogMessage;
 import com.runtoinfo.youxiao.globalTools.utils.Entity;
 import com.runtoinfo.youxiao.globalTools.utils.IntentDataType;

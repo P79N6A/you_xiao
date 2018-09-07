@@ -4,10 +4,8 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 
-import com.runtoinfo.teacher.CPRCBean.CPRCDataEntity;
-import com.runtoinfo.teacher.CPRCBean.CPRCTypeEntity;
-import com.runtoinfo.teacher.HttpEntity;
-import com.runtoinfo.teacher.bean.RequestDataEntity;
+import com.runtoinfo.httpUtils.HttpEntity;
+import com.runtoinfo.httpUtils.bean.RequestDataEntity;
 import com.runtoinfo.youxiao.globalTools.utils.Entity;
 import com.runtoinfo.youxiao.globalTools.utils.SPUtils;
 

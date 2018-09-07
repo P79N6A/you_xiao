@@ -3,8 +3,8 @@
     package="com.runtoinfo.information">
 
     <application android:theme="@style/Theme.AppCompat.Light.NoActionBar">
-        <activity android:name=".InformationMainActivity"/>
-        <activity android:name=".InformationDetails"/>
+        <activity android:name=".activity.InformationMainActivity"/>
+        <activity android:name=".activity.InformationDetails"/>
     </application>
 
 </manifest>

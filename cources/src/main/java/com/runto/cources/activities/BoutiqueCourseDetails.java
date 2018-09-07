@@ -16,8 +16,8 @@ import com.runto.cources.R;
 import com.runto.cources.databinding.ActivityBoutiqueCourseDetailsBinding;
 import com.runto.cources.fragment.CourseIntroductionFragment;
 import com.runto.cources.fragment.CourseListFragment;
-import com.runtoinfo.teacher.bean.CourseDataEntity;
-import com.runtoinfo.teacher.utils.HttpUtils;
+import com.runtoinfo.httpUtils.bean.CourseDataEntity;
+import com.runtoinfo.httpUtils.utils.HttpUtils;
 import com.runtoinfo.youxiao.globalTools.adapter.CommonViewPagerAdapter;
 
 import java.util.ArrayList;

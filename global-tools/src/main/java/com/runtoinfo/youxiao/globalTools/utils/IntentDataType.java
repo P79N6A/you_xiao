@@ -22,4 +22,6 @@ public class IntentDataType {
 
     public final static String TARGET = "TARGET";
 
+    public final static String TYPE = "TYPE";
+
 }

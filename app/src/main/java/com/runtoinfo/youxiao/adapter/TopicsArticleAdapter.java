@@ -4,10 +4,8 @@ import android.app.Activity;
 import android.content.Context;
 import android.widget.ImageView;
 
-import com.runtoinfo.teacher.HttpEntity;
-import com.runtoinfo.teacher.bean.TopiceHttpResultEntity;
-import com.runtoinfo.teacher.bean.TopicsEntity;
-import com.runtoinfo.teacher.utils.HttpUtils;
+import com.runtoinfo.httpUtils.bean.TopiceHttpResultEntity;
+import com.runtoinfo.httpUtils.utils.HttpUtils;
 import com.runtoinfo.youxiao.R;
 import com.runtoinfo.youxiao.globalTools.adapter.BaseViewHolder;
 import com.runtoinfo.youxiao.globalTools.adapter.UniversalRecyclerAdapter;
@@ -33,7 +31,7 @@ public class TopicsArticleAdapter extends UniversalRecyclerAdapter<TopiceHttpRes
 
     @Override
     protected void convert(Context mContext, BaseViewHolder holder, TopiceHttpResultEntity topicsEntity, int position) {
-        HttpUtils.postPhoto(this.mContext, topicsEntity.getCoverImgs().get(1), (ImageView) holder.getView(R.id.topics_img_view));
+        HttpUtils.postSrcPhoto(this.mContext, topicsEntity.getCoverImgs().get(1), (ImageView) holder.getView(R.id.topics_img_view));
         holder.setText(R.id.topics_name, topicsEntity.getTitle());
         holder.setText(R.id.topics_announcer, topicsEntity.getPublisher());
         holder.setText(R.id.topics_comment, String.valueOf(topicsEntity.getCommentNumber()));

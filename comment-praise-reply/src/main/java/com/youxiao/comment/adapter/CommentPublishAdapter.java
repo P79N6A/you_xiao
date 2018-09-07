@@ -10,13 +10,11 @@ import android.widget.ImageView;
 
 import com.alibaba.android.arouter.launcher.ARouter;
 import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
-import com.runtoinfo.teacher.CPRCBean.CPRCDataEntity;
-import com.runtoinfo.teacher.CPRCBean.CPRCTypeEntity;
-import com.runtoinfo.teacher.CPRCBean.CommentPublishItemEntity;
-import com.runtoinfo.teacher.CPRCBean.CommentRequestResultEntity;
-import com.runtoinfo.teacher.HttpEntity;
-import com.runtoinfo.teacher.utils.HttpUtils;
+import com.runtoinfo.httpUtils.CPRCBean.CPRCDataEntity;
+import com.runtoinfo.httpUtils.CPRCBean.CPRCTypeEntity;
+import com.runtoinfo.httpUtils.CPRCBean.CommentRequestResultEntity;
+import com.runtoinfo.httpUtils.HttpEntity;
+import com.runtoinfo.httpUtils.utils.HttpUtils;
 import com.runtoinfo.youxiao.globalTools.adapter.BaseViewHolder;
 import com.runtoinfo.youxiao.globalTools.adapter.UniversalRecyclerAdapter;
 import com.runtoinfo.youxiao.globalTools.utils.DialogMessage;
@@ -24,7 +22,6 @@ import com.runtoinfo.youxiao.globalTools.utils.Entity;
 import com.runtoinfo.youxiao.globalTools.utils.IntentDataType;
 import com.runtoinfo.youxiao.globalTools.utils.SPUtils;
 import com.youxiao.comment.R;
-import com.youxiao.comment.activity.PublishComment;
 
 import java.util.ArrayList;
 import java.util.List;

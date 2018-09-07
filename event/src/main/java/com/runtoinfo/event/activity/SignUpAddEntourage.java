@@ -18,9 +18,9 @@ import com.runtoinfo.event.R;
 import com.runtoinfo.event.adapter.EventAddMemberAdapter;
 import com.runtoinfo.event.databinding.ActivityAddEntourageBinding;
 import com.runtoinfo.event.dialog.SignUpSuccess;
-import com.runtoinfo.teacher.HttpEntity;
-import com.runtoinfo.teacher.bean.AddMemberBean;
-import com.runtoinfo.teacher.utils.HttpUtils;
+import com.runtoinfo.httpUtils.HttpEntity;
+import com.runtoinfo.httpUtils.bean.AddMemberBean;
+import com.runtoinfo.httpUtils.utils.HttpUtils;
 import com.runtoinfo.youxiao.globalTools.utils.DialogMessage;
 import com.runtoinfo.youxiao.globalTools.utils.Entity;
 
@@ -77,8 +77,7 @@ public class SignUpAddEntourage extends EventBaseActivity {
             @Override
             public void onClick(View v) {
                 AddMemberBean addMemberBean =new AddMemberBean();
-                index++;
-                adapter.addItem(addMemberBean, index);
+                adapter.addItem(addMemberBean, adapter.getItemCount());
             }
         });
     }
@@ -95,7 +94,6 @@ public class SignUpAddEntourage extends EventBaseActivity {
                         progressDialog.dismiss();
                         signUpSuccess.show();
                         upIndex = 0;
-                        index = 0;
                     } else {
                         HttpUtils.postAddMember(handler, HttpEntity.MAIN_URL + HttpEntity.CAMPAIGN_ADD_MEMBER, adapter.getList().get(upIndex), spUtils.getString(Entity.TOKEN));
                         upIndex++;

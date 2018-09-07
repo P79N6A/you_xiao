@@ -10,14 +10,17 @@ import android.view.View;
 import com.alibaba.android.arouter.facade.annotation.Route;
 import com.alibaba.android.arouter.launcher.ARouter;
 import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.runtoinfo.event.R;
 import com.runtoinfo.event.adapter.EventRecyclerAdapter;
 import com.runtoinfo.event.databinding.ActivityActivitiesMainBinding;
-import com.runtoinfo.event.entity.EventEntity;
-import com.runtoinfo.teacher.HttpEntity;
-import com.runtoinfo.teacher.utils.HttpUtils;
+import com.runtoinfo.httpUtils.HttpEntity;
+import com.runtoinfo.httpUtils.bean.MyEventEntity;
+import com.runtoinfo.httpUtils.bean.RequestDataEntity;
+import com.runtoinfo.httpUtils.utils.HttpUtils;
 import com.runtoinfo.youxiao.globalTools.adapter.UniversalRecyclerAdapter;
 import com.runtoinfo.youxiao.globalTools.utils.Entity;
+import com.runtoinfo.youxiao.globalTools.utils.IntentDataType;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -30,14 +33,14 @@ import java.util.List;
 public class EnventActivity extends EventBaseActivity{
 
     public ActivityActivitiesMainBinding binding;
-    public List<EventEntity> dataList = new ArrayList<>();
+    public List<MyEventEntity> dataList = new ArrayList<>();
     public EventRecyclerAdapter adapter;
     public UniversalRecyclerAdapter.OnItemClickListener onItemClickListener = new UniversalRecyclerAdapter.OnItemClickListener() {
         @Override
         public void onItemClick(View view, int position) {
-            EventEntity eventEntity = dataList.get(position);
+            MyEventEntity eventEntity = dataList.get(position);
             String json = new Gson().toJson(eventEntity);
-            ARouter.getInstance().build("/event/eventDetails").withString("json", json).navigation();
+            ARouter.getInstance().build("/event/eventDetails").withString(IntentDataType.DATA, json).withInt(IntentDataType.TYPE, 0).navigation();
         }
     };
 
@@ -51,7 +54,10 @@ public class EnventActivity extends EventBaseActivity{
             }
         });
 
-        HttpUtils.getEventAll(mHandler, HttpEntity.MAIN_URL + HttpEntity.SCHOOL_CAMPAIGN, spUtils.getString(Entity.TOKEN));
+        RequestDataEntity entity = new RequestDataEntity();
+        entity.setUrl(HttpEntity.MAIN_URL + HttpEntity.SCHOOL_CAMPAIGN);
+        entity.setToken(spUtils.getString(Entity.TOKEN));
+        HttpUtils.getEventAll(mHandler, entity);
     }
 
     @Override
@@ -67,7 +73,7 @@ public class EnventActivity extends EventBaseActivity{
 
     public void initRecyclerView(){
         if (dataList.size() > 0) {
-            adapter = new EventRecyclerAdapter(EnventActivity.this, dataList, R.layout.mian_activity_recycler_item);
+            adapter = new EventRecyclerAdapter(EnventActivity.this, dataList, R.layout.mian_activity_recycler_item, 1);
             binding.activityEventRecycler.setLayoutManager(new LinearLayoutManager(this));
             binding.activityEventRecycler.setAdapter(adapter);
 
@@ -87,19 +93,11 @@ public class EnventActivity extends EventBaseActivity{
                         JSONObject result = json.getJSONObject("result");
                         JSONArray items = result.getJSONArray("items");
                         for (int i = 0; i < items.length(); i++){
-                            EventEntity eventEntity = new EventEntity();
                             JSONObject item = items.getJSONObject(i);
-                            eventEntity.setContent(item.getString("content"));
-                            eventEntity.setCover(item.getString("cover"));
-                            eventEntity.setEndString(item.getString("endTime"));
-                            eventEntity.setStartDate(item.getString("startDate"));
-                            eventEntity.setEventName(item.getString("name"));
-                            eventEntity.setLocation(item.getString("location"));
-                            eventEntity.setIntroduction(item.getString("introduction"));
-                            eventEntity.setId(item.getInt("id"));
+                            MyEventEntity eventEntity =
+                                    new Gson().fromJson(item.toString(), new TypeToken<MyEventEntity>(){}.getType());
                             dataList.add(eventEntity);
                         }
-
                         initRecyclerView();
                     }catch (JSONException e){
                         e.printStackTrace();

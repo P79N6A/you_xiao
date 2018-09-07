@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent" android:layout_height="match_parent"
+    android:padding="15dp">
+
+    <ImageView
+        android:layout_width="160dp"
+        android:layout_height="120dp"
+        android:id="@+id/record_study_imag"
+        android:background="@drawable/boutique_recycler_2"/>
+
+    <TextView
+        android:id="@+id/record_study_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:textSize="16sp"
+        android:layout_marginStart="15dp"
+        android:textColor="#333333"
+        android:layout_marginTop="10dp"
+        android:layout_toEndOf="@+id/record_study_imag"
+        android:text="零基础入门钢琴教程五线谱初级" />
+
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_toEndOf="@+id/record_study_imag"
+        android:layout_above="@+id/record_course_goon"
+        android:layout_marginBottom="10dp"
+        android:layout_marginStart="15dp"
+        android:layout_marginTop="30dp">
+
+        <TextView
+            android:id="@+id/record_study_old"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="15sp"
+            android:textColor="#999999"
+            android:text="已学:"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/record_progress"
+            android:text="10%"
+            android:layout_toEndOf="@+id/record_study_old"/>
+
+    </LinearLayout>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/record_course_goon"
+        android:background="@drawable/background_button_blue"
+        android:text="继续学习"
+        android:paddingStart="8dp"
+        android:paddingEnd="8dp"
+        android:paddingTop="6dp"
+        android:paddingBottom="6dp"
+        android:textSize="16sp"
+        android:layout_toEndOf="@+id/record_study_imag"
+        android:layout_alignBottom="@+id/record_study_imag"
+        android:layout_marginStart="15dp"
+        android:textColor="#fff"/>
+
+
+</RelativeLayout>

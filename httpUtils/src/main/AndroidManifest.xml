@@ -1,4 +1,4 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.runtoinfo.teacher" >
+    package="com.runtoinfo.httpUtils" >
     <uses-permission android:name="android.permission.INTERNET"/>
 </manifest>

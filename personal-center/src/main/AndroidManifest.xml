@@ -18,7 +18,11 @@
         <activity android:name=".activities.CameraActivity" />
         <activity android:name=".activities.PersonalSettings" />
         <activity android:name=".activities.PersonalAboutUs" />
-        <activity android:name=".activities.PersonalFeedBack"></activity>
+        <activity android:name=".activities.PersonalFeedBack" />
+        <activity
+            android:name=".activities.MySomeRecord"
+            android:label="@string/title_activity_my_some_record"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar"></activity>
     </application>
 
 </manifest>

@@ -26,9 +26,9 @@ import android.view.WindowManager;
 import android.widget.TextView;
 
 import com.alibaba.android.arouter.launcher.ARouter;
-import com.runtoinfo.teacher.HttpEntity;
-import com.runtoinfo.teacher.bean.HomeCourseEntity;
-import com.runtoinfo.teacher.utils.HttpUtils;
+import com.runtoinfo.httpUtils.HttpEntity;
+import com.runtoinfo.httpUtils.bean.HomeCourseEntity;
+import com.runtoinfo.httpUtils.utils.HttpUtils;
 import com.runtoinfo.youxiao.R;
 import com.runtoinfo.youxiao.adapter.CoursePunchAdapter;
 import com.runtoinfo.youxiao.globalTools.adapter.UniversalRecyclerAdapter;

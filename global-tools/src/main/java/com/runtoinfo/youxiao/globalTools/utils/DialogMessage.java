@@ -84,6 +84,8 @@ public class DialogMessage {
                         case 2:
                             msg.what = 12;//回复回复
                             break;
+                            default:
+                                msg.what = 20;
                     }
                     msg.obj = editText.getText().toString();
                     handler.sendMessage(msg);

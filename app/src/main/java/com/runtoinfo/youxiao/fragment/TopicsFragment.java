@@ -15,10 +15,10 @@ import android.widget.LinearLayout;
 
 import com.alibaba.android.arouter.launcher.ARouter;
 import com.google.gson.Gson;
-import com.runtoinfo.teacher.HttpEntity;
-import com.runtoinfo.teacher.bean.RequestDataEntity;
-import com.runtoinfo.teacher.bean.TopiceHttpResultEntity;
-import com.runtoinfo.teacher.utils.HttpUtils;
+import com.runtoinfo.httpUtils.HttpEntity;
+import com.runtoinfo.httpUtils.bean.RequestDataEntity;
+import com.runtoinfo.httpUtils.bean.TopiceHttpResultEntity;
+import com.runtoinfo.httpUtils.utils.HttpUtils;
 import com.runtoinfo.youxiao.R;
 import com.runtoinfo.youxiao.adapter.TopicsArticleAdapter;
 import com.runtoinfo.youxiao.adapter.ViewPageAdapter;

@@ -9,22 +9,21 @@ import android.view.View;
 
 import com.alibaba.android.arouter.facade.annotation.Route;
 import com.runto.cources.R;
-import com.runto.cources.databinding.CourseLeaveRecordBinding;
 
 @Route(path = "/course/courseLeaveCode")
 public class CourseLeaveCodeActivity extends Activity {
 
-    CourseLeaveRecordBinding binding;
+    //CourseLeaveRecordBinding binding;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.course_leave_record);
-        binding = DataBindingUtil.setContentView(this, R.layout.course_leave_record);
-        binding.courseLeaveCodeBack.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                onBackPressed();
-            }
-        });
+        //setContentView(R.layout.course_leave_record);
+//        binding = DataBindingUtil.setContentView(this, R.layout.course_leave_record);
+//        binding.courseLeaveCodeBack.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                onBackPressed();
+//            }
+//        });
     }
 }

@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="10dp"
+        android:layout_marginTop="10dp">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <com.runtoinfo.youxiao.globalTools.views.CircleImageView
+                android:id="@+id/infor_praise_user_image"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_centerVertical="true"
+                android:src="@drawable/youxiao_logo"/>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_centerVertical="true"
+                android:layout_marginStart="15dp"
+                android:layout_toEndOf="@+id/infor_praise_user_image">
+
+                <TextView
+                    android:id="@+id/praise_name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="#333333"
+                    android:textSize="20sp"
+                    android:text="有校官方"/>
+                <TextView
+                    android:id="@+id/praise_time"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="#666666"
+                    android:text="2018.04.25"/>
+
+            </LinearLayout>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="16sp"
+                android:text="回复"
+                android:layout_alignParentEnd="true"
+                android:padding="5dp"
+                android:background="@drawable/background_boundary_button"
+                android:textColor="#999999"
+                android:visibility="gone"/>
+        </RelativeLayout>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="20sp"
+            android:textColor="#333333"
+            android:layout_marginTop="10dp"
+            android:text="赞了你的评论"/>
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginTop="15dp">
+
+            <TextView
+                android:id="@+id/praise_default_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="叶少阳:"
+                android:textSize="20sp"
+                android:textColor="#27acf7"/>
+
+            <TextView
+                android:id="@+id/praise_default_comment"
+                style="@style/TextView_Style"
+                android:layout_marginStart="15dp"
+                android:text="非常同意楼主的说法！"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="100dp"
+            android:orientation="horizontal"
+            android:padding="10dp"
+            android:background="@drawable/linearlayout_background">
+
+            <ImageView
+                android:id="@+id/praise_ava_img"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_marginTop="10dp"
+                android:background="@drawable/info_praise_back"/>
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="3"
+                android:layout_marginTop="10dp"
+                android:layout_marginStart="15dp"
+                android:orientation="vertical">
+                <TextView
+                    android:id="@+id/praise_ava_title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="#333333"
+                    android:textSize="15sp"
+                    android:text="周末带孩子培养兴趣爱好是限制了他的自由吗"/>
+
+                <TextView
+                    android:id="@+id/praise_publisher"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="#999999"
+                    android:textSize="12sp"
+                    android:text="作者：张美丽"
+                    android:layout_marginTop="10dp"/>
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+</LinearLayout>

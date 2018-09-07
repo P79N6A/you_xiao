@@ -71,6 +71,14 @@
                 android:text="地点：济南市历下区"
                 android:textColor="#999999"
                 android:textSize="15sp" />
+
+            <TextView
+                android:id="@+id/event_participant"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="#999999"
+                android:textSize="15sp"
+                android:layout_marginTop="5dp"/>
         </LinearLayout>
 
 
@@ -113,7 +121,6 @@
             android:text="立即报名"
             android:textColor="#fff"
             android:textSize="18sp" />
-
 
     </LinearLayout>
 </layout>

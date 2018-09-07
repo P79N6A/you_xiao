@@ -15,9 +15,9 @@ import android.view.ViewGroup;
 
 import com.alibaba.android.arouter.launcher.ARouter;
 import com.google.gson.Gson;
-import com.runtoinfo.teacher.HttpEntity;
-import com.runtoinfo.teacher.bean.CourseDataEntity;
-import com.runtoinfo.teacher.utils.HttpUtils;
+import com.runtoinfo.httpUtils.HttpEntity;
+import com.runtoinfo.httpUtils.bean.CourseDataEntity;
+import com.runtoinfo.httpUtils.utils.HttpUtils;
 import com.runtoinfo.youxiao.R;
 import com.runtoinfo.youxiao.adapter.BoutiqueInChildRecyclerAdapter;
 import com.runtoinfo.youxiao.globalTools.utils.DialogMessage;

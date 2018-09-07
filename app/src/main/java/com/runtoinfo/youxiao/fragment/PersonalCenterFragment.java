@@ -18,6 +18,7 @@ import com.runtoinfo.youxiao.R;
 import com.runtoinfo.youxiao.activities.LoginActivity;
 import com.runtoinfo.youxiao.activities.MainActivity;
 import com.runtoinfo.youxiao.databinding.FragmentPersonalCenterBinding;
+import com.runtoinfo.youxiao.globalTools.utils.IntentDataType;
 import com.runtoinfo.youxiao.ui.MyGridView;
 
 import org.json.JSONException;
@@ -80,6 +81,7 @@ public class PersonalCenterFragment extends BaseFragment {
                 try {
                     JSONObject object = new JSONObject(json);
                     String itemObj = object.getString("text").replaceAll("\\s*", "");
+                    String dataType = null;
                     switch (position)
                     {
                         /*case 0://我的订单
@@ -89,13 +91,20 @@ public class PersonalCenterFragment extends BaseFragment {
                         case 2://我的活动
                             break;*/
                         case 0://上课记录
+                            dataType = "courseRecord";
+                            ARouter.getInstance().build("/center/mySomeRecord").withString(IntentDataType.DATA, dataType).navigation();
                             break;
                         case 1://"请假记录":
-                            ARouter.getInstance().build("/course/courseLeaveCode").navigation();
+                            dataType = "leaveRecord";
+                            ARouter.getInstance().build("/center/mySomeRecord").withString(IntentDataType.DATA, dataType).navigation();
                             break;
-                        case 2:
+                        case 2://学习轨迹
+                            dataType = "learnTrack";
+                            ARouter.getInstance().build("/center/mySomeRecord").withString(IntentDataType.DATA, dataType).navigation();
                             break;
-                        case 3:
+                        case 3://我的收藏
+                            dataType = "collection";
+                            ARouter.getInstance().build("/center/mySomeRecord").withString(IntentDataType.DATA, dataType).navigation();
                             break;
                         case 4://"关于我们":
                             ARouter.getInstance().build("/personal/aboutUs").navigation();
@@ -120,6 +129,18 @@ public class PersonalCenterFragment extends BaseFragment {
             @Override
             public void onClick(View v) {
                 ARouter.getInstance().build("/cources/colorfulActivity").navigation();
+            }
+        });
+        binding.personalMyActivity.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
+        binding.personalMyInformation.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ARouter.getInstance().build("/information/informationActivity").navigation();
             }
         });
     }

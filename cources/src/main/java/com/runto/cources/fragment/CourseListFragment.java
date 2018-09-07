@@ -3,26 +3,21 @@ package com.runto.cources.fragment;
 import android.annotation.SuppressLint;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
-import android.support.annotation.FontRes;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.SimpleAdapter;
 
-import com.alibaba.android.arouter.launcher.ARouter;
 import com.runto.cources.R;
 import com.runto.cources.activities.BoutiqueCourseDetails;
 import com.runto.cources.adapter.ListViewAdapter;
 import com.runto.cources.databinding.FragmentCourseListBinding;
-import com.runtoinfo.teacher.bean.ChildContent;
+import com.runtoinfo.httpUtils.bean.ChildContent;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 /**
  * Created by Administrator on 2018/7/27 0027.

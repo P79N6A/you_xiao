@@ -21,6 +21,7 @@ public abstract class UniversalRecyclerAdapter<T> extends RecyclerView.Adapter<B
     private OnItemClickListener mItemClickListener;
     private onLongItemClickListener mLongItemClickListener;
     private Handler handler;
+    private int type;
 
     public final static int ONE_PIC_TYPE = 1;
     public final static int SECOND_PIC_TYPE = 2;
@@ -42,6 +43,13 @@ public abstract class UniversalRecyclerAdapter<T> extends RecyclerView.Adapter<B
     public  UniversalRecyclerAdapter(Context mContext, List<T> mDatas) {
         this.mContext = mContext;
         this.mDatas = mDatas;
+    }
+
+    public UniversalRecyclerAdapter(Context context, List<T> mDatas, int mLayoutId, int type){
+        this.mContext = context;
+        this.mDatas = mDatas;
+        this.mLayoutId = mLayoutId;
+        this.type = type;
     }
 
     public void updateData(List<T> data) {
