@@ -6,13 +6,22 @@ package com.runtoinfo.httpUtils.bean;
 
 public class AddMemberBean {
     public String gender;
-    public String campaignId;
+    public int campaignId;
     public int userId;
     public String memberType;
     public String name;
     public String phoneNumber;
     public String age;
+    public int parentId;
     public int index;
+
+    public int getParentId() {
+        return parentId;
+    }
+
+    public void setParentId(int parentId) {
+        this.parentId = parentId;
+    }
 
     public int getIndex() {
         return index;
@@ -38,11 +47,11 @@ public class AddMemberBean {
         this.gender = gender;
     }
 
-    public String getCampaignId() {
+    public int getCampaignId() {
         return campaignId;
     }
 
-    public void setCampaignId(String campaignId) {
+    public void setCampaignId(int campaignId) {
         this.campaignId = campaignId;
     }
 

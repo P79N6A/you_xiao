@@ -257,7 +257,6 @@
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
                     android:layout_toStartOf="@+id/personal_next_ares"
-                    android:src="@drawable/persona_avatar"
                     android:textSize="18sp"
                     android:textColor="#999999"/>
 

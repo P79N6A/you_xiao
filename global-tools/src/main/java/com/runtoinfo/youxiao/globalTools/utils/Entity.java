@@ -13,4 +13,7 @@ public class Entity {
     public final static String PHONE_NUMBER = "PHONE_NUMBER";
     public final static String COURSE_ID = "COURSE_ID";
     public final static String COURSE_INST_ID = "COURSE_INST_ID";
-}
+    public final static String CAMPUS_ID = "CAMPUS_ID";
+    public final static String TENANT_ID = "TENANT_ID";
+    public final static String SCHOOL_DATA = "SCHOOL_DATA";
+ }

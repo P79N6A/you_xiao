@@ -115,6 +115,13 @@ public class EventAddMemberAdapter extends UniversalRecyclerAdapter<AddMemberBea
             phone.addTextChangedListener(phoneNum);
             phone.setTag(phoneNum);
         }
+
+        holder.getView(R.id.activity_delete_item).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                removeItem(position);
+            }
+        });
     }
 
 

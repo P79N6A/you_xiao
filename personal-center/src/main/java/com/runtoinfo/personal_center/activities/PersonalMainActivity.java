@@ -210,7 +210,7 @@ public class PersonalMainActivity extends BaseActivity {
             }
         }, "1970-01-01 00:00", now); // 初始化日期格式请用：yyyy-MM-dd HH:mm，否则不能正常运行
         customDatePicker1.showSpecificTime(false); // 不显示时和分
-        customDatePicker1.setIsLoop(false); // 不允许循环滚动
+        customDatePicker1.setIsLoop(true); // 不允许循环滚动
 
 //        customDatePicker2 = new CustomDatePicker(this, new CustomDatePicker.ResultHandler() {
 //            @Override

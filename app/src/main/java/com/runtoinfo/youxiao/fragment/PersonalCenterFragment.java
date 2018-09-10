@@ -134,7 +134,7 @@ public class PersonalCenterFragment extends BaseFragment {
         binding.personalMyActivity.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                ARouter.getInstance().build("/event/mineEventActivity").navigation();
             }
         });
         binding.personalMyInformation.setOnClickListener(new View.OnClickListener() {

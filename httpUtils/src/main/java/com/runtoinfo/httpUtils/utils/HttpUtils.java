@@ -17,6 +17,7 @@ import com.runtoinfo.httpUtils.CPRCBean.GetAllCPC;
 import com.runtoinfo.httpUtils.HttpEntity;
 import com.runtoinfo.httpUtils.bean.AddMemberBean;
 import com.runtoinfo.httpUtils.CPRCBean.CPRCDataEntity;
+import com.runtoinfo.httpUtils.bean.AddMemberResultEntity;
 import com.runtoinfo.httpUtils.bean.ChildContent;
 import com.runtoinfo.httpUtils.bean.CourseDataEntity;
 import com.runtoinfo.httpUtils.bean.HandWorkEntity;
@@ -596,45 +597,67 @@ public class HttpUtils {
     /**
      * 添加报名人员
      * @param handler
-     * @param url
+     * @param entity 请求实体
      */
-    public static void postAddMember(final Handler handler, final String url, final AddMemberBean addMemberBean, final String token){
+    public static void postAddMember(final Handler handler, final RequestDataEntity entity, final AddMemberBean addMemberBean, final int type) {
         executorService.execute(new Runnable() {
             @Override
             public void run() {
-                try {
-                    JSONObject json = new JSONObject();
+                    /*JSONObject json = new JSONObject();
                     json.put("campaignId", addMemberBean.getCampaignId());
                     json.put("userId", addMemberBean.getUserId());
                     json.put("memberType", addMemberBean.getMemberType());
                     json.put("name", addMemberBean.getName());
                     json.put("gender", addMemberBean.getGender());
                     json.put("age", addMemberBean.getAge());
-                    json.put("phoneNumber", addMemberBean.getPhoneNumber());
+                    json.put("phoneNumber", addMemberBean.getPhoneNumber());*/
 
-                    RequestBody body = RequestBody.create(JSON, json.toString());
+                String json = new Gson().toJson(addMemberBean);
 
-                    Request request = new Request.Builder()
-                            .header("Authorization", "Bearer " + token)
-                            .url(url)
-                            .post(body)
-                            .build();
-                    client.newCall(request).enqueue(new Callback() {
-                        @Override
-                        public void onFailure(Call call, IOException e) {
-                            handler.sendEmptyMessage(404);
-                        }
+                RequestBody body = RequestBody.create(JSON, json);
 
-                        @Override
-                        public void onResponse(Call call, Response response) throws IOException {
-                            if (response.isSuccessful()) {
-                                handler.sendEmptyMessage(0);
+                Request request = new Request.Builder()
+                        .header(Authorization, Bearer + entity.getToken())
+                        .url(entity.getUrl())
+                        .post(body)
+                        .build();
+                client.newCall(request).enqueue(new Callback() {
+                    @Override
+                    public void onFailure(Call call, IOException e) {
+                        handler.sendEmptyMessage(404);
+                    }
+
+                    @Override
+                    public void onResponse(Call call, Response response) throws IOException {
+                        if (response.isSuccessful()) {
+                            switch (type) {
+                                case 0://单独报名
+                                    handler.sendEmptyMessage(0);
+                                    break;
+                                case 1://添加随行人员报名
+                                    try {
+                                        JSONObject json = new JSONObject(response.body().string());
+                                        JSONObject result = json.getJSONObject("result");
+                                        int id = result.getInt("id");
+                                        Message msg = new Message();
+                                        msg.what = 0;
+                                        msg.obj = id;
+                                        handler.sendMessage(msg);
+                                    } catch (JSONException e) {
+                                        e.printStackTrace();
+                                    }
+                                    break;
+                                case 2://继续添加随行人员
+                                    handler.sendEmptyMessage(0);
+                                    break;
+                                case 3://完成提交
+                                    handler.sendEmptyMessage(3);
+                                    break;
                             }
+
                         }
-                    });
-                }catch (JSONException e){
-                    e.printStackTrace();
-                }
+                    }
+                });
             }
         });
     }

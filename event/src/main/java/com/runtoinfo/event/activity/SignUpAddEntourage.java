@@ -18,11 +18,14 @@ import com.runtoinfo.event.R;
 import com.runtoinfo.event.adapter.EventAddMemberAdapter;
 import com.runtoinfo.event.databinding.ActivityAddEntourageBinding;
 import com.runtoinfo.event.dialog.SignUpSuccess;
+import com.runtoinfo.event.entity.AddMemberEntity;
 import com.runtoinfo.httpUtils.HttpEntity;
 import com.runtoinfo.httpUtils.bean.AddMemberBean;
+import com.runtoinfo.httpUtils.bean.RequestDataEntity;
 import com.runtoinfo.httpUtils.utils.HttpUtils;
 import com.runtoinfo.youxiao.globalTools.utils.DialogMessage;
 import com.runtoinfo.youxiao.globalTools.utils.Entity;
+import com.runtoinfo.youxiao.globalTools.utils.IntentDataType;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -32,20 +35,23 @@ public class SignUpAddEntourage extends EventBaseActivity {
 
     public ActivityAddEntourageBinding binding;
     public List<AddMemberBean> dataList = new ArrayList<>();
-    public int index = 0, upIndex = 0;
     public LayoutInflater inflate;
     public ProgressDialog progressDialog;
     public SignUpSuccess signUpSuccess;
     public EventAddMemberAdapter adapter;
-    public AddMemberBean intentBean;
+    public int campaignId;
+    public RequestDataEntity requestDataEntity;
 
     public void initView(){
         binding = DataBindingUtil.setContentView( SignUpAddEntourage.this, R.layout.activity_add_entourage);
+        requestDataEntity = new RequestDataEntity();
+        requestDataEntity.setUrl(HttpEntity.MAIN_URL + HttpEntity.CAMPAIGN_ADD_MEMBER);
+        requestDataEntity.setToken(spUtils.getString(Entity.TOKEN));
     }
 
     @Override
     protected void initData() {
-        intentBean =new Gson().fromJson( getIntent().getExtras().getString("json"), new TypeToken<AddMemberBean>(){}.getType());
+        campaignId = getIntent().getExtras().getInt(IntentDataType.DATA);
         //添加一个
         dataList = new ArrayList<>();
         dataList.add(new AddMemberBean());
@@ -61,25 +67,27 @@ public class SignUpAddEntourage extends EventBaseActivity {
         binding.activitySignUp.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (adapter.getList().size() == 1) {
-                    AddMemberBean bean = adapter.getList().get(0);
-                    if (TextUtils.isEmpty(bean.getMemberType()) || TextUtils.isEmpty(bean.getPhoneNumber()) || TextUtils.isEmpty(bean.getName())) {
-                        Toast.makeText(SignUpAddEntourage.this, "请完善随行人员信息", Toast.LENGTH_SHORT).show();
-                        return;
-                    }
-                }
-                DialogMessage.createDialog(SignUpAddEntourage.this, progressDialog, "正在上传信息...");
-                HttpUtils.postAddMember(handler, HttpEntity.MAIN_URL + HttpEntity.CAMPAIGN_ADD_MEMBER, intentBean, spUtils.getString(Entity.TOKEN));
+               upLoadMember(3);
             }
         });
 
         binding.activityAddAgain.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                AddMemberBean addMemberBean =new AddMemberBean();
-                adapter.addItem(addMemberBean, adapter.getItemCount());
+               upLoadMember(2);
             }
         });
+    }
+
+    public void upLoadMember(int requestType){
+        AddMemberBean bean = adapter.getList().get(adapter.getItemCount() - 1);
+        bean.setCampaignId(campaignId);
+        if (TextUtils.isEmpty(bean.getMemberType()) || TextUtils.isEmpty(bean.getPhoneNumber()) || TextUtils.isEmpty(bean.getName())) {
+            Toast.makeText(SignUpAddEntourage.this, "请完善随行人员信息", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        DialogMessage.createDialog(SignUpAddEntourage.this, progressDialog, "正在上传信息...");
+        HttpUtils.postAddMember(handler, requestDataEntity, bean, requestType);
     }
 
 
@@ -89,14 +97,14 @@ public class SignUpAddEntourage extends EventBaseActivity {
         public void handleMessage(Message msg) {
             switch (msg.what){
                 case 0:
-                    int size = adapter.getList().size();
-                    if (upIndex == size) {
+                    progressDialog.dismiss();
+                    AddMemberBean addMemberBean =new AddMemberBean();
+                    adapter.addItem(addMemberBean, adapter.getItemCount());
+                    break;
+                case 3:
+                    if (progressDialog != null){
                         progressDialog.dismiss();
                         signUpSuccess.show();
-                        upIndex = 0;
-                    } else {
-                        HttpUtils.postAddMember(handler, HttpEntity.MAIN_URL + HttpEntity.CAMPAIGN_ADD_MEMBER, adapter.getList().get(upIndex), spUtils.getString(Entity.TOKEN));
-                        upIndex++;
                     }
                     break;
                 case 404:

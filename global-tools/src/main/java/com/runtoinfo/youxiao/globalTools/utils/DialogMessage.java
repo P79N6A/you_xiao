@@ -15,6 +15,7 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.runtoinfo.youxiao.globalTools.R;
+import com.runtoinfo.youxiao.globalTools.adapter.BaseViewHolder;
 import com.victor.loading.rotate.RotateLoading;
 
 
@@ -107,5 +108,17 @@ public class DialogMessage {
         WindowManager.LayoutParams lp = window.getAttributes();
         lp.width = dm.widthPixels;
         window.setAttributes(lp);
+    }
+
+    public static Dialog showDialogWithLayout(Context context, int layoutId){
+        Dialog dialog = new Dialog(context);
+        dialog.setContentView(layoutId);
+        dialog.setCanceledOnTouchOutside(false);
+        return dialog;
+    }
+
+    public static View getView(Context context, int layoutId, int viewId){
+        View view = LayoutInflater.from(context).inflate(layoutId, null);
+        return view.findViewById(viewId);
     }
 }

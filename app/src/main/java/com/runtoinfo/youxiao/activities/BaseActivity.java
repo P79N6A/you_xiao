@@ -1,5 +1,6 @@
 package com.runtoinfo.youxiao.activities;
 
+import android.content.pm.ActivityInfo;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
@@ -34,8 +35,9 @@ public abstract class BaseActivity extends FragmentActivity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        initView();
+        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         initShared();
+        initView();
         //添加Activity到堆栈
         MyApplication.getInstance().addActivity(this);
         initData();

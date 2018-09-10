@@ -67,6 +67,7 @@ public class LoginActivity extends BaseActivity {
         progressDialog = new ProgressDialog(LoginActivity.this);
         dialog = new Dialog(this, R.style.dialog);
         loginHead = new HttpLoginHead();
+
         initEvent();
     }
 
@@ -276,7 +277,6 @@ public class LoginActivity extends BaseActivity {
     }
 
     public void setUserName(){
-        //
         if (!TextUtils.isEmpty(spUtils.getString(com.runtoinfo.youxiao.globalTools.utils.Entity.PHONE_NUMBER))){
             String phone = spUtils.getString(com.runtoinfo.youxiao.globalTools.utils.Entity.PHONE_NUMBER);
             binding.loginMobilePhone.setText(phone);
@@ -296,8 +296,10 @@ public class LoginActivity extends BaseActivity {
      */
     public void setSelectSchool(SelectSchoolEntity dynamics){
         loginHead.setCampusId(dynamics.getId());
+        spUtils.setInt(Entity.CAMPUS_ID, dynamics.getId());
         loginHead.setTenancyName(dynamics.getTenancyName());
         loginHead.setTenantId(dynamics.getTenantId());
+        spUtils.setInt(Entity.TENANT_ID, Integer.parseInt(dynamics.getTenantId()));
         DialogMessage.createDialog(LoginActivity.this, progressDialog, "正在接收数据，请稍后...");
         mHandler.sendEmptyMessage(0);
     }
@@ -323,7 +325,10 @@ public class LoginActivity extends BaseActivity {
         }
         mAdapter = new ListViewAdapter(this, schoolList);
         binding.loginSelectLv.setAdapter(mAdapter);
-        mHandler.sendEmptyMessage(6);
+
+        String schoolData = new Gson().toJson(schoolList);
+        spUtils.setString(Entity.SCHOOL_DATA, schoolData);
+        //mHandler.sendEmptyMessage(6);
     }
 
     /**
@@ -403,8 +408,6 @@ public class LoginActivity extends BaseActivity {
                     if (dialog != null)
                     DialogMessage.showLoading(LoginActivity.this, dialog, false);
                     String json = new Gson().toJson(schoolList);
-                    if (!TextUtils.isEmpty(spUtils.getString(Entity.TOKEN)))
-                    ARouter.getInstance().build(Entity.MAIN_ACTIVITY_PATH).withString(IntentDataType.DATA, json).navigation();
                     break;
 
             }
@@ -442,9 +445,7 @@ public class LoginActivity extends BaseActivity {
     @Override
     protected void onStart() {
         super.onStart();
-        String isLoged = spUtils.getString(Entity.TOKEN);
-        if (!TextUtils.isEmpty(isLoged)){
-            DialogMessage.showLoading(this, dialog, true);
-        }
+        if (!TextUtils.isEmpty(spUtils.getString(Entity.TOKEN)))
+            ARouter.getInstance().build(Entity.MAIN_ACTIVITY_PATH).navigation();
     }
 }

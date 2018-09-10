@@ -121,5 +121,14 @@ public class MySomeRecord extends BaseActivity {
        binding.personalCollectionTabLayout.setupWithViewPager(binding.personalCollectionViewPager);
    }
 
+   public void initEvent(){
+       binding.personalFeedbackBack.setOnClickListener(new View.OnClickListener() {
+           @Override
+           public void onClick(View v) {
+               onBackPressed();
+           }
+       });
+   }
+
 
 }

@@ -275,7 +275,5 @@
                 android:focusableInTouchMode="true" />
 
         </LinearLayout>
-
-
     </LinearLayout>
 </layout>

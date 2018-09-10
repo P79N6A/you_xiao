@@ -20,6 +20,7 @@ import com.runtoinfo.youxiao.fragment.FineClassFragment;
 import com.runtoinfo.youxiao.fragment.HomeFragment;
 import com.runtoinfo.youxiao.fragment.PersonalCenterFragment;
 import com.runtoinfo.youxiao.fragment.TopicsFragment;
+import com.runtoinfo.youxiao.globalTools.utils.Entity;
 import com.runtoinfo.youxiao.globalTools.utils.IntentDataType;
 
 import java.util.ArrayList;
@@ -51,7 +52,7 @@ public class MainActivity extends BaseActivity implements ViewPager.OnPageChange
     @Override
     protected void initView() {
         binding = DataBindingUtil.setContentView(MainActivity.this, R.layout.activity_main);
-        schoolSelectList = new Gson().fromJson(getIntent().getExtras().getString(IntentDataType.DATA), new TypeToken<List<SelectSchoolEntity>>(){}.getType());
+        schoolSelectList = new Gson().fromJson(spUtils.getString(Entity.SCHOOL_DATA), new TypeToken<List<SelectSchoolEntity>>(){}.getType());
         tv_menus = new ArrayList<TextView>();
         tv_menus.add(binding.tvBottomMenuChat);
         tv_menus.add(binding.tvBottomMenuAddressbook);

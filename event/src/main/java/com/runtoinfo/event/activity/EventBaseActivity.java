@@ -2,6 +2,7 @@ package com.runtoinfo.event.activity;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 
 import com.runtoinfo.youxiao.globalTools.utils.SPUtils;
@@ -17,6 +18,7 @@ public abstract class EventBaseActivity extends Activity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         initShared();
         initView();
         initData();

@@ -157,12 +157,12 @@ public class TopicsFragment extends BaseFragment {
     }
 
     public void getAllArticle(){
+        if (resultList.size() > 0) resultList.clear();
         RequestDataEntity requestDataEntity = new RequestDataEntity();
         requestDataEntity.setToken(spUtils.getString(Entity.TOKEN));
         requestDataEntity.setUserId(spUtils.getInt(Entity.USER_ID));
         requestDataEntity.setCourseId(spUtils.getInt(Entity.COURSE_ID));
         requestDataEntity.setUrl(HttpEntity.MAIN_URL + HttpEntity.COURSE_TOPICS);
-
         HttpUtils.getTopics(mHandler, requestDataEntity, resultList);
     }
 }

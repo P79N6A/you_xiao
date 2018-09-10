@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/background_cancel_dialog">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/dialog_message"
+        android:textSize="18sp"
+        android:textColor="#333333"
+        android:text="是不是手滑了？"
+        android:layout_gravity="center"
+        android:paddingTop="30dp"
+        android:paddingBottom="30dp"
+        android:gravity="center"/>
+    <View
+        android:layout_width="wrap_content"
+        android:layout_height="0.5dp"
+        android:background="#ededed"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:orientation="horizontal">
+        <TextView
+            android:id="@+id/cancel_sign"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:text="取消报名"
+            android:textSize="18sp"
+            android:gravity="center"
+            android:layout_weight="1"
+            android:textColor="#666666"/>
+
+        <View
+            android:layout_width="0.5dp"
+            android:layout_height="wrap_content"
+            android:background="#ededed"/>
+
+        <TextView
+            android:id="@+id/think_again"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:text="再想想"
+            android:textSize="18sp"
+            android:gravity="center"
+            android:layout_weight="1"
+            android:textColor="#3aa6fe"/>
+    </LinearLayout>
+</LinearLayout>

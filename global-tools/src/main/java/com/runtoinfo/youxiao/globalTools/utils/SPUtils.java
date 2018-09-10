@@ -30,7 +30,7 @@ public class SPUtils {
     }
 
     public String getString(String key){
-        return preferences.getString(key,"null");
+        return preferences.getString(key,"");
     }
 
     public void setInt(String key, int value){

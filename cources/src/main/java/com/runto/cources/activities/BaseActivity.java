@@ -2,6 +2,7 @@ package com.runto.cources.activities;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.content.pm.ActivityInfo;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -25,7 +26,7 @@ public abstract class BaseActivity extends Activity {
     public SPUtils spUtils;
 
     protected void initWindow() {
-
+        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
     }
 
 

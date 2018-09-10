@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.view.View;
 
+import com.alibaba.android.arouter.facade.annotation.Route;
 import com.alibaba.android.arouter.launcher.ARouter;
 import com.google.gson.Gson;
 import com.runtoinfo.event.R;
@@ -25,6 +26,7 @@ import com.runtoinfo.youxiao.globalTools.utils.IntentDataType;
 import java.util.ArrayList;
 import java.util.List;
 
+@Route(path = "/event/mineEventActivity")
 public class MineEventActivity extends EventBaseActivity {
 
     public ActivityMineEventBinding binding;
@@ -44,7 +46,12 @@ public class MineEventActivity extends EventBaseActivity {
 
     @Override
     protected void initEvent() {
-
+        binding.mineEventBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onBackPressed();
+            }
+        });
     }
     public void initRecyclerData(){
         mAdapter = new EventRecyclerAdapter(MineEventActivity.this, dataList, R.layout.mian_activity_recycler_item, 0);

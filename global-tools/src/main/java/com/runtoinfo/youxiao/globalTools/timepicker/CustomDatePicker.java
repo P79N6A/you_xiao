@@ -259,7 +259,7 @@ public class CustomDatePicker {
      * 将“0-9”转换为“00-09”
      */
     private String formatTimeUnit(int unit) {
-        return unit < 10 ? "0" + String.valueOf(unit) : String.valueOf(unit);
+        return unit < 10 ? String.valueOf(unit) : String.valueOf(unit);
     }
 
     private void initArrayList() {
