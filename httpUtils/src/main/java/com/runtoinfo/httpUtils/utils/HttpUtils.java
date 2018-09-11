@@ -27,6 +27,7 @@ import com.runtoinfo.httpUtils.bean.LeaveEntity;
 import com.runtoinfo.httpUtils.bean.MyEventEntity;
 import com.runtoinfo.httpUtils.bean.RequestDataEntity;
 import com.runtoinfo.httpUtils.bean.TopiceHttpResultEntity;
+import com.runtoinfo.youxiao.globalTools.utils.Entity;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -188,16 +189,39 @@ public class HttpUtils {
                             //.addHeader("Authorization",  "Bearer " + head.getToken())
                             .post(body)
                             .build();
-                    Response response = null;
-                    response = client.newCall(request).execute();
-                    if (response.isSuccessful()) {
-                        Message message = new Message();
-                        message.what = 3;
-                        message.obj = response;
-                        handler.sendMessage(message);
-                    }
-                } catch (IOException e) {
-                    e.printStackTrace();
+                    client.newCall(request).enqueue(new Callback() {
+                        @Override
+                        public void onFailure(Call call, IOException e) {
+
+                        }
+
+                        @Override
+                        public void onResponse(Call call, Response response) throws IOException {
+                            if (response.isSuccessful()) {
+                                try {
+                                    Message message = new Message();
+                                    JSONObject json = new JSONObject(response.body().string());
+                                    boolean success = json.getBoolean("success");
+                                    if(!success){
+                                        JSONObject error = json.getJSONObject("error");
+                                        String mes = error.getString("message");
+                                        String details = error.getString("details");
+                                        message.what = 400;
+                                        message.obj = mes;
+                                        handler.sendMessage(message);
+                                    }else{
+                                        message.obj = json.getString("result");
+                                        message.what = 3;
+                                        handler.sendMessage(message);
+                                    }
+                                } catch (JSONException e) {
+                                    e.printStackTrace();
+                                }
+                            }
+                        }
+                    });
+
+
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -1341,6 +1365,36 @@ public class HttpUtils {
                             }catch (JSONException e){
                                 e.printStackTrace();
                             }
+                        }
+                    }
+                });
+            }
+        });
+    }
+
+    /**
+     * 获取用户未读信息
+     * @param handler
+     * @param requestDataEntity 请求体
+     */
+    public static void getUserUnreadNotification(final Handler handler, final RequestDataEntity requestDataEntity){
+        executorService.execute(new Runnable() {
+            @Override
+            public void run() {
+                Request request = new Request.Builder()
+                        .url(requestDataEntity.getUrl() + "?tenantId=" + requestDataEntity.getTenantId() + "&userId=" + requestDataEntity.getUserId())
+                        .header(Authorization, Bearer + requestDataEntity.getToken())
+                        .build();
+                getHttpsClient().newCall(request).enqueue(new Callback() {
+                    @Override
+                    public void onFailure(Call call, IOException e) {
+
+                    }
+
+                    @Override
+                    public void onResponse(Call call, Response response) throws IOException {
+                        if (response.isSuccessful()){
+                            Log.e("Notification", response.body().string());
                         }
                     }
                 });

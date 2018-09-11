@@ -28,3 +28,12 @@
 -keep class net.sourceforge.pinyin4j.**{*;}
 -keep class net.sourceforge.pinyin4j.format.**{*;}
 -keep class net.sourceforge.pinyin4j.format.exception.**{*;}
+
+-keep class com.taobao.** {*;}
+-keep class com.alibaba.** {*;}
+-dontwarn com.taobao.**
+-dontwarn com.alibaba.**
+-keep class com.ut.** {*;}
+-dontwarn com.ut.**
+-keep class com.ta.** {*;}
+-dontwarn com.ta.**

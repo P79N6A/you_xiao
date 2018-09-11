@@ -131,5 +131,21 @@ public class HttpEntity {
      * 获取我的收藏
      */
     public final static String GET_COLLECTION_ME = "/api/services/app/Comment/GetMyFavorite";
+    /**
+     * 获取用户未读消息数量
+     */
+    public final static String GET_NOTIFICATION_COUNT = "/api/services/app/Notification/GetUserNotificationCount";
+    /**
+     * 获取指定的消息
+     */
+    public final static String GET_ASYNC_NOTIFICATION = "/api/services/app/Notification/GetUserNotificationAsync";
+    /**
+     * 获取用户未读消息
+     */
+    public final static String GET_USER_NOTIFICATION_UNREAD = "/api/services/app/Notification/GetUserNotificationsAsync";
+    /**
+     * 更新消息状态
+     */
+    public final static String UPDATE_USER_NOTIFICATION_STATUE = "/api/services/app/Notification/ReadUserNotification";
 
 }

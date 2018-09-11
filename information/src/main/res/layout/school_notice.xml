@@ -1,116 +1,40 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="#f7f7f7">
 
-    <RelativeLayout
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="#fff"
-        android:padding="10dp">
-
-        <ImageView
-            android:id="@+id/system_information_back"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
-            android:src="@drawable/activity_black_back" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerHorizontal="true"
-            android:layout_centerVertical="true"
-            android:text="学校通知"
-            android:textColor="#333333"
-            android:textSize="20sp" />
-    </RelativeLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
+        android:background="#f7f7f7"
         android:orientation="vertical">
 
-        <TextView
+        <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:gravity="center"
-            android:padding="15dp"
-            android:text="2018/05/30 10:00"
-            android:textColor="#999999"
-            android:textSize="15sp" />
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="15dp"
-            android:layout_marginStart="15dp"
-            android:background="@drawable/background_edittext"
-            android:orientation="vertical"
-            android:padding="15dp">
+            android:background="#fff"
+            android:padding="10dp">
 
             <ImageView
-                android:layout_width="match_parent"
-                android:layout_height="180dp"
-                android:scaleType="fitXY"
-                android:src="@drawable/boutique_course_details"/>
+                android:id="@+id/system_information_back"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:src="@drawable/activity_black_back" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="12dp"
-                android:text="特大优惠来袭：线上钢琴课程5月20日开课啦，今天购买立减200元，快去看看吧！ >>"
-                android:textColor="#999999"
-                android:textSize="18sp" />
-
-        </LinearLayout>
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical">
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:gravity="center"
-            android:padding="15dp"
-            android:text="2018/05/30 10:00"
-            android:textColor="#999999"
-            android:textSize="15sp" />
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="15dp"
-            android:layout_marginStart="15dp"
-            android:background="@drawable/background_edittext"
-            android:orientation="vertical"
-            android:padding="15dp">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="重要消息"
+                android:layout_centerHorizontal="true"
+                android:layout_centerVertical="true"
+                android:text="学校通知"
                 android:textColor="#333333"
-                android:textSize="18sp" />
+                android:textSize="20sp" />
+        </RelativeLayout>
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:text="尊敬的用户您好，今天的课程有雨恶劣天气原因取消，敬请谅解。"
-                android:textColor="#666666"
-                android:textSize="18sp" />
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/school_notice_recycler"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
 
-        </LinearLayout>
     </LinearLayout>
-
-</LinearLayout>
 
 </layout>

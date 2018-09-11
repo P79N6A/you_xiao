@@ -113,12 +113,21 @@ public class DialogMessage {
     public static Dialog showDialogWithLayout(Context context, int layoutId){
         Dialog dialog = new Dialog(context);
         dialog.setContentView(layoutId);
+        //setWindowTransparent(dialog);
         dialog.setCanceledOnTouchOutside(false);
+        dialog.setCancelable(false);
         return dialog;
     }
 
     public static View getView(Context context, int layoutId, int viewId){
         View view = LayoutInflater.from(context).inflate(layoutId, null);
         return view.findViewById(viewId);
+    }
+
+    public static void setWindowTransparent(Dialog dialog){
+        Window window = dialog.getWindow();
+        WindowManager.LayoutParams lp = window.getAttributes();
+        lp.alpha = 0.6f;
+        window.setAttributes(lp);
     }
 }

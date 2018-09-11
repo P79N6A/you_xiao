@@ -1,9 +1,12 @@
 package com.runtoinfo.youxiao.activities;
 
+import android.app.Dialog;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -20,6 +23,7 @@ import com.runtoinfo.youxiao.fragment.FineClassFragment;
 import com.runtoinfo.youxiao.fragment.HomeFragment;
 import com.runtoinfo.youxiao.fragment.PersonalCenterFragment;
 import com.runtoinfo.youxiao.fragment.TopicsFragment;
+import com.runtoinfo.youxiao.globalTools.utils.DialogMessage;
 import com.runtoinfo.youxiao.globalTools.utils.Entity;
 import com.runtoinfo.youxiao.globalTools.utils.IntentDataType;
 
@@ -41,6 +45,7 @@ public class MainActivity extends BaseActivity implements ViewPager.OnPageChange
     private long firstTime = 0;
 
     public List<SelectSchoolEntity> schoolSelectList;
+    public Handler handler= new Handler();
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -78,6 +83,13 @@ public class MainActivity extends BaseActivity implements ViewPager.OnPageChange
         mFragments.add(new PersonalCenterFragment());
         mMainMenuAdapter = new FragmentAdapter(getSupportFragmentManager(), mFragments);
         setMenuSelector(0); // 默认选中第一个菜单项“微信”
+
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                showUpdate("1222222222222222222222222222222222");
+            }
+        }, 2000);
     }
 
     // 初始化事件
@@ -165,5 +177,21 @@ public class MainActivity extends BaseActivity implements ViewPager.OnPageChange
             Toast.makeText(MainActivity.this, "再按一次退出程序", Toast.LENGTH_SHORT).show();
             firstTime = System.currentTimeMillis();
         }
+    }
+    //获取版本号提示是否更新
+    public void checkVersionFromServer(){
+
+    }
+
+    public void showUpdate(String details){
+        final Dialog dialog = DialogMessage.showDialogWithLayout(MainActivity.this, R.layout.check_version_layout);
+        dialog.show();
+        dialog.findViewById(R.id.check_version_dismiss).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+            }
+        });
+        ((TextView) dialog.findViewById(R.id.check_version_details)).setText(details);
     }
 }

@@ -389,8 +389,8 @@ public class LoginActivity extends BaseActivity {
                     binding.loginGetVerification.setBackgroundResource(R.drawable.background_verification_selected);
                     break;
                 case 3:
-                    Response response = (Response) msg.obj;
-                    if (response != null && response.code() == 200){
+                    String response = msg.obj.toString();
+                    if (response != null && !response.equals("null")){
                         getToken(response);
                         String json = new Gson().toJson(schoolList);
                         ARouter.getInstance().build(Entity.MAIN_ACTIVITY_PATH).withString(IntentDataType.DATA, json).navigation();
@@ -409,22 +409,24 @@ public class LoginActivity extends BaseActivity {
                     DialogMessage.showLoading(LoginActivity.this, dialog, false);
                     String json = new Gson().toJson(schoolList);
                     break;
-
+                case 400:
+                    String result = msg.obj.toString();
+                    if (progressDialog != null) progressDialog.dismiss();
+                    DialogMessage.showToast(LoginActivity.this, result);
             }
         }
     };
 
-    public void getToken(final Response response){
+    public void getToken(final String json){
         HttpUtils.executorService.execute(new Runnable() {
             @Override
             public void run() {
                 try {
-                    JSONObject J = new JSONObject(response.body().string());
-                    JSONObject json = J.getJSONObject("result");
+                    JSONObject J = new JSONObject(json);
                     Log.e("LoginUserId", json.toString());
-                    String token = json.getString("accessToken");
+                    String token = J.getString("accessToken");
                     spUtils.setString(Entity.TOKEN, token);
-                    spUtils.setInt(Entity.USER_ID, json.getInt("userId"));
+                    spUtils.setInt(Entity.USER_ID, J.getInt("userId"));
                     loginHead.setToken(token);
 
                     LoginActivity.this.runOnUiThread(new Runnable() {
@@ -434,8 +436,6 @@ public class LoginActivity extends BaseActivity {
                         }
                     });
                 } catch (JSONException e) {
-                    e.printStackTrace();
-                } catch (IOException e) {
                     e.printStackTrace();
                 }
             }

@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:background="@android:color/transparent">
+
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/bg_check_version">
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginStart="18dp"
+        android:layout_marginTop="17dp"
+        android:background="@drawable/bg_check_version_delete"
+        android:id="@+id/check_version_dismiss" />
+
+    <TextView
+        android:id="@+id/check_version_details"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="22dp"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"
+        android:text="版本更新内容
+1.本次更新增加部分功能。
+2.增加功能的同时完善代码逻辑。"
+        android:textSize="16sp" />
+    </RelativeLayout>
+
+</RelativeLayout>

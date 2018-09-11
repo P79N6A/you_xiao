@@ -90,12 +90,12 @@ public class InformationDetails extends BaseActivity {
             }
         });
 
-        systemBinding.systemCheckCourse.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                ARouter.getInstance().build("/cources/colorfulActivity").navigation();
-            }
-        });
+//        systemBinding.systemCheckCourse.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                ARouter.getInstance().build("/cources/colorfulActivity").navigation();
+//            }
+//        });
     }
 
     public void initClassReminderData() {
@@ -106,12 +106,12 @@ public class InformationDetails extends BaseActivity {
             }
         });
 
-        reminderBinding.reminderGoCourse.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                ARouter.getInstance().build("/cources/colorfulActivity").navigation();
-            }
-        });
+//        reminderBinding.reminderGoCourse.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                ARouter.getInstance().build("/cources/colorfulActivity").navigation();
+//            }
+//        });
     }
 
     public void initSchoolData() {

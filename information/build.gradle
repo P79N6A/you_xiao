@@ -13,6 +13,11 @@ android {
 
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
 
+        ndk {
+            //选择要添加的对应cpu类型的.so库。
+            abiFilters 'armeabi', 'x86'
+        }
+
         javaCompileOptions {
             annotationProcessorOptions {
                 arguments = [ moduleName : project.getName() ]
@@ -46,5 +51,4 @@ dependencies {
     implementation project(':global-tools')
     implementation project(':httpUtils')
     implementation 'com.google.code.gson:gson:2.8.2'
-
 }

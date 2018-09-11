@@ -11,7 +11,16 @@ public class RequestDataEntity {
     public int userId;
     public int courseId;
     public String msg;
+    public int tenantId;
     public int type;
+
+    public int getTenantId() {
+        return tenantId;
+    }
+
+    public void setTenantId(int tenantId) {
+        this.tenantId = tenantId;
+    }
 
     public int getType() {
         return type;

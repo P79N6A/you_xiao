@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.view.View;
 
 import com.alibaba.android.arouter.facade.annotation.Route;
+import com.alibaba.sdk.android.feedback.impl.FeedbackAPI;
 import com.runtoinfo.personal_center.R;
 import com.runtoinfo.personal_center.databinding.ActivityPersonalFeedBackBinding;
 import com.runtoinfo.personal_center.databinding.ActivityPersonalSettingsBinding;
@@ -17,10 +18,6 @@ public class PersonalFeedBack extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        //setContentView(R.layout.activity_personal_feed_back);
-
-
-        //initView();
     }
 
     public void initView(){

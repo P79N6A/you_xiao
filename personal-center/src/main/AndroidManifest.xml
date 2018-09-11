@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     package="com.runtoinfo.personal_center">
 
     <uses-permission android:name="android.permission.INTERNET" />
@@ -13,7 +14,10 @@
     <!-- 过滤不支持相机的设备 -->
     <uses-feature android:name="android.hardware.Camera" />
 
-    <application android:theme="@style/Theme.AppCompat.Light.NoActionBar">
+    <application
+        android:allowBackup="false"
+        tools:replace="android:allowBackup"
+        android:theme="@style/Theme.AppCompat.Light.NoActionBar">
         <activity android:name=".activities.PersonalMainActivity" />
         <activity android:name=".activities.CameraActivity" />
         <activity android:name=".activities.PersonalSettings" />
@@ -22,7 +26,7 @@
         <activity
             android:name=".activities.MySomeRecord"
             android:label="@string/title_activity_my_some_record"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar"></activity>
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
     </application>
 
 </manifest>
