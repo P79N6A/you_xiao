@@ -3,7 +3,7 @@ package com.runtoinfo.httpUtils.bean;
 /**
  * Created by QiaoJunChao on 2018/8/29.
  */
-
+@SuppressWarnings("all")
 public class RequestDataEntity {
 
     public String url;
@@ -12,7 +12,16 @@ public class RequestDataEntity {
     public int courseId;
     public String msg;
     public int tenantId;
+    public int campusId;
     public int type;
+
+    public int getCampusId() {
+        return campusId;
+    }
+
+    public void setCampusId(int campusId) {
+        this.campusId = campusId;
+    }
 
     public int getTenantId() {
         return tenantId;

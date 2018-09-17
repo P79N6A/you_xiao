@@ -3,7 +3,7 @@ package com.runtoinfo.httpUtils.bean;
 /**
  * Created by QiaoJunChao on 2018/9/6.
  */
-
+@SuppressWarnings("all")
 public class MyEventEntity {
 
     public int tenantId;

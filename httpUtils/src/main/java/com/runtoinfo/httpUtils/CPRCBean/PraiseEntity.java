@@ -3,7 +3,7 @@ package com.runtoinfo.httpUtils.CPRCBean;
 /**
  * Created by QiaoJunChao on 2018/9/5.
  */
-
+@SuppressWarnings("all")
 public class PraiseEntity {
 
     public String praiser;

@@ -388,12 +388,12 @@ public class LoginActivity extends BaseActivity {
                     binding.loginGetVerification.setEnabled(true);
                     binding.loginGetVerification.setBackgroundResource(R.drawable.background_verification_selected);
                     break;
-                case 3:
+                case 3://选择完成学校进行跳转
                     String response = msg.obj.toString();
                     if (response != null && !response.equals("null")){
                         getToken(response);
-                        String json = new Gson().toJson(schoolList);
-                        ARouter.getInstance().build(Entity.MAIN_ACTIVITY_PATH).withString(IntentDataType.DATA, json).navigation();
+//                        String json = new Gson().toJson(schoolList);
+//                        ARouter.getInstance().build(Entity.MAIN_ACTIVITY_PATH).withString(IntentDataType.DATA, json).navigation();
                     }
                     break;
                 case 4:
@@ -433,6 +433,8 @@ public class LoginActivity extends BaseActivity {
                         @Override
                         public void run() {
                             if (progressDialog != null) progressDialog.cancel();
+                            String json = new Gson().toJson(schoolList);
+                            ARouter.getInstance().build(Entity.MAIN_ACTIVITY_PATH).withString(IntentDataType.DATA, json).navigation();
                         }
                     });
                 } catch (JSONException e) {

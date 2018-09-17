@@ -2,6 +2,7 @@ package com.runto.cources.adapter;
 
 import android.content.Context;
 import android.graphics.Color;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,6 +17,8 @@ import com.bumptech.glide.RequestManager;
 import com.runto.cources.R;
 import com.runto.cources.bean.Article;
 import com.runto.cources.group.GroupRecyclerAdapter;
+import com.runtoinfo.httpUtils.bean.CourseEntity;
+import com.runtoinfo.youxiao.globalTools.views.RoundCornerProgressBar;
 
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
@@ -31,19 +34,23 @@ public class ArticleAdapter extends GroupRecyclerAdapter<String, Article> {
 
     private RequestManager mLoader;
     private Context context;
+    private List<CourseEntity> dataList = new ArrayList<>();
 
-    public ArticleAdapter(Context context, String courseNum) {
+    public ArticleAdapter(Context context, List<CourseEntity> dataList) {
         super(context);
         this.context = context;
+        this.dataList = dataList;
         mLoader = Glide.with(context.getApplicationContext());
         LinkedHashMap<String, List<Article>> map = new LinkedHashMap<>();
         List<String> titles = new ArrayList<>();
-        map.put("当日课程", create(0));
-        //map.put("每周热点", create(1));
-        //map.put("最高评论", create(2));
-        titles.add("当日课程共" + courseNum + "节");
-        //titles.add("每周热点");
-        //titles.add("最高评论");
+        map.put("今日课程", create(dataList));
+        if (dataList.size() == 1){
+            if (dataList.get(0).getType() != 1){
+                titles.add("今日课程共" + dataList.size() + "节");
+            }
+        }else{
+            titles.add("今日课程共" + dataList.size() + "节");
+        }
         resetGroups(map,titles);
     }
 
@@ -56,30 +63,42 @@ public class ArticleAdapter extends GroupRecyclerAdapter<String, Article> {
     @Override
     protected void onBindViewHolder(RecyclerView.ViewHolder holder, Article item, int position) {
         ArticleViewHolder h = (ArticleViewHolder) holder;
-        h.course_time.setText(item.getCourse_time());
-        h.course_teacher.setText(item.getCourse_teacher());
-        h.course_address.setText(item.getCourse_address());
-        h.course_progress.setProgress(12);
-        h.course_home_work.setText(item.getCourse_home_work());
-        h.course_progress_num.setText(item.getCourse_progress_num());
+        if (item.getType() == 0) {
+            h.course_name.setText(item.getCourse_name());
+            h.course_time.setText(item.getCourse_time());
+            h.course_teacher.setText(item.getCourse_teacher());
+            h.course_address.setText(item.getCourse_address());
+            h.course_progress.setProgress(item.getCourse_progress());
+            h.course_home_work.setText(item.getCourse_home_work());
+            h.course_progress_num.setText(item.getCourse_progress_num());
 
-        h.tv_time.setText("时间：");
-        h.tv_teacher.setText("老师：");
-        h.tv_address.setText("地点：");
-        h.tv_progress.setText("进度：");
-        h.tv_homework.setText("作业：");
+            h.tv_time.setText("时间：");
+            h.tv_teacher.setText("老师：");
+            h.tv_address.setText("地点：");
+            h.tv_progress.setText("进度：");
+            h.tv_homework.setText("作业：");
+        }else{
+            h.no_course_layout.setVisibility(View.VISIBLE);
+            h.course_item_layout.setVisibility(View.GONE);
+            h.no_course_message.setText(item.getCourse_message());
+        }
 
     }
 
     private static class ArticleViewHolder extends RecyclerView.ViewHolder {
         private TextView tv_teacher, tv_time,tv_address, tv_homework, tv_progress;
         private ProgressBar course_progress;
-        private TextView course_time, course_address, course_teacher, course_home_work, course_progress_num, course_signIn_tv;
+        private TextView course_time, course_address, course_teacher, course_home_work, course_progress_num, course_signIn_tv, course_name;
         private LinearLayout hand_homework, leave_layout, signIn_layout;
         private ImageView course_signIn_img;
+        private LinearLayout course_item_layout;
+        private LinearLayout no_course_layout;
+        private TextView no_course_message;
 
         private ArticleViewHolder(View itemView) {
             super(itemView);
+
+            course_name = itemView.findViewById(R.id.course_name);
             course_teacher = (TextView) itemView.findViewById(R.id.course_teacher_name);//老师姓名
             course_address = (TextView) itemView.findViewById(R.id.course_address);//教室类别
             course_home_work = itemView.findViewById(R.id.course_homework);//作业内容
@@ -99,6 +118,10 @@ public class ArticleAdapter extends GroupRecyclerAdapter<String, Article> {
 
             course_signIn_img = itemView.findViewById(R.id.course_sign_in_img);
             course_signIn_tv = itemView.findViewById(R.id.course_sign_in_tv);
+
+            course_item_layout = itemView.findViewById(R.id.course_details_layout);
+            no_course_layout = itemView.findViewById(R.id.no_course_layout);
+            no_course_message = itemView.findViewById(R.id.course_no_message);
 
             hand_homework.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -136,15 +159,39 @@ public class ArticleAdapter extends GroupRecyclerAdapter<String, Article> {
         return article;
     }
 
+    private static Article create(CourseEntity entity){
+        Article article = new Article();
+        article.setCourse_time(entity.getStartTime() + "-" + entity.getEndTime());
+        article.setCourse_address(entity.getClassroomName());
+        article.setCourse_teacher(entity.getTeacherName());
+        article.setCourse_progress(entity.getProgress());
+        article.setCourse_home_work(entity.getHomeworkRequirement());
+        article.setCourse_progress_num(entity.getProgress() + "%");
+        article.setCourse_name(entity.getCourseName());
+        article.setCourse_message(entity.getCourseMessage());
+        article.setType(entity.getType());
+        return article;
+    }
+
     private static List<Article> create(int p) {
         List<Article> list = new ArrayList<>();
 
         if (p == 0)
         {
-            list.add(create("18:00-19:00", "小提琴室", "李老师", 12,"小提琴琴谱练习","12%",0));
-            list.add(create("15:00-16:00", "美术", "黄老师", 8,"美术阶梯教室", "8%",0));
+            //list.add(create("", "", "", 0,"","",0));
+            //list.add(create("15:00-16:00", "美术", "黄老师", 8,"美术阶梯教室", "8%",0));
+            CourseEntity courseEntity = new CourseEntity();
+            courseEntity.setCourseName("暂无课程");
+            list.add(create(courseEntity));
         }
 
+        return list;
+    }
+    private static List<Article> create(List<CourseEntity> dataList){
+        List<Article> list = new ArrayList<>();
+        for (int i = 0; i < dataList.size(); i++){
+            list.add(create(dataList.get(i)));
+        }
         return list;
     }
 }

@@ -25,6 +25,7 @@ import com.runto.cources.adapter.GridViewAdapter;
 import com.runto.cources.adapter.ImageAdapter;
 import com.runto.cources.databinding.CourseHandHomeworkBinding;
 import com.runtoinfo.httpUtils.HttpEntity;
+import com.runtoinfo.httpUtils.bean.RequestDataEntity;
 import com.runtoinfo.httpUtils.utils.HttpUtils;
 import com.runtoinfo.youxiao.globalTools.adapter.UniversalRecyclerAdapter;
 import com.runtoinfo.youxiao.globalTools.utils.DialogMessage;
@@ -133,12 +134,12 @@ public class CourseHandHomeWork extends BaseActivity {
         binding.courseHomeWorkCommitUp.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Map<String, Object> dataMap = new HashMap<>();
-                dataMap.put("url", HttpEntity.MAIN_URL + HttpEntity.POST_ALI_SERVER);
-                dataMap.put("token",spUtils.getString(Entity.TOKEN));
+                RequestDataEntity requestDataEntity = new RequestDataEntity();
+                requestDataEntity.setUrl( HttpEntity.MAIN_URL + HttpEntity.POST_ALI_SERVER);
+                requestDataEntity.setToken(spUtils.getString(Entity.TOKEN));
                 //DialogMessage.createDialog(CourseHandHomeWork.this, progressDialog, "正在上传，请稍后...");
                 DialogMessage.showLoading(CourseHandHomeWork.this, progressDialog, true);
-                HttpUtils.postVideoPhoto(handler, dataMap, mAdapter.dataList, filePathList);
+                HttpUtils.postVideoPhoto(handler, requestDataEntity, mAdapter.dataList, filePathList);
             }
         });
     }

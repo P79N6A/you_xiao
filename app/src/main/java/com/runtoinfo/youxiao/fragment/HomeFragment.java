@@ -2,6 +2,7 @@ package com.runtoinfo.youxiao.fragment;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
+import android.app.Dialog;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.databinding.DataBindingUtil;
@@ -16,30 +17,43 @@ import android.os.Vibrator;
 import android.support.annotation.Nullable;
 import android.support.annotation.RequiresApi;
 import android.support.v4.app.ActivityCompat;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.LinearLayoutManager;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
 import android.view.WindowManager;
+import android.view.animation.Animation;
+import android.widget.AdapterView;
 import android.widget.TextView;
 
 import com.alibaba.android.arouter.launcher.ARouter;
 import com.runtoinfo.httpUtils.HttpEntity;
+import com.runtoinfo.httpUtils.bean.GetSchoolSettingEntity;
 import com.runtoinfo.httpUtils.bean.HomeCourseEntity;
+import com.runtoinfo.httpUtils.bean.RequestDataEntity;
 import com.runtoinfo.httpUtils.utils.HttpUtils;
 import com.runtoinfo.youxiao.R;
+import com.runtoinfo.youxiao.activities.MainActivity;
 import com.runtoinfo.youxiao.adapter.CoursePunchAdapter;
 import com.runtoinfo.youxiao.globalTools.adapter.UniversalRecyclerAdapter;
 import com.runtoinfo.youxiao.globalTools.utils.DialogMessage;
 import com.runtoinfo.youxiao.globalTools.utils.Entity;
 import com.runtoinfo.youxiao.databinding.FragmentHomeBinding;
 import com.runtoinfo.youxiao.entity.SelectSchoolEntity;
+import com.runtoinfo.youxiao.globalTools.utils.TimeUtil;
 import com.runtoinfo.youxiao.ui.FloatDragView;
 import com.runtoinfo.youxiao.ui.MyScrollView;
 import com.runtoinfo.youxiao.ui.PopupWindowFragment;
 import com.runtoinfo.youxiao.globalTools.utils.IntentDataType;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -51,6 +65,7 @@ import java.util.Map;
  */
 
 @SuppressLint("ValidFragment")
+@SuppressWarnings("all")
 public class HomeFragment extends BaseFragment implements MyScrollView.ScrollViewListener{
 
     public FragmentHomeBinding binding;
@@ -60,6 +75,9 @@ public class HomeFragment extends BaseFragment implements MyScrollView.ScrollVie
     public int mHeight = 0;
     public List<SelectSchoolEntity> schoolSelectList;
     public TextView tSignUp;
+    public String phoneNumber;
+    public final int[] startLocation = new int[2];
+    public boolean isGetData = false;
 
     public HomeFragment(List<SelectSchoolEntity> schoolSelectList){
         this.schoolSelectList = schoolSelectList;
@@ -90,12 +108,53 @@ public class HomeFragment extends BaseFragment implements MyScrollView.ScrollVie
                         spUtils.setInt(com.runtoinfo.youxiao.globalTools.utils.Entity.COURSE_INST_ID,entity.getCourseInstId());
                     }
                     break;
-                case 404:
+                case 5:
+                    try{
+                        JSONObject json = new JSONObject(msg.obj.toString());
+                        JSONObject result = json.getJSONObject("result");
+                        JSONArray items = result.getJSONArray("items");
+                        JSONObject item1 = items.getJSONObject(0);
+                        binding.homeSystemContent.setText(item1.getString("title"));
+                        if (TimeUtil.getTimeDif(item1.getString("publishTime")) != null){
+                            binding.homeSystemContentTime.setText(TimeUtil.getTimeDif(item1.getString("publishTime")));
+                        }
+                        JSONObject item2 = items.getJSONObject(1);
+                        binding.homeActivityContent.setText(item2.getString("title"));
+                        if (TimeUtil.getTimeDif(item2.getString("publishTime")) != null){
+                            binding.homeActivityContentTime.setText(TimeUtil.getTimeDif(item2.getString("publishTime")));
+                        }
+                    }catch (JSONException e){
+                        e.printStackTrace();
+                    }
+                    break;
+                case 10://获取校长电话
+                    GetSchoolSettingEntity entity = (GetSchoolSettingEntity) msg.obj;
+                    phoneNumber = entity.getContactPhoneNumber();
+                    initFloatWindowListener();
+                    break;
+                case 20://切换学校后
+                    try {
+                        JSONObject result = (JSONObject) msg.obj;
+                        spUtils.setString(Entity.TOKEN, result.getString("accessToken"));
+                        spUtils.setInt(Entity.USER_ID, result.getInt("userId"));
+                        refresh(HomeFragment.this);
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                    break;
+                case 400:
                     DialogMessage.showToast(getContext(), "请求数据失败");
+                    break;
+                case 500:
+                    DialogMessage.showToast(getContext(), "服务器数据异常");
+                    break;
+                case 404:
+                    DialogMessage.showToast(getContext(), "数据解析错误");
                     break;
             }
         }
     };
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -104,6 +163,8 @@ public class HomeFragment extends BaseFragment implements MyScrollView.ScrollVie
         initCourseDataList();
         initFloatWindow();
         initListener();
+        requestNews();
+        Log.e("TIME", "t++++++");
         return binding.getRoot();
     }
 
@@ -149,10 +210,30 @@ public class HomeFragment extends BaseFragment implements MyScrollView.ScrollVie
     }
 
     /**
+     * 获取动态
+     */
+    public void requestNews(){
+        RequestDataEntity requestDataEntity = new RequestDataEntity();
+        requestDataEntity.setToken(spUtils.getString(Entity.TOKEN));
+        Log.e("Token", spUtils.getString(Entity.TOKEN));
+        requestDataEntity.setUrl(HttpEntity.MAIN_URL + HttpEntity.SCHOOL_NEWS_ALL);
+        requestDataEntity.setType(0);
+        HttpUtils.getSchoolNewsAll(handler, requestDataEntity);
+    }
+    /**
+     * 获取校长电话
+     */
+    public void requestSchoolSetting(){
+        RequestDataEntity requestDataEntity = new RequestDataEntity();
+        requestDataEntity.setToken(spUtils.getString(Entity.TOKEN));
+        requestDataEntity.setUrl(HttpEntity.MAIN_URL + HttpEntity.GET_SCHOOL_SETTING);
+        HttpUtils.getSchoolSetting(handler, requestDataEntity);
+    }
+
+    /**
      * 悬浮按钮
      */
     public void initFloatWindow(){
-        final int[] startLocation = new int[2];
         ViewTreeObserver vto = binding.homeHeadImage.getViewTreeObserver();
         vto.addOnPreDrawListener(new ViewTreeObserver.OnPreDrawListener() {
             public boolean onPreDraw() {
@@ -161,19 +242,43 @@ public class HomeFragment extends BaseFragment implements MyScrollView.ScrollVie
                 return true;
             }
         });
+        requestSchoolSetting();
+    }
 
+    public void initFloatWindowListener(){
         //悬浮按钮
         FloatDragView.addFloatDragView(getActivity(), binding.homeFrameLayout, new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //调起电话
-                Intent intent = new Intent(Intent.ACTION_CALL);
-                Uri data = Uri.parse("tel:" + 10010);
-                intent.setData(data);
-                startActivity(intent);
+                if (phoneNumber != null){
+                    final Dialog dialog = DialogMessage.showDialogWithLayout(getContext(), R.layout.show_school_phone_number_layout);
+                    dialog.show();
+                    dialog.findViewById(R.id.call_number_cancel).setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            dialog.dismiss();
+                        }
+                    });
+
+                    ((TextView) dialog.findViewById(R.id.school_phoneNumber)).setText(phoneNumber);
+
+                    dialog.findViewById(R.id.call_number).setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            //调起电话
+                            Intent intent = new Intent(Intent.ACTION_CALL);
+                            Uri data = Uri.parse("tel:" + phoneNumber);
+                            intent.setData(data);
+                            startActivity(intent);
+                        }
+                    });
+                }
             }
         }, startLocation);
     }
+
+
+
     public void initListener(){
 
         /**
@@ -188,8 +293,20 @@ public class HomeFragment extends BaseFragment implements MyScrollView.ScrollVie
                 Vibrator vibrator = (Vibrator) getActivity().getSystemService(getActivity().VIBRATOR_SERVICE);
                 vibrator.vibrate(100);
 
-                List<SelectSchoolEntity> list = new ArrayList<>();
-                popupWindow = new PopupWindowFragment(getContext(), getActivity());
+                popupWindow = new PopupWindowFragment(getContext(), getActivity(), new AdapterView.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                        SelectSchoolEntity entity = schoolSelectList.get(position);
+                        RequestDataEntity requestDataEntity = new RequestDataEntity();
+                        requestDataEntity.setToken(spUtils.getString(Entity.TOKEN));
+                        requestDataEntity.setUrl(HttpEntity.MAIN_URL + HttpEntity.SWITCH_CAMPUS);
+                        requestDataEntity.setTenantId(Integer.parseInt(entity.getTenantId()));
+                        requestDataEntity.setCampusId(entity.getId());
+                        HttpUtils.switchCampusId(handler, requestDataEntity);
+
+                        popupWindow.popupWindow.dismiss();
+                    }
+                });
                 popupWindow.showPopupWindows(schoolSelectList, binding.fragmentHomeImagview);
                 WindowManager.LayoutParams params=getActivity().getWindow().getAttributes();
                 params.alpha=0.7f;
@@ -244,13 +361,39 @@ public class HomeFragment extends BaseFragment implements MyScrollView.ScrollVie
                 binding.homeMyScroll.setScrollViewListener(HomeFragment.this);
             }
         });
+        binding.homeActivityContent.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ARouter.getInstance().build("/main/schoolDynamics")
+                        .withString(IntentDataType.INTENT_KEY, IntentDataType.SCHOOL_DYNAMICS).navigation();
+            }
+        });
+        binding.homeSystemContent.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ARouter.getInstance().build("/main/schoolDynamics")
+                        .withString(IntentDataType.INTENT_KEY, IntentDataType.SCHOOL_DYNAMICS).navigation();
+            }
+        });
     }
 
-
+    @Override
+    public Animation onCreateAnimation(int transit, boolean enter, int nextAnim) {
+        //进入当前Fragment
+        if (enter && !isGetData) {
+            isGetData = true;
+            //这里可以做网络请求或者需要的数据刷新操作
+            refresh(HomeFragment.this);
+        } else {
+            isGetData = false;
+        }
+        return super.onCreateAnimation(transit, enter, nextAnim);
+    }
 
     @Override
     public void onPause() {
         super.onPause();
+        isGetData = false;
     }
 
     @Override

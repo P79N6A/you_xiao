@@ -12,7 +12,6 @@ import java.util.List;
 
 /**
  * 分组的RecyclerAdapter
- * Created by haibin on 2017/5/15.
  */
 @SuppressWarnings("unused")
 public abstract class GroupRecyclerAdapter<Parent, Child> extends BaseRecyclerAdapter<Child> {
@@ -75,6 +74,7 @@ public abstract class GroupRecyclerAdapter<Parent, Child> extends BaseRecyclerAd
         }
         notifyDataSetChanged();
     }
+
 
     /**
      * 清除分组数据

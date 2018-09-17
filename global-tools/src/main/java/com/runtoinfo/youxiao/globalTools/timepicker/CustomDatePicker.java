@@ -94,6 +94,7 @@ public class CustomDatePicker {
             WindowManager.LayoutParams lp = window.getAttributes();
             lp.width = dm.widthPixels;
             window.setAttributes(lp);
+
         }
     }
 

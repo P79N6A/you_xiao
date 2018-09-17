@@ -99,7 +99,6 @@ public class ListViewAdapter extends BaseAdapter implements AdapterView.OnItemCl
             getImage(list.get(position).getImgPath(), holder);
             holder.schoolName.setSelected(true);
         }
-
         return convertView;
     }
 
@@ -107,4 +106,5 @@ public class ListViewAdapter extends BaseAdapter implements AdapterView.OnItemCl
         HttpUtils.postAsynchronous(context, url, holder.orgLogo);
         //holder.orgLogo.setImageBitmap(map.get("bitmap"));
     }
+
 }

@@ -14,12 +14,16 @@ import com.dmcbig.mediapicker.entity.Media;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.runtoinfo.httpUtils.CPRCBean.GetAllCPC;
+import com.runtoinfo.httpUtils.CenterEntity.LearnTrackEntity;
+import com.runtoinfo.httpUtils.CenterEntity.PersonalInformationEntity;
 import com.runtoinfo.httpUtils.HttpEntity;
 import com.runtoinfo.httpUtils.bean.AddMemberBean;
 import com.runtoinfo.httpUtils.CPRCBean.CPRCDataEntity;
 import com.runtoinfo.httpUtils.bean.AddMemberResultEntity;
 import com.runtoinfo.httpUtils.bean.ChildContent;
 import com.runtoinfo.httpUtils.bean.CourseDataEntity;
+import com.runtoinfo.httpUtils.bean.CourseEntity;
+import com.runtoinfo.httpUtils.bean.GetSchoolSettingEntity;
 import com.runtoinfo.httpUtils.bean.HandWorkEntity;
 import com.runtoinfo.httpUtils.bean.HomeCourseEntity;
 import com.runtoinfo.httpUtils.bean.HttpLoginHead;
@@ -57,8 +61,8 @@ import okhttp3.Response;
 /**
  * Created by QiaoJunChao on 2018/8/10.
  */
-
-public class HttpUtils {
+@SuppressWarnings("all")
+public class HttpUtils<T> {
 
     public static final ExecutorService executorService = Executors.newScheduledThreadPool(7);
     public static final MediaType JSON = MediaType.parse("application/json; charset=utf-8");
@@ -74,12 +78,11 @@ public class HttpUtils {
         executorService.execute(new Runnable() {
             @Override
             public void run() {
-                OkHttpClient client = new OkHttpClient();
                 Request request = new Request.Builder()
                         .url(url)
                         .build();
 
-                client.newCall(request).enqueue(new Callback() {
+                getHttpsClient().newCall(request).enqueue(new Callback() {
                     @Override
                     public void onFailure(Call call, IOException e) {
 
@@ -116,7 +119,7 @@ public class HttpUtils {
                             .url(url)
                             .build();
 
-                    Response response = client.newCall(request).execute();
+                    Response response = getHttpsClient().newCall(request).execute();
                     if (response.isSuccessful()) {
                         final Drawable drawable = Drawable.createFromStream(response.body().byteStream(), "image");
                         context.runOnUiThread(new Runnable() {
@@ -173,7 +176,6 @@ public class HttpUtils {
             @Override
             public void run() {
                 try {
-                    OkHttpClient client = new OkHttpClient();
                     JSONObject json = new JSONObject();
                     json.put("userName", head.getUserName());
                     json.put("passWord", head.getPassWord());
@@ -189,7 +191,7 @@ public class HttpUtils {
                             //.addHeader("Authorization",  "Bearer " + head.getToken())
                             .post(body)
                             .build();
-                    client.newCall(request).enqueue(new Callback() {
+                    getHttpsClient().newCall(request).enqueue(new Callback() {
                         @Override
                         public void onFailure(Call call, IOException e) {
 
@@ -253,7 +255,7 @@ public class HttpUtils {
                     Request request = new Request.Builder()
                             .url(url).post(body).build();
 
-                    Response response = client.newCall(request).execute();
+                    Response response = getHttpsClient().newCall(request).execute();
                     if (response.isSuccessful()){
                         Message message = new Message();
                         message.what = 3;
@@ -282,7 +284,6 @@ public class HttpUtils {
             @Override
             public void run() {
                 try {
-                    OkHttpClient client = new OkHttpClient();
                     FormBody body = new FormBody.Builder()
                             .add("phoneNumber", phoneNumber)
                             .add("newPassword", newPassword)
@@ -290,7 +291,7 @@ public class HttpUtils {
 
                     Request request = new Request.Builder()
                             .url(url).post(body).build();
-                    Response response = client.newCall(request).execute();
+                    Response response = getHttpsClient().newCall(request).execute();
                     if (response.isSuccessful()){
                         handler.sendEmptyMessage(0);
                     }else{
@@ -321,7 +322,7 @@ public class HttpUtils {
                         .post(formBody)
                         .build();
                 try {
-                    Response response = client.newCall(request).execute();
+                    Response response = getHttpsClient().newCall(request).execute();
                     if (response.isSuccessful()){
                         String body = response.body().string();
                         Log.e("body", body);
@@ -349,7 +350,6 @@ public class HttpUtils {
      */
     public static void getAsy(final Handler handler,final Map<String, List> map,final String url,final String userName){
 
-                OkHttpClient client = new OkHttpClient();
                 String requestUrl = url + "?phoneNumber=" + userName + "&client=student";
                 final Request request = new Request.Builder()
                         .url(requestUrl)
@@ -358,10 +358,10 @@ public class HttpUtils {
                 final List<List<String>> schoolList = new ArrayList<>();
                 final List<HttpLoginHead> headList = new ArrayList<>();
                 final List<String> imgList = new ArrayList<>();
-                client.newCall(request).enqueue(new Callback() {
+                getHttpsClient().newCall(request).enqueue(new Callback() {
                     @Override
                     public void onFailure(Call call, IOException e) {
-
+                        handler.sendEmptyMessage(500);
                     }
 
                     @Override
@@ -418,12 +418,11 @@ public class HttpUtils {
             @Override
             public void run() {
                 try {
-                    OkHttpClient client = new OkHttpClient();//创建OkHttpClient对象
                     Request request = new Request.Builder()
                             .url(url + "?phoneNumber=" + phoneNumber)//请求接口。如果需要传参拼接到接口后面。
                             .build();//创建Request 对象
                     Response response = null;
-                    response = client.newCall(request).execute();//得到Response 对象
+                    response = getHttpsClient().newCall(request).execute();//得到Response 对象
                     if (response.isSuccessful()) {
                         Log.d("kwwl","response.code()=="+response.code());
                         Log.d("kwwl","response.message()=="+response.message());
@@ -457,24 +456,21 @@ public class HttpUtils {
      * @param url
      * @param token 登录后的标识
      */
-    public static void getSchoolNewsAll(final Handler handler, final String url, final String token){
+    public static void getSchoolNewsAll(final Handler handler, final RequestDataEntity requestDataEntity){
         executorService.execute(new Runnable() {
             @Override
             public void run() {
                 try {
                     Map<String, Object> object = new HashMap<>();
-                    object.put("Title","");
-                    object.put("Subtitle", "");
-                    object.put("Tag", "");
-                    object.put("Status", "");
-                    object.put("MaxResultCount", 7);
+                    object.put("type", requestDataEntity.getType());
+                    object.put("MaxResultCount", 10);
                     object.put("SkipCount", 0);
-                    object.put("Sorting","");
+                    object.put("Sorting","publishTime desc");
                     Request request = new Request.Builder()
-                            .header("Authorization", "Bearer " + token)
-                            .url(url + setUrl(object))
+                            .header(Authorization, Bearer + requestDataEntity.getToken())
+                            .url(requestDataEntity.getUrl() + setUrl(object))
                             .build();
-                    Response response = client.newCall(request).execute();
+                    Response response = getHttpsClient().newCall(request).execute();
                     if (response.isSuccessful()){
                         String result = response.body().string();
                         Message message = new Message();
@@ -510,7 +506,7 @@ public class HttpUtils {
                             .url(url)
                             .post(requestBody)
                             .build();
-                    client.newCall(request).enqueue(new Callback(){
+                    getHttpsClient().newCall(request).enqueue(new Callback(){
 
                         @Override
                         public void onFailure(Call call, IOException e) {
@@ -559,7 +555,7 @@ public class HttpUtils {
                         .header(Authorization,  Bearer + entity.getToken())
                         .url(entity.getUrl() + urlString)
                         .build();
-                client.newCall(request).enqueue(new Callback() {
+                getHttpsClient().newCall(request).enqueue(new Callback() {
                     @Override
                     public void onFailure(Call call, IOException e) {
 
@@ -591,7 +587,7 @@ public class HttpUtils {
                         .url(entity.getUrl() + "?UserId=" + entity.getUserId())
                         .build();
 
-                client.newCall(request).enqueue(new Callback() {
+                getHttpsClient().newCall(request).enqueue(new Callback() {
                     @Override
                     public void onFailure(Call call, IOException e) {
 
@@ -627,25 +623,14 @@ public class HttpUtils {
         executorService.execute(new Runnable() {
             @Override
             public void run() {
-                    /*JSONObject json = new JSONObject();
-                    json.put("campaignId", addMemberBean.getCampaignId());
-                    json.put("userId", addMemberBean.getUserId());
-                    json.put("memberType", addMemberBean.getMemberType());
-                    json.put("name", addMemberBean.getName());
-                    json.put("gender", addMemberBean.getGender());
-                    json.put("age", addMemberBean.getAge());
-                    json.put("phoneNumber", addMemberBean.getPhoneNumber());*/
-
                 String json = new Gson().toJson(addMemberBean);
-
                 RequestBody body = RequestBody.create(JSON, json);
-
                 Request request = new Request.Builder()
                         .header(Authorization, Bearer + entity.getToken())
                         .url(entity.getUrl())
                         .post(body)
                         .build();
-                client.newCall(request).enqueue(new Callback() {
+                getHttpsClient().newCall(request).enqueue(new Callback() {
                     @Override
                     public void onFailure(Call call, IOException e) {
                         handler.sendEmptyMessage(404);
@@ -700,7 +685,7 @@ public class HttpUtils {
                         .url(url + "?CategoryId=2")
                         .build();
 
-                client.newCall(request).enqueue(new Callback() {
+                getHttpsClient().newCall(request).enqueue(new Callback() {
                     @Override
                     public void onFailure(Call call, IOException e) {
                         handler.sendEmptyMessage(404);
@@ -746,7 +731,7 @@ public class HttpUtils {
                         .url(dataMap.get("url") + "?CourseType=" + dataMap.get("type") +"&MaxResultCount=5&SkipCount=0")
                         .build();
 
-                client.newCall(request).enqueue(new Callback() {
+                getHttpsClient().newCall(request).enqueue(new Callback() {
                     @Override
                     public void onFailure(Call call, IOException e) {
 
@@ -803,7 +788,7 @@ public class HttpUtils {
                         .header("Authorization", "Bearer " + map.get("token"))
                         .url(map.get("url") + setUrl(url))
                         .build();
-                client.newCall(request).enqueue(new Callback() {
+                getHttpsClient().newCall(request).enqueue(new Callback() {
                     @Override
                     public void onFailure(Call call, IOException e) {
                         handler.sendEmptyMessage(404);
@@ -865,7 +850,7 @@ public class HttpUtils {
                         .header("Authorization", "Bearer " + dataMap.get("token"))
                         .url(dataMap.get("url").toString() + "?studentId=18&date=2018-08-17")
                         .build();
-                client.newCall(request).enqueue(new Callback() {
+                getHttpsClient().newCall(request).enqueue(new Callback() {
                     @Override
                     public void onFailure(Call call, IOException e) {
                         handler.sendEmptyMessage(404);
@@ -923,7 +908,7 @@ public class HttpUtils {
                             .url(map.get("url").toString())
                             .post(body)
                             .build();
-                    client.newCall(request).enqueue(new Callback() {
+                    getHttpsClient().newCall(request).enqueue(new Callback() {
                         @Override
                         public void onFailure(Call call, IOException e) {
                             handler.sendEmptyMessage(404);
@@ -959,7 +944,7 @@ public class HttpUtils {
      * @param map
      * @param list
      */
-    public static void postVideoPhoto(final Handler handler, final Map<String, Object> map, final List<Media> list, final List<String> filePathList){
+    public static void postVideoPhoto(final Handler handler, final RequestDataEntity requestDataEntity, final List<Media> list, final List<String> filePathList){
         executorService.execute(new Runnable() {
             @Override
             public void run() {
@@ -971,11 +956,11 @@ public class HttpUtils {
                 }
                 MultipartBody body = builder.build();
                 final Request request = new Request.Builder()
-                        .header("Authorization", "Bearer " + map.get("token"))
-                        .url(map.get("url").toString())
+                        .header(Authorization,  Bearer + requestDataEntity.getToken())
+                        .url(requestDataEntity.getUrl())
                         .post(body)
                         .build();
-                client.newCall(request).enqueue(new Callback() {
+                getHttpsClient().newCall(request).enqueue(new Callback() {
                     @Override
                     public void onFailure(Call call, IOException e) {
                         handler.sendEmptyMessage(404);
@@ -996,6 +981,96 @@ public class HttpUtils {
                                 handler.sendEmptyMessage(0);
                             } catch (JSONException e) {
                                 handler.sendEmptyMessage(300);
+                            }
+                        }
+                    }
+                });
+            }
+        });
+    }
+
+    /**
+     * 上传单个文件
+     * @param handler
+     * @param entity
+     */
+    public static void postOneFile(final Handler handler, final RequestDataEntity entity){
+        executorService.execute(new Runnable() {
+            @Override
+            public void run() {
+                Request request = new Request.Builder()
+                        .url(entity.getUrl())
+                        .header(Authorization, Bearer + entity.getToken())
+                        .build();
+
+                getHttpsClient().newCall(request).enqueue(new Callback() {
+                    @Override
+                    public void onFailure(Call call, IOException e) {
+                        handler.sendEmptyMessage(500);
+                    }
+
+                    @Override
+                    public void onResponse(Call call, Response response) throws IOException {
+                        if (response.isSuccessful()){
+                            try {
+                                JSONObject json = new JSONObject(response.body().string());
+                                boolean success = json.getBoolean("success");
+                                if (success){
+                                    JSONObject result = json.getJSONObject("result");
+                                    String path = result.getString("filePath");
+                                    Message msg = new Message();
+                                    msg.what = 0;
+                                    msg.obj = path;
+                                    handler.sendMessage(msg);
+                                }else
+                                    handler.sendEmptyMessage(400);
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    }
+                });
+            }
+        });
+    }
+
+    /**
+     * 修改用户信息
+     * @param handler
+     * @param requestDataEntity
+     * @param entity
+     */
+    public static void updateUserInfor(final Handler handler, final RequestDataEntity requestDataEntity, final PersonalInformationEntity entity){
+        executorService.execute(new Runnable() {
+            @Override
+            public void run() {
+                entity.setId(requestDataEntity.getUserId());
+                String json = new Gson().toJson(entity);
+                RequestBody body = RequestBody.create(JSON, json);
+                Request request = new Request.Builder()
+                        .header(Authorization, Bearer + requestDataEntity.getToken())
+                        .url(requestDataEntity.getUrl())
+                        .post(body)
+                        .build();
+                getHttpsClient().newCall(request).enqueue(new Callback() {
+                    @Override
+                    public void onFailure(Call call, IOException e) {
+                        handler.sendEmptyMessage(500);
+                    }
+
+                    @Override
+                    public void onResponse(Call call, Response response) throws IOException {
+                        if (response.isSuccessful()){
+                            try {
+                                JSONObject json = new JSONObject(response.body().string());
+                                boolean success = json.getBoolean("success");
+                                if (success){
+                                    handler.sendEmptyMessage(1);
+                                }else{
+                                    handler.sendEmptyMessage(400);
+                                }
+                            } catch (JSONException e) {
+                                e.printStackTrace();
                             }
                         }
                     }
@@ -1036,7 +1111,7 @@ public class HttpUtils {
                             .post(body)
                             .build();
 
-                    client.newCall(request).enqueue(new Callback() {
+                    getHttpsClient().newCall(request).enqueue(new Callback() {
                         @Override
                         public void onFailure(Call call, IOException e) {
                             Log.e("result", "请求失败");
@@ -1076,7 +1151,7 @@ public class HttpUtils {
                         .post(body)
                         .build();
 
-                client.newCall(request).enqueue(new Callback() {
+                getHttpsClient().newCall(request).enqueue(new Callback() {
                     @Override
                     public void onFailure(Call call, IOException e) {
                         handler.sendEmptyMessage(500);
@@ -1107,7 +1182,7 @@ public class HttpUtils {
                         .url(dataEntity.getUrl() /*+ "?MaxResultCount=5&SkipCount=0"*/)
                         .build();
 
-                client.newCall(request).enqueue(new Callback() {
+                getHttpsClient().newCall(request).enqueue(new Callback() {
                     @Override
                     public void onFailure(Call call, IOException e) {
 
@@ -1178,7 +1253,7 @@ public class HttpUtils {
                         .post(body)
                         .build();
 
-                client.newCall(request).enqueue(new Callback() {
+                getHttpsClient().newCall(request).enqueue(new Callback() {
                     @Override
                     public void onFailure(Call call, IOException e) {
                         handler.sendEmptyMessage(500);
@@ -1235,7 +1310,7 @@ public class HttpUtils {
                         .header(Authorization, Bearer + cpc.getToken())
                         .url(HttpEntity.MAIN_URL + HttpEntity.GET_COMMENT_ALL + "?Type=" + cpc.getType())
                         .build();
-                client.newCall(request).enqueue(new Callback() {
+                getHttpsClient().newCall(request).enqueue(new Callback() {
                     @Override
                     public void onFailure(Call call, IOException e) {
 
@@ -1281,7 +1356,7 @@ public class HttpUtils {
                             .url(HttpEntity.MAIN_URL + HttpEntity.DELETE_COMMENT_CREATE)
                             .delete(body)
                             .build();
-                    client.newCall(request).enqueue(new Callback() {
+                    getHttpsClient().newCall(request).enqueue(new Callback() {
                         @Override
                         public void onFailure(Call call, IOException e) {
 
@@ -1315,7 +1390,7 @@ public class HttpUtils {
                         .header(Authorization, Bearer + entity.getToken())
                         .build();
 
-                client.newCall(request).enqueue(new Callback() {
+                getHttpsClient().newCall(request).enqueue(new Callback() {
                     @Override
                     public void onFailure(Call call, IOException e) {
 
@@ -1402,6 +1477,198 @@ public class HttpUtils {
         });
     }
 
+    /**
+     * 检索课程
+     */
+    public void getCouseAll(final Handler handler, final RequestDataEntity entity, final Map<String, Object> dataMap, final List<T> dataList){
+        executorService.execute(new Runnable() {
+            @Override
+            public void run() {
+                final Request request = new Request.Builder()
+                        .header(Authorization, Bearer + entity.getToken())
+                        .url(entity.getUrl() + setUrl(dataMap))
+                        .build();
+
+                getHttpsClient().newCall(request).enqueue(new Callback() {
+                    @Override
+                    public void onFailure(Call call, IOException e) {
+                        handler.sendEmptyMessage(500);
+                    }
+
+                    @Override
+                    public void onResponse(Call call, Response response) throws IOException {
+                        if (response.isSuccessful()){
+                            try {
+                                JSONObject json = new JSONObject(response.body().string());
+                                boolean success = json.getBoolean("success");
+                                if (success){
+                                    JSONArray result = json.getJSONArray("result");
+                                    for (int i = 0; i < result.length(); i++){
+                                        JSONObject item = result.getJSONObject(i);
+                                        CourseEntity courseEntity = new Gson().fromJson(item.toString(), new TypeToken<CourseEntity>(){}.getType());
+                                        dataList.add((T) courseEntity);
+                                    }
+                                    handler.sendEmptyMessage(0);
+                                }else{
+                                    handler.sendEmptyMessage(400);
+                                }
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    }
+                });
+            }
+        });
+    }
+
+    /**
+     * 获取学习轨迹
+     * @param request
+     * @return
+     */
+    public static void getLearnTacks(final Handler handler, final RequestDataEntity requestDataEntity, final Map<String, Object> map, final List<LearnTrackEntity> dataList){
+        executorService.execute(new Runnable() {
+            @Override
+            public void run() {
+                Request request = new Request.Builder()
+                        .header(Authorization, Bearer + requestDataEntity.getToken())
+                        .url(requestDataEntity.getUrl() + setUrl(map))
+                        .build();
+                getHttpsClient().newCall(request).enqueue(new Callback() {
+                    @Override
+                    public void onFailure(Call call, IOException e) {
+                        handler.sendEmptyMessage(500);
+                    }
+
+                    @Override
+                    public void onResponse(Call call, Response response) throws IOException {
+                        if (response.isSuccessful()){
+                            try {
+                                JSONObject json = new JSONObject(response.body().string());
+                                boolean success =json.getBoolean("success");
+                                if (success){
+                                    JSONObject result = json.getJSONObject("result");
+                                    JSONArray items = result.getJSONArray("items");
+                                    for (int i = 0; i < items.length(); i++){
+                                        JSONObject item = items.getJSONObject(i);
+                                        LearnTrackEntity trackEntity =
+                                                new Gson().fromJson(item.toString(), new TypeToken<LearnTrackEntity>(){}.getType());
+                                        dataList.add(trackEntity);
+                                    }
+                                    handler.sendEmptyMessage(0);
+                                }else{
+                                    handler.sendEmptyMessage(400);
+                                }
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    }
+                });
+            }
+        });
+    }
+
+    /**
+     * 获取校长电话
+     * @param handler
+     * @param requestDataEntity
+     */
+
+    public static void getSchoolSetting(final Handler handler, final RequestDataEntity requestDataEntity){
+            executorService.execute(new Runnable() {
+                @Override
+                public void run() {
+                    Request request = new Request.Builder()
+                            .header(Authorization, Bearer + requestDataEntity.getToken())
+                            .url(requestDataEntity.getUrl())
+                            .build();
+                    getHttpsClient().newCall(request).enqueue(new Callback() {
+                        @Override
+                        public void onFailure(Call call, IOException e) {
+                            handler.sendEmptyMessage(500);
+                        }
+
+                        @Override
+                        public void onResponse(Call call, Response response) throws IOException {
+                            if (response.isSuccessful()){
+                                try {
+                                    JSONObject json = new JSONObject(response.body().string());
+                                    boolean success = json.getBoolean("success");
+                                    if (success){
+                                        JSONObject result = json.getJSONObject("result");
+                                        GetSchoolSettingEntity settingEntity =
+                                                new Gson().fromJson(result.toString(), new TypeToken<GetSchoolSettingEntity>(){}.getType());
+                                        Message msg = new Message();
+                                        msg.what = 10;
+                                        msg.obj = settingEntity;
+                                        handler.sendMessage(msg);
+                                    }else{
+                                        handler.sendEmptyMessage(400);
+                                    }
+                                } catch (JSONException e) {
+                                    e.printStackTrace();
+                                    handler.sendEmptyMessage(404);
+                                }
+
+                            }
+                        }
+                    });
+                }
+            });
+    }
+
+    /**
+     * 切换学校
+     * @param request
+     * @return
+     */
+
+    public static void switchCampusId(final Handler handler, final RequestDataEntity requestDataEntity){
+        executorService.execute(new Runnable() {
+            @Override
+            public void run() {
+                FormBody body = new FormBody.Builder()
+                        .add("tenantId", String.valueOf(requestDataEntity.getTenantId()))
+                        .add("campusId", String.valueOf(requestDataEntity.getCampusId()))
+                        .build();
+                Request request = new Request.Builder()
+                        .header(Authorization, Bearer + requestDataEntity.getToken())
+                        .url(requestDataEntity.getUrl())
+                        .post(body)
+                        .build();
+                getHttpsClient().newCall(request).enqueue(new Callback() {
+                    @Override
+                    public void onFailure(Call call, IOException e) {
+                        handler.sendEmptyMessage(500);
+                    }
+
+                    @Override
+                    public void onResponse(Call call, Response response) throws IOException {
+                        if (response.isSuccessful()){
+                            try {
+                                JSONObject json = new JSONObject(response.body().string());
+                                boolean success = json.getBoolean("success");
+                                if (success){
+                                    JSONObject result = json.getJSONObject("result");
+                                    Message msg = new Message();
+                                    msg.what = 20;
+                                    msg.obj = result;
+                                    handler.sendMessage(msg);
+                                }else{
+                                    handler.sendEmptyMessage(400);
+                                }
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                                handler.sendEmptyMessage(404);
+                            }
+                        }
+                    }
+                });
+            }
+        });
+    }
 
     public static String execute(Request request){
         try {
@@ -1416,6 +1683,10 @@ public class HttpUtils {
         return "{\"error\":\"fail\"}";
     }
 
+    public Type getType(){
+        TypeToken<T> typeToken = new TypeToken<T>(){};
+        return typeToken.getType();
+    }
 
     /**
      * 公共解析返回结果
@@ -1481,7 +1752,7 @@ public class HttpUtils {
                         .post(body)
                         .build();
 
-                client.newCall(request).enqueue(new Callback() {
+                getHttpsClient().newCall(request).enqueue(new Callback() {
                     @Override
                     public void onFailure(Call call, IOException e) {
                         handler.sendEmptyMessage(500);

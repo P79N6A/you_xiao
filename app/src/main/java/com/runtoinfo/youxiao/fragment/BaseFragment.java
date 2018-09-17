@@ -3,6 +3,7 @@ package com.runtoinfo.youxiao.fragment;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -156,6 +157,13 @@ public class BaseFragment extends Fragment {
 
     }
 
+    public void refresh(Fragment fragment){
+        final FragmentTransaction ft = getFragmentManager().beginTransaction();
+        ft.detach(fragment);
+        ft.attach(fragment);
+        ft.commit();
+    }
+
     /**
      * 找到activity的控件
      *
@@ -167,4 +175,6 @@ public class BaseFragment extends Fragment {
     protected <T extends View> T findActivityViewById(@IdRes int id) {
         return (T) mActivity.findViewById(id);
     }*/
+
+
 }

@@ -3,7 +3,7 @@ package com.runtoinfo.httpUtils.CPRCBean;
 /**
  * Created by QiaoJunChao on 2018/9/3.
  */
-
+@SuppressWarnings("all")
 public class GetAllCPC {
     public int UserId;
     public int Type;

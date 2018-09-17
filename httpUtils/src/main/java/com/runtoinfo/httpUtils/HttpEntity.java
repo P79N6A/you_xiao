@@ -56,6 +56,10 @@ public class HttpEntity {
      */
     public final static String CAMPAIGN_ADD_MEMBER = "/api/services/app/Campaign/AddMember";
     /**
+     * 修改用户信息
+     */
+    public final static String UPDATE_USER_INFORMATION = "/api/services/app/User/ChangProfile";
+    /**
      * 修改报名人员
      */
     public final static String UPDATE_MODIFY_MEMBER = "/api/services/app/Campaign/ModifyMember";
@@ -92,9 +96,13 @@ public class HttpEntity {
      */
     public final static String HAND_HOME_WORK = "/api/services/app/CourseSchedule/HandinHomework";
     /**
-     * 上传文件
+     * 上传多个文件
      */
     public final static String POST_ALI_SERVER = "/api/services/app/File/UploadMore";
+    /**
+     * 上传单个文件
+     */
+    public final static String POST_ALI_ONE_FILE = "/api/services/app/File/Upload";
     /**
      * 请假
      */
@@ -147,5 +155,20 @@ public class HttpEntity {
      * 更新消息状态
      */
     public final static String UPDATE_USER_NOTIFICATION_STATUE = "/api/services/app/Notification/ReadUserNotification";
-
+    /**
+     * 获取课表
+     */
+    public final static String GET_USER_COURSE_LIST = "/api/services/app/CourseSchedule/GetTimetableByUser";
+    /**
+     * 获取学些轨迹
+     */
+    public final static String GET_LEARN_TACKS = "/api/services/app/OnlineCourse/GetLearningTacks";
+    /**
+     * 获取校长电话
+     */
+    public final static String GET_SCHOOL_SETTING = "/api/services/app/CampusSetting/GetSetting";
+    /**
+     * 切换学校
+     */
+    public final static String SWITCH_CAMPUS = "/api/TokenAuth/SwitchCampus";
 }

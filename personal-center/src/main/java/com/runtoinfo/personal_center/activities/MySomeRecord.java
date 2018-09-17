@@ -3,6 +3,9 @@ package com.runtoinfo.personal_center.activities;
 import android.content.IntentFilter;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
+import android.os.Message;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.widget.LinearLayoutManager;
@@ -13,7 +16,10 @@ import com.alibaba.android.arouter.facade.annotation.Route;
 import com.runtoinfo.httpUtils.CenterEntity.CourseRecordEntity;
 import com.runtoinfo.httpUtils.CenterEntity.LearnTrackEntity;
 import com.runtoinfo.httpUtils.CenterEntity.LeaveRecordEntity;
+import com.runtoinfo.httpUtils.HttpEntity;
 import com.runtoinfo.httpUtils.bean.LeaveEntity;
+import com.runtoinfo.httpUtils.bean.RequestDataEntity;
+import com.runtoinfo.httpUtils.utils.HttpUtils;
 import com.runtoinfo.personal_center.R;
 import com.runtoinfo.personal_center.adapter.CourseRecordAdapter;
 import com.runtoinfo.personal_center.adapter.LearningTrackAdapter;
@@ -21,11 +27,14 @@ import com.runtoinfo.personal_center.adapter.LeaveAdapter;
 import com.runtoinfo.personal_center.databinding.ContentMySomeRecordBinding;
 import com.runtoinfo.personal_center.fragment.TNFragment;
 import com.runtoinfo.youxiao.globalTools.adapter.CommonViewPagerAdapter;
+import com.runtoinfo.youxiao.globalTools.utils.Entity;
 import com.runtoinfo.youxiao.globalTools.utils.IntentDataType;
 import com.runtoinfo.youxiao.globalTools.utils.RecyclerViewDecoration;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Route(path = "/center/mySomeRecord")
 public class MySomeRecord extends BaseActivity {
@@ -70,6 +79,7 @@ public class MySomeRecord extends BaseActivity {
             case "learnTrack":
                 binding.someRecordTitle.setText("学习轨迹");
                 hideView(false);
+                requestLearnTacks();
                 break;
             case "collection":
                 binding.someRecordTitle.setText("我的收藏");
@@ -87,14 +97,14 @@ public class MySomeRecord extends BaseActivity {
    }
 
    public void initLearnAdapter(){
-       learningTrackAdapter = new LearningTrackAdapter(MySomeRecord.this, learnList, R.layout.record_leave_item_layout);
+       learningTrackAdapter = new LearningTrackAdapter(MySomeRecord.this, learnList, R.layout.record_study_item_layout);
        binding.myRecordRecycler.setLayoutManager(new LinearLayoutManager(this));
        binding.myRecordRecycler.setAdapter(learningTrackAdapter);
        binding.myRecordRecycler.addItemDecoration(new RecyclerViewDecoration(this, RecyclerViewDecoration.HORIZONTAL_LIST));
    }
 
    public void initCourseAdapter(){
-       courseRecordAdapter = new CourseRecordAdapter(MySomeRecord.this, courseList, R.layout.record_leave_item_layout);
+       courseRecordAdapter = new CourseRecordAdapter(MySomeRecord.this, courseList, R.layout.record_course_item_latyou);
        binding.myRecordRecycler.setLayoutManager(new LinearLayoutManager(this));
        binding.myRecordRecycler.setAdapter(courseRecordAdapter);
        binding.myRecordRecycler.addItemDecoration(new RecyclerViewDecoration(this, RecyclerViewDecoration.HORIZONTAL_LIST));
@@ -104,6 +114,19 @@ public class MySomeRecord extends BaseActivity {
        binding.recordInclude.setVisibility(flag? View.VISIBLE:View.GONE);
        binding.myRecordRecycler.setVisibility(flag?View.GONE:View.VISIBLE);
    }
+
+   //学习轨迹
+    public void requestLearnTacks(){
+        RequestDataEntity requestDataEntity = new RequestDataEntity();
+        requestDataEntity.setToken(spUtils.getString(Entity.TOKEN));
+        requestDataEntity.setUrl(HttpEntity.MAIN_URL + HttpEntity.GET_LEARN_TACKS);
+
+        Map<String, Object> requestMap = new HashMap<>();
+        requestMap.put("MaxResultCount", 10);
+        requestMap.put("SkipCount", 0);
+
+        HttpUtils.getLearnTacks(handler, requestDataEntity, requestMap, learnList);
+    }
 
    public void includeLayout(){
        fragments.add(new TNFragment(news, 0));
@@ -129,6 +152,21 @@ public class MySomeRecord extends BaseActivity {
            }
        });
    }
+
+   public Handler handler = new Handler(Looper.getMainLooper()){
+       @Override
+       public void handleMessage(Message msg) {
+           switch (msg.what){
+               case 0:
+                   initLearnAdapter();
+                   break;
+               case 500:
+                   break;
+               case 400:
+                   break;
+           }
+       }
+   };
 
 
 }

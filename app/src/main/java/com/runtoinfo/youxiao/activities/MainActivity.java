@@ -1,6 +1,7 @@
 package com.runtoinfo.youxiao.activities;
 
 import android.app.Dialog;
+import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.os.Handler;
@@ -87,7 +88,7 @@ public class MainActivity extends BaseActivity implements ViewPager.OnPageChange
         handler.postDelayed(new Runnable() {
             @Override
             public void run() {
-                showUpdate("1222222222222222222222222222222222");
+                //showUpdate("1.修复登录BUG;\n2.增加新功能");
             }
         }, 2000);
     }
@@ -193,5 +194,10 @@ public class MainActivity extends BaseActivity implements ViewPager.OnPageChange
             }
         });
         ((TextView) dialog.findViewById(R.id.check_version_details)).setText(details);
+    }
+
+    public void refresh(){
+       //finish();
+       onRestart();
     }
 }

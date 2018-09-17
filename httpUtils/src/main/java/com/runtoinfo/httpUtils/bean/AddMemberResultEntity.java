@@ -4,6 +4,7 @@ package com.runtoinfo.httpUtils.bean;
  * Created by QiaoJunChao on 2018/9/7.
  */
 
+@SuppressWarnings("all")
 public class AddMemberResultEntity {
     public int tenantId;
     public int campusId;

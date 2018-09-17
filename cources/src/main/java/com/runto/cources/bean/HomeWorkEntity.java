@@ -6,7 +6,7 @@ import android.widget.VideoView;
 /**
  * Created by QiaoJunChao on 2018/8/27.
  */
-
+@SuppressWarnings("all")
 public class HomeWorkEntity {
     public ImageView imageView;
     public VideoView videoView;

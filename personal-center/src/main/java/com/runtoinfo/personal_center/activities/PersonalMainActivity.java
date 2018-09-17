@@ -11,7 +11,11 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
+import android.os.Message;
 import android.provider.MediaStore;
+import android.text.TextUtils;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.Gravity;
@@ -23,10 +27,16 @@ import com.alibaba.android.arouter.facade.annotation.Route;
 import com.alibaba.android.arouter.launcher.ARouter;
 import com.lljjcoder.style.citylist.utils.CityListLoader;
 import com.lljjcoder.style.citythreelist.CityBean;
+import com.runtoinfo.httpUtils.CenterEntity.PersonalInformationEntity;
+import com.runtoinfo.httpUtils.HttpEntity;
+import com.runtoinfo.httpUtils.bean.RequestDataEntity;
+import com.runtoinfo.httpUtils.utils.HttpUtils;
 import com.runtoinfo.personal_center.R;
 import com.runtoinfo.personal_center.databinding.ActivityPersonalMainBinding;
 import com.runtoinfo.personal_center.ui.SelectPictureDialog;
 import com.runtoinfo.youxiao.globalTools.timepicker.CustomDatePicker;
+import com.runtoinfo.youxiao.globalTools.utils.DialogMessage;
+import com.runtoinfo.youxiao.globalTools.utils.Entity;
 import com.squareup.leakcanary.LeakCanary;
 import com.squareup.leakcanary.RefWatcher;
 
@@ -66,7 +76,7 @@ public class PersonalMainActivity extends BaseActivity {
         binding.personalRelativeUsername.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                hideView(true);
             }
         });
         //性别
@@ -80,7 +90,6 @@ public class PersonalMainActivity extends BaseActivity {
         binding.personalRelativeBirthday.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //showDateSelect(PersonalMainActivity.this, 3, Calendar.getInstance());
                 customDatePicker1.show(binding.personalEditBirth.getText().toString());
             }
         });
@@ -99,6 +108,37 @@ public class PersonalMainActivity extends BaseActivity {
             }
         });
 
+        binding.userNameCancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                hideView(false);
+            }
+        });
+
+        binding.userNameSave.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (!TextUtils.isEmpty(binding.userNameNew.getText().toString())){
+                    hideView(false);
+                    PersonalInformationEntity entity = new PersonalInformationEntity();
+                    entity.setName(binding.userNameNew.getText().toString());
+                    requestOwnServer(entity);
+                }
+            }
+        });
+
+        binding.userNameClear.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                binding.userNameNew.setText("");
+            }
+        });
+    }
+
+    public void hideView(boolean flag){
+        binding.personalTitleLayout.setVisibility(flag?View.GONE:View.VISIBLE);
+        binding.personalSettingLayout.setVisibility(flag?View.GONE:View.VISIBLE);
+        binding.updateUserNameLayout.setVisibility(flag?View.VISIBLE:View.GONE);
     }
 
     public void initSexSelectionDialog(){
@@ -121,6 +161,9 @@ public class PersonalMainActivity extends BaseActivity {
             public void onClick(View v) {
                 dialog.dismiss();
                 binding.personalEditSex.setText("男");
+                PersonalInformationEntity entity = new  PersonalInformationEntity();
+                entity.setGender(0);
+                requestOwnServer(entity);
             }
         });
 
@@ -129,6 +172,9 @@ public class PersonalMainActivity extends BaseActivity {
             public void onClick(View v) {
                 dialog.dismiss();
                 binding.personalEditSex.setText("女");
+                PersonalInformationEntity entity = new  PersonalInformationEntity();
+                entity.setGender(1);
+                requestOwnServer(entity);
             }
         });
 
@@ -161,6 +207,7 @@ public class PersonalMainActivity extends BaseActivity {
                     Log.e("PATH", path);
                     Bitmap bitmap = BitmapFactory.decodeFile(path);
                     binding.personalEditTx.setImageBitmap(bitmap);
+                    requestFile();
                     break;
                 case RESULT_OK:
                     selectPic(data);
@@ -168,6 +215,50 @@ public class PersonalMainActivity extends BaseActivity {
             }
         }
     }
+
+    /**
+     * 给阿里服务传递文件 获取文件路径
+     */
+    public void requestFile(){
+        RequestDataEntity entity = new RequestDataEntity();
+        entity.setToken(spUtils.getString(Entity.TOKEN));
+        entity.setUrl(HttpEntity.MAIN_URL + HttpEntity.POST_ALI_ONE_FILE);
+        HttpUtils.postOneFile(handler, entity);
+    }
+
+    /**
+     * 给自己服务器上传返回的文件路径
+     */
+    public void requestOwnServer(PersonalInformationEntity entity){
+        RequestDataEntity requestDataEntity = new RequestDataEntity();
+        requestDataEntity.setUrl(HttpEntity.MAIN_URL + HttpEntity.UPDATE_USER_INFORMATION);
+        requestDataEntity.setToken(spUtils.getString(Entity.TOKEN));
+        requestDataEntity.setUserId(spUtils.getInt(Entity.USER_ID));
+        HttpUtils.updateUserInfor(handler, requestDataEntity, entity);
+    }
+
+    public Handler handler = new Handler(Looper.getMainLooper()){
+        @Override
+        public void handleMessage(Message msg) {
+            switch (msg.what){
+                case 0:
+                    String path = msg.obj.toString();
+                    PersonalInformationEntity entity = new PersonalInformationEntity();
+                    entity.setAvatar(path);
+                    requestOwnServer(entity);
+                    break;
+                case 1:
+                    DialogMessage.showToast(PersonalMainActivity.this, "修改成功");
+                    break;
+                case 400:
+                    DialogMessage.showToast(PersonalMainActivity.this, "修改失败");
+                    break;
+                case 500:
+                    DialogMessage.showToast(PersonalMainActivity.this, "请求失败");
+                    break;
+            }
+        }
+    };
 
     @Override
     protected void onResume() {
@@ -207,6 +298,9 @@ public class PersonalMainActivity extends BaseActivity {
             @Override
             public void handle(String time) { // 回调接口，获得选中的时间
                 binding.personalEditBirth.setText(time.split(" ")[0]);
+                PersonalInformationEntity entity = new PersonalInformationEntity();
+                entity.setBirthDay(time.split(" ")[0]);
+                requestOwnServer(entity);
             }
         }, "1970-01-01 00:00", now); // 初始化日期格式请用：yyyy-MM-dd HH:mm，否则不能正常运行
         customDatePicker1.showSpecificTime(false); // 不显示时和分
@@ -232,6 +326,13 @@ public class PersonalMainActivity extends BaseActivity {
             SelectPictureDialog dialog = new SelectPictureDialog(this, R.style.dialog, R.layout.personal_sex_selection, 2);
             dialog.show();
         }
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (binding.updateUserNameLayout.getVisibility() == View.VISIBLE){
+            hideView(false);
+        }else super.onBackPressed();
     }
 
     private void selectPic(Intent intent) {

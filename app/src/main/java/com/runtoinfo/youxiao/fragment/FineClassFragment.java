@@ -10,6 +10,7 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
 
 import com.runtoinfo.httpUtils.HttpEntity;
 import com.runtoinfo.httpUtils.utils.HttpUtils;
@@ -36,6 +37,7 @@ public class FineClassFragment extends BaseFragment {
     public List<Fragment> fragments = new ArrayList<>();
     public View view;
     public List<Map<String, Object>> dataList = new ArrayList<>();
+    public boolean isGetData;
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
@@ -47,12 +49,6 @@ public class FineClassFragment extends BaseFragment {
     public void initTableData(){
 
         SetTabLayoutWidth.reflex(binding.boutiqueCourseTablayout);
-
-//        String[] title = new String[]{"全部","音乐","美术","体育","其他","数学","英语"};
-//        titles.addAll(Arrays.asList(title));
-//        for (int i =0; i < titles.size(); i++){
-//            fragments.add(new MusicFragment());
-//        }
         viewPagerAdapter = new BoutiqueCourseViewPagerAdapter(getFragmentManager(),fragments, titles);
         binding.boutiqueCourseViewpager.setAdapter(viewPagerAdapter);
         binding.boutiqueCourseViewpager.setOffscreenPageLimit(titles.size());
@@ -89,4 +85,23 @@ public class FineClassFragment extends BaseFragment {
             }
         }
     };
+
+    @Override
+    public Animation onCreateAnimation(int transit, boolean enter, int nextAnim) {
+        //进入当前Fragment
+        if (enter && !isGetData) {
+            isGetData = true;
+            //这里可以做网络请求或者需要的数据刷新操作
+            refresh(FineClassFragment.this);
+        } else {
+            isGetData = false;
+        }
+        return super.onCreateAnimation(transit, enter, nextAnim);
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        isGetData = false;
+    }
 }

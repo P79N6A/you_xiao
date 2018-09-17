@@ -1,13 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent" android:layout_height="match_parent"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:padding="15dp">
 
-    <ImageView
-        android:layout_width="160dp"
-        android:layout_height="120dp"
+    <com.runtoinfo.youxiao.globalTools.views.RoundImagView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:id="@+id/record_study_imag"
-        android:background="@drawable/boutique_recycler_2"/>
+        app:type="round"
+        android:layout_alignBottom="@+id/record_course_goon"
+        android:layout_alignTop="@+id/record_study_title"
+        android:scaleType="fitXY"
+        android:src="@drawable/boutique_recycler_2"/>
 
     <TextView
         android:id="@+id/record_study_title"

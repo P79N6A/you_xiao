@@ -1,9 +1,10 @@
 package com.runtoinfo.httpUtils.bean;
 
 /**
+ * 添加随行人员
  * Created by QiaoJunChao on 2018/8/20.
  */
-
+@SuppressWarnings("all")
 public class AddMemberBean {
     public String gender;
     public int campaignId;

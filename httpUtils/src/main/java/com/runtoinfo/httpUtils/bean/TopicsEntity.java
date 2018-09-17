@@ -3,7 +3,7 @@ package com.runtoinfo.httpUtils.bean;
 /**
  * Created by QiaoJunChao on 2018/8/30.
  */
-
+@SuppressWarnings("all")
 public class TopicsEntity {
 
     public String imagePath;

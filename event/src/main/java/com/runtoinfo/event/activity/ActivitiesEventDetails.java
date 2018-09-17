@@ -16,6 +16,7 @@ import com.runtoinfo.httpUtils.bean.MyEventEntity;
 import com.runtoinfo.httpUtils.utils.HttpUtils;
 import com.runtoinfo.youxiao.globalTools.utils.DialogMessage;
 import com.runtoinfo.youxiao.globalTools.utils.IntentDataType;
+import com.runtoinfo.youxiao.globalTools.utils.TimeUtil;
 
 @Route(path = "/event/eventDetails")
 public class ActivitiesEventDetails extends EventBaseActivity {
@@ -38,7 +39,7 @@ public class ActivitiesEventDetails extends EventBaseActivity {
         binding.activityEventAddress.setText("地点: " + eventEntity.getLocation());
         binding.activityEventDescription.setText(eventEntity.getContent());
         HttpUtils.postPhoto(this, eventEntity.getCover(), binding.activityEventImg);
-        binding.activityEventTime.setText("时间: " + eventEntity.getStartDate().split("T")[0]);
+        binding.activityEventTime.setText("时间: " + TimeUtil.iso8601ToDate(eventEntity.getStartDate(), 0));
         binding.activityEventName.setText(eventEntity.getName());
         if (type == 1){
             binding.eventParticipant.setVisibility(View.VISIBLE);

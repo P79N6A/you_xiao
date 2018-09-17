@@ -2,15 +2,18 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:padding="15dp">
 
-    <ImageView
+    <com.runtoinfo.youxiao.globalTools.views.RoundImagView
         android:id="@+id/record_course_img"
         android:layout_width="160dp"
         android:layout_height="wrap_content"
         android:layout_alignBottom="@+id/record_course_data_layout"
-        android:background="@drawable/boutique_recycler_2" />
+        android:src="@drawable/boutique_recycler_2"
+        android:scaleType="fitXY"
+        app:type="round"/>
 
     <LinearLayout
         android:id="@+id/record_course_data_layout"

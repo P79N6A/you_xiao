@@ -1,8 +1,10 @@
 package com.runtoinfo.personal_center.adapter;
 
 import android.content.Context;
+import android.view.View;
 
 import com.runtoinfo.httpUtils.CenterEntity.LearnTrackEntity;
+import com.runtoinfo.personal_center.R;
 import com.runtoinfo.youxiao.globalTools.adapter.BaseViewHolder;
 import com.runtoinfo.youxiao.globalTools.adapter.UniversalRecyclerAdapter;
 
@@ -20,6 +22,12 @@ public class LearningTrackAdapter extends UniversalRecyclerAdapter<LearnTrackEnt
 
     @Override
     protected void convert(Context mContext, BaseViewHolder holder, LearnTrackEntity learnTrackEntity, int position) {
-
+        holder.setText(R.id.record_progress, learnTrackEntity.getProgress() + "%");
+        holder.getView(R.id.record_course_goon).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //去往课程详情
+            }
+        });
     }
 }

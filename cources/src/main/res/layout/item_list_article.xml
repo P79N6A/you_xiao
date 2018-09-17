@@ -1,218 +1,247 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:paddingLeft="15dp"
-    android:paddingRight="10dp"
-    android:background="#FFFFFF"
-    android:orientation="vertical"
-    android:paddingTop="10dp">
-
-
-
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="15dp">
-
-        <TextView
-            android:id="@+id/course_name"
-            style="@style/TextView_18sp_title"
-            android:text="小提琴-阶梯音乐" />
-
-    </RelativeLayout>
-
+    android:orientation="vertical">
 
     <LinearLayout
+        android:id="@+id/course_details_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
+        android:background="#FFFFFF"
         android:orientation="vertical"
-        tools:ignore="RtlHardcoded">
+        android:paddingEnd="10dp"
+        android:paddingStart="15dp"
+        android:paddingTop="10dp">
 
-        <LinearLayout
-            android:layout_width="wrap_content"
+
+        <RelativeLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal">
+            android:layout_marginTop="15dp">
 
             <TextView
-                android:id="@+id/course_tv_time"
-                style="@style/TextView_Course_999"
-                android:drawableLeft="@drawable/course_time"
-                android:text="时间：" />
+                android:id="@+id/course_name"
+                style="@style/TextView_18sp_title"
+                android:text="小提琴-阶梯音乐" />
 
-            <TextView
-                android:id="@+id/course_time"
-                style="@style/TextView_Course_999"
-                tools:text="18:00 - 23:00" />
-        </LinearLayout>
+        </RelativeLayout>
 
 
         <LinearLayout
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_marginTop="2dp">
+            android:layout_marginTop="10dp"
+            android:orientation="vertical"
+            tools:ignore="RtlHardcoded">
 
-            <TextView
-                android:id="@+id/course_tv_address"
-                style="@style/TextView_Course_999"
-                android:drawableLeft="@drawable/course_address"
-                tools:text="地点：" />
-
-            <TextView
-                android:id="@+id/course_address"
-                style="@style/TextView_Course_999"
-                tools:text="布米童艺小提琴室" />
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="2dp"
-            android:orientation="horizontal">
-
-            <TextView
-                android:id="@+id/course_tv_teacher"
-                style="@style/TextView_Course_999"
-                android:drawableLeft="@drawable/course_teacher"
-                tools:text="老师：" />
-
-            <TextView
-                android:id="@+id/course_teacher_name"
-                style="@style/TextView_Course_999"
-                tools:text="李老师" />
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_marginTop="2dp">
-
-            <TextView
-                android:id="@+id/course_tv_progress"
-                style="@style/TextView_Course_999"
-                android:drawableLeft="@drawable/course_progress"
-                tools:text="进度：" />
-
-            <ProgressBar
-                style="?android:attr/progressBarStyleHorizontal"
+            <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:max="100"
-                android:id="@+id/course_progress"
-                android:progress="10" />
+                android:orientation="horizontal">
 
-            <TextView
-                android:id="@+id/course_progress_num"
-                style="@style/TextView_Course_999"
-                android:layout_marginStart="5dp"
-                android:text="10%" />
+                <TextView
+                    android:id="@+id/course_tv_time"
+                    style="@style/TextView_Course_999"
+                    android:drawableLeft="@drawable/course_time"
+                    android:text="时间：" />
+
+                <TextView
+                    android:id="@+id/course_time"
+                    style="@style/TextView_Course_999"
+                    tools:text="18:00 - 23:00" />
+            </LinearLayout>
+
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="2dp"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/course_tv_address"
+                    style="@style/TextView_Course_999"
+                    android:drawableLeft="@drawable/course_address"
+                    tools:text="地点：" />
+
+                <TextView
+                    android:id="@+id/course_address"
+                    style="@style/TextView_Course_999"
+                    tools:text="布米童艺小提琴室" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="2dp"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/course_tv_teacher"
+                    style="@style/TextView_Course_999"
+                    android:drawableLeft="@drawable/course_teacher"
+                    tools:text="老师：" />
+
+                <TextView
+                    android:id="@+id/course_teacher_name"
+                    style="@style/TextView_Course_999"
+                    tools:text="李老师" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="2dp"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/course_tv_progress"
+                    style="@style/TextView_Course_999"
+                    android:drawableLeft="@drawable/course_progress"
+                    tools:text="进度：" />
+
+
+                <ProgressBar
+                    style="?android:attr/progressBarStyleHorizontal"
+                    android:id="@+id/course_progress"
+                    android:layout_width="100dp"
+                    android:layout_height="6dp"
+                    android:layout_gravity="center"
+                    android:progressDrawable="@drawable/progress_background"
+                    android:max="100"
+                    android:progress="50"/>
+
+                <TextView
+                    android:id="@+id/course_progress_num"
+                    style="@style/TextView_Course_999"
+                    android:layout_marginStart="5dp"
+                    android:text="10%" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="2dp"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/course_tv_homework"
+                    style="@style/TextView_Course_999"
+                    android:drawableLeft="@drawable/course_home_work"
+                    tools:text="作业：" />
+
+                <TextView
+                    android:id="@+id/course_homework"
+                    style="@style/TextView_Course_999"
+                    tools:text="小提琴琴谱练习" />
+            </LinearLayout>
+
         </LinearLayout>
+
+        <View
+            android:layout_width="wrap_content"
+            android:layout_height="0.1dp"
+            android:layout_marginTop="15dp"
+            android:background="#cccccc" />
+
 
         <LinearLayout
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_marginTop="2dp">
+            android:layout_marginTop="15dp"
+            android:gravity="center"
+            android:orientation="horizontal">
 
-            <TextView
-                android:id="@+id/course_tv_homework"
-                style="@style/TextView_Course_999"
-                android:drawableLeft="@drawable/course_home_work"
-                tools:text="作业：" />
+            <LinearLayout
+                android:id="@+id/course_hand_homework_layout"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:orientation="horizontal">
 
-            <TextView
-                android:id="@+id/course_homework"
-                style="@style/TextView_Course_999"
-                tools:text="小提琴琴谱练习" />
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/course_hand_home_work" />
+
+                <TextView
+                    android:id="@+id/course_hand_homework"
+                    style="@style/TextView_Course_18sp"
+                    android:text="交作业" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/course_leave_layout"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/course_leave" />
+
+                <TextView
+                    android:id="@+id/course_leave"
+                    style="@style/TextView_Course_18sp"
+                    android:text="请假" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/course_sign_in_layout"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:id="@+id/course_sign_in_img"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/course_sign_in" />
+
+                <TextView
+                    android:id="@+id/course_sign_in_tv"
+                    style="@style/TextView_Course_18sp"
+                    android:text="签到" />
+            </LinearLayout>
+
         </LinearLayout>
 
+        <View
+            android:layout_width="wrap_content"
+            android:layout_height="0.1dp"
+            android:layout_marginTop="15dp"
+            android:background="#cccccc" />
     </LinearLayout>
-
-    <View
-        android:layout_width="wrap_content"
-        android:layout_height="0.1dp"
-        android:layout_marginTop="15dp"
-        android:background="#cccccc" />
-
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="15dp"
-        android:gravity="center"
-        android:orientation="horizontal">
-
-        <LinearLayout
-            android:id="@+id/course_hand_homework_layout"
-            android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:id="@+id/no_course_layout"
+        android:background="#f7f7f7"
+        android:visibility="gone">
+        <TextView
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
+            android:textColor="#333333"
+            android:textSize="18sp"
+            android:layout_marginTop="20dp"
+            android:layout_marginBottom="20dp"
+            android:text="今日没有课程哦"
+            android:layout_gravity="center"
             android:gravity="center"
-            android:orientation="horizontal">
-
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/course_hand_home_work" />
-
-            <TextView
-                android:id="@+id/course_hand_homework"
-                style="@style/TextView_Course_18sp"
-                android:text="交作业" />
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:gravity="center"
-            android:orientation="horizontal"
-            android:id="@+id/course_leave_layout">
-
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/course_leave" />
-
-            <TextView
-                android:id="@+id/course_leave"
-                style="@style/TextView_Course_18sp"
-                android:text="请假" />
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:gravity="center"
-            android:id="@+id/course_sign_in_layout"
-            android:orientation="horizontal">
-
-            <ImageView
-                android:id="@+id/course_sign_in_img"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/course_sign_in" />
-
-            <TextView
-                android:id="@+id/course_sign_in_tv"
-                style="@style/TextView_Course_18sp"
-                android:text="签到" />
-        </LinearLayout>
-
+            android:id="@+id/course_no_message"/>
     </LinearLayout>
-
-    <View
-        android:layout_width="wrap_content"
-        android:layout_height="0.1dp"
-        android:layout_marginTop="15dp"
-        android:background="#cccccc" />
 
 </LinearLayout>

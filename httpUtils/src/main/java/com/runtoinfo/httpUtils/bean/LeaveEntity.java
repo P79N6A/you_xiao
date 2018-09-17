@@ -3,7 +3,7 @@ package com.runtoinfo.httpUtils.bean;
 /**
  * Created by QiaoJunChao on 2018/8/29.
  */
-
+@SuppressWarnings("all")
 public class LeaveEntity {
     public int userId;
     public int askTo;

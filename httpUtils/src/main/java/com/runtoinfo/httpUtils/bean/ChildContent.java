@@ -4,6 +4,7 @@ package com.runtoinfo.httpUtils.bean;
  * Created by QiaoJunChao on 2018/8/23.
  */
 
+@SuppressWarnings("all")
 public class ChildContent {
 
     public int mediaType;

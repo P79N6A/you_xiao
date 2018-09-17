@@ -5,7 +5,7 @@ import java.util.List;
 /**
  * Created by QiaoJunChao on 2018/8/30.
  */
-
+@SuppressWarnings("all")
 public class TopiceHttpResultEntity {
 
     public int tenantId;

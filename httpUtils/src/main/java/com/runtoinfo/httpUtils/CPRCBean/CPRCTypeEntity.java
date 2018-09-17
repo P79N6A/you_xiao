@@ -6,7 +6,7 @@ package com.runtoinfo.httpUtils.CPRCBean;
  * 评论、回复、赞、收藏
  * 类型综合
  */
-
+@SuppressWarnings("all")
 public class CPRCTypeEntity {
     /**
      * TYPE

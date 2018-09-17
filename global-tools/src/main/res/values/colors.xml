@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <color name="background">#FFFFFF</color>
-    <color name="split_line">#11112233</color>
+    <color name="split_line">#112233</color>
     <color name="text1">#333333</color>
     <color name="text2">#999999</color>
 
@@ -11,4 +11,11 @@
     <color name="color4">#666666</color>
     <color name="color5">#57C5E8</color>
     <color name="dialog_bg">#ffffff</color>
+    <color name="color6">#3aa6fe</color>
+    <color name="color7">#ff3aa6fe</color>
+    <color name="color8">#ffcccccc</color>
+
+    <color name="round_corner_progress_bar_background_default">#5f5f5f</color>
+    <color name="round_corner_progress_bar_progress_default">#7f7f7f</color>
+    <color name="round_corner_progress_bar_secondary_progress_default">@android:color/transparent</color>
 </resources>

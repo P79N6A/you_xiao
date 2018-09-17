@@ -2,13 +2,11 @@ package com.runto.cources.bean;
 
 import java.io.Serializable;
 
-/**
- * 一个简单的bean
- * Created by huanghaibin on 2017/12/4.
- */
+
 @SuppressWarnings("all")
 public class Article implements Serializable {
     private int id;
+    private String course_name;
     private String tv_time;
     private String course_time;
     private String tv_teacher;
@@ -20,6 +18,32 @@ public class Article implements Serializable {
     private String tv_home_work;
     private String course_home_work;
     private String course_progress_num;
+    private String course_message;
+    private int type;
+
+    public int getType() {
+        return type;
+    }
+
+    public void setType(int type) {
+        this.type = type;
+    }
+
+    public String getCourse_message() {
+        return course_message;
+    }
+
+    public void setCourse_message(String course_message) {
+        this.course_message = course_message;
+    }
+
+    public String getCourse_name() {
+        return course_name;
+    }
+
+    public void setCourse_name(String course_name) {
+        this.course_name = course_name;
+    }
 
     public String getCourse_progress_num() {
         return course_progress_num;

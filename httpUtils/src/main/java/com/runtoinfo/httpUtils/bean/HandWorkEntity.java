@@ -5,7 +5,7 @@ import java.util.List;
 /**
  * Created by QiaoJunChao on 2018/8/28.
  */
-
+@SuppressWarnings("all")
 public class HandWorkEntity {
 
     public int courseId;

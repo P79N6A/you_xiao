@@ -22,7 +22,7 @@ import com.victor.loading.rotate.RotateLoading;
 /**
  * Created by QiaoJunChao on 2018/8/21.
  */
-
+@SuppressWarnings("all")
 public class DialogMessage {
 
     public static RotateLoading rotateLoading;
@@ -111,7 +111,7 @@ public class DialogMessage {
     }
 
     public static Dialog showDialogWithLayout(Context context, int layoutId){
-        Dialog dialog = new Dialog(context);
+        Dialog dialog = new Dialog(context, R.style.dialog);
         dialog.setContentView(layoutId);
         //setWindowTransparent(dialog);
         dialog.setCanceledOnTouchOutside(false);

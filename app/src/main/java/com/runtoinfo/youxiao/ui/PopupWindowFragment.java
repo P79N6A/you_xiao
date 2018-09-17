@@ -13,11 +13,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
+import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.PopupWindow;
 
 import com.runtoinfo.youxiao.R;
 import com.runtoinfo.youxiao.adapter.ListViewAdapter;
+import com.runtoinfo.youxiao.adapter.SchoolDynamicsRecyclerAdapter;
 import com.runtoinfo.youxiao.entity.SelectSchoolEntity;
 import com.runtoinfo.youxiao.utils.Utils;
 
@@ -35,9 +37,11 @@ public class PopupWindowFragment {
     public ListView listView;
     public ListViewAdapter adapter;
     public Activity activity;
-    public PopupWindowFragment(Context context, Activity activity){
+    public AdapterView.OnItemClickListener onItemClickListener;
+    public PopupWindowFragment(Context context, Activity activity, AdapterView.OnItemClickListener listener){
         this.context = context;
         this.activity = activity;
+        this.onItemClickListener = listener;
     }
 
     public PopupWindow popupWindow;
@@ -55,6 +59,7 @@ public class PopupWindowFragment {
         listView = v.findViewById(R.id.fragment_home_item_list);
         adapter = new ListViewAdapter(activity, list);
         listView.setAdapter(adapter);
+        listView.setOnItemClickListener(onItemClickListener);
 
         int y = Utils.getTotalHeightofListView(listView) + 50;
 
@@ -64,11 +69,7 @@ public class PopupWindowFragment {
         //popupWindow.setBackgroundDrawable(context.getResources().getDrawable(R.drawable.back_ground_radius_8dp));
         //popupWindow.getBackground().setAlpha(100);//设置透明度
         popupWindow.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_MODE_CHANGED);//防止软键盘遮挡
-
-
-
         popupWindow.showAsDropDown(view, 0, 0);
-
 
         popupWindow.setOnDismissListener(new PopupWindow.OnDismissListener() {
             @Override

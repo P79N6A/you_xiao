@@ -3,7 +3,7 @@ package com.runtoinfo.httpUtils.CPRCBean;
 /**
  * Created by QiaoJunChao on 2018/8/31.
  */
-
+@SuppressWarnings("all")
 public class CPRCDataEntity {
     public int userId;
     public int type;

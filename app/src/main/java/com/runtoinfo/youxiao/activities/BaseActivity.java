@@ -24,6 +24,8 @@ import myapplication.MyApplication;
 public abstract class BaseActivity extends FragmentActivity {
 
     public SPUtils spUtils;
+    public Bundle saveBundle;
+
 
     @Override
     public void onResume() {
@@ -35,6 +37,7 @@ public abstract class BaseActivity extends FragmentActivity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        this.saveBundle = savedInstanceState;
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         initShared();
         initView();
@@ -111,5 +114,9 @@ public abstract class BaseActivity extends FragmentActivity {
 
         //结束Activity&从栈中移除该Activity
         //MyApplication.getInstance().finishAllActivity();
+    }
+
+    public void refresh(){
+        onCreate(saveBundle);
     }
 }

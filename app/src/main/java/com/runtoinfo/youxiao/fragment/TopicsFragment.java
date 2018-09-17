@@ -10,6 +10,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 
@@ -48,6 +49,7 @@ public class TopicsFragment extends BaseFragment {
     public FragmentTopicsBinding binding;
     public ViewPageAdapter adapter;
     public TopicsArticleAdapter articleAdapter;
+    public boolean isGetData;
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
@@ -99,6 +101,7 @@ public class TopicsFragment extends BaseFragment {
         }
     }
     public void initEvent(){
+        if (articleAdapter != null)
         articleAdapter.setOnItemClickListener(new UniversalRecyclerAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(View view, int position) {
@@ -164,5 +167,24 @@ public class TopicsFragment extends BaseFragment {
         requestDataEntity.setCourseId(spUtils.getInt(Entity.COURSE_ID));
         requestDataEntity.setUrl(HttpEntity.MAIN_URL + HttpEntity.COURSE_TOPICS);
         HttpUtils.getTopics(mHandler, requestDataEntity, resultList);
+    }
+
+    @Override
+    public Animation onCreateAnimation(int transit, boolean enter, int nextAnim) {
+        //进入当前Fragment
+        if (enter && !isGetData) {
+            isGetData = true;
+            //这里可以做网络请求或者需要的数据刷新操作
+            refresh(TopicsFragment.this);
+        } else {
+            isGetData = false;
+        }
+        return super.onCreateAnimation(transit, enter, nextAnim);
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        isGetData = false;
     }
 }

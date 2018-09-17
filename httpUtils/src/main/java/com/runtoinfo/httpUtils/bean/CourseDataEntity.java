@@ -5,7 +5,7 @@ import java.util.List;
 /**
  * Created by QiaoJunChao on 2018/8/23.
  */
-
+@SuppressWarnings("all")
 public class CourseDataEntity {
 
     public String name;

@@ -9,6 +9,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
 import android.widget.AdapterView;
 import android.widget.SimpleAdapter;
 
@@ -39,6 +40,7 @@ public class PersonalCenterFragment extends BaseFragment {
     public SimpleAdapter adapter;
     public Map<String, Object> map = new HashMap<>();
     public List<Map<String, Object>> dataList = new ArrayList<>();
+    public boolean isGetData;
 
     @Nullable
     @Override
@@ -143,5 +145,24 @@ public class PersonalCenterFragment extends BaseFragment {
                 ARouter.getInstance().build("/information/informationActivity").navigation();
             }
         });
+    }
+
+    @Override
+    public Animation onCreateAnimation(int transit, boolean enter, int nextAnim) {
+        //进入当前Fragment
+        if (enter && !isGetData) {
+            isGetData = true;
+            //这里可以做网络请求或者需要的数据刷新操作
+            refresh(PersonalCenterFragment.this);
+        } else {
+            isGetData = false;
+        }
+        return super.onCreateAnimation(transit, enter, nextAnim);
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        isGetData = false;
     }
 }

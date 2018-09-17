@@ -3,7 +3,7 @@ package com.runtoinfo.httpUtils.CPRCBean;
 /**
  * Created by QiaoJunChao on 2018/9/4.
  */
-
+@SuppressWarnings("all")
 public class MyCommentEntity {
 
     public String replyer;
