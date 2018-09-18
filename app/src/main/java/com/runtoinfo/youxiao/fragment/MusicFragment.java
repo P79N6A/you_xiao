@@ -56,6 +56,11 @@ public class MusicFragment extends BaseFragment{
         return binding.getRoot();
     }
 
+    @Override
+    protected void lazyLoad() {
+
+    }
+
     public void initTalLayoutView(){
 
         if (type == -1) {

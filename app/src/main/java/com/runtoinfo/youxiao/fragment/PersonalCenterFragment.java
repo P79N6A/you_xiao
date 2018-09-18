@@ -14,6 +14,7 @@ import android.widget.AdapterView;
 import android.widget.SimpleAdapter;
 
 import com.alibaba.android.arouter.launcher.ARouter;
+import com.alibaba.sdk.android.feedback.impl.FeedbackAPI;
 import com.google.gson.Gson;
 import com.runtoinfo.youxiao.R;
 import com.runtoinfo.youxiao.activities.LoginActivity;
@@ -41,6 +42,8 @@ public class PersonalCenterFragment extends BaseFragment {
     public Map<String, Object> map = new HashMap<>();
     public List<Map<String, Object>> dataList = new ArrayList<>();
     public boolean isGetData;
+    private boolean mHasLoadedOnce = false;
+    private boolean isPrepared = false;
 
     @Nullable
     @Override
@@ -48,12 +51,27 @@ public class PersonalCenterFragment extends BaseFragment {
         //View view = View.inflate(getActivity(), R.layout.fragment_personal_center, null);
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_personal_center, container, false);
         initData();
+        lazyLoad();
         return binding.getRoot();
     }
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+    }
+
+    @Override
+    protected void lazyLoad() {
+        if (mHasLoadedOnce || !isPrepared)
+            return;
+        mHasLoadedOnce = true;
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        mHasLoadedOnce = false;
+        isPrepared = false;
     }
 
     public void initData(){
@@ -112,7 +130,8 @@ public class PersonalCenterFragment extends BaseFragment {
                             ARouter.getInstance().build("/personal/aboutUs").navigation();
                             break;
                         case 5://"意见反馈":
-                            ARouter.getInstance().build("/personal/feedback").navigation();
+                            //ARouter.getInstance().build("/personal/feedback").navigation();
+                            FeedbackAPI.openFeedbackActivity();
                             break;
                     }
                 } catch (JSONException e) {
@@ -153,7 +172,7 @@ public class PersonalCenterFragment extends BaseFragment {
         if (enter && !isGetData) {
             isGetData = true;
             //这里可以做网络请求或者需要的数据刷新操作
-            refresh(PersonalCenterFragment.this);
+            //refresh(PersonalCenterFragment.this);
         } else {
             isGetData = false;
         }

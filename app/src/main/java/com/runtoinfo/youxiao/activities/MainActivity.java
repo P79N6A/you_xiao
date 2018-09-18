@@ -88,7 +88,7 @@ public class MainActivity extends BaseActivity implements ViewPager.OnPageChange
         handler.postDelayed(new Runnable() {
             @Override
             public void run() {
-                //showUpdate("1.修复登录BUG;\n2.增加新功能");
+                showUpdate("1.修复登录BUG;\n2.增加新功能");
             }
         }, 2000);
     }

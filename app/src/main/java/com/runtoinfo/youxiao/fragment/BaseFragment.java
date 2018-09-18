@@ -17,25 +17,24 @@ import com.runtoinfo.youxiao.entity.CourseTypeEntity;
  * Created by Administrator on 2018/5/25 0025.
  */
 
-public class BaseFragment extends Fragment {
+public abstract class BaseFragment extends Fragment {
 
-//    /**
-//     * 是否对用户可见
-//     */
-//    protected boolean mIsVisible;
-//    /**
-//     * 是否加载完成
-//     * 当执行完onViewCreated方法后即为true
-//     */
-//    protected boolean mIsPrepare;
-//
-//    /**
-//     * 是否加载完成
-//     * 当执行完onViewCreated方法后即为true
-//     */
-//    protected boolean mIsImmersion;
-//
-//    protected ImmersionBar mImmersionBar;
+    /**
+     * 是否对用户可见
+     */
+    protected boolean isVisible;
+    /**
+     * 是否加载完成
+     * 当执行完onViewCreated方法后即为true
+     */
+    protected boolean mIsPrepare;
+
+    /**
+     * 是否加载完成
+     * 当执行完onViewCreated方法后即为true
+     */
+    protected boolean mIsImmersion;
+
 
     public SPUtils spUtils;
     public CourseTypeEntity courseTypeEntity;
@@ -84,6 +83,31 @@ public class BaseFragment extends Fragment {
 //        initView();
 //        setListener();
 //    }
+
+
+    @Override
+    public void setUserVisibleHint(boolean isVisibleToUser) {
+        super.setUserVisibleHint(isVisibleToUser);
+
+        if(getUserVisibleHint()) {
+            isVisible = true;
+            onVisible();
+        } else {
+            isVisible = false;
+            onInvisible();
+        }
+
+
+    }
+
+
+
+    /**
+     * 延迟加载
+     * 子类必须重写此方法
+     */
+    protected abstract void lazyLoad();
+
 
     /**
      * 是否懒加载

@@ -16,8 +16,8 @@
 
     <application
         android:allowBackup="false"
-        tools:replace="android:allowBackup"
-        android:theme="@style/Theme.AppCompat.Light.NoActionBar">
+        android:theme="@style/Theme.AppCompat.Light.NoActionBar"
+        tools:replace="android:allowBackup">
         <activity android:name=".activities.PersonalMainActivity" />
         <activity android:name=".activities.CameraActivity" />
         <activity android:name=".activities.PersonalSettings" />
@@ -27,6 +27,7 @@
             android:name=".activities.MySomeRecord"
             android:label="@string/title_activity_my_some_record"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
+        <activity android:name=".activities.GeoAreaActivity"></activity>
     </application>
 
 </manifest>

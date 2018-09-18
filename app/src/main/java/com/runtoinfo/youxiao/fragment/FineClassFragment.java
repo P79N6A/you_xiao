@@ -38,11 +38,14 @@ public class FineClassFragment extends BaseFragment {
     public View view;
     public List<Map<String, Object>> dataList = new ArrayList<>();
     public boolean isGetData;
+    private boolean mHasLoadedOnce = false;
+    private boolean isPrepared = false;
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_fine_class, container, false);
         initTableView();
+        lazyLoad();
         return binding.getRoot();
     }
 
@@ -92,11 +95,25 @@ public class FineClassFragment extends BaseFragment {
         if (enter && !isGetData) {
             isGetData = true;
             //这里可以做网络请求或者需要的数据刷新操作
-            refresh(FineClassFragment.this);
+            //refresh(FineClassFragment.this);
         } else {
             isGetData = false;
         }
         return super.onCreateAnimation(transit, enter, nextAnim);
+    }
+
+    @Override
+    protected void lazyLoad() {
+        if (mHasLoadedOnce || !isPrepared)
+            return;
+        mHasLoadedOnce = true;
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        mHasLoadedOnce = false;
+        isPrepared = false;
     }
 
     @Override

@@ -1,35 +1,80 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="wrap_content"
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:background="@android:color/transparent">
+    android:background="@drawable/bg_check_version"
+    android:layout_centerVertical="true"
+    android:layout_centerHorizontal="true"
+    android:orientation="vertical">
 
     <RelativeLayout
-        android:layout_width="wrap_content"
+        android:id="@+id/title"
+        android:layout_width="260dp"
         android:layout_height="wrap_content"
-        android:background="@drawable/bg_check_version">
-
-    <ImageView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
-        android:layout_marginStart="18dp"
-        android:layout_marginTop="17dp"
-        android:background="@drawable/bg_check_version_delete"
-        android:id="@+id/check_version_dismiss" />
+        android:layout_centerHorizontal="true"
+        android:layout_gravity="center"
+        android:layout_marginTop="158dp">
+
+        <TextView
+            android:id="@+id/version_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_alignBottom="@+id/check_version_dismiss"
+            android:text="发现新版本"
+            android:textColor="#333333"
+            android:textSize="18sp"
+            android:textStyle="bold" />
+
+
+        <ImageView
+            android:id="@+id/check_version_dismiss"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_alignParentEnd="true"
+            android:background="@drawable/bg_check_version_delete" />
+    </RelativeLayout>
+
+    <ScrollView
+        android:id="@+id/check_version_scroll"
+        android:layout_width="wrap_content"
+        android:layout_height="140dp"
+        android:padding="20dp"
+        android:scrollbars="none"
+        android:layout_below="@+id/title">
+        <TextView
+            android:id="@+id/check_version_details"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="版本更新内容
+
+1.本次更新增加部分功能。
+2.增加功能的同时完善代码逻辑。
+2.增加功能的同时完善代码逻辑"
+            android:textSize="18sp" />
+    </ScrollView>
+
+
 
     <TextView
-        android:id="@+id/check_version_details"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="22dp"
+        android:textSize="18sp"
+        android:textColor="#fff"
+        android:background="@drawable/update_button_background"
+        android:text="一键升级"
+        android:paddingTop="8dp"
+        android:paddingBottom="8dp"
+        android:paddingStart="14dp"
+        android:paddingEnd="14dp"
+        android:layout_below="@+id/check_version_scroll"
         android:layout_centerHorizontal="true"
-        android:layout_centerVertical="true"
-        android:text="版本更新内容
-1.本次更新增加部分功能。
-2.增加功能的同时完善代码逻辑。"
-        android:textSize="16sp" />
-    </RelativeLayout>
+        android:layout_marginTop="20dp"
+        android:layout_marginBottom="20dp"
+        android:id="@+id/update_button"/>
+
 
 </RelativeLayout>

@@ -45,6 +45,11 @@ public class BoutiqueCourseChildFragment extends BaseFragment {
         return binding.getRoot();
     }
 
+    @Override
+    protected void lazyLoad() {
+
+    }
+
     public void initChildData(){
         SetTabLayoutWidth.reflex(binding.courseChildSecondTablayout);
         courseTypeEntity.setCourseSubject(String.valueOf(type));

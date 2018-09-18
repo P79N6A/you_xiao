@@ -12,6 +12,7 @@
         android:layout_weight="1"
         android:id="@+id/select_image"
         android:gravity="center"
+        android:visibility="gone"
         android:layout_gravity="center"/>
 
     <TextView

@@ -171,4 +171,8 @@ public class HttpEntity {
      * 切换学校
      */
     public final static String SWITCH_CAMPUS = "/api/TokenAuth/SwitchCampus";
+    /**
+     * 地址选择
+     */
+    public final static String GET_GEO_AREA = "/api/services/app/GeoArea/GetAll";
 }

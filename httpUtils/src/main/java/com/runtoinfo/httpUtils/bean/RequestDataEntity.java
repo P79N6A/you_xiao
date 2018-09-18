@@ -14,6 +14,15 @@ public class RequestDataEntity {
     public int tenantId;
     public int campusId;
     public int type;
+    public String code;
+
+    public String getCode() {
+        return code;
+    }
+
+    public void setCode(String code) {
+        this.code = code;
+    }
 
     public int getCampusId() {
         return campusId;

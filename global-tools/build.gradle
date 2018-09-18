@@ -45,4 +45,5 @@ dependencies {
     implementation 'com.ogaclejapan.smarttablayout:library:1.6.1@aar'
     implementation 'com.victor:lib:1.0.4'
     implementation 'com.google.code.gson:gson:2.8.2'
+    implementation project(':httpUtils')
 }

@@ -54,6 +54,11 @@ public class BoutiqueCourseInChildFragment extends BaseFragment {
         return binding.getRoot();
     }
 
+    @Override
+    protected void lazyLoad() {
+
+    }
+
     public void initCourseData(){
 
         Map<String, Object> requestMap = new HashMap<>();

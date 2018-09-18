@@ -97,7 +97,7 @@ public class PersonalMainActivity extends BaseActivity {
         binding.personalRelativeAddress.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ARouter.getInstance().build("/cityView/province").navigation(PersonalMainActivity.this, 1001);
+                ARouter.getInstance().build("/personal/GeoAreaActivity").navigation(PersonalMainActivity.this, 1001);
             }
         });
 
@@ -197,10 +197,35 @@ public class PersonalMainActivity extends BaseActivity {
             switch (resultCode)
             {
                 case 1002:
-                    CityBean area = data.getParcelableExtra("area");
-                    CityBean city = data.getParcelableExtra("city");
-                    CityBean province = data.getParcelableExtra("province");
-                    binding.personalEditArea.setText(province.getName() + " " + city.getName() + " "+ area.getName());
+                    String name = data.getStringExtra("name");
+                    String[] cities = name.split(",");
+                    StringBuilder result = new StringBuilder("");
+                    for (int i = 0; i < cities.length; i++){
+                        result.append(cities[i]);
+                    }
+                    binding.personalEditArea.setText(result.toString());
+                    PersonalInformationEntity entity = new PersonalInformationEntity();
+                    switch (cities.length){
+                        case 1:
+                            entity.setProvince(cities[0]);
+                            break;
+                        case 2:
+                            entity.setCity(cities[1]);
+                            entity.setProvince(cities[0]);
+                            break;
+                        case 3:
+                            entity.setCity(cities[1]);
+                            entity.setProvince(cities[0]);
+                            entity.setDistrict(cities[2]);
+                            break;
+                        case 4:
+                            entity.setCity(cities[1]);
+                            entity.setProvince(cities[0]);
+                            entity.setDistrict(cities[2]);
+                            entity.setStreet(cities[3]);
+                            break;
+                    }
+                    requestOwnServer(entity);
                     break;
                 case 121:
                     String path = data.getStringExtra("path");

@@ -208,7 +208,7 @@ public class LoginActivity extends BaseActivity {
         binding.loginGetVerification.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                binding.loginGetVerification.setBackgroundResource(R.color.color_gray);
+                binding.loginGetVerification.setBackgroundResource(R.drawable.background_verification_wait);
                 binding.loginGetVerification.setEnabled(false);
                 timers();
 

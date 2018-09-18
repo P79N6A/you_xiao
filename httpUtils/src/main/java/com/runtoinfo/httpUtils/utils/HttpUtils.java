@@ -23,6 +23,7 @@ import com.runtoinfo.httpUtils.bean.AddMemberResultEntity;
 import com.runtoinfo.httpUtils.bean.ChildContent;
 import com.runtoinfo.httpUtils.bean.CourseDataEntity;
 import com.runtoinfo.httpUtils.bean.CourseEntity;
+import com.runtoinfo.httpUtils.bean.GeoAreaEntity;
 import com.runtoinfo.httpUtils.bean.GetSchoolSettingEntity;
 import com.runtoinfo.httpUtils.bean.HandWorkEntity;
 import com.runtoinfo.httpUtils.bean.HomeCourseEntity;
@@ -31,7 +32,6 @@ import com.runtoinfo.httpUtils.bean.LeaveEntity;
 import com.runtoinfo.httpUtils.bean.MyEventEntity;
 import com.runtoinfo.httpUtils.bean.RequestDataEntity;
 import com.runtoinfo.httpUtils.bean.TopiceHttpResultEntity;
-import com.runtoinfo.youxiao.globalTools.utils.Entity;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -1663,6 +1663,104 @@ public class HttpUtils<T> {
                                 e.printStackTrace();
                                 handler.sendEmptyMessage(404);
                             }
+                        }
+                    }
+                });
+            }
+        });
+    }
+
+    /**
+     * 获取用户的未读数量
+     * @param handler
+     * @param entity
+     */
+    public static void getNotificationCount(final Handler handler, final RequestDataEntity entity, final Map<String, Object> map){
+        executorService.execute(new Runnable() {
+            @Override
+            public void run() {
+
+                Request request = new Request.Builder()
+                        .url(entity.getUrl() + setUrl(map))
+                        .header(Authorization, Bearer + entity.getToken())
+                        .build();
+                getHttpsClient().newCall(request).enqueue(new Callback() {
+                    @Override
+                    public void onFailure(Call call, IOException e) {
+                        handler.sendEmptyMessage(500);
+                    }
+
+                    @Override
+                    public void onResponse(Call call, Response response) throws IOException {
+                        if (response.isSuccessful()){
+                            try {
+                                JSONObject json = new JSONObject(response.body().string());
+                                boolean success = json.getBoolean("success");
+                                if (success){
+                                    Message message = new Message();
+                                    message.obj = json.getInt("result");
+                                    message.what = 30;
+                                    handler.sendMessage(message);
+                                }else{
+                                    handler.sendEmptyMessage(400);
+                                }
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                                handler.sendEmptyMessage(404);
+                            }
+                        }
+                    }
+                });
+            }
+        });
+    }
+
+    /**
+     * 添加地址选择
+     * @param handler
+     * @param entity
+     * @param dataList
+     */
+    public static void getGeoArea(final Handler handler, final RequestDataEntity entity, final List<GeoAreaEntity> dataList){
+        executorService.execute(new Runnable() {
+            @Override
+            public void run() {
+                Request request = new Request.Builder()
+                        .header(Authorization, Bearer + entity.getToken())
+                        .url(entity.getUrl() + "?ParentId=" + entity.getCode())
+                        .build();
+                getHttpsClient().newCall(request).enqueue(new Callback() {
+                    @Override
+                    public void onFailure(Call call, IOException e) {
+                        handler.sendEmptyMessage(500);
+                    }
+
+                    @Override
+                    public void onResponse(Call call, Response response) throws IOException {
+                        if (response.isSuccessful()){
+                            try {
+                                JSONObject json = new JSONObject(response.body().string());
+                                boolean success = json.getBoolean("success");
+                                if (success){
+                                    if (dataList.size() > 0) dataList.clear();
+                                    JSONObject result = json.getJSONObject("result");
+                                    JSONArray array = result.getJSONArray("items");
+                                    for (int i = 0; i < array.length(); i++){
+                                        JSONObject item = array.getJSONObject(i);
+                                        GeoAreaEntity geoAreaEntity = new Gson().fromJson(item.toString(),
+                                                new TypeToken<GeoAreaEntity>(){}.getType());
+                                        dataList.add(geoAreaEntity);
+                                    }
+                                    handler.sendEmptyMessage(1);
+                                }else{
+                                    handler.sendEmptyMessage(400);
+                                }
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                                handler.sendEmptyMessage(404);
+                            }
+                        }else{
+                            handler.sendEmptyMessage(500);
                         }
                     }
                 });

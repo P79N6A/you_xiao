@@ -29,6 +29,8 @@ import com.alibaba.sdk.android.push.noonesdk.PushServiceFactory;
 import com.gyf.barlibrary.ImmersionBar;
 import com.runtoinfo.youxiao.R;
 import com.runtoinfo.youxiao.globalTools.utils.DialogMessage;
+import com.runtoinfo.youxiao.globalTools.utils.Entity;
+import com.runtoinfo.youxiao.globalTools.utils.SPUtils;
 import com.taobao.sophix.SophixManager;
 import com.taobao.sophix.listener.PatchLoadStatusListener;
 import com.tencent.bugly.crashreport.CrashReport;
@@ -51,6 +53,7 @@ public class MyApplication extends Application {
     private static final String TAG = "AppApplication";
     private static Stack<Activity> activityStack;
     private static MyApplication singleton;
+    private SPUtils spUtils;
     //hotfix init need attr
     public interface MsgDisplayListener {
         void handle(String msg);
@@ -62,6 +65,7 @@ public class MyApplication extends Application {
     public void onCreate() {
         super.onCreate();
         singleton = this;
+        spUtils = new SPUtils(this);
         initArouter();
         checkPermission();
         initManService();
@@ -237,12 +241,23 @@ public class MyApplication extends Application {
             public void onSuccess(String response) {
                 Log.i(TAG, "init cloudchannel success");
                 //setConsoleText("init cloudchannel success");
-                DialogMessage.showToast(getBaseContext(), response);
+                //DialogMessage.showToast(getBaseContext(), response);
             }
             @Override
             public void onFailed(String errorCode, String errorMessage) {
                 Log.e(TAG, "init cloudchannel failed -- errorcode:" + errorCode + " -- errorMessage:" + errorMessage);
                 //setConsoleText("init cloudchannel failed -- errorcode:" + errorCode + " -- errorMessage:" + errorMessage);
+            }
+        });
+        pushService.bindAccount(String.valueOf(spUtils.getInt(Entity.USER_ID)), new CommonCallback() {
+            @Override
+            public void onSuccess(String s) {
+                Log.e("110", "绑定成功");
+            }
+
+            @Override
+            public void onFailed(String s, String s1) {
+
             }
         });
     }

@@ -50,6 +50,8 @@ public class TopicsFragment extends BaseFragment {
     public ViewPageAdapter adapter;
     public TopicsArticleAdapter articleAdapter;
     public boolean isGetData;
+    private boolean mHasLoadedOnce = false;
+    private boolean isPrepared = false;
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
@@ -57,6 +59,7 @@ public class TopicsFragment extends BaseFragment {
         viewPages();
         startImageViewScroll();
         getAllArticle();
+        lazyLoad();
         return binding.getRoot();
     }
 
@@ -89,6 +92,20 @@ public class TopicsFragment extends BaseFragment {
 
         }
     };
+
+    @Override
+    protected void lazyLoad() {
+        if (mHasLoadedOnce || !isPrepared)
+            return;
+        mHasLoadedOnce = true;
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        mHasLoadedOnce = false;
+        isPrepared = false;
+    }
 
     public void initItemsData(){
         if (resultList.size() > 0) {
@@ -175,7 +192,7 @@ public class TopicsFragment extends BaseFragment {
         if (enter && !isGetData) {
             isGetData = true;
             //这里可以做网络请求或者需要的数据刷新操作
-            refresh(TopicsFragment.this);
+            //refresh(TopicsFragment.this);
         } else {
             isGetData = false;
         }

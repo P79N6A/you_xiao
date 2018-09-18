@@ -56,7 +56,7 @@ public class ForgetPassWordActivity extends BaseActivity {
         binding.resetGetVerificationCode.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                binding.resetGetVerificationCode.setBackgroundResource(R.color.color_gray);
+                binding.resetGetVerificationCode.setBackgroundResource(R.drawable.background_verification_wait);
                 binding.resetGetVerificationCode.setEnabled(false);
                 spUtils.setString(Entity.PHONE_NUMBER, binding.resetPasswordPhone.getText().toString());
                 timers();
@@ -222,6 +222,7 @@ public class ForgetPassWordActivity extends BaseActivity {
                 case 0:
                     dialog.cancel();
                     Toast.makeText(ForgetPassWordActivity.this, "修改成功", Toast.LENGTH_SHORT).show();
+                    ForgetPassWordActivity.this.finish();
                     break;
                 case 1:
                     dialog.cancel();

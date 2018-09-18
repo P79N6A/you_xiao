@@ -22,6 +22,7 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.util.Log;
+import android.util.MonthDisplayHelper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -78,6 +79,8 @@ public class HomeFragment extends BaseFragment implements MyScrollView.ScrollVie
     public String phoneNumber;
     public final int[] startLocation = new int[2];
     public boolean isGetData = false;
+    private boolean mHasLoadedOnce = false;
+    private boolean isPrepared = false;
 
     public HomeFragment(List<SelectSchoolEntity> schoolSelectList){
         this.schoolSelectList = schoolSelectList;
@@ -142,6 +145,14 @@ public class HomeFragment extends BaseFragment implements MyScrollView.ScrollVie
                         e.printStackTrace();
                     }
                     break;
+                case 30:
+                    int count = (int) msg.obj;
+                    if (count > 0){
+                        binding.homeEmailImg.setImageResource(R.drawable.home_emals_off);
+                    }else{
+                        binding.homeEmailImg.setImageResource(R.drawable.home_emals_on);
+                    }
+                    break;
                 case 400:
                     DialogMessage.showToast(getContext(), "请求数据失败");
                     break;
@@ -164,8 +175,23 @@ public class HomeFragment extends BaseFragment implements MyScrollView.ScrollVie
         initFloatWindow();
         initListener();
         requestNews();
+        lazyLoad();
         Log.e("TIME", "t++++++");
         return binding.getRoot();
+    }
+
+    @Override
+    protected void lazyLoad() {
+        if (mHasLoadedOnce || !isPrepared)
+            return;
+        mHasLoadedOnce = true;
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        mHasLoadedOnce = false;
+        isPrepared = false;
     }
 
 
@@ -228,6 +254,20 @@ public class HomeFragment extends BaseFragment implements MyScrollView.ScrollVie
         requestDataEntity.setToken(spUtils.getString(Entity.TOKEN));
         requestDataEntity.setUrl(HttpEntity.MAIN_URL + HttpEntity.GET_SCHOOL_SETTING);
         HttpUtils.getSchoolSetting(handler, requestDataEntity);
+    }
+    /**
+     * 获取用户未读消息
+     */
+    public void requestUserInformationCount(){
+        RequestDataEntity requestDataEntity = new RequestDataEntity();
+        requestDataEntity.setTenantId(spUtils.getInt(Entity.TENANT_ID));
+        requestDataEntity.setUrl(HttpEntity.MAIN_URL + HttpEntity.GET_NOTIFICATION_COUNT);
+        requestDataEntity.setUserId(spUtils.getInt(Entity.USER_ID));
+        requestDataEntity.setToken(spUtils.getString(Entity.TOKEN));
+        Map<String, Object> map = new HashMap<>();
+        map.put("tenantId", spUtils.getInt(Entity.TENANT_ID));
+        map.put("userId", spUtils.getInt(Entity.USER_ID));
+        HttpUtils.getNotificationCount(handler, requestDataEntity, map);
     }
 
     /**
@@ -383,7 +423,7 @@ public class HomeFragment extends BaseFragment implements MyScrollView.ScrollVie
         if (enter && !isGetData) {
             isGetData = true;
             //这里可以做网络请求或者需要的数据刷新操作
-            refresh(HomeFragment.this);
+            //refresh(HomeFragment.this);
         } else {
             isGetData = false;
         }

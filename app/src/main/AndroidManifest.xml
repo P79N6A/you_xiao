@@ -47,6 +47,8 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.AppCompat.Light.NoActionBar"
         tools:ignore="GoogleAppIndexingWarning"
+        android:hardwareAccelerated="false"
+        android:largeHeap="true"
         tools:replace="android:allowBackup">
         <activity android:name=".activities.LoginActivity">
             <intent-filter>
@@ -60,9 +62,17 @@
         <activity android:name=".activities.MainActivity" />
         <activity android:name=".activities.SchoolDynamics" />
 
-        <meta-data
-            android:name="android.support.FILE_PROVIDER_PATHS"
-            android:resource="@xml/provider_paths" />
+        <provider
+            android:name="android.support.v4.content.FileProvider"
+            android:authorities="${applicationId}.fileprovider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/provider_paths"
+                tools:replace="android:resource"/>
+        </provider>
+
 
         <activity android:name=".activities.ForgetPassWordActivity"/>
 
