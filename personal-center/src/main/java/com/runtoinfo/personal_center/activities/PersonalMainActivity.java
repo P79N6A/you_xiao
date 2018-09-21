@@ -41,6 +41,7 @@ import com.squareup.leakcanary.LeakCanary;
 import com.squareup.leakcanary.RefWatcher;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.Locale;
 
@@ -51,6 +52,7 @@ public class PersonalMainActivity extends BaseActivity {
     //在自己的Application中添加如下代码
     private RefWatcher refWatcher;
     private CustomDatePicker customDatePicker1, customDatePicker2;
+    public HttpUtils httpUtils;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -60,6 +62,7 @@ public class PersonalMainActivity extends BaseActivity {
     @Override
     protected void initView() {
         binding = DataBindingUtil.setContentView(PersonalMainActivity.this, R.layout.activity_personal_main);
+        httpUtils = new HttpUtils(getBaseContext());
         initEvent();
         initDatePicker();
     }
@@ -197,32 +200,32 @@ public class PersonalMainActivity extends BaseActivity {
             switch (resultCode)
             {
                 case 1002:
-                    String name = data.getStringExtra("name");
-                    String[] cities = name.split(",");
+                    ArrayList<String> name = data.getStringArrayListExtra("name");
+                    ArrayList<String> areaCode = data.getStringArrayListExtra("code");
                     StringBuilder result = new StringBuilder("");
-                    for (int i = 0; i < cities.length; i++){
-                        result.append(cities[i]);
+                    for (int i = 0; i < name.size(); i++){
+                        result.append(name.get(i));
                     }
                     binding.personalEditArea.setText(result.toString());
                     PersonalInformationEntity entity = new PersonalInformationEntity();
-                    switch (cities.length){
+                    switch (areaCode.size()){
                         case 1:
-                            entity.setProvince(cities[0]);
+                            entity.setProvince(areaCode.get(0));
                             break;
                         case 2:
-                            entity.setCity(cities[1]);
-                            entity.setProvince(cities[0]);
+                            entity.setCity(areaCode.get(1));
+                            entity.setProvince(areaCode.get(0));
                             break;
                         case 3:
-                            entity.setCity(cities[1]);
-                            entity.setProvince(cities[0]);
-                            entity.setDistrict(cities[2]);
+                            entity.setCity(areaCode.get(1));
+                            entity.setProvince(areaCode.get(0));
+                            entity.setDistrict(areaCode.get(2));
                             break;
                         case 4:
-                            entity.setCity(cities[1]);
-                            entity.setProvince(cities[0]);
-                            entity.setDistrict(cities[2]);
-                            entity.setStreet(cities[3]);
+                            entity.setCity(areaCode.get(1));
+                            entity.setProvince(areaCode.get(0));
+                            entity.setDistrict(areaCode.get(2));
+                            entity.setStreet(areaCode.get(3));
                             break;
                     }
                     requestOwnServer(entity);
@@ -248,7 +251,7 @@ public class PersonalMainActivity extends BaseActivity {
         RequestDataEntity entity = new RequestDataEntity();
         entity.setToken(spUtils.getString(Entity.TOKEN));
         entity.setUrl(HttpEntity.MAIN_URL + HttpEntity.POST_ALI_ONE_FILE);
-        HttpUtils.postOneFile(handler, entity);
+        httpUtils.postOneFile(handler, entity);
     }
 
     /**
@@ -259,7 +262,7 @@ public class PersonalMainActivity extends BaseActivity {
         requestDataEntity.setUrl(HttpEntity.MAIN_URL + HttpEntity.UPDATE_USER_INFORMATION);
         requestDataEntity.setToken(spUtils.getString(Entity.TOKEN));
         requestDataEntity.setUserId(spUtils.getInt(Entity.USER_ID));
-        HttpUtils.updateUserInfor(handler, requestDataEntity, entity);
+        httpUtils.updateUserInfor(handler, requestDataEntity, entity);
     }
 
     public Handler handler = new Handler(Looper.getMainLooper()){

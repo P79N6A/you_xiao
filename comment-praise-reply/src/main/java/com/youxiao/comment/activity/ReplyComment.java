@@ -41,10 +41,12 @@ public class ReplyComment extends BaseActivity {
     public List<CommentRequestResultEntity> dataList = new ArrayList<>();
     public CommentRequestResultEntity dialogEntity;
     public boolean selected = true;
+    public HttpUtils httpUtils;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         binding = DataBindingUtil.setContentView(ReplyComment.this,R.layout.activity_reply_comment);
+        httpUtils = new HttpUtils(getBaseContext());
         initView();
         initData();
         requestAll();
@@ -58,7 +60,7 @@ public class ReplyComment extends BaseActivity {
 
     public void initData(){
         binding.replyPublishName.setText(resultEntity.getNickName());
-        HttpUtils.postSrcPhoto(ReplyComment.this, HttpEntity.IMAGE_HEAD + resultEntity.getUserAvatar(), binding.replyCommentAvatar);
+        httpUtils.postSrcPhoto(ReplyComment.this, HttpEntity.IMAGE_HEAD + resultEntity.getUserAvatar(), binding.replyCommentAvatar);
         binding.replyPublishDetails.setText(resultEntity.getContent());
         if (resultEntity.hasPraise){
             binding.replyPublishPraise.setImageResource(R.drawable.comment_praised);
@@ -93,11 +95,11 @@ public class ReplyComment extends BaseActivity {
                     entity.setType(CPRCTypeEntity.PRAISE);
                     entity.setTarget(resultEntity.getId());
                     entity.setTargetType(CPRCTypeEntity.TARGET_COMMENT);
-                    HttpUtils.postComment(handler, entity);
+                    httpUtils.postComment(handler, entity);
                     selected = false;
                     binding.replyPublishPraise.setBackgroundResource(R.drawable.comment_praised);
                 }else{
-                    HttpUtils.putAllStatue(handler, resultEntity.getId(), spUtils.getString(Entity.TOKEN));
+                    httpUtils.putAllStatue(handler, resultEntity.getId(), spUtils.getString(Entity.TOKEN));
                     selected = true;
                     binding.replyPublishPraise.setBackgroundResource(R.drawable.comment_praise);
                 }
@@ -127,7 +129,7 @@ public class ReplyComment extends BaseActivity {
         cpc.setMaxResultCount(10);
         cpc.setSkipCount(0);
 
-        HttpUtils.getCommentAll(handler, cpc);
+        httpUtils.getCommentAll(handler, cpc);
     }
 
     public Handler handler = new Handler(Looper.getMainLooper()){
@@ -173,7 +175,7 @@ public class ReplyComment extends BaseActivity {
                     cprcDataEntity.setUserId(spUtils.getInt(Entity.USER_ID));
                     cprcDataEntity.setContent(json);
                     cprcDataEntity.setToken(spUtils.getString(Entity.TOKEN));
-                    HttpUtils.postComment(handler, cprcDataEntity);
+                    httpUtils.postComment(handler, cprcDataEntity);
                     break;
                 case 12://来自dialogMessage中发送按钮 回复回复请求
                     DialogMessage.showBottomDialog(handler, 2,ReplyComment.this, false);
@@ -186,7 +188,7 @@ public class ReplyComment extends BaseActivity {
                     replyReply.setParentId(dialogEntity.getId());
                     replyReply.setContent(content);
                     replyReply.setToken(spUtils.getString(Entity.TOKEN));
-                    HttpUtils.postComment(handler, replyReply);
+                    httpUtils.postComment(handler, replyReply);
                     break;
                 case 13://来自mAdapter 回复按钮
                     dialogEntity = new Gson().fromJson(msg.obj.toString(), new TypeToken<CommentRequestResultEntity>(){}.getType());

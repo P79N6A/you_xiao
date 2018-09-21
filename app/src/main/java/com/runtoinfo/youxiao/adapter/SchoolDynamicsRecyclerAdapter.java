@@ -34,6 +34,7 @@ public class SchoolDynamicsRecyclerAdapter extends RecyclerView.Adapter {
     public Activity context;
     public int type;
     public Handler handler;
+    public HttpUtils httpUtils;
 
     public OnItemClickListener oneItemClickListener = new OnItemClickListener() {
         @Override
@@ -63,6 +64,7 @@ public class SchoolDynamicsRecyclerAdapter extends RecyclerView.Adapter {
         this.dataList = mDatas;
         this.context = mContext;
         this.handler = handler;
+        httpUtils = new HttpUtils(context);
     }
 
     public void setOneOnItemClickListener(OnItemClickListener listener){
@@ -105,20 +107,20 @@ public class SchoolDynamicsRecyclerAdapter extends RecyclerView.Adapter {
             ViewHolder viewHolder =(ViewHolder) holder;
             viewHolder.oneTitle.setText(schoolDynamicsEntity.getTile());
             viewHolder.video.setUp(schoolDynamicsEntity.getVideoPath(), JZVideoPlayer.SCREEN_WINDOW_NORMAL,"");
-            HttpUtils.postAsynchronous(context, schoolDynamicsEntity.getImagList().get(0), viewHolder.video.thumbImageView);
+            httpUtils.postAsynchronous(context, schoolDynamicsEntity.getImagList().get(0), viewHolder.video.thumbImageView);
             viewHolder.onReader.setText(schoolDynamicsEntity.getReadNumber());
         }else if (type == SECOND_PIC_TYPE){
             SecondViewHolder secondViewHolder = (SecondViewHolder) holder;
             secondViewHolder.secondTitle.setText(schoolDynamicsEntity.getTile());
             secondViewHolder.secondMsg.setText(schoolDynamicsEntity.getMessage());
-            HttpUtils.postAsynchronous(context, schoolDynamicsEntity.getImagList().get(0), secondViewHolder.second_img);
+            httpUtils.postAsynchronous(context, schoolDynamicsEntity.getImagList().get(0), secondViewHolder.second_img);
             secondViewHolder.secondRead.setText(schoolDynamicsEntity.getReadNumber() + "");
         }else{
             ThreeViewHolder threeViewHolder = (ThreeViewHolder) holder;
             threeViewHolder.threeTitle.setText(schoolDynamicsEntity.getTile());
-            HttpUtils.postAsynchronous(context, schoolDynamicsEntity.getImagList().get(0), threeViewHolder.three_img1);
-            HttpUtils.postAsynchronous(context, schoolDynamicsEntity.getImagList().get(1), threeViewHolder.three_img2);
-            HttpUtils.postAsynchronous(context, schoolDynamicsEntity.getImagList().get(2), threeViewHolder.three_img3);
+            httpUtils.postAsynchronous(context, schoolDynamicsEntity.getImagList().get(0), threeViewHolder.three_img1);
+            httpUtils.postAsynchronous(context, schoolDynamicsEntity.getImagList().get(1), threeViewHolder.three_img2);
+            httpUtils.postAsynchronous(context, schoolDynamicsEntity.getImagList().get(2), threeViewHolder.three_img3);
         }
     }
 

@@ -32,10 +32,12 @@ public class ActivitiesSignUp extends EventBaseActivity {
     public RequestDataEntity requestDataEntity;
     public int requestType;
     public int campaignId;
+    public HttpUtils httpUtils;
 
     @Override
     protected void initView() {
         binding = DataBindingUtil.setContentView(this, R.layout.activity_sigin_up);
+        httpUtils = new HttpUtils(getBaseContext());
         campaignId = getIntent().getExtras().getInt(IntentDataType.DATA);
         requestDataEntity = new RequestDataEntity();
         requestDataEntity.setToken(spUtils.getString(Entity.TOKEN));
@@ -82,7 +84,7 @@ public class ActivitiesSignUp extends EventBaseActivity {
             addMember.setCampaignId(campaignId);
             addMember.setUserId(spUtils.getInt(Entity.USER_ID));
             addMember.setGender(gender);
-            HttpUtils.postAddMember(mHandler, requestDataEntity,  addMember, requestType);
+            httpUtils.postAddMember(mHandler, requestDataEntity,  addMember, requestType);
 
         }else{
             Toast.makeText(ActivitiesSignUp.this, "请完善报名信息", Toast.LENGTH_SHORT).show();

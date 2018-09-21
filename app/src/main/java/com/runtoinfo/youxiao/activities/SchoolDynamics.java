@@ -46,6 +46,7 @@ public class SchoolDynamics extends BaseActivity {
     public int type;
     public int targetType;
     public int returnType;
+    public HttpUtils httpUtils;
     @Override
     protected void initView() {
         binding = DataBindingUtil.setContentView(this, R.layout.school_movment);
@@ -84,7 +85,7 @@ public class SchoolDynamics extends BaseActivity {
                 dataEntity.setTarget(schoolDynamicsEntity.getId());
                 dataEntity.setTargetType(targetType);
                 dataEntity.setUserId(spUtils.getInt(Entity.USER_ID));
-                HttpUtils.postComment(handler, dataEntity);
+                httpUtils.postComment(handler, dataEntity);
             }
         });
 
@@ -97,7 +98,7 @@ public class SchoolDynamics extends BaseActivity {
                 dataEntity.setTarget(schoolDynamicsEntity.getId());
                 dataEntity.setTargetType(targetType);
                 dataEntity.setUserId(spUtils.getInt(Entity.USER_ID));
-                HttpUtils.postComment(handler, dataEntity);
+                httpUtils.postComment(handler, dataEntity);
             }
         });
     }
@@ -141,7 +142,7 @@ public class SchoolDynamics extends BaseActivity {
         dataEntity.setUrl(HttpEntity.MAIN_URL + HttpEntity.SCHOOL_NEWS_ALL);
         dataEntity.setType(type);
         dataEntity.setToken(spUtils.getString(Entity.TOKEN));
-        HttpUtils.getSchoolNewsAll(handler, dataEntity);
+        httpUtils.getSchoolNewsAll(handler, dataEntity);
     }
 
     @Override
@@ -180,7 +181,7 @@ public class SchoolDynamics extends BaseActivity {
                         hideView(true);
                         binding.dynamicsTitle.setText(schoolDynamicsEntity.getTile());
                         binding.dynamicsTime.setText(schoolDynamicsEntity.getPublishTime());
-                        HttpUtils.getNewsReadNumber(handler,
+                        httpUtils.getNewsReadNumber(handler,
                                 HttpEntity.MAIN_URL + HttpEntity.NEWS_READ_NUMBER,
                                 spUtils.getString(Entity.TOKEN),
                                 schoolDynamicsEntity.getId());

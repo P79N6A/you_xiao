@@ -21,17 +21,19 @@ public class TopicsArticleAdapter extends UniversalRecyclerAdapter<TopiceHttpRes
 
     public Activity mContext;
     public List<TopiceHttpResultEntity> dataList = new ArrayList<>();
+    public HttpUtils httpUtils;
 
 
     public TopicsArticleAdapter(Activity mContext, List<TopiceHttpResultEntity> mDatas, int mLayoutId) {
         super(mContext, mDatas, mLayoutId);
         this.mContext = mContext;
         this.dataList = mDatas;
+        httpUtils = new HttpUtils(mContext);
     }
 
     @Override
     protected void convert(Context mContext, BaseViewHolder holder, TopiceHttpResultEntity topicsEntity, int position) {
-        HttpUtils.postSrcPhoto(this.mContext, topicsEntity.getCoverImgs().get(1), (ImageView) holder.getView(R.id.topics_img_view));
+        httpUtils.postSrcPhoto(this.mContext, topicsEntity.getCoverImgs().get(1), (ImageView) holder.getView(R.id.topics_img_view));
         holder.setText(R.id.topics_name, topicsEntity.getTitle());
         holder.setText(R.id.topics_announcer, topicsEntity.getPublisher());
         holder.setText(R.id.topics_comment, String.valueOf(topicsEntity.getCommentNumber()));

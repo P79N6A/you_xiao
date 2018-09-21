@@ -132,12 +132,12 @@ public class ColorfulActivity extends BaseActivity implements
     protected void initData() {
         dataList.clear();
         Map<String, Object> map = new HashMap<>();
-        map.put("startTime", mCalendarView.getCurYear() + "-" + mCalendarView.getCurMonth() + "-" + mCalendarView.getCurDay());
-        map.put("endTime", mCalendarView.getCurYear() + "-" + mCalendarView.getCurMonth() + "-" + (mCalendarView.getCurDay() + 1));
+        map.put("startDate", mCalendarView.getCurYear() + "-" + mCalendarView.getCurMonth() + "-" + mCalendarView.getCurDay());
+        map.put("endDate", mCalendarView.getCurYear() + "-" + mCalendarView.getCurMonth() + "-" + (mCalendarView.getCurDay() + 1));
         RequestDataEntity requestDataEntity = new RequestDataEntity();
         requestDataEntity.setUrl(HttpEntity.MAIN_URL + HttpEntity.GET_USER_COURSE_LIST);
         requestDataEntity.setToken(spUtils.getString(Entity.TOKEN));
-        HttpUtils<CourseEntity> utils = new HttpUtils<>();
+        HttpUtils<CourseEntity> utils = new HttpUtils<>(getBaseContext());
         utils.getCouseAll(handler, requestDataEntity, map, dataList);
     }
 
@@ -164,13 +164,16 @@ public class ColorfulActivity extends BaseActivity implements
                     schemes.add(getSchemeCalendar(year, month, 8, Color.parseColor("#999999"), ""));
                     mCalendarView.setSchemeDate(schemes);
 
-                    mRecyclerView.setAdapter(new ArticleAdapter(ColorfulActivity.this, dataList));
-                    mRecyclerView.notifyDataSetChanged();
+                    mRecyclerView.setAdapter(new ArticleAdapter(ColorfulActivity.this, dataList, handler));
                     mRecyclerView.notifyDataSetChanged();
                     break;
+                case 1:
+                    break;
+
             }
         }
     };
+
 
     public void setListData(){
         CourseEntity entity = new CourseEntity();

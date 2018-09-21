@@ -103,7 +103,8 @@ public class ListViewAdapter extends BaseAdapter implements AdapterView.OnItemCl
     }
 
     private void getImage(String url, ViewHolder holder){
-        HttpUtils.postAsynchronous(context, url, holder.orgLogo);
+        HttpUtils httpUtils = new HttpUtils(context);
+        httpUtils.postAsynchronous(context, url, holder.orgLogo);
         //holder.orgLogo.setImageBitmap(map.get("bitmap"));
     }
 

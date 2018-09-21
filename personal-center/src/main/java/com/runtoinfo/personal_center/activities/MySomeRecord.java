@@ -52,6 +52,8 @@ public class MySomeRecord extends BaseActivity {
     public List<Fragment> fragments = new ArrayList<>();
     public int news = 0, courses = 0, topics = 0;
     public CommonViewPagerAdapter viewPagerAdapter;
+    public RequestDataEntity requestDataEntity;
+    public HttpUtils httpUtils;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,8 +63,12 @@ public class MySomeRecord extends BaseActivity {
     @Override
     protected void initView() {
         binding = DataBindingUtil.setContentView(MySomeRecord.this, R.layout.content_my_some_record);
+        httpUtils = new HttpUtils(getBaseContext());
         layoutInflater = LayoutInflater.from(this);
+        initRequestData();
         initResult();
+        initEvent();
+
     }
 
     public void initResult(){
@@ -75,6 +81,7 @@ public class MySomeRecord extends BaseActivity {
             case "leaveRecord":
                 binding.someRecordTitle.setText("请假记录");
                 hideView(false);
+                requestLeaveRecord();
                 break;
             case "learnTrack":
                 binding.someRecordTitle.setText("学习轨迹");
@@ -111,21 +118,37 @@ public class MySomeRecord extends BaseActivity {
    }
 
    public void hideView(boolean flag){
-       binding.recordInclude.setVisibility(flag? View.VISIBLE:View.GONE);
-       binding.myRecordRecycler.setVisibility(flag?View.GONE:View.VISIBLE);
+       binding.recordInclude.setVisibility(flag ? View.VISIBLE : View.GONE);
+       binding.myRecordRecycler.setVisibility(flag ? View.GONE : View.VISIBLE);
+   }
+
+   public void initRequestData(){
+       requestDataEntity = new RequestDataEntity();
+       requestDataEntity.setToken(spUtils.getString(Entity.TOKEN));
+       requestDataEntity.setUserId(spUtils.getInt(Entity.USER_ID));
+       requestDataEntity.setTenantId(spUtils.getInt(Entity.TENANT_ID));
    }
 
    //学习轨迹
     public void requestLearnTacks(){
-        RequestDataEntity requestDataEntity = new RequestDataEntity();
-        requestDataEntity.setToken(spUtils.getString(Entity.TOKEN));
         requestDataEntity.setUrl(HttpEntity.MAIN_URL + HttpEntity.GET_LEARN_TACKS);
 
         Map<String, Object> requestMap = new HashMap<>();
         requestMap.put("MaxResultCount", 10);
         requestMap.put("SkipCount", 0);
 
-        HttpUtils.getLearnTacks(handler, requestDataEntity, requestMap, learnList);
+        httpUtils.getLearnTacks(handler, requestDataEntity, requestMap, learnList);
+    }
+
+    //请假记录
+    public void requestLeaveRecord(){
+        requestDataEntity.setUrl(HttpEntity.MAIN_URL + HttpEntity.GET_LEAVE_RECORD);
+
+        Map<String, Object> requestMap = new HashMap<>();
+        requestMap.put("UserId", spUtils.getInt(Entity.USER_ID));
+        requestMap.put("Sorting", "data desc");
+
+        httpUtils.getLeaveRecord(handler, requestDataEntity, requestMap, leaveEntityList);
     }
 
    public void includeLayout(){
@@ -160,9 +183,14 @@ public class MySomeRecord extends BaseActivity {
                case 0:
                    initLearnAdapter();
                    break;
+               case 1:
+                   initLeaveAdapter();
+                   break;
                case 500:
                    break;
                case 400:
+                   break;
+               case 404:
                    break;
            }
        }

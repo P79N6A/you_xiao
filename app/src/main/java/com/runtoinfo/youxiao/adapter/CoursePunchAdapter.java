@@ -12,11 +12,13 @@ import android.widget.TextView;
 import com.alibaba.android.arouter.launcher.ARouter;
 import com.runtoinfo.httpUtils.HttpEntity;
 import com.runtoinfo.httpUtils.bean.HomeCourseEntity;
+import com.runtoinfo.httpUtils.bean.RequestDataEntity;
 import com.runtoinfo.httpUtils.utils.HttpUtils;
 import com.runtoinfo.youxiao.R;
 import com.runtoinfo.youxiao.globalTools.adapter.BaseViewHolder;
 import com.runtoinfo.youxiao.globalTools.adapter.UniversalRecyclerAdapter;
 import com.runtoinfo.youxiao.globalTools.utils.DialogMessage;
+import com.runtoinfo.youxiao.globalTools.utils.TimeUtil;
 
 import java.util.HashMap;
 import java.util.List;
@@ -25,7 +27,7 @@ import java.util.Map;
 /**
  * Created by qiaojunchao on 2018/7/4 0004.
  */
-
+@SuppressWarnings("all")
 public class CoursePunchAdapter extends UniversalRecyclerAdapter<HomeCourseEntity> {
 
     public Activity context;
@@ -33,6 +35,7 @@ public class CoursePunchAdapter extends UniversalRecyclerAdapter<HomeCourseEntit
     private int layoutId;
     private View.OnClickListener mOnClickListener;
     private TextView tSignIn;
+    private HttpUtils httpUtils;
 
 
     public CoursePunchAdapter(Activity mContext, List<HomeCourseEntity> mDatas, int mLayoutId) {
@@ -40,13 +43,14 @@ public class CoursePunchAdapter extends UniversalRecyclerAdapter<HomeCourseEntit
         this.context = mContext;
         this.list = mDatas;
         this.layoutId = mLayoutId;
+        httpUtils = new HttpUtils(mContext);
     }
 
     @Override
     protected void convert(Context mContext, final BaseViewHolder holder, final HomeCourseEntity homeCourseEntity, int position) {
         holder.setText(R.id.home_course_name, homeCourseEntity.getCourseName());
-        holder.setText(R.id.home_course_time, homeCourseEntity.getBeginTime().split("T")[0]);
-        HttpUtils.postPhoto(context, homeCourseEntity.getCoverPhoto(),(ImageView) holder.getView(R.id.home_img_course));
+        holder.setText(R.id.home_course_time, TimeUtil.iso8601ToDate(homeCourseEntity.getBeginTime(), 1));
+        httpUtils.postSrcPhoto(context, homeCourseEntity.getCoverPhoto(),(ImageView) holder.getView(R.id.home_img_course));
         holder.getView(R.id.home_details).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -71,7 +75,7 @@ public class CoursePunchAdapter extends UniversalRecyclerAdapter<HomeCourseEntit
                 map.put("CourseInstId", homeCourseEntity.getCourseInstId());
                 map.put("url", HttpEntity.MAIN_URL + HttpEntity.POST_SIGNIN_COURSE);
                 map.put("token", homeCourseEntity.getToken());
-                HttpUtils.postSignIn(handler, map);
+                httpUtils.postSignIn(handler, map);
             }
         });
     }

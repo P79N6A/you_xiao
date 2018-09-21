@@ -52,10 +52,12 @@ public class TopicsFragment extends BaseFragment {
     public boolean isGetData;
     private boolean mHasLoadedOnce = false;
     private boolean isPrepared = false;
+    private HttpUtils httpUtils;
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_topics, container, false);
+        httpUtils = new HttpUtils(getContext());
         viewPages();
         startImageViewScroll();
         getAllArticle();
@@ -183,7 +185,7 @@ public class TopicsFragment extends BaseFragment {
         requestDataEntity.setUserId(spUtils.getInt(Entity.USER_ID));
         requestDataEntity.setCourseId(spUtils.getInt(Entity.COURSE_ID));
         requestDataEntity.setUrl(HttpEntity.MAIN_URL + HttpEntity.COURSE_TOPICS);
-        HttpUtils.getTopics(mHandler, requestDataEntity, resultList);
+        httpUtils.getTopics(mHandler, requestDataEntity, resultList);
     }
 
     @Override

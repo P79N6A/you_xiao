@@ -47,20 +47,22 @@ import java.util.concurrent.Callable;
 /**
  * Created by Administrator on 2018/5/8 0008.
  */
-
+@SuppressWarnings("all")
 public class MyApplication extends Application {
 
     private static final String TAG = "AppApplication";
     private static Stack<Activity> activityStack;
     private static MyApplication singleton;
-    private SPUtils spUtils;
-    //hotfix init need attr
+    public static SPUtils spUtils;
+    public CloudPushService pushService;
+
     public interface MsgDisplayListener {
         void handle(String msg);
     }
+
     public static MsgDisplayListener msgDisplayListener = null;
     public static StringBuilder cacheMsg = new StringBuilder();
-    public static SharedPreferences Sp;
+
     @Override
     public void onCreate() {
         super.onCreate();
@@ -72,31 +74,24 @@ public class MyApplication extends Application {
         initFeedbackService();
         initHttpDnsService();
         initHotfix();
-        initPushService(this);
-        //isFirstLogin();
-        initSharePreference();
-        CrashReport.initCrashReport(getApplicationContext(),"446920bced", true);
+        //initPushService(this);
+        CrashReport.initCrashReport(getApplicationContext(), "446920bced", true);
     }
 
-    public static MyApplication getInstance(){
+    public static MyApplication getInstance() {
         return singleton;
-    }
-
-    @SuppressLint({"WrongConstant", "CommitPrefEdits"})
-    public void initSharePreference(){
-        Sp = getSharedPreferences("YouXiao", Context.MODE_APPEND);
     }
 
     /**
      * ARouter 初始化
      */
-    public void initArouter(){
+    public void initArouter() {
         // 打印日志
         ARouter.openLog();
         // 开启调试模式(如果在InstantRun模式下运行，必须开启调试模式！线上版本需要关闭,否则有安全风险)
         ARouter.openDebug();
         // 尽可能早，推荐在Application中初始化
-        ARouter.init( this );
+        ARouter.init(this);
     }
 
 
@@ -109,9 +104,9 @@ public class MyApplication extends Application {
         //用户注册埋点
         manService.getMANAnalytics().userRegister("usernick");
         //用户登录埋点
-        manService.getMANAnalytics().updateUserAccount("usernick","userid");
+        manService.getMANAnalytics().updateUserAccount("usernick", "userid");
         //用户注销埋点
-        manService.getMANAnalytics().updateUserAccount("","");
+        manService.getMANAnalytics().updateUserAccount("", "");
         // 打开调试日志
         manService.getMANAnalytics().turnOnDebug();
         manService.getMANAnalytics().setAppVersion("3.0");
@@ -131,11 +126,12 @@ public class MyApplication extends Application {
         // 若既没有设置AndroidManifest.xml 中的 android:versionName，也没有调用setAppVersion，appVersion则为null
         //manService.getMANAnalytics().setAppVersion("2.0");
         HashMap<String, String> map = new HashMap<String, String>();
-        map.put("debug_api_url","https://service-usertrack.alibaba-inc.com/upload_records_from_client");
+        map.put("debug_api_url", "https://service-usertrack.alibaba-inc.com/upload_records_from_client");
         map.put("debug_key", "aliyun_sdk_utDetection");
         map.put("debug_sampling_option", "true");
         UTTeamWork.getInstance().turnOnRealTimeDebug(map);
     }
+
     private void initFeedbackService() {
         /**
          * 添加自定义的error handler
@@ -194,6 +190,7 @@ public class MyApplication extends Application {
         //设置标题栏高度，单位为像素
         FeedbackAPI.setTitleBarHeight(100);
     }
+
     private void initHttpDnsService() {
         // 初始化httpdns
         //HttpDnsService httpdns = HttpDns.getService(getApplicationContext(), accountID);
@@ -202,6 +199,7 @@ public class MyApplication extends Application {
         // 允许过期IP以实现懒加载策略
         //httpdns.setExpiredIPEnabled(true);
     }
+
     private void initHotfix() {
         String appVersion;
         try {
@@ -229,30 +227,41 @@ public class MyApplication extends Application {
                     }
                 }).initialize();
     }
+
     /**
      * 初始化云推送通道
      * @param applicationContext
      */
-    private void initPushService(final Context applicationContext) {
+    public void initPushService(final Context applicationContext) {
         PushServiceFactory.init(applicationContext);
-        final CloudPushService pushService = PushServiceFactory.getCloudPushService();
+        pushService = PushServiceFactory.getCloudPushService();
         pushService.register(applicationContext, new CommonCallback() {
             @Override
             public void onSuccess(String response) {
-                Log.i(TAG, "init cloudchannel success");
-                //setConsoleText("init cloudchannel success");
-                //DialogMessage.showToast(getBaseContext(), response);
             }
+
             @Override
             public void onFailed(String errorCode, String errorMessage) {
-                Log.e(TAG, "init cloudchannel failed -- errorcode:" + errorCode + " -- errorMessage:" + errorMessage);
-                //setConsoleText("init cloudchannel failed -- errorcode:" + errorCode + " -- errorMessage:" + errorMessage);
             }
         });
+
         pushService.bindAccount(String.valueOf(spUtils.getInt(Entity.USER_ID)), new CommonCallback() {
             @Override
             public void onSuccess(String s) {
-                Log.e("110", "绑定成功");
+                Log.e("bindAccount", "绑定成功");
+            }
+
+            @Override
+            public void onFailed(String s, String s1) {
+            }
+        });
+    }
+
+    public void unbindAccount(){
+        pushService.unbindAccount(new CommonCallback() {
+            @Override
+            public void onSuccess(String s) {
+                Log.e("unbindAccount", "解绑成功");
             }
 
             @Override
@@ -262,7 +271,7 @@ public class MyApplication extends Application {
         });
     }
 
-    public void checkPermission(){
+    public void checkPermission() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             NotificationManager mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
             // 通知渠道的id
@@ -289,12 +298,11 @@ public class MyApplication extends Application {
     /**
      * 判断是否是第一次登录
      */
-    public boolean isFirstLogin(){
+    public boolean isFirstLogin() {
 
         SharedPreferences sp = this.getSharedPreferences("YouXiao", MODE_PRIVATE);
         boolean isFirst = sp.getBoolean("isFirst", true);
-        if (isFirst)
-        {
+        if (isFirst) {
             sp.edit().putBoolean("isFirst", false).apply();
         }
         return isFirst;
@@ -303,12 +311,13 @@ public class MyApplication extends Application {
     /**
      * add Activity 添加Activity到栈
      */
-    public void addActivity(Activity activity){
-        if(activityStack ==null){
-            activityStack =new Stack<Activity>();
+    public void addActivity(Activity activity) {
+        if (activityStack == null) {
+            activityStack = new Stack<Activity>();
         }
         activityStack.add(activity);
     }
+
     /**
      * get current Activity 获取当前Activity（栈中最后一个压入的）
      */
@@ -316,6 +325,7 @@ public class MyApplication extends Application {
         Activity activity = activityStack.lastElement();
         return activity;
     }
+
     /**
      * 结束当前Activity（栈中最后一个压入的）
      */

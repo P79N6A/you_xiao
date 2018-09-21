@@ -55,6 +55,9 @@ public class LoginActivity extends BaseActivity {
     public HttpLoginHead loginHead;
     public ProgressDialog progressDialog = null;
     public Dialog dialog;
+    public boolean isLoadUserName = true;
+    public HttpUtils httpUtils;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -67,7 +70,7 @@ public class LoginActivity extends BaseActivity {
         progressDialog = new ProgressDialog(LoginActivity.this);
         dialog = new Dialog(this, R.style.dialog);
         loginHead = new HttpLoginHead();
-
+        httpUtils = new HttpUtils(getBaseContext());
         initEvent();
     }
 
@@ -76,7 +79,7 @@ public class LoginActivity extends BaseActivity {
         setUserName();
     }
 
-    public void initEvent(){
+    public void initEvent() {
         //登录
         binding.loginBt.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -103,37 +106,33 @@ public class LoginActivity extends BaseActivity {
          */
         binding.loginMobilePhone.addTextChangedListener(new TextWatcher() {
             @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
 
             @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {}
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+            }
 
             @Override
             public void afterTextChanged(Editable s) {
                 //if (binding.loginMobilePhone.getText().replaceAll())
                 String text = binding.loginMobilePhone.getText().toString().replaceAll("\\s*", "");
-                if (text.length() == 11)
-                {
-                    HttpUtils.getAsy(mHandler, dataMap, HttpEntity.MAIN_URL + HttpEntity.GET_ORGANIZATION_INFO, text);
+                if (text.length() == 11) {
+                    httpUtils.getAsy(mHandler, dataMap, HttpEntity.MAIN_URL + HttpEntity.GET_ORGANIZATION_INFO, text);
                     loginHead.setUserName(text);
                     spUtils.setString(com.runtoinfo.youxiao.globalTools.utils.Entity.PHONE_NUMBER, text);
                     binding.loginGetVerification.setBackgroundResource(R.drawable.background_verification_selected);
                     binding.loginGetVerification.setEnabled(true);
-                }
-                else
-                {
+                } else {
                     binding.loginGetVerification.setBackgroundResource(R.drawable.background_verification_button);
 
                     binding.loginGetVerification.setEnabled(false);
                 }
 
-                if (binding.loginGetVerification.length() != 0 && binding.loginPassword.length() != 0)
-                {
+                if (binding.loginGetVerification.length() != 0 && binding.loginPassword.length() != 0) {
                     binding.loginBt.setEnabled(true);
                     binding.loginBt.setBackgroundResource(R.drawable.background_login_button_selected);
-                }
-                else
-                {
+                } else {
                     binding.loginBt.setEnabled(false);
                     binding.loginBt.setBackgroundResource(R.drawable.background_login_button);
                 }
@@ -145,20 +144,19 @@ public class LoginActivity extends BaseActivity {
          */
         binding.loginPassword.addTextChangedListener(new TextWatcher() {
             @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
 
             @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {}
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+            }
 
             @Override
             public void afterTextChanged(Editable s) {
-                if (binding.loginGetVerification.length() != 0 && binding.loginPassword.length() != 0)
-                {
+                if (binding.loginGetVerification.length() != 0 && binding.loginPassword.length() != 0) {
                     binding.loginBt.setEnabled(true);
                     binding.loginBt.setBackgroundResource(R.drawable.background_login_button_selected);
-                }
-                else
-                {
+                } else {
                     binding.loginBt.setEnabled(false);
                     binding.loginBt.setBackgroundResource(R.drawable.background_login_button);
                 }
@@ -177,8 +175,7 @@ public class LoginActivity extends BaseActivity {
                 binding.loginGetVerification.setVisibility(View.VISIBLE);
                 binding.loginImgPwVis.setVisibility(View.GONE);
                 binding.loginBt.setTag("VER_CODE");
-                if (binding.loginPassword.length() > 0)
-                {
+                if (binding.loginPassword.length() > 0) {
                     binding.loginPassword.setText("");
                 }
             }
@@ -195,8 +192,7 @@ public class LoginActivity extends BaseActivity {
                 binding.loginGetVerification.setVisibility(View.GONE);
                 binding.loginImgPwVis.setVisibility(View.VISIBLE);
                 binding.loginBt.setTag("PASS_WORD");
-                if (binding.loginPassword.length() > 0)
-                {
+                if (binding.loginPassword.length() > 0) {
                     binding.loginPassword.setText("");
                 }
             }
@@ -212,7 +208,7 @@ public class LoginActivity extends BaseActivity {
                 binding.loginGetVerification.setEnabled(false);
                 timers();
 
-                HttpUtils.get(HttpEntity.MAIN_URL + HttpEntity.GET_CAPTION_CODE, binding.loginMobilePhone.getText().toString());
+                httpUtils.get(HttpEntity.MAIN_URL + HttpEntity.GET_CAPTION_CODE, binding.loginMobilePhone.getText().toString());
             }
         });
 
@@ -248,7 +244,7 @@ public class LoginActivity extends BaseActivity {
         binding.loginImgPwVis.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                switch (binding.loginPassword.getTag().toString()){
+                switch (binding.loginPassword.getTag().toString()) {
                     case "PASSWORD_OFF":
                         binding.loginImgPwVis.setImageDrawable(getResources().getDrawable(R.drawable.login_password_off));
                         binding.loginPassword.setTransformationMethod(HideReturnsTransformationMethod.getInstance());
@@ -276,25 +272,24 @@ public class LoginActivity extends BaseActivity {
         });
     }
 
-    public void setUserName(){
-        if (!TextUtils.isEmpty(spUtils.getString(com.runtoinfo.youxiao.globalTools.utils.Entity.PHONE_NUMBER))){
-            String phone = spUtils.getString(com.runtoinfo.youxiao.globalTools.utils.Entity.PHONE_NUMBER);
+    /**
+     * 将保存的用户名填入输入框
+     */
+    public void setUserName() {
+        if (!TextUtils.isEmpty(spUtils.getString(Entity.PHONE_NUMBER))) {
+            String phone = spUtils.getString(Entity.PHONE_NUMBER);
             binding.loginMobilePhone.setText(phone);
-            if (phone.length() == 11){
-                HttpUtils.getAsy(mHandler, dataMap, HttpEntity.MAIN_URL + HttpEntity.GET_ORGANIZATION_INFO, phone);
-                loginHead.setUserName(phone);
-                binding.loginGetVerification.setBackgroundResource(R.drawable.background_verification_selected);
-                binding.loginGetVerification.setEnabled(true);
-            }
+            isLoadUserName = false;
         }
     }
 
 
     /**
      * 选择的学校的实体
+     *
      * @param dynamics
      */
-    public void setSelectSchool(SelectSchoolEntity dynamics){
+    public void setSelectSchool(SelectSchoolEntity dynamics) {
         loginHead.setCampusId(dynamics.getId());
         spUtils.setInt(Entity.CAMPUS_ID, dynamics.getId());
         loginHead.setTenancyName(dynamics.getTenancyName());
@@ -338,19 +333,16 @@ public class LoginActivity extends BaseActivity {
     private Timer timer = null;
     private TimerTask task = null;
 
-    public void timers(){
+    public void timers() {
         time = 30;
         timer = new Timer();
         task = new TimerTask() {
             @Override
             public void run() {
                 time--;
-                if (time == 0)
-                {
+                if (time == 0) {
                     mHandler.sendEmptyMessage(2);
-                }
-                else
-                {
+                } else {
                     Message msg = new Message();
                     msg.what = 1;
                     msg.obj = time + "";
@@ -362,18 +354,18 @@ public class LoginActivity extends BaseActivity {
     }
 
     @SuppressLint("HandlerLeak")
-    public Handler mHandler = new Handler(Looper.getMainLooper()){
+    public Handler mHandler = new Handler(Looper.getMainLooper()) {
         @Override
         public void handleMessage(Message msg) {
-            switch (msg.what)
-            {
+            switch (msg.what) {
                 case 0:
-                    switch (binding.loginBt.getTag().toString()){
+                    switch (binding.loginBt.getTag().toString()) {
                         case "PASS_WORD":
-                            HttpUtils.post(mHandler,HttpEntity.MAIN_URL + HttpEntity.LOGIN_URL_AUTH, loginHead);
+
+                            httpUtils.post(mHandler, HttpEntity.MAIN_URL + HttpEntity.LOGIN_URL_AUTH, loginHead);
                             break;
                         case "VER_CODE":
-                            HttpUtils.postCaptcha(mHandler, HttpEntity.MAIN_URL + HttpEntity.LOGIN_URL_CAPTCHA, loginHead);
+                            httpUtils.postCaptcha(mHandler, HttpEntity.MAIN_URL + HttpEntity.LOGIN_URL_CAPTCHA, loginHead);
                             break;
                     }
 
@@ -390,10 +382,8 @@ public class LoginActivity extends BaseActivity {
                     break;
                 case 3://选择完成学校进行跳转
                     String response = msg.obj.toString();
-                    if (response != null && !response.equals("null")){
+                    if (response != null && !response.equals("null")) {
                         getToken(response);
-//                        String json = new Gson().toJson(schoolList);
-//                        ARouter.getInstance().build(Entity.MAIN_ACTIVITY_PATH).withString(IntentDataType.DATA, json).navigation();
                     }
                     break;
                 case 4:
@@ -402,11 +392,11 @@ public class LoginActivity extends BaseActivity {
                     break;
                 case 5:
                     initSelectSchoolData();
-                    if(progressDialog != null) progressDialog.dismiss();
+                    if (progressDialog != null) progressDialog.dismiss();
                     break;
                 case 6:
                     if (dialog != null)
-                    DialogMessage.showLoading(LoginActivity.this, dialog, false);
+                        DialogMessage.showLoading(LoginActivity.this, dialog, false);
                     String json = new Gson().toJson(schoolList);
                     break;
                 case 400:
@@ -417,7 +407,7 @@ public class LoginActivity extends BaseActivity {
         }
     };
 
-    public void getToken(final String json){
+    public void getToken(final String json) {
         HttpUtils.executorService.execute(new Runnable() {
             @Override
             public void run() {
@@ -449,5 +439,18 @@ public class LoginActivity extends BaseActivity {
         super.onStart();
         if (!TextUtils.isEmpty(spUtils.getString(Entity.TOKEN)))
             ARouter.getInstance().build(Entity.MAIN_ACTIVITY_PATH).navigation();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        if (isLoadUserName)
+            setUserName();
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        isLoadUserName = true;
     }
 }

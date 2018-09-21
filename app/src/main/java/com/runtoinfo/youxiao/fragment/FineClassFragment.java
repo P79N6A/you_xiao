@@ -40,10 +40,12 @@ public class FineClassFragment extends BaseFragment {
     public boolean isGetData;
     private boolean mHasLoadedOnce = false;
     private boolean isPrepared = false;
+    private HttpUtils httpUtils;
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_fine_class, container, false);
+        httpUtils = new HttpUtils(getContext());
         initTableView();
         lazyLoad();
         return binding.getRoot();
@@ -59,7 +61,7 @@ public class FineClassFragment extends BaseFragment {
     }
 
     public void initTableView(){
-        HttpUtils.getAllCourseType(handler,HttpEntity.MAIN_URL + HttpEntity.GET_COURSE_TYPE, dataList, spUtils.getString(Entity.TOKEN));
+        httpUtils.getAllCourseType(handler,HttpEntity.MAIN_URL + HttpEntity.GET_COURSE_TYPE, dataList, spUtils.getString(Entity.TOKEN));
     }
 
     public Handler handler = new Handler(Looper.myLooper()){

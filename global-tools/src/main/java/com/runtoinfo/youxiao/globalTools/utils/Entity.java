@@ -16,4 +16,7 @@ public class Entity {
     public final static String CAMPUS_ID = "CAMPUS_ID";
     public final static String TENANT_ID = "TENANT_ID";
     public final static String SCHOOL_DATA = "SCHOOL_DATA";
+    public final static String SYSTEM = "system";
+    public final static String LESSON_REMINDER = "lessonReminder";
+    public final static String CAMPUS_NOTICE = "campusNotice";
  }

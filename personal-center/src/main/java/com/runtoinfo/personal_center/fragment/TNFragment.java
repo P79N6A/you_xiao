@@ -43,6 +43,7 @@ public class TNFragment extends BasePersonalFragment {
     public CollectionDataLayoutBinding binding;
     public List<CollectionEntity> list = new ArrayList<>();
     public CollectionAdapter collectionAdapter;
+    public HttpUtils httpUtils;
 
     public TNFragment(int number, int type){
         this.number = number;
@@ -63,7 +64,7 @@ public class TNFragment extends BasePersonalFragment {
         entity.setToken(spUtils.getString(Entity.TOKEN));
         entity.setUrl(HttpEntity.MAIN_URL + HttpEntity.GET_COLLECTION_ME);
         entity.setType(type);
-        HttpUtils.getMyCollection(handler, entity);
+        httpUtils.getMyCollection(handler, entity);
     }
     public void initRecyclerData(){
         collectionAdapter = new CollectionAdapter(getActivity(), list, R.layout.personal_collection_item_layout, type);

@@ -41,9 +41,11 @@ public class SignUpAddEntourage extends EventBaseActivity {
     public EventAddMemberAdapter adapter;
     public int campaignId;
     public RequestDataEntity requestDataEntity;
+    public HttpUtils httpUtils;
 
     public void initView(){
         binding = DataBindingUtil.setContentView( SignUpAddEntourage.this, R.layout.activity_add_entourage);
+        httpUtils = new HttpUtils(getBaseContext());
         requestDataEntity = new RequestDataEntity();
         requestDataEntity.setUrl(HttpEntity.MAIN_URL + HttpEntity.CAMPAIGN_ADD_MEMBER);
         requestDataEntity.setToken(spUtils.getString(Entity.TOKEN));
@@ -87,7 +89,7 @@ public class SignUpAddEntourage extends EventBaseActivity {
             return;
         }
         DialogMessage.createDialog(SignUpAddEntourage.this, progressDialog, "正在上传信息...");
-        HttpUtils.postAddMember(handler, requestDataEntity, bean, requestType);
+        httpUtils.postAddMember(handler, requestDataEntity, bean, requestType);
     }
 
 

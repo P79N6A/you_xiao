@@ -62,6 +62,7 @@
                 android:layout_alignParentEnd="true"
                 android:gravity="center_vertical">
             <FrameLayout
+                android:id="@+id/info_system_layout"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content">
                 <ImageView
@@ -70,6 +71,7 @@
                     android:layout_height="wrap_content"
                     android:src="@drawable/infor_number"/>
                 <TextView
+                    android:id="@+id/info_system_count"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:gravity="center"
@@ -129,6 +131,7 @@
                 android:layout_alignParentEnd="true"
                 android:gravity="center_vertical">
                 <FrameLayout
+                    android:id="@+id/info_lesson_layout"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content">
                     <ImageView
@@ -137,6 +140,7 @@
                         android:layout_height="wrap_content"
                         android:src="@drawable/infor_number"/>
                     <TextView
+                        android:id="@+id/info_lesson_count"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:gravity="center"
@@ -196,6 +200,7 @@
                 android:layout_alignParentEnd="true"
                 android:gravity="center_vertical">
                 <FrameLayout
+                    android:id="@+id/info_campus_layout"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content">
                     <ImageView
@@ -204,6 +209,7 @@
                         android:layout_height="wrap_content"
                         android:src="@drawable/infor_number"/>
                     <TextView
+                        android:id="@+id/info_campus_count"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:gravity="center"

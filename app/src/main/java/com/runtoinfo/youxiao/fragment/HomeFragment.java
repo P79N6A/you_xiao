@@ -17,12 +17,9 @@ import android.os.Vibrator;
 import android.support.annotation.Nullable;
 import android.support.annotation.RequiresApi;
 import android.support.v4.app.ActivityCompat;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.util.Log;
-import android.util.MonthDisplayHelper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -39,13 +36,13 @@ import com.runtoinfo.httpUtils.bean.HomeCourseEntity;
 import com.runtoinfo.httpUtils.bean.RequestDataEntity;
 import com.runtoinfo.httpUtils.utils.HttpUtils;
 import com.runtoinfo.youxiao.R;
-import com.runtoinfo.youxiao.activities.MainActivity;
 import com.runtoinfo.youxiao.adapter.CoursePunchAdapter;
 import com.runtoinfo.youxiao.globalTools.adapter.UniversalRecyclerAdapter;
 import com.runtoinfo.youxiao.globalTools.utils.DialogMessage;
 import com.runtoinfo.youxiao.globalTools.utils.Entity;
 import com.runtoinfo.youxiao.databinding.FragmentHomeBinding;
 import com.runtoinfo.youxiao.entity.SelectSchoolEntity;
+import com.runtoinfo.youxiao.globalTools.utils.RecyclerViewDecoration;
 import com.runtoinfo.youxiao.globalTools.utils.TimeUtil;
 import com.runtoinfo.youxiao.ui.FloatDragView;
 import com.runtoinfo.youxiao.ui.MyScrollView;
@@ -81,6 +78,7 @@ public class HomeFragment extends BaseFragment implements MyScrollView.ScrollVie
     public boolean isGetData = false;
     private boolean mHasLoadedOnce = false;
     private boolean isPrepared = false;
+    public HttpUtils httpUtils;
 
     public HomeFragment(List<SelectSchoolEntity> schoolSelectList){
         this.schoolSelectList = schoolSelectList;
@@ -116,15 +114,17 @@ public class HomeFragment extends BaseFragment implements MyScrollView.ScrollVie
                         JSONObject json = new JSONObject(msg.obj.toString());
                         JSONObject result = json.getJSONObject("result");
                         JSONArray items = result.getJSONArray("items");
-                        JSONObject item1 = items.getJSONObject(0);
-                        binding.homeSystemContent.setText(item1.getString("title"));
-                        if (TimeUtil.getTimeDif(item1.getString("publishTime")) != null){
-                            binding.homeSystemContentTime.setText(TimeUtil.getTimeDif(item1.getString("publishTime")));
-                        }
-                        JSONObject item2 = items.getJSONObject(1);
-                        binding.homeActivityContent.setText(item2.getString("title"));
-                        if (TimeUtil.getTimeDif(item2.getString("publishTime")) != null){
-                            binding.homeActivityContentTime.setText(TimeUtil.getTimeDif(item2.getString("publishTime")));
+                        if (items.length() > 1) {
+                            JSONObject item1 = items.getJSONObject(0);
+                            binding.homeSystemContent.setText(item1.getString("title"));
+                            if (TimeUtil.getTimeDif(item1.getString("publishTime")) != null) {
+                                binding.homeSystemContentTime.setText(TimeUtil.getTimeDif(item1.getString("publishTime")));
+                            }
+                            JSONObject item2 = items.getJSONObject(1);
+                            binding.homeActivityContent.setText(item2.getString("title"));
+                            if (TimeUtil.getTimeDif(item2.getString("publishTime")) != null) {
+                                binding.homeActivityContentTime.setText(TimeUtil.getTimeDif(item2.getString("publishTime")));
+                            }
                         }
                     }catch (JSONException e){
                         e.printStackTrace();
@@ -170,13 +170,15 @@ public class HomeFragment extends BaseFragment implements MyScrollView.ScrollVie
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_home, container, false);
+        httpUtils = new HttpUtils(getContext());
         requestPermission();
         initCourseDataList();
         initFloatWindow();
         initListener();
         requestNews();
         lazyLoad();
-        Log.e("TIME", "t++++++");
+        Log.e("UserId", spUtils.getInt(Entity.USER_ID) + "");
+        Log.e("tenantId", spUtils.getInt(Entity.TENANT_ID) + "");
         return binding.getRoot();
     }
 
@@ -223,16 +225,24 @@ public class HomeFragment extends BaseFragment implements MyScrollView.ScrollVie
                 ARouter.getInstance().build("/cources/colorfulActivity").navigation();
             }
         });
+
+        binding.homeRecyclerView.addItemDecoration(new RecyclerViewDecoration(getContext(), RecyclerViewDecoration.HORIZONTAL_LIST));
     }
 
     /**
      * 请求接口获取今日课程
      */
     public void initCourseDataList(){
+
+        RequestDataEntity requestDataEntity = new RequestDataEntity();
+        requestDataEntity.setToken(spUtils.getString(Entity.TOKEN));
+        requestDataEntity.setUrl(HttpEntity.MAIN_URL + HttpEntity.GET_HOME_COURSE_DATA);
+
         Map<String, Object> map = new HashMap<>();
-        map.put("url", HttpEntity.MAIN_URL + HttpEntity.GET_HOME_COURSE_DATA);
-        map.put("token", spUtils.getString(com.runtoinfo.youxiao.globalTools.utils.Entity.TOKEN));
-        HttpUtils.getCourseDataList(handler, map, getCourseList);
+        map.put("studentId", 18);
+        map.put("date", TimeUtil.getNowDate());
+        HttpUtils httpUtils = new HttpUtils(getContext());
+        httpUtils.getCourseDataList(handler, requestDataEntity, map, getCourseList);
     }
 
     /**
@@ -244,7 +254,7 @@ public class HomeFragment extends BaseFragment implements MyScrollView.ScrollVie
         Log.e("Token", spUtils.getString(Entity.TOKEN));
         requestDataEntity.setUrl(HttpEntity.MAIN_URL + HttpEntity.SCHOOL_NEWS_ALL);
         requestDataEntity.setType(0);
-        HttpUtils.getSchoolNewsAll(handler, requestDataEntity);
+        httpUtils.getSchoolNewsAll(handler, requestDataEntity);
     }
     /**
      * 获取校长电话
@@ -253,7 +263,7 @@ public class HomeFragment extends BaseFragment implements MyScrollView.ScrollVie
         RequestDataEntity requestDataEntity = new RequestDataEntity();
         requestDataEntity.setToken(spUtils.getString(Entity.TOKEN));
         requestDataEntity.setUrl(HttpEntity.MAIN_URL + HttpEntity.GET_SCHOOL_SETTING);
-        HttpUtils.getSchoolSetting(handler, requestDataEntity);
+        httpUtils.getSchoolSetting(handler, requestDataEntity);
     }
     /**
      * 获取用户未读消息
@@ -267,7 +277,7 @@ public class HomeFragment extends BaseFragment implements MyScrollView.ScrollVie
         Map<String, Object> map = new HashMap<>();
         map.put("tenantId", spUtils.getInt(Entity.TENANT_ID));
         map.put("userId", spUtils.getInt(Entity.USER_ID));
-        HttpUtils.getNotificationCount(handler, requestDataEntity, map);
+        httpUtils.getNotificationCount(handler, requestDataEntity, map);
     }
 
     /**
@@ -342,7 +352,7 @@ public class HomeFragment extends BaseFragment implements MyScrollView.ScrollVie
                         requestDataEntity.setUrl(HttpEntity.MAIN_URL + HttpEntity.SWITCH_CAMPUS);
                         requestDataEntity.setTenantId(Integer.parseInt(entity.getTenantId()));
                         requestDataEntity.setCampusId(entity.getId());
-                        HttpUtils.switchCampusId(handler, requestDataEntity);
+                        httpUtils.switchCampusId(handler, requestDataEntity);
 
                         popupWindow.popupWindow.dismiss();
                     }

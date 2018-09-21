@@ -39,12 +39,14 @@ public class CommentPublishAdapter extends UniversalRecyclerAdapter<CommentReque
     public CommentRequestResultEntity temResultEntity;
     public Handler dataHandler;
     public Handler handler;
+    public HttpUtils httpUtils;
     public CommentPublishAdapter(Handler handler, Activity mContext, List<CommentRequestResultEntity> mDatas, int mLayoutId) {
         super(handler, mContext, mDatas, mLayoutId);
         this.dataList = mDatas;
         this.activity = mContext;
         this.spUtils = new SPUtils(mContext);
         this.dataHandler = handler;
+        httpUtils = new HttpUtils(mContext);
     }
 
     @Override
@@ -58,7 +60,7 @@ public class CommentPublishAdapter extends UniversalRecyclerAdapter<CommentReque
             temResultEntity = null;
             holder.setText(R.id.comment_publish_details, commentPublishItemEntity.getContent());
         }
-        HttpUtils.postSrcPhoto(activity, HttpEntity.IMAGE_HEAD + commentPublishItemEntity.getUserAvatar(), (ImageView) holder.getView(R.id.comment_publish_item_img));
+        httpUtils.postSrcPhoto(activity, HttpEntity.IMAGE_HEAD + commentPublishItemEntity.getUserAvatar(), (ImageView) holder.getView(R.id.comment_publish_item_img));
         String[] time = new String[2];
         if (commentPublishItemEntity.getApprovedTime() != null) {
              time = commentPublishItemEntity.getApprovedTime().split("T");
@@ -84,10 +86,10 @@ public class CommentPublishAdapter extends UniversalRecyclerAdapter<CommentReque
                     entity.setType(CPRCTypeEntity.PRAISE);
                     entity.setTarget(commentPublishItemEntity.getId());
                     entity.setTargetType(CPRCTypeEntity.TARGET_COMMENT);
-                    HttpUtils.postComment(handler, entity);
+                    httpUtils.postComment(handler, entity);
                     imageView.setBackgroundResource(R.drawable.comment_praised);
                 }else{
-                    HttpUtils.putAllStatue(handler, commentPublishItemEntity.getId(), spUtils.getString(Entity.TOKEN));
+                    httpUtils.putAllStatue(handler, commentPublishItemEntity.getId(), spUtils.getString(Entity.TOKEN));
                     imageView.setBackgroundResource(R.drawable.comment_praise);
                 }
             }

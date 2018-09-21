@@ -20,6 +20,24 @@ public class Article implements Serializable {
     private String course_progress_num;
     private String course_message;
     private int type;
+    private int courseInsId;
+    private boolean isSignIn;
+
+    public boolean isSignIn() {
+        return isSignIn;
+    }
+
+    public void setSignIn(boolean signIn) {
+        isSignIn = signIn;
+    }
+
+    public int getCourseInsId() {
+        return courseInsId;
+    }
+
+    public void setCourseInsId(int courseInsId) {
+        this.courseInsId = courseInsId;
+    }
 
     public int getType() {
         return type;

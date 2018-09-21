@@ -23,6 +23,7 @@ public class EventRecyclerAdapter extends UniversalRecyclerAdapter<MyEventEntity
     public List<MyEventEntity> dataList;
     public int LayoutId;
     public int type;
+    public HttpUtils httpUtils;
     public EventRecyclerAdapter(Activity mContext, List<MyEventEntity> mDatas, int mLayoutId, int type) {
         super(mContext, mDatas, mLayoutId);
         this.context = mContext;
@@ -33,7 +34,7 @@ public class EventRecyclerAdapter extends UniversalRecyclerAdapter<MyEventEntity
 
     @Override
     protected void convert(Context mContext, BaseViewHolder holder, MyEventEntity eventEntity, int position) {
-        HttpUtils.postPhoto(context, eventEntity.getCover(),((ImageView) holder.getView(R.id.activity_comment_imageView)));
+        httpUtils.postPhoto(context, eventEntity.getCover(),((ImageView) holder.getView(R.id.activity_comment_imageView)));
         holder.setText(R.id.activity_name, eventEntity.getName());
         if (type == 1) {
             holder.setText(R.id.activity_time, TimeUtil.iso8601ToDate(eventEntity.getStartDate(), 1) + "至" + TimeUtil.iso8601ToDate(eventEntity.getEndTime(), 1));

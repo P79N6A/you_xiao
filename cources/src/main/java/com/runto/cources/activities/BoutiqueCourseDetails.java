@@ -40,6 +40,7 @@ public class BoutiqueCourseDetails extends FragmentActivity {
     public SensorManager sensorManager;
     JZVideoPlayer.JZAutoFullscreenListener sensorEventListener;
     public CourseDataEntity courseDataEntity;
+    public HttpUtils httpUtils;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -55,7 +56,7 @@ public class BoutiqueCourseDetails extends FragmentActivity {
         sensorEventListener = new JZVideoPlayer.JZAutoFullscreenListener();
         if (courseDataEntity != null){
             binding.boutiqueCourseName.setText(courseDataEntity.getName());
-            HttpUtils.postPhoto(this, courseDataEntity.getCover(), binding.boutiqueCourseDetailsImageView);
+            httpUtils.postPhoto(this, courseDataEntity.getCover(), binding.boutiqueCourseDetailsImageView);
             binding.boutiqueCourseOpenTime.setText(courseDataEntity.getStartTime().split("T")[0] + "开课");
             binding.boutiqueCoursePurchaseNumber.setText(courseDataEntity.getPurchasedNumber() + "人购买");
             binding.boutiqueCoursePrice.setText("¥" + courseDataEntity.getPrice());

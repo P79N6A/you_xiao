@@ -40,6 +40,7 @@ public class PublishComment extends BaseActivity {
     public int targetType;
     public CommentPublishAdapter mAdapter;
     public List<CommentRequestResultEntity> dataList = new ArrayList<>();
+    public HttpUtils httpUtils;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -92,7 +93,7 @@ public class PublishComment extends BaseActivity {
                     cprcDataEntity.setUserId(spUtils.getInt(Entity.USER_ID));
                     cprcDataEntity.setContent(result);
                     cprcDataEntity.setToken(spUtils.getString(Entity.TOKEN));
-                    HttpUtils.postComment(mHandler, cprcDataEntity);
+                    httpUtils.postComment(mHandler, cprcDataEntity);
                     break;
                 case 20:
                     try {
@@ -136,7 +137,7 @@ public class PublishComment extends BaseActivity {
         cpc.setMaxResultCount(10);
         cpc.setSkipCount(0);
 
-        HttpUtils.getCommentAll(mHandler, cpc);
+        httpUtils.getCommentAll(mHandler, cpc);
     }
 
 }

@@ -32,10 +32,12 @@ public class MineEventActivity extends EventBaseActivity {
     public ActivityMineEventBinding binding;
     public List<MyEventEntity> dataList = new ArrayList<>();
     public EventRecyclerAdapter mAdapter;
+    public HttpUtils httpUtils;
 
     @Override
     protected void initView() {
         binding = DataBindingUtil.setContentView(MineEventActivity.this, R.layout.activity_mine_event);
+        httpUtils = new HttpUtils(getBaseContext());
         requestData();
     }
 
@@ -73,7 +75,7 @@ public class MineEventActivity extends EventBaseActivity {
         entity.setToken(spUtils.getString(Entity.TOKEN));
         entity.setUrl(HttpEntity.MAIN_URL + HttpEntity.GET_CAMPAIGN_BY_USER);
         entity.setUserId(spUtils.getInt(Entity.USER_ID));
-        HttpUtils.getMyEvent(handler, entity, dataList);
+        httpUtils.getMyEvent(handler, entity, dataList);
     }
 
     public Handler handler = new Handler(Looper.getMainLooper()){

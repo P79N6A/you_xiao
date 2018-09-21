@@ -1,6 +1,7 @@
 package com.runtoinfo.httpUtils.utils;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.IntentFilter;
 import android.graphics.drawable.Drawable;
 import android.os.Handler;
@@ -14,7 +15,9 @@ import com.dmcbig.mediapicker.entity.Media;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.runtoinfo.httpUtils.CPRCBean.GetAllCPC;
+import com.runtoinfo.httpUtils.CPRCBean.PraiseEntity;
 import com.runtoinfo.httpUtils.CenterEntity.LearnTrackEntity;
+import com.runtoinfo.httpUtils.CenterEntity.LeaveRecordEntity;
 import com.runtoinfo.httpUtils.CenterEntity.PersonalInformationEntity;
 import com.runtoinfo.httpUtils.HttpEntity;
 import com.runtoinfo.httpUtils.bean.AddMemberBean;
@@ -31,7 +34,11 @@ import com.runtoinfo.httpUtils.bean.HttpLoginHead;
 import com.runtoinfo.httpUtils.bean.LeaveEntity;
 import com.runtoinfo.httpUtils.bean.MyEventEntity;
 import com.runtoinfo.httpUtils.bean.RequestDataEntity;
+import com.runtoinfo.httpUtils.bean.SystemMessageEntity;
 import com.runtoinfo.httpUtils.bean.TopiceHttpResultEntity;
+import com.runtoinfo.httpUtils.bean.VersionEntity;
+import com.zhy.http.okhttp.OkHttpUtils;
+import com.zhy.http.okhttp.https.HttpsUtils;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -70,11 +77,16 @@ public class HttpUtils<T> {
     public static final OkHttpClient client = new OkHttpClient();
     private static final String Authorization = "Authorization";
     private static final String Bearer = "Bearer ";
+    private static Context context;
+
+    public HttpUtils(Context context) {
+        this.context = context;
+    }
 
     /**
      * POST 异步加载网络图片
      */
-    public static void postAsynchronous(final Activity context, final String url, final ImageView imageView){
+    public void postAsynchronous(final Activity context, final String url, final ImageView imageView) {
         executorService.execute(new Runnable() {
             @Override
             public void run() {
@@ -82,7 +94,7 @@ public class HttpUtils<T> {
                         .url(url)
                         .build();
 
-                getHttpsClient().newCall(request).enqueue(new Callback() {
+                getClient().newCall(request).enqueue(new Callback() {
                     @Override
                     public void onFailure(Call call, IOException e) {
 
@@ -98,7 +110,6 @@ public class HttpUtils<T> {
                                     imageView.setBackground(drawable);
                                 }
                             });
-
                         }
                     }
                 });
@@ -108,62 +119,69 @@ public class HttpUtils<T> {
     }
 
     /**
-     *获取图片
+     * 获取图片
      */
-    public static void postPhoto(final Activity context, final String url, final ImageView imageView){
+    public void postPhoto(final Activity context, final String url, final ImageView imageView) {
         executorService.execute(new Runnable() {
             @Override
             public void run() {
-                try {
-                    Request request = new Request.Builder()
-                            .url(url)
-                            .build();
+                Request request = new Request.Builder()
+                        .url(url)
+                        .build();
 
-                    Response response = getHttpsClient().newCall(request).execute();
-                    if (response.isSuccessful()) {
-                        final Drawable drawable = Drawable.createFromStream(response.body().byteStream(), "image");
-                        context.runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                imageView.setBackground(drawable);
-                            }
-                        });
+                getClient().newCall(request).enqueue(new Callback() {
+                    @Override
+                    public void onFailure(Call call, IOException e) {
+
                     }
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
+
+                    @Override
+                    public void onResponse(Call call, Response response) throws IOException {
+                        if (response.isSuccessful()) {
+                            final Drawable drawable = Drawable.createFromStream(response.body().byteStream(), "image");
+                            context.runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    imageView.setBackground(drawable);
+                                }
+                            });
+                        }
+                    }
+                });
             }
         });
     }
+
     /**
      * 类似src
      */
-    public static void postSrcPhoto(final Activity context, final String url, final ImageView imageView){
+    public void postSrcPhoto(final Activity context, final String url, final ImageView imageView) {
         executorService.execute(new Runnable() {
             @Override
             public void run() {
-                try {
-                    OkHttpClient newClient = client.newBuilder()
-                            .sslSocketFactory(HttpsTrustManager.createSSLSocketFactory())
-                            .hostnameVerifier(new HttpsTrustManager.TrustAllHostnameVerifier())
-                            .build();
-                    Request request = new Request.Builder()
-                            .url(url)
-                            .build();
+                Request request = new Request.Builder()
+                        .url(url)
+                        .build();
 
-                    Response response = newClient.newCall(request).execute();
-                    if (response.isSuccessful()) {
-                        final Drawable drawable = Drawable.createFromStream(response.body().byteStream(), "image");
-                        context.runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                imageView.setImageDrawable(drawable);
-                            }
-                        });
+                getClient().newCall(request).enqueue(new Callback() {
+                    @Override
+                    public void onFailure(Call call, IOException e) {
+
                     }
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
+
+                    @Override
+                    public void onResponse(Call call, Response response) throws IOException {
+                        if (response.isSuccessful()) {
+                            final Drawable drawable = Drawable.createFromStream(response.body().byteStream(), "image");
+                            context.runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    imageView.setImageDrawable(drawable);
+                                }
+                            });
+                        }
+                    }
+                });
             }
         });
     }
@@ -171,7 +189,7 @@ public class HttpUtils<T> {
     /**
      * POST 登录传参 密码登录
      */
-    public static void post(final android.os.Handler handler, final String url, final HttpLoginHead head){
+    public void post(final android.os.Handler handler, final String url, final HttpLoginHead head) {
         executorService.execute(new Runnable() {
             @Override
             public void run() {
@@ -187,11 +205,11 @@ public class HttpUtils<T> {
                     RequestBody body = RequestBody.create(JSON, json.toString());
 
                     Request request = new Request.Builder()
+                            .header(Authorization, Bearer + head.getToken())
                             .url(url)
-                            //.addHeader("Authorization",  "Bearer " + head.getToken())
                             .post(body)
                             .build();
-                    getHttpsClient().newCall(request).enqueue(new Callback() {
+                    getClient().newCall(request).enqueue(new Callback() {
                         @Override
                         public void onFailure(Call call, IOException e) {
 
@@ -204,14 +222,14 @@ public class HttpUtils<T> {
                                     Message message = new Message();
                                     JSONObject json = new JSONObject(response.body().string());
                                     boolean success = json.getBoolean("success");
-                                    if(!success){
+                                    if (!success) {
                                         JSONObject error = json.getJSONObject("error");
                                         String mes = error.getString("message");
                                         String details = error.getString("details");
                                         message.what = 400;
                                         message.obj = mes;
                                         handler.sendMessage(message);
-                                    }else{
+                                    } else {
                                         message.obj = json.getString("result");
                                         message.what = 3;
                                         handler.sendMessage(message);
@@ -235,11 +253,12 @@ public class HttpUtils<T> {
 
     /**
      * post 验证码登录
+     *
      * @param handler
-     * @param url 验证码登录接口 HttpEntity.LOGIN_URL_CAPTCHA
+     * @param url     验证码登录接口 HttpEntity.LOGIN_URL_CAPTCHA
      * @param head
      */
-    public static void postCaptcha(final android.os.Handler handler, final String url, final HttpLoginHead head){
+    public void postCaptcha(final android.os.Handler handler, final String url, final HttpLoginHead head) {
         executorService.execute(new Runnable() {
             @Override
             public void run() {
@@ -255,19 +274,25 @@ public class HttpUtils<T> {
                     Request request = new Request.Builder()
                             .url(url).post(body).build();
 
-                    Response response = getHttpsClient().newCall(request).execute();
-                    if (response.isSuccessful()){
-                        Message message = new Message();
-                        message.what = 3;
-                        message.obj = response;
-                        handler.sendMessage(message);
-                    }else {
-                        handler.sendEmptyMessage(4);
-                    }
+                    getClient().newCall(request).enqueue(new Callback() {
+                        @Override
+                        public void onFailure(Call call, IOException e) {
 
+                        }
+
+                        @Override
+                        public void onResponse(Call call, Response response) throws IOException {
+                            if (response.isSuccessful()) {
+                                Message message = new Message();
+                                message.what = 3;
+                                message.obj = response;
+                                handler.sendMessage(message);
+                            } else {
+                                handler.sendEmptyMessage(4);
+                            }
+                        }
+                    });
                 } catch (JSONException e) {
-                    e.printStackTrace();
-                }catch (IOException e) {
                     e.printStackTrace();
                 }
             }
@@ -276,14 +301,14 @@ public class HttpUtils<T> {
 
     /**
      * post 重置密码
+     *
      * @param handler
-     * @param url HttpEntity.REST_PASSWORD
+     * @param url     HttpEntity.REST_PASSWORD
      */
-    public static void postForgetPassWord(final Handler handler, final String url, final String phoneNumber, final String newPassword){
+    public void postForgetPassWord(final Handler handler, final String url, final String phoneNumber, final String newPassword) {
         executorService.execute(new Runnable() {
             @Override
             public void run() {
-                try {
                     FormBody body = new FormBody.Builder()
                             .add("phoneNumber", phoneNumber)
                             .add("newPassword", newPassword)
@@ -291,28 +316,35 @@ public class HttpUtils<T> {
 
                     Request request = new Request.Builder()
                             .url(url).post(body).build();
-                    Response response = getHttpsClient().newCall(request).execute();
-                    if (response.isSuccessful()){
-                        handler.sendEmptyMessage(0);
-                    }else{
-                        handler.sendEmptyMessage(1);
-                    }
-                }catch (IOException E){
-                    E.printStackTrace();
-                }
+                    getClient().newCall(request).enqueue(new Callback() {
+                        @Override
+                        public void onFailure(Call call, IOException e) {
+
+                        }
+
+                        @Override
+                        public void onResponse(Call call, Response response) throws IOException {
+                            if (response.isSuccessful()) {
+                                handler.sendEmptyMessage(0);
+                            } else {
+                                handler.sendEmptyMessage(1);
+                            }
+                        }
+                    });
+
             }
         });
 
     }
 
     /**
-     *验证码验证
+     * 验证码验证
      */
 
-    public static void postValidate(final Handler handler, final String url, final String phoneNumber, final String code){
+    public void postValidate(final Handler handler, final String url, final String phoneNumber, final String code) {
         executorService.execute(new Runnable() {
             @Override
-            public void run(){
+            public void run() {
                 FormBody formBody = new FormBody.Builder()
                         .add("phoneNumber", phoneNumber)
                         .add("captchaCode", code)
@@ -322,18 +354,18 @@ public class HttpUtils<T> {
                         .post(formBody)
                         .build();
                 try {
-                    Response response = getHttpsClient().newCall(request).execute();
-                    if (response.isSuccessful()){
+                    Response response = getClient().newCall(request).execute();
+                    if (response.isSuccessful()) {
                         String body = response.body().string();
                         Log.e("body", body);
                         JSONObject jsonObject = new JSONObject(body);
                         boolean result = jsonObject.getBoolean("result");
-                        if (result){
+                        if (result) {
                             handler.sendEmptyMessage(3);
-                        }else{
+                        } else {
                             handler.sendEmptyMessage(4);
                         }
-                    } else{
+                    } else {
                         handler.sendEmptyMessage(4);
                     }
                 } catch (IOException e) {
@@ -348,72 +380,72 @@ public class HttpUtils<T> {
     /**
      * GET 异步加载 获取用户名下信息
      */
-    public static void getAsy(final Handler handler,final Map<String, List> map,final String url,final String userName){
+    public void getAsy(final Handler handler, final Map<String, List> map, final String url, final String userName) {
 
-                String requestUrl = url + "?phoneNumber=" + userName + "&client=student";
-                final Request request = new Request.Builder()
-                        .url(requestUrl)
-                        .build();
-                final List<String> orgNameList = new ArrayList<>();
-                final List<List<String>> schoolList = new ArrayList<>();
-                final List<HttpLoginHead> headList = new ArrayList<>();
-                final List<String> imgList = new ArrayList<>();
-                getHttpsClient().newCall(request).enqueue(new Callback() {
-                    @Override
-                    public void onFailure(Call call, IOException e) {
-                        handler.sendEmptyMessage(500);
-                    }
+        String requestUrl = url + "?phoneNumber=" + userName + "&client=student";
+        final Request request = new Request.Builder()
+                .url(requestUrl)
+                .build();
+        final List<String> orgNameList = new ArrayList<>();
+        final List<List<String>> schoolList = new ArrayList<>();
+        final List<HttpLoginHead> headList = new ArrayList<>();
+        final List<String> imgList = new ArrayList<>();
+        getClient().newCall(request).enqueue(new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                handler.sendEmptyMessage(500);
+            }
 
-                    @Override
-                    public void onResponse(Call call, Response response) throws IOException {
-                        if (response.isSuccessful()) {//回调的方法执行在子线程。
-                            //head.setCode(response.code());
-                            try {
-                                String body = response.body().string();
-                                Log.e("response", body);
-                                JSONObject obj = new JSONObject(body);
-                                JSONObject json = obj.getJSONObject("result");
-                                JSONArray array = json.getJSONArray("items");
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                if (response.isSuccessful()) {//回调的方法执行在子线程。
+                    //head.setCode(response.code());
+                    try {
+                        String body = response.body().string();
+                        Log.e("response", body);
+                        JSONObject obj = new JSONObject(body);
+                        JSONObject json = obj.getJSONObject("result");
+                        JSONArray array = json.getJSONArray("items");
 
-                                for (int i = 0; i < array.length(); i++) {
-                                    HttpLoginHead loginHead = new HttpLoginHead();
-                                    JSONObject JSON = array.getJSONObject(i);
-                                    String orgName = JSON.getString("brandName");
-                                    orgNameList.add(orgName);
-                                    imgList.add(JSON.getString("logo"));
-                                    JSONArray object = JSON.getJSONArray("campuses");
-                                    loginHead.setTenancyName(JSON.getString("tenancyName"));
-                                    loginHead.setCampusId(JSON.getInt("id"));
-                                    loginHead.setTenantId(JSON.getString("tenantId"));
-                                    List<String> schoolName = new ArrayList<>();
-                                    for (int j = 0; j < object.length(); j++) {
-                                        JSONObject object1 = object.getJSONObject(j);
-                                        String name = object1.getString("name");
-                                        schoolName.add(name);
-                                    }
-                                    schoolList.add(schoolName);
-                                    headList.add(loginHead);
-                                }
-
-                                map.put("org", orgNameList);
-                                map.put("school", schoolList);
-                                map.put("head", headList);
-                                map.put("img", imgList);
-
-                                handler.sendEmptyMessage(5);
-                            } catch (JSONException e) {
-                                e.printStackTrace();
+                        for (int i = 0; i < array.length(); i++) {
+                            HttpLoginHead loginHead = new HttpLoginHead();
+                            JSONObject JSON = array.getJSONObject(i);
+                            String orgName = JSON.getString("brandName");
+                            orgNameList.add(orgName);
+                            imgList.add(JSON.getString("logo"));
+                            JSONArray object = JSON.getJSONArray("campuses");
+                            loginHead.setTenancyName(JSON.getString("tenancyName"));
+                            loginHead.setCampusId(JSON.getInt("id"));
+                            loginHead.setTenantId(JSON.getString("tenantId"));
+                            List<String> schoolName = new ArrayList<>();
+                            for (int j = 0; j < object.length(); j++) {
+                                JSONObject object1 = object.getJSONObject(j);
+                                String name = object1.getString("name");
+                                schoolName.add(name);
                             }
+                            schoolList.add(schoolName);
+                            headList.add(loginHead);
                         }
-                    }
 
-                });
+                        map.put("org", orgNameList);
+                        map.put("school", schoolList);
+                        map.put("head", headList);
+                        map.put("img", imgList);
+
+                        handler.sendEmptyMessage(5);
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+
+        });
     }
 
     /**
      * GET 同步加载 获取验证码
      */
-    public static void get(final String url, final String phoneNumber ){
+    public void get(final String url, final String phoneNumber) {
         executorService.execute(new Runnable() {
             @Override
             public void run() {
@@ -422,11 +454,11 @@ public class HttpUtils<T> {
                             .url(url + "?phoneNumber=" + phoneNumber)//请求接口。如果需要传参拼接到接口后面。
                             .build();//创建Request 对象
                     Response response = null;
-                    response = getHttpsClient().newCall(request).execute();//得到Response 对象
+                    response = getClient().newCall(request).execute();//得到Response 对象
                     if (response.isSuccessful()) {
-                        Log.d("kwwl","response.code()=="+response.code());
-                        Log.d("kwwl","response.message()=="+response.message());
-                        Log.d("kwwl","res=="+response.body().string());
+                        Log.d("kwwl", "response.code()==" + response.code());
+                        Log.d("kwwl", "response.message()==" + response.message());
+                        Log.d("kwwl", "res==" + response.body().string());
                         //此时的代码执行在子线程，修改UI的操作请使用handler跳转到UI线程。
                     }
                 } catch (Exception e) {
@@ -439,60 +471,67 @@ public class HttpUtils<T> {
     /**
      * PUT
      */
-    public static void put(){
+    public static void put() {
 
     }
 
     /**
      * delete
      */
-    public static void delete(){
+    public static void delete() {
 
     }
 
     /**
      * 新闻检索
+     *
      * @param handler
      * @param url
-     * @param token 登录后的标识
+     * @param token   登录后的标识
      */
-    public static void getSchoolNewsAll(final Handler handler, final RequestDataEntity requestDataEntity){
+    public void getSchoolNewsAll(final Handler handler, final RequestDataEntity requestDataEntity) {
         executorService.execute(new Runnable() {
             @Override
             public void run() {
-                try {
-                    Map<String, Object> object = new HashMap<>();
-                    object.put("type", requestDataEntity.getType());
-                    object.put("MaxResultCount", 10);
-                    object.put("SkipCount", 0);
-                    object.put("Sorting","publishTime desc");
-                    Request request = new Request.Builder()
-                            .header(Authorization, Bearer + requestDataEntity.getToken())
-                            .url(requestDataEntity.getUrl() + setUrl(object))
-                            .build();
-                    Response response = getHttpsClient().newCall(request).execute();
-                    if (response.isSuccessful()){
-                        String result = response.body().string();
-                        Message message = new Message();
-                        message.what = 5;
-                        message.obj = result;
-                        handler.sendMessage(message);
+                Map<String, Object> object = new HashMap<>();
+                object.put("type", requestDataEntity.getType());
+                object.put("MaxResultCount", 10);
+                object.put("SkipCount", 0);
+                object.put("Sorting", "publishTime desc");
+                Request request = new Request.Builder()
+                        .header(Authorization, Bearer + requestDataEntity.getToken())
+                        .url(requestDataEntity.getUrl() + setUrl(object))
+                        .build();
+                getClient().newCall(request).enqueue(new Callback() {
+                    @Override
+                    public void onFailure(Call call, IOException e) {
+
                     }
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
+
+                    @Override
+                    public void onResponse(Call call, Response response) throws IOException {
+                        if (response.isSuccessful()) {
+                            String result = response.body().string();
+                            Message message = new Message();
+                            message.what = 5;
+                            message.obj = result;
+                            handler.sendMessage(message);
+                        }
+                    }
+                });
             }
         });
     }
 
     /**
      * 获取新闻阅读数量
+     *
      * @param handler
      * @param url
      * @param token
      * @param id
      */
-    public static void getNewsReadNumber(final Handler handler, final String url, final String token, final int id){
+    public void getNewsReadNumber(final Handler handler, final String url, final String token, final int id) {
         executorService.execute(new Runnable() {
             @Override
             public void run() {
@@ -506,7 +545,7 @@ public class HttpUtils<T> {
                             .url(url)
                             .post(requestBody)
                             .build();
-                    getHttpsClient().newCall(request).enqueue(new Callback(){
+                    getClient().newCall(request).enqueue(new Callback() {
 
                         @Override
                         public void onFailure(Call call, IOException e) {
@@ -515,15 +554,15 @@ public class HttpUtils<T> {
 
                         @Override
                         public void onResponse(Call call, Response response) throws IOException {
-                            if (response.isSuccessful()){
-                                try{
+                            if (response.isSuccessful()) {
+                                try {
                                     JSONObject json = new JSONObject(response.body().string());
                                     int result = json.getInt("result");
                                     Message msg = new Message();
                                     msg.what = 4;
                                     msg.obj = result;
                                     handler.sendMessage(msg);
-                                }catch (JSONException E){
+                                } catch (JSONException E) {
                                     E.printStackTrace();
                                 }
                             }
@@ -538,9 +577,10 @@ public class HttpUtils<T> {
 
     /**
      * 获取所有的活动
+     *
      * @param handler
      */
-    public static void getEventAll(final Handler handler, final RequestDataEntity entity){
+    public void getEventAll(final Handler handler, final RequestDataEntity entity) {
         executorService.execute(new Runnable() {
             @Override
             public void run() {
@@ -552,10 +592,10 @@ public class HttpUtils<T> {
                 String urlString = setUrl(urlMap);
 
                 Request request = new Request.Builder()
-                        .header(Authorization,  Bearer + entity.getToken())
+                        .header(Authorization, Bearer + entity.getToken())
                         .url(entity.getUrl() + urlString)
                         .build();
-                getHttpsClient().newCall(request).enqueue(new Callback() {
+                getClient().newCall(request).enqueue(new Callback() {
                     @Override
                     public void onFailure(Call call, IOException e) {
 
@@ -563,7 +603,7 @@ public class HttpUtils<T> {
 
                     @Override
                     public void onResponse(Call call, Response response) throws IOException {
-                        if (response.isSuccessful()){
+                        if (response.isSuccessful()) {
                             Message msg = new Message();
                             msg.obj = response.body().string();
                             msg.what = 0;
@@ -574,10 +614,11 @@ public class HttpUtils<T> {
             }
         });
     }
+
     /**
      * 获取我的报名
      */
-    public static void getMyEvent(final Handler handler, final RequestDataEntity entity, final List<MyEventEntity> dataList){
+    public void getMyEvent(final Handler handler, final RequestDataEntity entity, final List<MyEventEntity> dataList) {
         executorService.execute(new Runnable() {
             @Override
             public void run() {
@@ -587,7 +628,7 @@ public class HttpUtils<T> {
                         .url(entity.getUrl() + "?UserId=" + entity.getUserId())
                         .build();
 
-                getHttpsClient().newCall(request).enqueue(new Callback() {
+                getClient().newCall(request).enqueue(new Callback() {
                     @Override
                     public void onFailure(Call call, IOException e) {
 
@@ -595,16 +636,17 @@ public class HttpUtils<T> {
 
                     @Override
                     public void onResponse(Call call, Response response) throws IOException {
-                        if (response.isSuccessful()){
-                            try{
+                        if (response.isSuccessful()) {
+                            try {
                                 JSONArray items = getItems(response.body().string(), handler);
-                                for (int i = 0; i < items.length(); i++){
+                                for (int i = 0; i < items.length(); i++) {
                                     JSONObject item = items.getJSONObject(i);
-                                    MyEventEntity eventEntity = new Gson().fromJson(item.toString(), new TypeToken<MyEventEntity>(){}.getType());
+                                    MyEventEntity eventEntity = new Gson().fromJson(item.toString(), new TypeToken<MyEventEntity>() {
+                                    }.getType());
                                     dataList.add(eventEntity);
                                 }
                                 handler.sendEmptyMessage(0);
-                            }catch(JSONException e){
+                            } catch (JSONException e) {
                                 e.printStackTrace();
                             }
                         }
@@ -616,10 +658,11 @@ public class HttpUtils<T> {
 
     /**
      * 添加报名人员
+     *
      * @param handler
-     * @param entity 请求实体
+     * @param entity  请求实体
      */
-    public static void postAddMember(final Handler handler, final RequestDataEntity entity, final AddMemberBean addMemberBean, final int type) {
+    public  void postAddMember(final Handler handler, final RequestDataEntity entity, final AddMemberBean addMemberBean, final int type) {
         executorService.execute(new Runnable() {
             @Override
             public void run() {
@@ -630,7 +673,7 @@ public class HttpUtils<T> {
                         .url(entity.getUrl())
                         .post(body)
                         .build();
-                getHttpsClient().newCall(request).enqueue(new Callback() {
+                getClient().newCall(request).enqueue(new Callback() {
                     @Override
                     public void onFailure(Call call, IOException e) {
                         handler.sendEmptyMessage(404);
@@ -673,10 +716,11 @@ public class HttpUtils<T> {
 
     /**
      * 获取精品课类别
-     * @param url 请求地址
+     *
+     * @param url     请求地址
      * @param mapList 返回的结果集合
      */
-    public static void getAllCourseType(final Handler handler, final String url, final List<Map<String, Object>> mapList, final String token){
+    public  void getAllCourseType(final Handler handler, final String url, final List<Map<String, Object>> mapList, final String token) {
         executorService.execute(new Runnable() {
             @Override
             public void run() {
@@ -685,7 +729,7 @@ public class HttpUtils<T> {
                         .url(url + "?CategoryId=2")
                         .build();
 
-                getHttpsClient().newCall(request).enqueue(new Callback() {
+                getClient().newCall(request).enqueue(new Callback() {
                     @Override
                     public void onFailure(Call call, IOException e) {
                         handler.sendEmptyMessage(404);
@@ -693,14 +737,14 @@ public class HttpUtils<T> {
 
                     @Override
                     public void onResponse(Call call, Response response) throws IOException {
-                        if (response.isSuccessful()){
+                        if (response.isSuccessful()) {
                             try {
                                 JSONObject json = new JSONObject(response.body().string());
                                 //if (!TextUtils.isEmpty(json.getString("error"))) {handler.sendEmptyMessage(404); return;}
                                 JSONObject result = json.getJSONObject("result");
                                 JSONArray items = result.getJSONArray("items");
 
-                                for (int i = 0; i < items.length(); i++){
+                                for (int i = 0; i < items.length(); i++) {
                                     Map<String, Object> dataMap = new HashMap<>();
                                     JSONObject chileItem = items.getJSONObject(i);
                                     dataMap.put("name", chileItem.getString("name"));
@@ -720,18 +764,18 @@ public class HttpUtils<T> {
     }
 
     /**
-     *获取子分类
+     * 获取子分类
      */
-    public static void getChildType(final Handler handler, final Map<String, Object> dataMap) {
+    public  void getChildType(final Handler handler, final Map<String, Object> dataMap) {
         executorService.execute(new Runnable() {
             @Override
             public void run() {
                 Request request = new Request.Builder()
                         .header("Authorization", "Bearer " + dataMap.get("token"))
-                        .url(dataMap.get("url") + "?CourseType=" + dataMap.get("type") +"&MaxResultCount=5&SkipCount=0")
+                        .url(dataMap.get("url") + "?CourseType=" + dataMap.get("type") + "&MaxResultCount=5&SkipCount=0")
                         .build();
 
-                getHttpsClient().newCall(request).enqueue(new Callback() {
+                getClient().newCall(request).enqueue(new Callback() {
                     @Override
                     public void onFailure(Call call, IOException e) {
 
@@ -739,11 +783,11 @@ public class HttpUtils<T> {
 
                     @Override
                     public void onResponse(Call call, Response response) throws IOException {
-                        if (response.isSuccessful()){
+                        if (response.isSuccessful()) {
                             try {
                                 JSONArray items = getItems(response.body().string(), handler);
                                 List<Map<String, Object>> mapList = new ArrayList<>();
-                                for (int i =0; i < items.length(); i++){
+                                for (int i = 0; i < items.length(); i++) {
                                     JSONObject childItem = items.getJSONObject(i);
                                     Map<String, Object> map = new HashMap<>();
                                     map.put("name", childItem.getString("name"));
@@ -768,17 +812,18 @@ public class HttpUtils<T> {
 
     /**
      * 获取课程的最终数据
+     *
      * @param handler
-     * @param map  参数集
-     * @param list 接受结果集
+     * @param map     参数集
+     * @param list    接受结果集
      */
 
-    public static void getInChildData(final Handler handler, final Map<String, Object> map, final List<CourseDataEntity> list){
+    public  void getInChildData(final Handler handler, final Map<String, Object> map, final List<CourseDataEntity> list) {
         executorService.execute(new Runnable() {
             @Override
             public void run() {
                 Map<String, Object> url = new HashMap<>();
-                url.put("CourseType", map.get("CourseType") == null ? "": map.get("CourseType"));
+                url.put("CourseType", map.get("CourseType") == null ? "" : map.get("CourseType"));
                 url.put("CourseSubject", map.get("CourseSubject") == null ? "" : map.get("CourseSubject"));
                 url.put("MediaType", map.get("MediaType") == null ? "" : map.get("MediaType"));
                 url.put("MaxResultCount", 5);
@@ -788,7 +833,7 @@ public class HttpUtils<T> {
                         .header("Authorization", "Bearer " + map.get("token"))
                         .url(map.get("url") + setUrl(url))
                         .build();
-                getHttpsClient().newCall(request).enqueue(new Callback() {
+                getClient().newCall(request).enqueue(new Callback() {
                     @Override
                     public void onFailure(Call call, IOException e) {
                         handler.sendEmptyMessage(404);
@@ -796,10 +841,10 @@ public class HttpUtils<T> {
 
                     @Override
                     public void onResponse(Call call, Response response) throws IOException {
-                        if (response.isSuccessful()){
+                        if (response.isSuccessful()) {
                             try {
                                 JSONArray items = getItems(response.body().string(), handler);
-                                for (int i = 0; i < items.length(); i++){
+                                for (int i = 0; i < items.length(); i++) {
                                     JSONObject childItem = items.getJSONObject(i);
                                     CourseDataEntity courseDataEntity = new CourseDataEntity();
                                     courseDataEntity.setName(childItem.getString("name"));
@@ -812,7 +857,7 @@ public class HttpUtils<T> {
                                     JSONObject courseContent = childItem.getJSONObject("courseContents");
                                     JSONArray childItems = courseContent.getJSONArray("items");
                                     List<ChildContent> chileList = new ArrayList<>();
-                                    for (int j = 0; j < childItems.length(); j++){
+                                    for (int j = 0; j < childItems.length(); j++) {
                                         JSONObject itemss = childItems.getJSONObject(j);
                                         ChildContent content = new ChildContent();
                                         content.setLeaf(itemss.getBoolean("isLeaf"));
@@ -837,53 +882,56 @@ public class HttpUtils<T> {
 
     /**
      * 首页今日打卡的课程
+     *
      * @param handler
-     * @param dataMap 参数集
+     * @param dataMap    参数集
      * @param courseData 数据集
      */
-    public static void getCourseDataList(final Handler handler,  final Map<String, Object> dataMap, final List<HomeCourseEntity> courseData){
+    public void getCourseDataList(final Handler handler, final RequestDataEntity entity, final Map<String, Object> dataMap, final List<HomeCourseEntity> courseData) {
         executorService.execute(new Runnable() {
             @Override
             public void run() {
 
                 final Request request = new Request.Builder()
-                        .header("Authorization", "Bearer " + dataMap.get("token"))
-                        .url(dataMap.get("url").toString() + "?studentId=18&date=2018-08-17")
+                        .header(Authorization, Bearer + entity.getToken())
+                        .url(entity.getUrl())
                         .build();
-                getHttpsClient().newCall(request).enqueue(new Callback() {
+                getClient().newCall(request).enqueue(new Callback() {
                     @Override
                     public void onFailure(Call call, IOException e) {
-                        handler.sendEmptyMessage(404);
+                        Log.e("IOException", e.toString());
+                        handler.sendEmptyMessage(500);
                     }
 
                     @Override
                     public void onResponse(Call call, Response response) throws IOException {
-                        if (response.isSuccessful()){
-                            try{
+                        if (response.isSuccessful()) {
+                            try {
                                 JSONObject json = new JSONObject(response.body().string());
-                                if (TextUtils.isEmpty(json.getString("error"))){
-                                    handler.sendEmptyMessage(404);
-                                    return;
+                                boolean success = json.getBoolean("success");
+                                if (!success) {
+                                    handler.sendEmptyMessage(400);
+                                } else {
+                                    JSONArray result = json.getJSONArray("result");
+                                    for (int i = 0; i < result.length(); i++) {
+                                        JSONObject childResult = result.getJSONObject(i);
+                                        HomeCourseEntity homeCourseEntity = new HomeCourseEntity();
+                                        homeCourseEntity.setBeginTime(childResult.getString("beginTime"));
+                                        homeCourseEntity.setClassId(childResult.getInt("classId"));
+                                        homeCourseEntity.setClassName(childResult.getString("className"));
+                                        homeCourseEntity.setCourseId(childResult.getInt("courseId"));
+                                        homeCourseEntity.setCourseName(childResult.getString("courseName"));
+                                        homeCourseEntity.setCourseInstId(childResult.getInt("courseInstId"));
+                                        homeCourseEntity.setCoverPhoto(childResult.getString("coverPhoto"));
+                                        homeCourseEntity.setSignIn(childResult.getBoolean("isSignIn"));
+                                        homeCourseEntity.setToken(entity.getToken());
+                                        courseData.add(homeCourseEntity);
+                                    }
+                                    handler.sendEmptyMessage(0);
                                 }
-                                JSONArray result = json.getJSONArray("result");
-                                for (int i = 0; i < result.length(); i++){
-                                    JSONObject childResult = result.getJSONObject(i);
-                                    HomeCourseEntity homeCourseEntity = new HomeCourseEntity();
-                                    homeCourseEntity.setBeginTime(childResult.getString("beginTime"));
-                                    homeCourseEntity.setClassId(childResult.getInt("classId"));
-                                    homeCourseEntity.setClassName(childResult.getString("className"));
-                                    homeCourseEntity.setCourseId(childResult.getInt("courseId"));
-                                    homeCourseEntity.setCourseName(childResult.getString("courseName"));
-                                    homeCourseEntity.setCourseInstId(childResult.getInt("courseInstId"));
-                                    homeCourseEntity.setCoverPhoto(childResult.getString("coverPhoto"));
-                                    homeCourseEntity.setSignIn(childResult.getBoolean("isSignIn"));
-                                    homeCourseEntity.setToken(dataMap.get("token").toString());
-                                    courseData.add(homeCourseEntity);
-                                }
-
-                                handler.sendEmptyMessage(0);
-                            }catch (JSONException e){
+                            } catch (JSONException e) {
                                 e.printStackTrace();
+                                handler.sendEmptyMessage(404);
                             }
                         }
                     }
@@ -895,7 +943,7 @@ public class HttpUtils<T> {
     /**
      * 签到
      */
-    public static void postSignIn(final Handler handler, final Map<String, Object> map){
+    public  void postSignIn(final Handler handler, final Map<String, Object> map) {
         executorService.execute(new Runnable() {
             @Override
             public void run() {
@@ -904,28 +952,29 @@ public class HttpUtils<T> {
                     json.put("CourseInstId", map.get("CourseInstId"));
                     RequestBody body = RequestBody.create(JSON, json.toString());
                     Request request = new Request.Builder()
-                            .header("Authorization", "Bearer " + map.get("token"))
+                            .header(Authorization, Bearer + map.get("token"))
                             .url(map.get("url").toString())
                             .post(body)
                             .build();
-                    getHttpsClient().newCall(request).enqueue(new Callback() {
+                    getClient().newCall(request).enqueue(new Callback() {
                         @Override
                         public void onFailure(Call call, IOException e) {
-                            handler.sendEmptyMessage(404);
+                            handler.sendEmptyMessage(500);
                         }
 
                         @Override
                         public void onResponse(Call call, Response response) throws IOException {
-                            if (response.isSuccessful()){
+                            if (response.isSuccessful()) {
                                 try {
                                     JSONObject json = new JSONObject(response.body().string());
-                                    if (TextUtils.isEmpty(json.getString("error"))){
-                                        handler.sendEmptyMessage(404);
+                                    if (TextUtils.isEmpty(json.getString("error"))) {
+                                        handler.sendEmptyMessage(400);
                                         return;
                                     }
                                     handler.sendEmptyMessage(1);
                                 } catch (JSONException e) {
                                     e.printStackTrace();
+                                    handler.sendEmptyMessage(404);
                                 }
                             }
                         }
@@ -940,27 +989,28 @@ public class HttpUtils<T> {
 
     /**
      * 上传图片文件
+     *
      * @param handler
      * @param map
      * @param list
      */
-    public static void postVideoPhoto(final Handler handler, final RequestDataEntity requestDataEntity, final List<Media> list, final List<String> filePathList){
+    public  void postVideoPhoto(final Handler handler, final RequestDataEntity requestDataEntity, final List<Media> list, final List<String> filePathList) {
         executorService.execute(new Runnable() {
             @Override
             public void run() {
                 MultipartBody.Builder builder = new MultipartBody.Builder();
                 builder.setType(MultipartBody.FORM);
-                for (int i = 0; i < list.size()-1; i++){
+                for (int i = 0; i < list.size() - 1; i++) {
                     File file = new File(list.get(i).path);
                     builder.addFormDataPart("file", file.getPath(), RequestBody.create(MediaType.parse("application/octet-stream"), file));
                 }
                 MultipartBody body = builder.build();
                 final Request request = new Request.Builder()
-                        .header(Authorization,  Bearer + requestDataEntity.getToken())
+                        .header(Authorization, Bearer + requestDataEntity.getToken())
                         .url(requestDataEntity.getUrl())
                         .post(body)
                         .build();
-                getHttpsClient().newCall(request).enqueue(new Callback() {
+                getClient().newCall(request).enqueue(new Callback() {
                     @Override
                     public void onFailure(Call call, IOException e) {
                         handler.sendEmptyMessage(404);
@@ -968,11 +1018,11 @@ public class HttpUtils<T> {
 
                     @Override
                     public void onResponse(Call call, Response response) throws IOException {
-                        if (response.isSuccessful()){
+                        if (response.isSuccessful()) {
                             try {
                                 JSONObject jsonObject = new JSONObject(response.body().string());
                                 JSONArray result = jsonObject.getJSONArray("result");
-                                for (int i = 0; i < result.length(); i++){
+                                for (int i = 0; i < result.length(); i++) {
                                     JSONObject childResult = result.getJSONObject(i);
                                     String filePath = childResult.getString("filePath");
                                     filePathList.add(filePath);
@@ -991,10 +1041,11 @@ public class HttpUtils<T> {
 
     /**
      * 上传单个文件
+     *
      * @param handler
      * @param entity
      */
-    public static void postOneFile(final Handler handler, final RequestDataEntity entity){
+    public  void postOneFile(final Handler handler, final RequestDataEntity entity) {
         executorService.execute(new Runnable() {
             @Override
             public void run() {
@@ -1003,7 +1054,7 @@ public class HttpUtils<T> {
                         .header(Authorization, Bearer + entity.getToken())
                         .build();
 
-                getHttpsClient().newCall(request).enqueue(new Callback() {
+                getClient().newCall(request).enqueue(new Callback() {
                     @Override
                     public void onFailure(Call call, IOException e) {
                         handler.sendEmptyMessage(500);
@@ -1011,18 +1062,18 @@ public class HttpUtils<T> {
 
                     @Override
                     public void onResponse(Call call, Response response) throws IOException {
-                        if (response.isSuccessful()){
+                        if (response.isSuccessful()) {
                             try {
                                 JSONObject json = new JSONObject(response.body().string());
                                 boolean success = json.getBoolean("success");
-                                if (success){
+                                if (success) {
                                     JSONObject result = json.getJSONObject("result");
                                     String path = result.getString("filePath");
                                     Message msg = new Message();
                                     msg.what = 0;
                                     msg.obj = path;
                                     handler.sendMessage(msg);
-                                }else
+                                } else
                                     handler.sendEmptyMessage(400);
                             } catch (JSONException e) {
                                 e.printStackTrace();
@@ -1036,11 +1087,12 @@ public class HttpUtils<T> {
 
     /**
      * 修改用户信息
+     *
      * @param handler
      * @param requestDataEntity
      * @param entity
      */
-    public static void updateUserInfor(final Handler handler, final RequestDataEntity requestDataEntity, final PersonalInformationEntity entity){
+    public  void updateUserInfor(final Handler handler, final RequestDataEntity requestDataEntity, final PersonalInformationEntity entity) {
         executorService.execute(new Runnable() {
             @Override
             public void run() {
@@ -1052,7 +1104,7 @@ public class HttpUtils<T> {
                         .url(requestDataEntity.getUrl())
                         .post(body)
                         .build();
-                getHttpsClient().newCall(request).enqueue(new Callback() {
+                getClient().newCall(request).enqueue(new Callback() {
                     @Override
                     public void onFailure(Call call, IOException e) {
                         handler.sendEmptyMessage(500);
@@ -1060,13 +1112,13 @@ public class HttpUtils<T> {
 
                     @Override
                     public void onResponse(Call call, Response response) throws IOException {
-                        if (response.isSuccessful()){
+                        if (response.isSuccessful()) {
                             try {
                                 JSONObject json = new JSONObject(response.body().string());
                                 boolean success = json.getBoolean("success");
-                                if (success){
+                                if (success) {
                                     handler.sendEmptyMessage(1);
-                                }else{
+                                } else {
                                     handler.sendEmptyMessage(400);
                                 }
                             } catch (JSONException e) {
@@ -1081,10 +1133,11 @@ public class HttpUtils<T> {
 
     /**
      * 提交作业
+     *
      * @param
      * @return
      */
-    public static void postHomeWork(final Handler handler, final Map<String, Object> dataMap, final List<Map<String, Object>> filePathList){
+    public  void postHomeWork(final Handler handler, final Map<String, Object> dataMap, final List<Map<String, Object>> filePathList) {
         executorService.execute(new Runnable() {
             @Override
             public void run() {
@@ -1096,7 +1149,7 @@ public class HttpUtils<T> {
                     workEntity.setUserId(Integer.parseInt(dataMap.get("userId").toString()));
                     workEntity.setRemark(dataMap.get("remark").toString());
                     List<HandWorkEntity.WorkItems> object = new ArrayList<>();
-                    for (int i = 0; i < filePathList.size(); i++){
+                    for (int i = 0; i < filePathList.size(); i++) {
                         HandWorkEntity.WorkItems workItems = new HandWorkEntity.WorkItems();
                         workItems.setPath(filePathList.get(i).get("path").toString());
                         workItems.setType((int) filePathList.get(i).get("type"));
@@ -1111,7 +1164,7 @@ public class HttpUtils<T> {
                             .post(body)
                             .build();
 
-                    getHttpsClient().newCall(request).enqueue(new Callback() {
+                    getClient().newCall(request).enqueue(new Callback() {
                         @Override
                         public void onFailure(Call call, IOException e) {
                             Log.e("result", "请求失败");
@@ -1119,7 +1172,7 @@ public class HttpUtils<T> {
 
                         @Override
                         public void onResponse(Call call, Response response) throws IOException {
-                            if (response.isSuccessful()){
+                            if (response.isSuccessful()) {
                                 Log.e("result", "上传成功");
                             }
                         }
@@ -1133,10 +1186,11 @@ public class HttpUtils<T> {
 
     /**
      * 提交请假
+     *
      * @param handler
      * @param dataEntity 请求所需要的参数
      */
-    public static void postLeave(final Handler handler, final RequestDataEntity dataEntity){
+    public  void postLeave(final Handler handler, final RequestDataEntity dataEntity) {
         executorService.execute(new Runnable() {
             @Override
             public void run() {
@@ -1151,7 +1205,7 @@ public class HttpUtils<T> {
                         .post(body)
                         .build();
 
-                getHttpsClient().newCall(request).enqueue(new Callback() {
+                getClient().newCall(request).enqueue(new Callback() {
                     @Override
                     public void onFailure(Call call, IOException e) {
                         handler.sendEmptyMessage(500);
@@ -1159,9 +1213,9 @@ public class HttpUtils<T> {
 
                     @Override
                     public void onResponse(Call call, Response response) throws IOException {
-                        if (response.isSuccessful()){
+                        if (response.isSuccessful()) {
                             handler.sendEmptyMessage(0);
-                        }else handler.sendEmptyMessage(404);
+                        } else handler.sendEmptyMessage(404);
                     }
                 });
             }
@@ -1170,10 +1224,11 @@ public class HttpUtils<T> {
 
     /**
      * 检索专题
+     *
      * @param handler
      * @param dataEntity
      */
-    public static void getTopics(final Handler handler, final RequestDataEntity dataEntity, final List<TopiceHttpResultEntity> resultList){
+    public  void getTopics(final Handler handler, final RequestDataEntity dataEntity, final List<TopiceHttpResultEntity> resultList) {
         executorService.execute(new Runnable() {
             @Override
             public void run() {
@@ -1182,7 +1237,7 @@ public class HttpUtils<T> {
                         .url(dataEntity.getUrl() /*+ "?MaxResultCount=5&SkipCount=0"*/)
                         .build();
 
-                getHttpsClient().newCall(request).enqueue(new Callback() {
+                getClient().newCall(request).enqueue(new Callback() {
                     @Override
                     public void onFailure(Call call, IOException e) {
 
@@ -1190,13 +1245,13 @@ public class HttpUtils<T> {
 
                     @Override
                     public void onResponse(Call call, Response response) throws IOException {
-                        if (response.isSuccessful()){
+                        if (response.isSuccessful()) {
                             try {
                                 String data = response.body().string();
                                 Log.e("data", data);
                                 JSONArray items = getItems(data, handler);
                                 Gson gson = new Gson();
-                                for (int i = 0; i < items.length(); i++){
+                                for (int i = 0; i < items.length(); i++) {
                                     JSONObject childItem = items.getJSONObject(i);
                                     TopiceHttpResultEntity entity = new TopiceHttpResultEntity();//gson.fromJson(childItem.toString(), new TypeToken<TopiceHttpResultEntity>(){}.getType());
                                     entity.setCampusId(String.valueOf(childItem.get("campusId")));
@@ -1205,7 +1260,7 @@ public class HttpUtils<T> {
                                     entity.setCoverType(childItem.getString("coverType"));
                                     List<String> imgList = new ArrayList<>();
                                     JSONArray paths = childItem.getJSONArray("coverImgs");
-                                    for (int j = 0; j < paths.length(); j++){
+                                    for (int j = 0; j < paths.length(); j++) {
                                         imgList.add(paths.get(j).toString());
                                     }
                                     entity.setCoverImgs(imgList);
@@ -1239,9 +1294,10 @@ public class HttpUtils<T> {
      * target：新闻或专题中文章id；
      * targetType：新闻：0；专题：1；评论：2； 回复：3；
      * level：层级
+     *
      * @param handler
      */
-    public static void postComment(final Handler handler, final CPRCDataEntity cprcDataEntity){
+    public  void postComment(final Handler handler, final CPRCDataEntity cprcDataEntity) {
         executorService.execute(new Runnable() {
             @Override
             public void run() {
@@ -1253,7 +1309,7 @@ public class HttpUtils<T> {
                         .post(body)
                         .build();
 
-                getHttpsClient().newCall(request).enqueue(new Callback() {
+                getClient().newCall(request).enqueue(new Callback() {
                     @Override
                     public void onFailure(Call call, IOException e) {
                         handler.sendEmptyMessage(500);
@@ -1261,12 +1317,13 @@ public class HttpUtils<T> {
 
                     @Override
                     public void onResponse(Call call, Response response) throws IOException {
-                        if (response.isSuccessful()){
+                        if (response.isSuccessful()) {
                             try {
                                 JSONObject json = new JSONObject(response.body().string());
                                 JSONObject result = json.getJSONObject("result");
                                 Message msg = new Message();
-                                if (cprcDataEntity.getType() == 1 && cprcDataEntity.getTargetType() == 3) msg.what = 2;
+                                if (cprcDataEntity.getType() == 1 && cprcDataEntity.getTargetType() == 3)
+                                    msg.what = 2;
                                 else msg.what = cprcDataEntity.getType();
                                 msg.obj = result;
                                 handler.sendMessage(msg);
@@ -1283,10 +1340,11 @@ public class HttpUtils<T> {
 
     /**
      * 获取全部评论或者回复
+     *
      * @param handler
      * @param cpc
      */
-    public static void getCommentAll(final Handler handler, final GetAllCPC cpc){
+    public  void getCommentAll(final Handler handler, final GetAllCPC cpc) {
         executorService.execute(new Runnable() {
             @Override
             public void run() {
@@ -1303,14 +1361,14 @@ public class HttpUtils<T> {
 
                 String json = new Gson().toJson(cpc);
 
-               RequestBody body = RequestBody.create(JSON, json);
+                RequestBody body = RequestBody.create(JSON, json);
 
 
                 Request request = new Request.Builder()
                         .header(Authorization, Bearer + cpc.getToken())
                         .url(HttpEntity.MAIN_URL + HttpEntity.GET_COMMENT_ALL + "?Type=" + cpc.getType())
                         .build();
-                getHttpsClient().newCall(request).enqueue(new Callback() {
+                getClient().newCall(request).enqueue(new Callback() {
                     @Override
                     public void onFailure(Call call, IOException e) {
 
@@ -1318,7 +1376,7 @@ public class HttpUtils<T> {
 
                     @Override
                     public void onResponse(Call call, Response response) throws IOException {
-                        if (response.isSuccessful()){
+                        if (response.isSuccessful()) {
                             try {
                                 JSONObject json = new JSONObject(response.body().string());
                                 JSONObject result = json.getJSONObject("result");
@@ -1338,11 +1396,12 @@ public class HttpUtils<T> {
 
     /**
      * 更新评论、赞、回复内容状态
+     *
      * @param handler
      * @param id
      * @param token
      */
-    public static void putAllStatue(final Handler handler, final int id, final String token){
+    public  void putAllStatue(final Handler handler, final int id, final String token) {
         executorService.execute(new Runnable() {
             @Override
             public void run() {
@@ -1356,7 +1415,7 @@ public class HttpUtils<T> {
                             .url(HttpEntity.MAIN_URL + HttpEntity.DELETE_COMMENT_CREATE)
                             .delete(body)
                             .build();
-                    getHttpsClient().newCall(request).enqueue(new Callback() {
+                    getClient().newCall(request).enqueue(new Callback() {
                         @Override
                         public void onFailure(Call call, IOException e) {
 
@@ -1364,12 +1423,12 @@ public class HttpUtils<T> {
 
                         @Override
                         public void onResponse(Call call, Response response) throws IOException {
-                            if (response.isSuccessful()){
+                            if (response.isSuccessful()) {
                                 handler.sendEmptyMessage(30);
                             }
                         }
                     });
-                }catch (JSONException e){
+                } catch (JSONException e) {
                     e.printStackTrace();
                 }
             }
@@ -1378,10 +1437,11 @@ public class HttpUtils<T> {
 
     /**
      * 获取评论
+     *
      * @param handler
      * @param entity
      */
-    public static void getMyCommentOrPraise(final Handler handler, final RequestDataEntity entity){
+    public  void getMyCommentOrPraise(final Handler handler, final RequestDataEntity entity) {
         executorService.execute(new Runnable() {
             @Override
             public void run() {
@@ -1390,22 +1450,24 @@ public class HttpUtils<T> {
                         .header(Authorization, Bearer + entity.getToken())
                         .build();
 
-                getHttpsClient().newCall(request).enqueue(new Callback() {
+                getClient().newCall(request).enqueue(new Callback() {
                     @Override
                     public void onFailure(Call call, IOException e) {
-
+                        handler.sendEmptyMessage(500);
                     }
 
                     @Override
                     public void onResponse(Call call, Response response) throws IOException {
-                        if (response.isSuccessful()){
+                        if (response.isSuccessful()) {
                             try {
-                                Message msg = new Message();
-                                msg.what = 30;
-                                msg.obj = getItems(response.body().string(), handler);
-                                handler.sendMessage(msg);
+                                JSONArray items = getItems(response.body().string(), handler);
+                                Message message = new Message();
+                                message.what = 30;
+                                message.obj = items;
+                                handler.sendMessage(message);
                             } catch (JSONException e) {
                                 e.printStackTrace();
+                                handler.sendEmptyMessage(404);
                             }
                         }
                     }
@@ -1414,7 +1476,7 @@ public class HttpUtils<T> {
         });
     }
 
-    public static void getMyCollection(final Handler handler, final RequestDataEntity entity){
+    public  void getMyCollection(final Handler handler, final RequestDataEntity entity) {
         executorService.execute(new Runnable() {
             @Override
             public void run() {
@@ -1422,7 +1484,7 @@ public class HttpUtils<T> {
                         .url(entity.getUrl() + "?userId=" + entity.getUserId() + "&targetType=" + entity.getType())
                         .header(Authorization, Bearer + entity.getToken())
                         .build();
-                getHttpsClient().newCall(request).enqueue(new Callback() {
+                getClient().newCall(request).enqueue(new Callback() {
                     @Override
                     public void onFailure(@NonNull Call call, @NonNull IOException e) {
                         handler.sendEmptyMessage(500);
@@ -1430,14 +1492,14 @@ public class HttpUtils<T> {
 
                     @Override
                     public void onResponse(@NonNull Call call, @NonNull Response response) throws IOException {
-                        if (response.isSuccessful()){
-                            try{
+                        if (response.isSuccessful()) {
+                            try {
                                 JSONArray items = getItems(response.body().string(), handler);
                                 Message msg = new Message();
                                 msg.what = 10;
                                 msg.obj = items;
                                 handler.sendMessage(msg);
-                            }catch (JSONException e){
+                            } catch (JSONException e) {
                                 e.printStackTrace();
                             }
                         }
@@ -1449,47 +1511,19 @@ public class HttpUtils<T> {
 
     /**
      * 获取用户未读信息
+     *
      * @param handler
      * @param requestDataEntity 请求体
      */
-    public static void getUserUnreadNotification(final Handler handler, final RequestDataEntity requestDataEntity){
-        executorService.execute(new Runnable() {
-            @Override
-            public void run() {
-                Request request = new Request.Builder()
-                        .url(requestDataEntity.getUrl() + "?tenantId=" + requestDataEntity.getTenantId() + "&userId=" + requestDataEntity.getUserId())
-                        .header(Authorization, Bearer + requestDataEntity.getToken())
-                        .build();
-                getHttpsClient().newCall(request).enqueue(new Callback() {
-                    @Override
-                    public void onFailure(Call call, IOException e) {
-
-                    }
-
-                    @Override
-                    public void onResponse(Call call, Response response) throws IOException {
-                        if (response.isSuccessful()){
-                            Log.e("Notification", response.body().string());
-                        }
-                    }
-                });
-            }
-        });
-    }
-
-    /**
-     * 检索课程
-     */
-    public void getCouseAll(final Handler handler, final RequestDataEntity entity, final Map<String, Object> dataMap, final List<T> dataList){
+    public  void getUserUnreadNotification(final Handler handler, final RequestDataEntity requestDataEntity, final List<SystemMessageEntity> dataList) {
         executorService.execute(new Runnable() {
             @Override
             public void run() {
                 final Request request = new Request.Builder()
-                        .header(Authorization, Bearer + entity.getToken())
-                        .url(entity.getUrl() + setUrl(dataMap))
+                        .url(requestDataEntity.getUrl() + "?tenantId=" + requestDataEntity.getTenantId() + "&userId=" + requestDataEntity.getUserId() + "&notificationName=" + requestDataEntity.getMsg())
+                        .header(Authorization, Bearer + requestDataEntity.getToken())
                         .build();
-
-                getHttpsClient().newCall(request).enqueue(new Callback() {
+                getClient().newCall(request).enqueue(new Callback() {
                     @Override
                     public void onFailure(Call call, IOException e) {
                         handler.sendEmptyMessage(500);
@@ -1497,72 +1531,34 @@ public class HttpUtils<T> {
 
                     @Override
                     public void onResponse(Call call, Response response) throws IOException {
-                        if (response.isSuccessful()){
+                        if (response.isSuccessful()) {
+                            //Log.e("Notification", response.body().string());
                             try {
                                 JSONObject json = new JSONObject(response.body().string());
                                 boolean success = json.getBoolean("success");
-                                if (success){
-                                    JSONArray result = json.getJSONArray("result");
-                                    for (int i = 0; i < result.length(); i++){
-                                        JSONObject item = result.getJSONObject(i);
-                                        CourseEntity courseEntity = new Gson().fromJson(item.toString(), new TypeToken<CourseEntity>(){}.getType());
-                                        dataList.add((T) courseEntity);
-                                    }
-                                    handler.sendEmptyMessage(0);
-                                }else{
-                                    handler.sendEmptyMessage(400);
-                                }
-                            } catch (JSONException e) {
-                                e.printStackTrace();
-                            }
-                        }
-                    }
-                });
-            }
-        });
-    }
-
-    /**
-     * 获取学习轨迹
-     * @param request
-     * @return
-     */
-    public static void getLearnTacks(final Handler handler, final RequestDataEntity requestDataEntity, final Map<String, Object> map, final List<LearnTrackEntity> dataList){
-        executorService.execute(new Runnable() {
-            @Override
-            public void run() {
-                Request request = new Request.Builder()
-                        .header(Authorization, Bearer + requestDataEntity.getToken())
-                        .url(requestDataEntity.getUrl() + setUrl(map))
-                        .build();
-                getHttpsClient().newCall(request).enqueue(new Callback() {
-                    @Override
-                    public void onFailure(Call call, IOException e) {
-                        handler.sendEmptyMessage(500);
-                    }
-
-                    @Override
-                    public void onResponse(Call call, Response response) throws IOException {
-                        if (response.isSuccessful()){
-                            try {
-                                JSONObject json = new JSONObject(response.body().string());
-                                boolean success =json.getBoolean("success");
-                                if (success){
+                                if (success) {
                                     JSONObject result = json.getJSONObject("result");
                                     JSONArray items = result.getJSONArray("items");
-                                    for (int i = 0; i < items.length(); i++){
+                                    for (int i = 0; i < items.length(); i++) {
                                         JSONObject item = items.getJSONObject(i);
-                                        LearnTrackEntity trackEntity =
-                                                new Gson().fromJson(item.toString(), new TypeToken<LearnTrackEntity>(){}.getType());
-                                        dataList.add(trackEntity);
+                                        SystemMessageEntity messageEntity =
+                                                new Gson().fromJson(item.toString(), new TypeToken<SystemMessageEntity>() {
+                                                }.getType());
+                                        if (!isEmpty(item.getString("cover")))
+                                            messageEntity.setItemType(2);
+                                        else messageEntity.setItemType(3);
+                                        dataList.add(messageEntity);
                                     }
                                     handler.sendEmptyMessage(0);
-                                }else{
+                                } else {
                                     handler.sendEmptyMessage(400);
                                 }
                             } catch (JSONException e) {
                                 e.printStackTrace();
+                                handler.sendEmptyMessage(404);
                             }
+                        } else {
+                            handler.sendEmptyMessage(500);
                         }
                     }
                 });
@@ -1571,74 +1567,24 @@ public class HttpUtils<T> {
     }
 
     /**
-     * 获取校长电话
+     * 将消息更改为已读
+     *
      * @param handler
      * @param requestDataEntity
      */
-
-    public static void getSchoolSetting(final Handler handler, final RequestDataEntity requestDataEntity){
-            executorService.execute(new Runnable() {
-                @Override
-                public void run() {
-                    Request request = new Request.Builder()
-                            .header(Authorization, Bearer + requestDataEntity.getToken())
-                            .url(requestDataEntity.getUrl())
-                            .build();
-                    getHttpsClient().newCall(request).enqueue(new Callback() {
-                        @Override
-                        public void onFailure(Call call, IOException e) {
-                            handler.sendEmptyMessage(500);
-                        }
-
-                        @Override
-                        public void onResponse(Call call, Response response) throws IOException {
-                            if (response.isSuccessful()){
-                                try {
-                                    JSONObject json = new JSONObject(response.body().string());
-                                    boolean success = json.getBoolean("success");
-                                    if (success){
-                                        JSONObject result = json.getJSONObject("result");
-                                        GetSchoolSettingEntity settingEntity =
-                                                new Gson().fromJson(result.toString(), new TypeToken<GetSchoolSettingEntity>(){}.getType());
-                                        Message msg = new Message();
-                                        msg.what = 10;
-                                        msg.obj = settingEntity;
-                                        handler.sendMessage(msg);
-                                    }else{
-                                        handler.sendEmptyMessage(400);
-                                    }
-                                } catch (JSONException e) {
-                                    e.printStackTrace();
-                                    handler.sendEmptyMessage(404);
-                                }
-
-                            }
-                        }
-                    });
-                }
-            });
-    }
-
-    /**
-     * 切换学校
-     * @param request
-     * @return
-     */
-
-    public static void switchCampusId(final Handler handler, final RequestDataEntity requestDataEntity){
+    public  void setNoticeReader(final Handler handler, final RequestDataEntity requestDataEntity, final Map<String, Object> dataMap) {
         executorService.execute(new Runnable() {
             @Override
             public void run() {
-                FormBody body = new FormBody.Builder()
-                        .add("tenantId", String.valueOf(requestDataEntity.getTenantId()))
-                        .add("campusId", String.valueOf(requestDataEntity.getCampusId()))
-                        .build();
+                String data = new Gson().toJson(dataMap);
+                RequestBody body = RequestBody.create(JSON, data);
+
                 Request request = new Request.Builder()
                         .header(Authorization, Bearer + requestDataEntity.getToken())
                         .url(requestDataEntity.getUrl())
                         .post(body)
                         .build();
-                getHttpsClient().newCall(request).enqueue(new Callback() {
+                getClient().newCall(request).enqueue(new Callback() {
                     @Override
                     public void onFailure(Call call, IOException e) {
                         handler.sendEmptyMessage(500);
@@ -1646,17 +1592,13 @@ public class HttpUtils<T> {
 
                     @Override
                     public void onResponse(Call call, Response response) throws IOException {
-                        if (response.isSuccessful()){
+                        if (response.isSuccessful()) {
                             try {
                                 JSONObject json = new JSONObject(response.body().string());
                                 boolean success = json.getBoolean("success");
-                                if (success){
-                                    JSONObject result = json.getJSONObject("result");
-                                    Message msg = new Message();
-                                    msg.what = 20;
-                                    msg.obj = result;
-                                    handler.sendMessage(msg);
-                                }else{
+                                if (success) {
+                                    handler.sendEmptyMessage(200);
+                                } else {
                                     handler.sendEmptyMessage(400);
                                 }
                             } catch (JSONException e) {
@@ -1671,20 +1613,21 @@ public class HttpUtils<T> {
     }
 
     /**
-     * 获取用户的未读数量
+     * 获取版本号
+     *
      * @param handler
-     * @param entity
+     * @param requestDataEntity
+     * @param dataMap
      */
-    public static void getNotificationCount(final Handler handler, final RequestDataEntity entity, final Map<String, Object> map){
+    public  void checkVersion(final Handler handler, final RequestDataEntity requestDataEntity, final Map<String, Object> dataMap) {
         executorService.execute(new Runnable() {
             @Override
             public void run() {
-
                 Request request = new Request.Builder()
-                        .url(entity.getUrl() + setUrl(map))
-                        .header(Authorization, Bearer + entity.getToken())
+                        .url(requestDataEntity.getUrl() + setUrl(dataMap))
+                        .header(Authorization, Bearer + requestDataEntity.getToken())
                         .build();
-                getHttpsClient().newCall(request).enqueue(new Callback() {
+                getClient().newCall(request).enqueue(new Callback() {
                     @Override
                     public void onFailure(Call call, IOException e) {
                         handler.sendEmptyMessage(500);
@@ -1692,16 +1635,283 @@ public class HttpUtils<T> {
 
                     @Override
                     public void onResponse(Call call, Response response) throws IOException {
-                        if (response.isSuccessful()){
+                        if (response.isSuccessful()) {
                             try {
                                 JSONObject json = new JSONObject(response.body().string());
                                 boolean success = json.getBoolean("success");
-                                if (success){
+                                if (success) {
+                                    JSONObject result = json.getJSONObject("result");
+                                    JSONArray items = result.getJSONArray("items");
+                                    List<VersionEntity> versionList = new ArrayList<>();
+                                    for (int i = 0; i < items.length(); i++) {
+                                        JSONObject item = items.getJSONObject(i);
+                                        VersionEntity versionEntity =
+                                                new Gson().fromJson(item.toString(), new TypeToken<VersionEntity>() {
+                                                }.getType());
+                                        versionList.add(versionEntity);
+                                    }
+                                    if (versionList.size() <= 0) {
+                                        return;
+                                    }
                                     Message message = new Message();
-                                    message.obj = json.getInt("result");
-                                    message.what = 30;
+                                    message.obj = versionList.get(0);
+                                    message.what = 0;
                                     handler.sendMessage(message);
-                                }else{
+                                } else {
+                                    handler.sendEmptyMessage(400);
+                                }
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                                handler.sendEmptyMessage(404);
+                            }
+                        }
+                    }
+                });
+            }
+        });
+    }
+
+    /**
+     * 检索课程
+     */
+    public void getCouseAll(final Handler handler, final RequestDataEntity entity, final Map<String, Object> dataMap, final List<T> dataList) {
+        executorService.execute(new Runnable() {
+            @Override
+            public void run() {
+                final Request request = new Request.Builder()
+                        .header(Authorization, Bearer + entity.getToken())
+                        .url(entity.getUrl() + setUrl(dataMap))
+                        .build();
+
+                getClient().newCall(request).enqueue(new Callback() {
+                    @Override
+                    public void onFailure(Call call, IOException e) {
+                        handler.sendEmptyMessage(500);
+                    }
+
+                    @Override
+                    public void onResponse(Call call, Response response) throws IOException {
+                        if (response.isSuccessful()) {
+                            try {
+                                JSONObject json = new JSONObject(response.body().string());
+                                boolean success = json.getBoolean("success");
+                                if (success) {
+                                    JSONArray result = json.getJSONArray("result");
+                                    for (int i = 0; i < result.length(); i++) {
+                                        JSONObject item = result.getJSONObject(i);
+                                        CourseEntity courseEntity = new Gson().fromJson(item.toString(), new TypeToken<CourseEntity>() {
+                                        }.getType());
+                                        dataList.add((T) courseEntity);
+                                    }
+                                    handler.sendEmptyMessage(0);
+                                } else {
+                                    handler.sendEmptyMessage(400);
+                                }
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    }
+                });
+            }
+        });
+    }
+
+    /**
+     * 获取学习轨迹
+     *
+     * @param request
+     * @return
+     */
+    public  void getLearnTacks(final Handler handler, final RequestDataEntity requestDataEntity, final Map<String, Object> map, final List<LearnTrackEntity> dataList) {
+        executorService.execute(new Runnable() {
+            @Override
+            public void run() {
+                Request request = new Request.Builder()
+                        .header(Authorization, Bearer + requestDataEntity.getToken())
+                        .url(requestDataEntity.getUrl() + setUrl(map))
+                        .build();
+                getClient().newCall(request).enqueue(new Callback() {
+                    @Override
+                    public void onFailure(Call call, IOException e) {
+                        handler.sendEmptyMessage(500);
+                    }
+
+                    @Override
+                    public void onResponse(Call call, Response response) throws IOException {
+                        if (response.isSuccessful()) {
+                            try {
+                                JSONObject json = new JSONObject(response.body().string());
+                                boolean success = json.getBoolean("success");
+                                if (success) {
+                                    JSONObject result = json.getJSONObject("result");
+                                    JSONArray items = result.getJSONArray("items");
+                                    for (int i = 0; i < items.length(); i++) {
+                                        JSONObject item = items.getJSONObject(i);
+                                        LearnTrackEntity trackEntity =
+                                                new Gson().fromJson(item.toString(), new TypeToken<LearnTrackEntity>() {
+                                                }.getType());
+                                        dataList.add(trackEntity);
+                                    }
+                                    handler.sendEmptyMessage(0);
+                                } else {
+                                    handler.sendEmptyMessage(400);
+                                }
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                                handler.sendEmptyMessage(404);
+                            }
+                        }
+                    }
+                });
+            }
+        });
+    }
+
+    /**
+     * 获取请假
+     *
+     * @param handler
+     * @param requestDataEntity
+     * @param dataMap
+     * @param dataList
+     */
+    public  void getLeaveRecord(final Handler handler, final RequestDataEntity requestDataEntity, final Map<String, Object> dataMap, final List<LeaveRecordEntity> dataList) {
+        executorService.execute(new Runnable() {
+            @Override
+            public void run() {
+                final Request request = new Request.Builder()
+                        .url(requestDataEntity.getUrl() + setUrl(dataMap))
+                        .header(Authorization, Bearer + requestDataEntity.getToken())
+                        .build();
+                getClient().newCall(request).enqueue(new Callback() {
+                    @Override
+                    public void onFailure(Call call, IOException e) {
+                        handler.sendEmptyMessage(500);
+                    }
+
+                    @Override
+                    public void onResponse(Call call, Response response) throws IOException {
+                        if (response.isSuccessful()) {
+                            try {
+                                JSONObject json = new JSONObject(response.body().string());
+                                boolean success = json.getBoolean("success");
+                                if (success) {
+                                    JSONObject result = json.getJSONObject("result");
+                                    JSONArray itmes = result.getJSONArray("items");
+                                    for (int i = 0; i < itmes.length(); i++) {
+                                        JSONObject item = itmes.getJSONObject(i);
+                                        LeaveRecordEntity leaveRecordEntity =
+                                                new Gson().fromJson(item.toString(), new TypeToken<LeaveRecordEntity>() {
+                                                }.getType());
+                                        dataList.add(leaveRecordEntity);
+                                        handler.sendEmptyMessage(1);
+                                    }
+                                } else {
+                                    handler.sendEmptyMessage(400);
+                                }
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                                handler.sendEmptyMessage(404);
+                            }
+                        }
+                    }
+                });
+            }
+        });
+
+    }
+
+    /**
+     * 获取校长电话
+     *
+     * @param handler
+     * @param requestDataEntity
+     */
+
+    public  void getSchoolSetting(final Handler handler, final RequestDataEntity requestDataEntity) {
+        executorService.execute(new Runnable() {
+            @Override
+            public void run() {
+                Request request = new Request.Builder()
+                        .header(Authorization, Bearer + requestDataEntity.getToken())
+                        .url(requestDataEntity.getUrl())
+                        .build();
+                getClient().newCall(request).enqueue(new Callback() {
+                    @Override
+                    public void onFailure(Call call, IOException e) {
+                        handler.sendEmptyMessage(500);
+                    }
+
+                    @Override
+                    public void onResponse(Call call, Response response) throws IOException {
+                        if (response.isSuccessful()) {
+                            try {
+                                JSONObject json = new JSONObject(response.body().string());
+                                boolean success = json.getBoolean("success");
+                                if (success) {
+                                    JSONObject result = json.getJSONObject("result");
+                                    GetSchoolSettingEntity settingEntity =
+                                            new Gson().fromJson(result.toString(), new TypeToken<GetSchoolSettingEntity>() {
+                                            }.getType());
+                                    Message msg = new Message();
+                                    msg.what = 10;
+                                    msg.obj = settingEntity;
+                                    handler.sendMessage(msg);
+                                } else {
+                                    handler.sendEmptyMessage(400);
+                                }
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                                handler.sendEmptyMessage(404);
+                            }
+
+                        }
+                    }
+                });
+            }
+        });
+    }
+
+    /**
+     * 切换学校
+     *
+     * @param request
+     * @return
+     */
+
+    public  void switchCampusId(final Handler handler, final RequestDataEntity requestDataEntity) {
+        executorService.execute(new Runnable() {
+            @Override
+            public void run() {
+                FormBody body = new FormBody.Builder()
+                        .add("tenantId", String.valueOf(requestDataEntity.getTenantId()))
+                        .add("campusId", String.valueOf(requestDataEntity.getCampusId()))
+                        .build();
+                Request request = new Request.Builder()
+                        .header(Authorization, Bearer + requestDataEntity.getToken())
+                        .url(requestDataEntity.getUrl())
+                        .post(body)
+                        .build();
+                getClient().newCall(request).enqueue(new Callback() {
+                    @Override
+                    public void onFailure(Call call, IOException e) {
+                        handler.sendEmptyMessage(500);
+                    }
+
+                    @Override
+                    public void onResponse(Call call, Response response) throws IOException {
+                        if (response.isSuccessful()) {
+                            try {
+                                JSONObject json = new JSONObject(response.body().string());
+                                boolean success = json.getBoolean("success");
+                                if (success) {
+                                    JSONObject result = json.getJSONObject("result");
+                                    Message msg = new Message();
+                                    msg.what = 20;
+                                    msg.obj = result;
+                                    handler.sendMessage(msg);
+                                } else {
                                     handler.sendEmptyMessage(400);
                                 }
                             } catch (JSONException e) {
@@ -1717,11 +1927,12 @@ public class HttpUtils<T> {
 
     /**
      * 添加地址选择
+     *
      * @param handler
      * @param entity
      * @param dataList
      */
-    public static void getGeoArea(final Handler handler, final RequestDataEntity entity, final List<GeoAreaEntity> dataList){
+    public  void getGeoArea(final Handler handler, final RequestDataEntity entity, final List<GeoAreaEntity> dataList) {
         executorService.execute(new Runnable() {
             @Override
             public void run() {
@@ -1729,7 +1940,7 @@ public class HttpUtils<T> {
                         .header(Authorization, Bearer + entity.getToken())
                         .url(entity.getUrl() + "?ParentId=" + entity.getCode())
                         .build();
-                getHttpsClient().newCall(request).enqueue(new Callback() {
+                getClient().newCall(request).enqueue(new Callback() {
                     @Override
                     public void onFailure(Call call, IOException e) {
                         handler.sendEmptyMessage(500);
@@ -1737,29 +1948,30 @@ public class HttpUtils<T> {
 
                     @Override
                     public void onResponse(Call call, Response response) throws IOException {
-                        if (response.isSuccessful()){
+                        if (response.isSuccessful()) {
                             try {
                                 JSONObject json = new JSONObject(response.body().string());
                                 boolean success = json.getBoolean("success");
-                                if (success){
+                                if (success) {
                                     if (dataList.size() > 0) dataList.clear();
                                     JSONObject result = json.getJSONObject("result");
                                     JSONArray array = result.getJSONArray("items");
-                                    for (int i = 0; i < array.length(); i++){
+                                    for (int i = 0; i < array.length(); i++) {
                                         JSONObject item = array.getJSONObject(i);
                                         GeoAreaEntity geoAreaEntity = new Gson().fromJson(item.toString(),
-                                                new TypeToken<GeoAreaEntity>(){}.getType());
+                                                new TypeToken<GeoAreaEntity>() {
+                                                }.getType());
                                         dataList.add(geoAreaEntity);
                                     }
                                     handler.sendEmptyMessage(1);
-                                }else{
+                                } else {
                                     handler.sendEmptyMessage(400);
                                 }
                             } catch (JSONException e) {
                                 e.printStackTrace();
                                 handler.sendEmptyMessage(404);
                             }
-                        }else{
+                        } else {
                             handler.sendEmptyMessage(500);
                         }
                     }
@@ -1768,7 +1980,66 @@ public class HttpUtils<T> {
         });
     }
 
-    public static String execute(Request request){
+    /**
+     * 获取用户的未读数量
+     *
+     * @param handler
+     * @param entity
+     */
+    public  void getNotificationCount(final Handler handler, final RequestDataEntity entity, final Map<String, Object> map) {
+        executorService.execute(new Runnable() {
+            @Override
+            public void run() {
+
+                Request request = new Request.Builder()
+                        .url(entity.getUrl() + setUrl(map))
+                        .header(Authorization, Bearer + entity.getToken())
+                        .build();
+                getClient().newCall(request).enqueue(new Callback() {
+                    @Override
+                    public void onFailure(Call call, IOException e) {
+                        handler.sendEmptyMessage(500);
+                    }
+
+                    @Override
+                    public void onResponse(Call call, Response response) throws IOException {
+                        if (response.isSuccessful()) {
+                            try {
+                                JSONObject json = new JSONObject(response.body().string());
+                                boolean success = json.getBoolean("success");
+                                if (success) {
+                                    Message message = new Message();
+                                    message.obj = json.getInt("result");
+                                    switch (entity.getType()) {
+                                        case 1://系统信息
+                                            message.what = 31;
+                                            break;
+                                        case 2://上课提醒
+                                            message.what = 32;
+                                            break;
+                                        case 3://学校通知
+                                            message.what = 33;
+                                            break;
+                                        default:
+                                            message.what = 30;
+                                            break;
+                                    }
+                                    handler.sendMessage(message);
+                                } else {
+                                    handler.sendEmptyMessage(400);
+                                }
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                                handler.sendEmptyMessage(404);
+                            }
+                        }
+                    }
+                });
+            }
+        });
+    }
+
+    public static String execute(Request request) {
         try {
             OkHttpClient client = new OkHttpClient();
             Response response = client.newCall(request).execute();
@@ -1781,66 +2052,92 @@ public class HttpUtils<T> {
         return "{\"error\":\"fail\"}";
     }
 
-    public Type getType(){
-        TypeToken<T> typeToken = new TypeToken<T>(){};
+    public Type getType() {
+        TypeToken<T> typeToken = new TypeToken<T>() {
+        };
         return typeToken.getType();
     }
 
     /**
      * 公共解析返回结果
-     * @param body 获取的结果
+     *
+     * @param body    获取的结果
      * @param handler handler
      * @return JSONArray
      * @throws JSONException JSONException
      */
-    public static JSONArray getItems(String body, Handler handler) throws JSONException{
+    public static JSONArray getItems(String body, Handler handler) throws JSONException {
         JSONObject json = new JSONObject(body);
         JSONObject result = json.getJSONObject("result");
-        if (TextUtils.isEmpty(json.getString("error"))) {handler.sendEmptyMessage(404); return null;}
+        if (TextUtils.isEmpty(json.getString("error"))) {
+            handler.sendEmptyMessage(400);
+            return null;
+        }
         JSONArray items = result.getJSONArray("items");
         return items;
     }
 
     /**
      * 为get请求拼接参数
+     *
      * @param map
      * @return
      */
-    public static String setUrl(Map<String, Object> map){
+    public static String setUrl(Map<String, Object> map) {
         StringBuilder builder = new StringBuilder("?");
         Iterator iterator = map.keySet().iterator();
-        while (iterator.hasNext()){
-            String key =(String) iterator.next();
+        while (iterator.hasNext()) {
+            String key = (String) iterator.next();
             builder.append(key).append("=").append(map.get(key)).append("&");
         }
         String s = builder.toString();
-        return s.substring(0, s.length() -1);
+        return s.substring(0, s.length() - 1);
     }
 
     /**
      * 为了使用https 而设
+     *
      * @return OkHttpClient
      */
-    public static OkHttpClient getHttpsClient(){
-        OkHttpClient newClient;
-        newClient = client.newBuilder()
-                .sslSocketFactory(HttpsTrustManager.createSSLSocketFactory())
-                .hostnameVerifier(new HttpsTrustManager.TrustAllHostnameVerifier())
+    public static OkHttpClient getHttpsClient() {
+//        OkHttpClient.Builder newClient = new OkHttpClient.Builder();
+//         newClient.sslSocketFactory(HttpsTrustManager.createSSLSocketFactory())
+//                .hostnameVerifier(new HttpsTrustManager.TrustAllHostnameVerifier())
+//                .build();
+
+        HttpsUtils.SSLParams sslParams = HttpsUtils.getSslSocketFactory(null, null, null);
+        OkHttpClient okHttpClient = new OkHttpClient.Builder()
+                .sslSocketFactory(sslParams.sSLSocketFactory, sslParams.trustManager)
+                //其他配置
                 .build();
+        OkHttpUtils.initClient(okHttpClient);
+
+        return okHttpClient;
+    }
+
+    public OkHttpClient getClient() {
+        OkHttpClient newClient;
+        newClient = HttpsSettings.setCertificates(context);
         return newClient;
     }
 
+    public static boolean isEmpty(String flag) {
+        if (!TextUtils.isEmpty(flag) && !flag.equals("null"))
+            return false;
+        else return true;
+    }
 
 
     /**
      * 没有完善 暂时不用
+     *
      * @param handler
      * @param url
      * @param body
      * @param token
      */
 
-    public static void postAll(final Handler handler, final String url, final RequestBody body, final String token){
+    public static void postAll(final Handler handler, final String url, final RequestBody body, final String token) {
         executorService.execute(new Runnable() {
             @Override
             public void run() {
@@ -1858,7 +2155,7 @@ public class HttpUtils<T> {
 
                     @Override
                     public void onResponse(Call call, Response response) throws IOException {
-                        if (response.isSuccessful()){
+                        if (response.isSuccessful()) {
 
                         }
                     }

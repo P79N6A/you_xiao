@@ -6,7 +6,7 @@ package com.runtoinfo.httpUtils;
 
 public class HttpEntity {
 
-    public final static String MAIN_URL = "http://api.11youxiao.com";
+    public final static String MAIN_URL = "https://api.11youxiao.com";
 
     public final static String IMAGE_HEAD = "https://image.11youxiao.com/";
 
@@ -152,9 +152,13 @@ public class HttpEntity {
      */
     public final static String GET_USER_NOTIFICATION_UNREAD = "/api/services/app/Notification/GetUserNotificationsAsync";
     /**
-     * 更新消息状态
+     * 更新消息状态 （单个）
      */
     public final static String UPDATE_USER_NOTIFICATION_STATUE = "/api/services/app/Notification/ReadUserNotification";
+    /**
+     * 更改消息状态为已读（批量）
+     */
+    public final static String UPDATE_USER_NOTIFICATION_STATUE_ALL = "/api/services/app/Notification/BatchReadUserNotification";
     /**
      * 获取课表
      */
@@ -175,4 +179,12 @@ public class HttpEntity {
      * 地址选择
      */
     public final static String GET_GEO_AREA = "/api/services/app/GeoArea/GetAll";
+    /**
+     * 检索请假
+     */
+    public final static String GET_LEAVE_RECORD = "/api/services/app/Leave/GetAll";
+    /**
+     * 检测版本
+     */
+    public final static String CHECK_VERSION = "/api/services/app/AppUpgrade/GetAll";
 }

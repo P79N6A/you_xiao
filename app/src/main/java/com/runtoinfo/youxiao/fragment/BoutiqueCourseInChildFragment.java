@@ -34,7 +34,7 @@ import java.util.Map;
 /**
  * Created by Administrator on 2018/7/26 0026.
  */
-
+@SuppressWarnings("all")
 @SuppressLint("ValidFragment")
 public class BoutiqueCourseInChildFragment extends BaseFragment {
 
@@ -46,10 +46,12 @@ public class BoutiqueCourseInChildFragment extends BaseFragment {
     public BoutiqueCourseInChildFragment(int type){
         this.type = type;
     }
+    public HttpUtils httpUtils;
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_boutique_course_in_child, container, false);
+        httpUtils = new HttpUtils(getContext());
         initCourseData();
         return binding.getRoot();
     }
@@ -70,7 +72,7 @@ public class BoutiqueCourseInChildFragment extends BaseFragment {
             requestMap.put("CourseSubject", courseTypeEntity.getCourseSubject());
             requestMap.put("MediaType", courseTypeEntity.getMediaType());
         }
-        HttpUtils.getInChildData(handler, requestMap, dataList);
+        httpUtils.getInChildData(handler, requestMap, dataList);
     }
     public void initView(){
 

@@ -36,10 +36,12 @@ public class ForgetPassWordActivity extends BaseActivity {
     HttpLoginHead head;
     ProgressDialog dialog;
     boolean isSuccess = false;
+    public HttpUtils httpUtils;
 
     @Override
     protected void initView() {
         binding = DataBindingUtil.setContentView( this,R.layout.login_reset_password);
+        httpUtils = new HttpUtils(getBaseContext());
         String json = getIntent().getExtras().getString("LoginHttpHead");
         head = new Gson().fromJson(json, new TypeToken<HttpLoginHead>(){}.getType());
         dialog = new ProgressDialog(this);
@@ -60,7 +62,7 @@ public class ForgetPassWordActivity extends BaseActivity {
                 binding.resetGetVerificationCode.setEnabled(false);
                 spUtils.setString(Entity.PHONE_NUMBER, binding.resetPasswordPhone.getText().toString());
                 timers();
-                HttpUtils.get(HttpEntity.MAIN_URL + HttpEntity.GET_CAPTION_CODE, binding.resetPasswordPhone.getText().toString());
+                httpUtils.get(HttpEntity.MAIN_URL + HttpEntity.GET_CAPTION_CODE, binding.resetPasswordPhone.getText().toString());
             }
         });
 
@@ -75,7 +77,7 @@ public class ForgetPassWordActivity extends BaseActivity {
             public void afterTextChanged(Editable s) {
                 if (binding.resetPasswordVerificationCode.length() == 4){
                     Utils.creatDialog(dialog);
-                    HttpUtils.postValidate(handler, HttpEntity.MAIN_URL + HttpEntity.CAPTCHA_VALIDATE,
+                    httpUtils.postValidate(handler, HttpEntity.MAIN_URL + HttpEntity.CAPTCHA_VALIDATE,
                             binding.resetPasswordPhone.getText().toString(), binding.resetPasswordVerificationCode.getText().toString());
                 }
             }
@@ -200,7 +202,7 @@ public class ForgetPassWordActivity extends BaseActivity {
                         Utils.creatDialog(dialog);
                         head.setUserName(binding.resetPasswordPhone.getText().toString());
                         head.setNewPassWord(binding.resetPassword.getText().toString());
-                        HttpUtils.postForgetPassWord(handler, HttpEntity.MAIN_URL + HttpEntity.REST_PASSWORD, binding.resetPasswordPhone.getText().toString(), binding.resetPassword.getText().toString());
+                        httpUtils.postForgetPassWord(handler, HttpEntity.MAIN_URL + HttpEntity.REST_PASSWORD, binding.resetPasswordPhone.getText().toString(), binding.resetPassword.getText().toString());
                     }
                 }
             }

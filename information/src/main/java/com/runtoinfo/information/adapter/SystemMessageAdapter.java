@@ -17,6 +17,7 @@ import com.runtoinfo.httpUtils.utils.HttpUtils;
 import com.runtoinfo.information.R;
 import com.runtoinfo.youxiao.globalTools.adapter.BaseViewHolder;
 import com.runtoinfo.youxiao.globalTools.adapter.UniversalRecyclerAdapter;
+import com.runtoinfo.youxiao.globalTools.utils.TimeUtil;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -33,31 +34,33 @@ public class SystemMessageAdapter extends RecyclerView.Adapter {
     public final static int TYPE_SCHOOL_NOTICE_MESSAGE = 3;
     public Activity context;
     public List<SystemMessageEntity> dataList = new ArrayList<>();
+    public HttpUtils httpUtils;
 
     public SystemMessageAdapter(Activity context, List<SystemMessageEntity> dataList) {
         this.context = context;
         this.dataList = dataList;
+        httpUtils = new HttpUtils(context);
     }
 
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view;
+        View view = null;
         LayoutInflater inflater = LayoutInflater.from(context);
         switch (viewType) {
             case TYPE_SYSTEM:
-                view = inflater.inflate(R.layout.sysytem_message_item_layout, parent);
+                view = inflater.inflate(R.layout.sysytem_message_item_layout, parent, false);
                 return new ViewHolder(view);
             case TYPE_MESSAGE:
-                view = inflater.inflate(R.layout.course_player_item_layout, parent);
+                view = inflater.inflate(R.layout.course_player_item_layout, parent, false);
                 return new CourseHolder(view);
             case TYPE_SCHOOL_NOTICE_PIC:
-                view = inflater.inflate(R.layout.school_notice_picture_layout, parent);
+                view = inflater.inflate(R.layout.school_notice_picture_layout, parent, false);
                 return new SchoolNoticePic(view);
             case TYPE_SCHOOL_NOTICE_MESSAGE:
-                view = inflater.inflate(R.layout.school_notice_msg_layout, parent);
+                view = inflater.inflate(R.layout.school_notice_msg_layout, parent, false);
                 return new SchoolNoticeMessage(view);
             default:
-                view = inflater.inflate(R.layout.course_player_item_layout, parent);
+                view = inflater.inflate(R.layout.course_player_item_layout, parent, false);
                 return new CourseHolder(view);
         }
     }
@@ -85,14 +88,14 @@ public class SystemMessageAdapter extends RecyclerView.Adapter {
                 break;
             case 2:
                 SchoolNoticePic schoolNotice = (SchoolNoticePic) holder;
-                HttpUtils.postSrcPhoto(context, HttpEntity.IMAGE_HEAD + messageEntity.getPicPath(), schoolNotice.imageView);
-                schoolNotice.time.setText(messageEntity.getTime());
+                httpUtils.postSrcPhoto(context, HttpEntity.IMAGE_HEAD + messageEntity.getCover(), schoolNotice.imageView);
+                schoolNotice.time.setText(TimeUtil.iso8601ToDate(messageEntity.getCreationTime(), 0));
                 schoolNotice.message.setText(messageEntity.getMessage());
                 break;
             case 3:
                 SchoolNoticeMessage schoolNoticeMessage = (SchoolNoticeMessage) holder;
                 schoolNoticeMessage.message.setText(messageEntity.getMessage());
-                schoolNoticeMessage.time.setText(messageEntity.getTime());
+                schoolNoticeMessage.time.setText(TimeUtil.iso8601ToDate(messageEntity.getCreationTime(), 0));
                 schoolNoticeMessage.title.setText(messageEntity.getTitle());
                 break;
         }

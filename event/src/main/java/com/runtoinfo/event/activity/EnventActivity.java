@@ -35,6 +35,7 @@ public class EnventActivity extends EventBaseActivity{
     public ActivityActivitiesMainBinding binding;
     public List<MyEventEntity> dataList = new ArrayList<>();
     public EventRecyclerAdapter adapter;
+    public HttpUtils httpUtils;
     public UniversalRecyclerAdapter.OnItemClickListener onItemClickListener = new UniversalRecyclerAdapter.OnItemClickListener() {
         @Override
         public void onItemClick(View view, int position) {
@@ -47,6 +48,7 @@ public class EnventActivity extends EventBaseActivity{
     @SuppressLint("CommitPrefEdits")
     public void initView(){
         binding = DataBindingUtil.setContentView(this, R.layout.activity_activities_main);
+        httpUtils = new HttpUtils(getBaseContext());
         binding.activityImgBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -57,7 +59,7 @@ public class EnventActivity extends EventBaseActivity{
         RequestDataEntity entity = new RequestDataEntity();
         entity.setUrl(HttpEntity.MAIN_URL + HttpEntity.SCHOOL_CAMPAIGN);
         entity.setToken(spUtils.getString(Entity.TOKEN));
-        HttpUtils.getEventAll(mHandler, entity);
+        httpUtils.getEventAll(mHandler, entity);
     }
 
     @Override

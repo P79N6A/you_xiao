@@ -1,7 +1,14 @@
 package com.runtoinfo.httpUtils.utils;
 
+import android.content.Context;
+
+import com.runtoinfo.httpUtils.R;
+
+import java.io.InputStream;
+import java.security.KeyStore;
 import java.security.SecureRandom;
 import java.security.cert.CertificateException;
+import java.security.cert.CertificateFactory;
 import java.security.cert.X509Certificate;
 
 import javax.net.ssl.HostnameVerifier;
@@ -9,13 +16,22 @@ import javax.net.ssl.SSLContext;
 import javax.net.ssl.SSLSession;
 import javax.net.ssl.SSLSocketFactory;
 import javax.net.ssl.TrustManager;
+import javax.net.ssl.TrustManagerFactory;
 import javax.net.ssl.X509TrustManager;
+
+import okhttp3.OkHttpClient;
 
 /**
  * Created by QiaoJunChao on 2018/9/5.
  */
 
 public class HttpsTrustManager implements X509TrustManager {
+
+    public OkHttpClient.Builder mOkHttpClient = new OkHttpClient.Builder();
+
+    public HttpsTrustManager(){
+        super();
+    }
 
     @Override
     public void checkClientTrusted(X509Certificate[] chain, String authType)

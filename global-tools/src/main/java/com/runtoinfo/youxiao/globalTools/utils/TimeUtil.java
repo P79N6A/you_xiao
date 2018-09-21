@@ -25,7 +25,7 @@ public class TimeUtil {
      */
     public static String iso8601ToDate(String iso8601, int type) {
         try {
-            Date date = ISO8601Utils.parse(iso8601, new ParsePosition(0));
+            Date date = ISO8601Utils.parse(iso8601 + "Z", new ParsePosition(0));
             Calendar calendar = Calendar.getInstance();
             calendar.setTime(date);
             StringBuilder buffer = new StringBuilder("");
@@ -49,8 +49,10 @@ public class TimeUtil {
 
     public static String getTimeDif(String ISO1806){
         try {
-            Date date = ISO8601Utils.parse(ISO1806, new ParsePosition(0));
+            //Date date = ISO8601Utils.parse(ISO1806, new ParsePosition(0));
+
             SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            Date date = format.parse(ISO1806);
             long publish = format.parse(format.format(date), new ParsePosition(0)).getTime() / 1000;
             long now = System.currentTimeMillis() / 1000;
             long dif = now - publish;
@@ -67,5 +69,14 @@ public class TimeUtil {
             e.printStackTrace();
         }
         return  null;
+    }
+
+    /**
+     * 获取当前时间（年-月-日）
+     */
+
+    public static String getNowDate(){
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+        return format.format(new Date());
     }
 }

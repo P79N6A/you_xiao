@@ -28,10 +28,12 @@ public class BoutiqueInChildRecyclerAdapter extends RecyclerView.Adapter {
     public LayoutInflater inflater;
     public List<CourseDataEntity> recyclerList = new ArrayList<>();
     public OnItemClickListener onItemClickListener;
+    public HttpUtils httpUtils;
 
     public BoutiqueInChildRecyclerAdapter(Activity context, List<CourseDataEntity> recyclerList){
         this.context = context;
         this.recyclerList = recyclerList;
+        httpUtils = new HttpUtils(context);
     }
 
     @Override
@@ -49,7 +51,7 @@ public class BoutiqueInChildRecyclerAdapter extends RecyclerView.Adapter {
         ViewHolder viewHolder = (ViewHolder) holder;
         CourseDataEntity recycler = recyclerList.get(position);
         //viewHolder.imageView.setBackground(recycler.getDrawable());
-        HttpUtils.postPhoto(context, recycler.getCover(), viewHolder.imageView);
+        httpUtils.postPhoto(context, recycler.getCover(), viewHolder.imageView);
         viewHolder.title.setText(recycler.getName());
         viewHolder.time.setText(recycler.getStartTime().split("T")[0]);
         viewHolder.price.setText("¥" + recycler.getPrice());

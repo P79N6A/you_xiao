@@ -36,10 +36,12 @@ public class GeoAreaActivity extends BaseActivity {
     public final List<GeoAreaEntity> province = new ArrayList<>();//省
     public final List<GeoAreaEntity> city = new ArrayList<>();//市
     public final List<GeoAreaEntity> district = new ArrayList<>();//区
-    public final List<GeoAreaEntity> address = new ArrayList<>();//街道
+    public final List<GeoAreaEntity> street = new ArrayList<>();//街道
     public int level = 0;
     public String code;
-    public String result = "";
+    public HttpUtils httpUtils;
+    public ArrayList<String> areaCode = new ArrayList<>();
+    public ArrayList<String> addressName = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,6 +52,7 @@ public class GeoAreaActivity extends BaseActivity {
     protected void initView() {
         binding = DataBindingUtil.setContentView(GeoAreaActivity.this, R.layout.activity_geo_area);
         context = GeoAreaActivity.this;
+        httpUtils = new HttpUtils(context);
         initRequestData();
         initRequestData();
         requestServer("0");
@@ -64,8 +67,9 @@ public class GeoAreaActivity extends BaseActivity {
                 province.clear();
                 city.clear();
                 district.clear();
-                address.clear();
-                result = code = "";
+                street.clear();
+                areaCode.clear();
+                addressName.clear();
             }
         });
 
@@ -90,8 +94,8 @@ public class GeoAreaActivity extends BaseActivity {
                     return;
                 }
                 Intent intent = new Intent(GeoAreaActivity.this, PersonalMainActivity.class);
-                intent.putExtra("code", code);
-                intent.putExtra("name", result);
+                intent.putStringArrayListExtra("code", areaCode);
+                intent.putStringArrayListExtra("name", addressName);
                 setResult(1002, intent);
                 GeoAreaActivity.this.finish();
             }
@@ -112,9 +116,9 @@ public class GeoAreaActivity extends BaseActivity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 GeoAreaEntity geoAreaEntity = listViewAdapter.getDataList().get(position);
-                String address = geoAreaEntity.getName();
-                result += address + ",";
+                addressName.add(geoAreaEntity.getName());
                 code = geoAreaEntity.getCode();
+                areaCode.add(code);
                 level = geoAreaEntity.getLevel();
                 requestServer(code);
             }
@@ -124,7 +128,7 @@ public class GeoAreaActivity extends BaseActivity {
     public void requestServer(String code){
         dataList.clear();
         requestDataEntity.setCode(code);
-        HttpUtils.getGeoArea(handler, requestDataEntity, dataList);
+        httpUtils.getGeoArea(handler, requestDataEntity, dataList);
     }
 
     public Handler handler = new Handler(Looper.getMainLooper()){
@@ -171,9 +175,9 @@ public class GeoAreaActivity extends BaseActivity {
                 initListViewData(district);
                 break;
             case 4:
-                address.clear();
-                address.addAll(dataList);
-                initListViewData(address);
+                street.clear();
+                street.addAll(dataList);
+                initListViewData(street);
                 break;
         }
     }
@@ -193,8 +197,8 @@ public class GeoAreaActivity extends BaseActivity {
                 initListViewData(district);
                 break;
             case 4:
-                if (address.size() > 0)
-                initListViewData(address);
+                if (street.size() > 0)
+                initListViewData(street);
                 break;
         }
     }

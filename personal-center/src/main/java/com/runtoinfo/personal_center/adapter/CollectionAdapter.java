@@ -19,20 +19,22 @@ import java.util.List;
 /**
  * Created by QiaoJunChao on 2018/9/5.
  */
-
+@SuppressWarnings("all")
 public class CollectionAdapter extends UniversalRecyclerAdapter<CollectionEntity> {
 
     public Activity activity;
     public int type;
+    public HttpUtils httpUtils;
     public CollectionAdapter(Activity mContext, List<CollectionEntity> mDatas, int mLayoutId, int type) {
         super(mContext, mDatas, mLayoutId);
         this.activity = mContext;
         this.type = type;
+        httpUtils = new HttpUtils(mContext);
     }
 
     @Override
     protected void convert(Context mContext, BaseViewHolder holder, CollectionEntity collectionEntity, int position) {
-        HttpUtils.postSrcPhoto(activity, HttpEntity.IMAGE_HEAD + collectionEntity.getTargetCover(), (ImageView) holder.getView(R.id.record_course_img));
+        httpUtils.postSrcPhoto(activity, HttpEntity.IMAGE_HEAD + collectionEntity.getTargetCover(), (ImageView) holder.getView(R.id.record_course_img));
         holder.setText(R.id.record_title, collectionEntity.getTargetTitle());
         switch (type){
             case 0:

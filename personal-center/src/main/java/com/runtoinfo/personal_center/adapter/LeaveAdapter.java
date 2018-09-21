@@ -1,11 +1,17 @@
 package com.runtoinfo.personal_center.adapter;
 
 import android.content.Context;
+import android.graphics.Color;
+import android.widget.TextView;
 
 import com.runtoinfo.httpUtils.CenterEntity.LeaveRecordEntity;
+import com.runtoinfo.personal_center.R;
 import com.runtoinfo.youxiao.globalTools.adapter.BaseViewHolder;
 import com.runtoinfo.youxiao.globalTools.adapter.UniversalRecyclerAdapter;
+import com.runtoinfo.youxiao.globalTools.utils.TimeUtil;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -20,6 +26,20 @@ public class LeaveAdapter extends UniversalRecyclerAdapter<LeaveRecordEntity>{
 
     @Override
     protected void convert(Context mContext, BaseViewHolder holder, LeaveRecordEntity leaveRecodEntity, int position) {
-
+        SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd");//设置日期格式
+        String date = df.format(new Date());// new Date()为获取当前系统时间
+        String iso8601 = TimeUtil.iso8601ToDate(leaveRecodEntity.getDate(), 1);
+        holder.setText(R.id.record_leave_title, date.equals(iso8601)? "今日请假": iso8601);
+        holder.setText(R.id.leave_course_name, "请假课程:" + leaveRecodEntity.getCourseName());
+        holder.setText(R.id.leave_type, "请假类型:" + leaveRecodEntity.getReason());
+        holder.setText(R.id.leave_status, leaveRecodEntity.getStatus() == 1? "审核通过" : "审核中");
+        TextView textView = holder.getView(R.id.leave_status);
+        if (leaveRecodEntity.getStatus() == 1){
+            textView.setText("审核通过");
+            textView.setTextColor(Color.parseColor("#3aa6fe"));
+        }else{
+            textView.setText("审核中");
+            textView.setTextColor(Color.parseColor("#f08d00"));
+        }
     }
 }

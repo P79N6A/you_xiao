@@ -25,10 +25,12 @@ public class ActivitiesEventDetails extends EventBaseActivity {
     public int type;
     public Dialog cancelDialog;
     public MyEventEntity eventEntity;
+    public HttpUtils httpUtils;
 
     @Override
     protected void initView() {
         binding = DataBindingUtil.setContentView(this, R.layout.activity_event_details);
+        httpUtils = new HttpUtils(getBaseContext());
     }
 
     @SuppressLint("SetTextI18n")
@@ -38,7 +40,7 @@ public class ActivitiesEventDetails extends EventBaseActivity {
         eventEntity = new Gson().fromJson(json, new TypeToken<MyEventEntity>(){}.getType());
         binding.activityEventAddress.setText("地点: " + eventEntity.getLocation());
         binding.activityEventDescription.setText(eventEntity.getContent());
-        HttpUtils.postPhoto(this, eventEntity.getCover(), binding.activityEventImg);
+        httpUtils.postPhoto(this, eventEntity.getCover(), binding.activityEventImg);
         binding.activityEventTime.setText("时间: " + TimeUtil.iso8601ToDate(eventEntity.getStartDate(), 0));
         binding.activityEventName.setText(eventEntity.getName());
         if (type == 1){

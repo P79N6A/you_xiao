@@ -24,6 +24,7 @@ import com.runtoinfo.httpUtils.utils.HttpUtils;
 import com.runtoinfo.youxiao.globalTools.adapter.BaseViewHolder;
 import com.runtoinfo.youxiao.globalTools.adapter.UniversalRecyclerAdapter;
 import com.runtoinfo.youxiao.globalTools.utils.DialogMessage;
+import com.runtoinfo.youxiao.globalTools.utils.TimeUtil;
 
 import java.util.List;
 
@@ -36,9 +37,11 @@ public class MyCommentAdapter extends UniversalRecyclerAdapter<MyCommentEntity> 
     public Activity activity;
     public Handler handler;
     public BaseViewHolder handlerHolder;
+    public HttpUtils httpUtils;
     public MyCommentAdapter(Handler handler, Activity context, List<MyCommentEntity> mDatas, int mLayoutId) {
         super(handler, context, mDatas, mLayoutId);
         this.activity = context;
+        httpUtils = new HttpUtils(context);
     }
 
     @Override
@@ -46,9 +49,9 @@ public class MyCommentAdapter extends UniversalRecyclerAdapter<MyCommentEntity> 
         handlerHolder = holder;
         holder.setText(R.id.reply_user_name, myCommentEntity.getReplyer());
         holder.setText(R.id.reply_time, myCommentEntity.getReplyTime());
-        HttpUtils.postSrcPhoto(activity, HttpEntity.IMAGE_HEAD + myCommentEntity.getReplyerAvatar(), (ImageView) holder.getView(R.id.infor_praise_user_ava));
+        httpUtils.postSrcPhoto(activity, HttpEntity.IMAGE_HEAD + myCommentEntity.getReplyerAvatar(), (ImageView) holder.getView(R.id.infor_praise_user_ava));
         holder.setText(R.id.reply_details, setStringColor(myCommentEntity.getReplyContent()));
-        HttpUtils.postPhoto(activity, HttpEntity.IMAGE_HEAD + myCommentEntity.getTargetCover(), (ImageView) holder.getView(R.id.reply_image));
+        httpUtils.postPhoto(activity, HttpEntity.IMAGE_HEAD + myCommentEntity.getTargetCover(), (ImageView) holder.getView(R.id.reply_image));
         holder.setText(R.id.target_title, myCommentEntity.getTargetTitle());
         holder.setText(R.id.target_publish, myCommentEntity.getTargetPublisher());
 
@@ -72,14 +75,14 @@ public class MyCommentAdapter extends UniversalRecyclerAdapter<MyCommentEntity> 
                         entity.setTarget(myCommentEntity.getTargetId());
                         entity.setTargetType(myCommentEntity.getTargetType());
                         entity.setContent(content);
-                        HttpUtils.postComment(handler, entity);
+                        httpUtils.postComment(handler, entity);
                         break;
                     case 3:
                         CommentRequestResultEntity resultEntity = new Gson().fromJson(msg.obj.toString(), new TypeToken<CommentRequestResultEntity>(){}.getType());
                         MyCommentEntity commentEntity = new MyCommentEntity();
                         String rContent = resultEntity.getContent() + "//@" + resultEntity.getNickName() + ":";
                         commentEntity.setReplyContent(rContent + myCommentEntity.getReplyContent());
-                        commentEntity.setReplyTime(resultEntity.getApprovedTime().split("T")[0]);
+                        commentEntity.setReplyTime(TimeUtil.iso8601ToDate(resultEntity.getApprovedTime(), 1));
                         commentEntity.setReplyer(resultEntity.getNickName());
                         commentEntity.setTargetCover(myCommentEntity.getTargetCover());
                         commentEntity.setTargetTitle(myCommentEntity.getTargetTitle());

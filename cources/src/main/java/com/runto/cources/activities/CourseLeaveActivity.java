@@ -30,6 +30,7 @@ public class CourseLeaveActivity extends BaseActivity {
     FragmentCourseLeaveBinding binding;
     private Dialog dialog;
     private DatePickerView leave_code;
+    public HttpUtils httpUtils;
 
     public void initView(){
         binding = DataBindingUtil.setContentView(this, R.layout.fragment_course_leave);
@@ -59,7 +60,7 @@ public class CourseLeaveActivity extends BaseActivity {
                 requestDataEntity.setUserId(spUtils.getInt(Entity.USER_ID));
                 requestDataEntity.setToken(spUtils.getString(Entity.TOKEN));
                 requestDataEntity.setMsg(binding.courseLeaveComment.getText().toString());
-                HttpUtils.postLeave(handler, requestDataEntity);
+                httpUtils.postLeave(handler, requestDataEntity);
             }
         });
     }

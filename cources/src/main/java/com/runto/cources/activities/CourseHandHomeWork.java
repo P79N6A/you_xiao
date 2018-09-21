@@ -48,9 +48,11 @@ public class CourseHandHomeWork extends BaseActivity {
     public ArrayList<Media> select = new ArrayList<>();
     public List<String> filePathList = new ArrayList<>();
     public Dialog progressDialog;
+    public HttpUtils httpUtils;
 
     public void initView(){
         binding = DataBindingUtil.setContentView(this, R.layout.course_hand_homework);
+        httpUtils = new HttpUtils(getBaseContext());
         progressDialog = new Dialog(this, R.style.dialog);
         initDialog();
     }
@@ -96,7 +98,7 @@ public class CourseHandHomeWork extends BaseActivity {
         pra.put("userId", spUtils.getInt(Entity.USER_ID));
         pra.put("remark", binding.courseHandWorkNots.getText().toString());
 
-        HttpUtils.postHomeWork(handler, pra, listMap);
+        httpUtils.postHomeWork(handler, pra, listMap);
     }
 
     @Override
@@ -139,7 +141,7 @@ public class CourseHandHomeWork extends BaseActivity {
                 requestDataEntity.setToken(spUtils.getString(Entity.TOKEN));
                 //DialogMessage.createDialog(CourseHandHomeWork.this, progressDialog, "正在上传，请稍后...");
                 DialogMessage.showLoading(CourseHandHomeWork.this, progressDialog, true);
-                HttpUtils.postVideoPhoto(handler, requestDataEntity, mAdapter.dataList, filePathList);
+                httpUtils.postVideoPhoto(handler, requestDataEntity, mAdapter.dataList, filePathList);
             }
         });
     }

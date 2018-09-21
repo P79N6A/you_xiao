@@ -44,6 +44,7 @@ public class MusicFragment extends BaseFragment{
     public TextView textView;
     public ImageView imageView;
     public int type;
+    public HttpUtils httpUtils;
 
     public MusicFragment(int type){
         this.type = type;
@@ -52,6 +53,7 @@ public class MusicFragment extends BaseFragment{
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_boutique_course_music, container, false);
+        httpUtils = new HttpUtils(getContext());
         initTalLayoutView();
         return binding.getRoot();
     }
@@ -75,23 +77,12 @@ public class MusicFragment extends BaseFragment{
             map.put("token", spUtils.getString(Entity.TOKEN));
             map.put("url", HttpEntity.MAIN_URL + HttpEntity.GET_COURSE_CHILD_TYPE);
 
-            HttpUtils.getChildType(handler, map);
+            httpUtils.getChildType(handler, map);
         }
 
     }
 
     public void initTalLayoutData(){
-//        String[] title = new String[]{"钢琴","小提琴","鼓","吉他","其他","琵琶","唢呐","二胡"};
-//        int[] drawable = new int[]{R.drawable.boutique_music_piano, R.drawable.boutique_music_violin,
-//                R.drawable.boutique_music_drum, R.drawable.boutique_music_guitar,
-//                R.drawable.boutique_music_other, R.drawable.boutique_music_piano,
-//                R.drawable.boutique_music_piano, R.drawable.boutique_music_piano,};
-//        titles.addAll(Arrays.asList(title));
-//
-//        for (int j = 0; j< title.length; j++){
-//            //BoutiqueCourseChildFragment fragment = new BoutiqueCourseChildFragment();
-//            //fragmentList.add(new BoutiqueCourseChildFragment());
-//        }
 
         viewPagerAdapter = new BoutiqueCourseChildPagerAdapter(getChildFragmentManager(), fragmentList);
         binding.boutiqueMusicChildViewpager.setAdapter(viewPagerAdapter);
@@ -109,7 +100,7 @@ public class MusicFragment extends BaseFragment{
             imageView = tab.getCustomView().findViewById(R.id.table_layout_item_imageView);
             if (titles.size() > 0 && iconPath.size() > 0) {
                 textView.setText(titles.get(i));
-                HttpUtils.postPhoto(getActivity(), iconPath.get(i), imageView);
+                httpUtils.postPhoto(getActivity(), iconPath.get(i), imageView);
             }
         }
 

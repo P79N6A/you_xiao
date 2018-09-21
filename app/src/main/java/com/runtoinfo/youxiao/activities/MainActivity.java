@@ -1,10 +1,18 @@
 package com.runtoinfo.youxiao.activities;
 
+import android.Manifest;
 import android.app.Dialog;
+import android.content.ComponentName;
 import android.content.Intent;
+import android.content.ServiceConnection;
 import android.databinding.DataBindingUtil;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.IBinder;
+import android.os.Looper;
+import android.os.Message;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
@@ -16,6 +24,12 @@ import android.widget.Toast;
 import com.alibaba.android.arouter.facade.annotation.Route;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+import com.runtoinfo.event.activity.MineEventActivity;
+import com.runtoinfo.httpUtils.HttpEntity;
+import com.runtoinfo.httpUtils.bean.RequestDataEntity;
+import com.runtoinfo.httpUtils.bean.VersionEntity;
+import com.runtoinfo.httpUtils.utils.HttpUtils;
+import com.runtoinfo.youxiao.BuildConfig;
 import com.runtoinfo.youxiao.R;
 import com.runtoinfo.youxiao.adapter.FragmentAdapter;
 import com.runtoinfo.youxiao.databinding.ActivityMainBinding;
@@ -27,10 +41,16 @@ import com.runtoinfo.youxiao.fragment.TopicsFragment;
 import com.runtoinfo.youxiao.globalTools.utils.DialogMessage;
 import com.runtoinfo.youxiao.globalTools.utils.Entity;
 import com.runtoinfo.youxiao.globalTools.utils.IntentDataType;
+import com.runtoinfo.youxiao.service.DownloadManagerService;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
+import myapplication.MyApplication;
+
+@SuppressWarnings("all")
 @Route( path = "/main/mainActivity")
 public class MainActivity extends BaseActivity implements ViewPager.OnPageChangeListener/*, View.OnClickListener*/{
 
@@ -44,21 +64,30 @@ public class MainActivity extends BaseActivity implements ViewPager.OnPageChange
     private FragmentAdapter mMainMenuAdapter;
     private String TAG = "MainActivity";
     private long firstTime = 0;
+    private HttpUtils httpUtils;
 
     public List<SelectSchoolEntity> schoolSelectList;
-    public Handler handler= new Handler();
+    public DownloadManagerService.DownloadBinder mDownloadBinder;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         initEvent();
+        checkVersionFromServer();
+        ((MyApplication) getApplication()).initPushService(MyApplication.getInstance());
     }
 
     // 初始化控件
     @Override
     protected void initView() {
         binding = DataBindingUtil.setContentView(MainActivity.this, R.layout.activity_main);
+        httpUtils = new HttpUtils(getBaseContext());
         schoolSelectList = new Gson().fromJson(spUtils.getString(Entity.SCHOOL_DATA), new TypeToken<List<SelectSchoolEntity>>(){}.getType());
+        initBottomMenu();
+
+    }
+
+    public void initBottomMenu(){
         tv_menus = new ArrayList<TextView>();
         tv_menus.add(binding.tvBottomMenuChat);
         tv_menus.add(binding.tvBottomMenuAddressbook);
@@ -70,8 +99,6 @@ public class MainActivity extends BaseActivity implements ViewPager.OnPageChange
         imgv_menus.add(binding.imgvBottomMenuDiscovery);
         imgv_menus.add(binding.imgvBottomMenuMe);
         mViewPager = binding.mainViewPager;
-
-        //initEvent();
     }
 
     // 初始化数据
@@ -84,13 +111,6 @@ public class MainActivity extends BaseActivity implements ViewPager.OnPageChange
         mFragments.add(new PersonalCenterFragment());
         mMainMenuAdapter = new FragmentAdapter(getSupportFragmentManager(), mFragments);
         setMenuSelector(0); // 默认选中第一个菜单项“微信”
-
-        handler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                showUpdate("1.修复登录BUG;\n2.增加新功能");
-            }
-        }, 2000);
     }
 
     // 初始化事件
@@ -181,10 +201,18 @@ public class MainActivity extends BaseActivity implements ViewPager.OnPageChange
     }
     //获取版本号提示是否更新
     public void checkVersionFromServer(){
+        RequestDataEntity requestDataEntity = new RequestDataEntity();
+        requestDataEntity.setToken(spUtils.getString(Entity.TOKEN));
+        requestDataEntity.setUrl(HttpEntity.MAIN_URL + HttpEntity.CHECK_VERSION);
 
+        Map<String, Object> dataMap = new HashMap<>();
+        dataMap.put("Platform", 1);
+        dataMap.put("Sorting", "Version desc");
+
+        httpUtils.checkVersion(handler, requestDataEntity, dataMap);
     }
 
-    public void showUpdate(String details){
+    public void showUpdate(String details,final String downloadUrl){
         final Dialog dialog = DialogMessage.showDialogWithLayout(MainActivity.this, R.layout.check_version_layout);
         dialog.show();
         dialog.findViewById(R.id.check_version_dismiss).setOnClickListener(new View.OnClickListener() {
@@ -193,8 +221,74 @@ public class MainActivity extends BaseActivity implements ViewPager.OnPageChange
                 dialog.dismiss();
             }
         });
+        dialog.findViewById(R.id.update_button).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MainActivity.this, DownloadManagerService.class);
+                startService(intent);
+                bindService(intent, mConnection, BIND_AUTO_CREATE);
+
+                if (Build.VERSION.SDK_INT >= 26) {
+                    //来判断应用是否有权限安装apk
+                    boolean installAllowed = getPackageManager().canRequestPackageInstalls();
+                    //有权限
+                    if (installAllowed) {
+                        //安装apk
+                        if (mDownloadBinder != null) {
+                            mDownloadBinder.startDownload(downloadUrl);
+                        }
+                    } else {
+                        //无权限 申请权限
+                        ActivityCompat.requestPermissions(MainActivity.this, new String[]{Manifest.permission.REQUEST_INSTALL_PACKAGES}, 200);
+                    }
+                } else {
+                    if (mDownloadBinder != null) {
+                        mDownloadBinder.startDownload(downloadUrl);
+                    }
+                }
+            }
+        });
         ((TextView) dialog.findViewById(R.id.check_version_details)).setText(details);
     }
+
+
+    public Handler handler = new Handler(Looper.getMainLooper()){
+        @Override
+        public void handleMessage(Message msg) {
+            switch (msg.what){
+                case 0:
+                    VersionEntity version = (VersionEntity) msg.obj;
+                    String [] versions = version.getVersion().split(".");
+                    StringBuilder strVersion = new StringBuilder("");
+                    for (String s : versions){
+                        strVersion.append(s);
+                    }
+                    String[] locationVersion = BuildConfig.VERSION_NAME.split(".");
+                    StringBuilder locVersion = new StringBuilder("");
+                    for (String l : locationVersion){
+                        locVersion.append(l);
+                    }
+                    if (Integer.parseInt(strVersion.toString()) > Integer.parseInt(locVersion.toString())){
+                        showUpdate(version.getDescription(), version.getiOSUpgradePath());
+                    }
+                    break;
+            }
+        }
+    };
+
+    private ServiceConnection mConnection = new ServiceConnection() {
+
+
+        @Override
+        public void onServiceConnected(ComponentName name, IBinder service) {
+            mDownloadBinder = (DownloadManagerService.DownloadBinder) service;
+        }
+
+        @Override
+        public void onServiceDisconnected(ComponentName name) {
+            mDownloadBinder = null;
+        }
+    };
 
     public void refresh(){
        //finish();
