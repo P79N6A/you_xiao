@@ -8,8 +8,8 @@ android {
         applicationId "com.runtoinfo.youxiao"
         minSdkVersion 18
         targetSdkVersion 26
-        versionCode 1
-        versionName "1.1.7"
+        versionCode 9
+        versionName "1.1.9"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
 
         ndk {

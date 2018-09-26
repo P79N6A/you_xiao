@@ -8,10 +8,11 @@
 
     <com.runtoinfo.youxiao.globalTools.views.RoundImagView
         android:id="@+id/record_course_img"
-        android:layout_width="160dp"
+        android:layout_width="120dp"
         android:layout_height="wrap_content"
         android:layout_alignBottom="@+id/record_course_data_layout"
-        android:src="@drawable/boutique_recycler_2"
+        android:layout_alignTop="@+id/record_course_data_layout"
+        android:background="@drawable/default_image"
         android:scaleType="fitXY"
         app:type="round"/>
 
@@ -27,9 +28,10 @@
             android:id="@+id/record_course_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="小提琴进阶课程高手弹奏"
+            android:text="小提琴进阶课程高手弹奏健身"
+            android:maxWidth="240dp"
             android:textColor="#333333"
-            android:textSize="18sp" />
+            android:textSize="16sp" />
 
         <LinearLayout
             android:layout_width="wrap_content"
@@ -42,7 +44,7 @@
                 android:layout_height="wrap_content"
                 android:text="教师:"
                 android:textColor="#999999"
-                android:textSize="16sp" />
+                android:textSize="14sp" />
 
             <TextView
                 android:id="@+id/record_course_teacher"
@@ -56,46 +58,41 @@
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="5dp"
             android:orientation="horizontal">
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textColor="#999999"
-                android:text="进度:"
-                android:textSize="16sp"/>
+                android:textSize="14sp"/>
             <TextView
                 android:id="@+id/record_course_progress"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textSize="16sp"
-                android:text="10%"
+                android:textSize="14sp"
                 android:layout_marginStart="5dp"
                 android:textColor="#999999"/>
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textSize="16sp"
+                android:textSize="14sp"
                 android:textColor="#999999"
-                android:layout_marginStart="20dp"
-                android:text="请假:"/>
+                android:layout_marginStart="20dp"/>
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textColor="#999999"
-                android:textSize="16sp"
+                android:textSize="14sp"
                 android:id="@+id/record_course_leave"
-                android:layout_marginStart="5dp"
-                android:text="2节"/>
+                android:layout_marginStart="5dp"/>
         </LinearLayout>
         
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="16sp"
+            android:textSize="14sp"
             android:textColor="#999999"
             android:text="2天前"
             android:drawablePadding="8dp"

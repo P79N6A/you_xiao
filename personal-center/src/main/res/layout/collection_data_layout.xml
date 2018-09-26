@@ -9,5 +9,30 @@
             android:id="@+id/collection_data_recycler"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
+
+        <LinearLayout
+            android:id="@+id/collection_nothing_layout"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:layout_gravity="center"
+            android:visibility="gone"
+            android:gravity="center">
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/collection_noting"
+                android:background="@drawable/record_colleciton"/>
+
+            <TextView
+                android:id="@+id/collection_details"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:textColor="#999999"
+                android:text="无收藏"
+                android:layout_gravity="center"
+                android:textSize="18sp"/>
+        </LinearLayout>
     </LinearLayout>
 </layout>

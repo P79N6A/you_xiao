@@ -15,7 +15,10 @@ import android.text.method.HideReturnsTransformationMethod;
 import android.text.method.PasswordTransformationMethod;
 import android.util.Log;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.AdapterView;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import com.alibaba.android.arouter.facade.annotation.Route;
@@ -174,6 +177,8 @@ public class LoginActivity extends BaseActivity {
                 binding.passwordLogin.setVisibility(View.VISIBLE);
                 binding.loginGetVerification.setVisibility(View.VISIBLE);
                 binding.loginImgPwVis.setVisibility(View.GONE);
+//                RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams) binding.loginPassword.getLayoutParams();
+//                params.addRule(RelativeLayout.START_OF, R.id.login_get_verification);
                 binding.loginBt.setTag("VER_CODE");
                 if (binding.loginPassword.length() > 0) {
                     binding.loginPassword.setText("");
@@ -191,6 +196,8 @@ public class LoginActivity extends BaseActivity {
                 binding.loginVerificationCode.setVisibility(View.VISIBLE);
                 binding.loginGetVerification.setVisibility(View.GONE);
                 binding.loginImgPwVis.setVisibility(View.VISIBLE);
+//                RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams) binding.loginPassword.getLayoutParams();
+//                params.addRule(RelativeLayout.START_OF, R.id.login_img_pw_vis);
                 binding.loginBt.setTag("PASS_WORD");
                 if (binding.loginPassword.length() > 0) {
                     binding.loginPassword.setText("");
@@ -244,18 +251,19 @@ public class LoginActivity extends BaseActivity {
         binding.loginImgPwVis.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                switch (binding.loginPassword.getTag().toString()) {
+                String tag = binding.loginPassword.getTag().toString();
+                switch (tag) {
                     case "PASSWORD_OFF":
                         binding.loginImgPwVis.setImageDrawable(getResources().getDrawable(R.drawable.login_password_off));
                         binding.loginPassword.setTransformationMethod(HideReturnsTransformationMethod.getInstance());
                         binding.loginPassword.setSelection(binding.loginPassword.getText().length());
-                        binding.loginPassword.setTag("PASSWORD_OFF");
+                        binding.loginPassword.setTag("PASSWORD_ON");
                         break;
                     case "PASSWORD_ON":
                         binding.loginImgPwVis.setImageDrawable(getResources().getDrawable(R.drawable.login_password_on));
                         binding.loginPassword.setTransformationMethod(PasswordTransformationMethod.getInstance());
                         binding.loginPassword.setSelection(binding.loginPassword.getText().length());
-                        binding.loginPassword.setTag("PASSWORD_ON");
+                        binding.loginPassword.setTag("PASSWORD_OFF");
                         break;
                 }
             }

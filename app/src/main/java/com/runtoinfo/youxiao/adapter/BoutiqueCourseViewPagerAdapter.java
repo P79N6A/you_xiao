@@ -36,4 +36,8 @@ public class BoutiqueCourseViewPagerAdapter extends FragmentPagerAdapter {
         return titles.get(position);
     }
 
+    @Override
+    public void destroyItem(ViewGroup container, int position, Object object) {
+        //super.destroyItem(container, position, object);
+    }
 }

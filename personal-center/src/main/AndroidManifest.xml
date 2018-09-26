@@ -27,7 +27,7 @@
             android:name=".activities.MySomeRecord"
             android:label="@string/title_activity_my_some_record"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
-        <activity android:name=".activities.GeoAreaActivity"></activity>
+        <activity android:name=".activities.GeoAreaActivity"/>
     </application>
 
 </manifest>

@@ -148,6 +148,7 @@
                             android:layout_alignParentEnd="true"
                             android:layout_centerVertical="true"
                             android:layout_marginEnd="10dp"
+                            android:layout_toStartOf="@+id/login_password"
                             android:src="@drawable/login_password_on" />
                     </RelativeLayout>
 

@@ -50,6 +50,7 @@ public class SchoolDynamics extends BaseActivity {
     @Override
     protected void initView() {
         binding = DataBindingUtil.setContentView(this, R.layout.school_movment);
+        httpUtils = new HttpUtils(getApplicationContext());
         changeView();
         initEvent();
     }

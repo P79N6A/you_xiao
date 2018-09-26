@@ -30,6 +30,7 @@ public class EventRecyclerAdapter extends UniversalRecyclerAdapter<MyEventEntity
         this.dataList = mDatas;
         this.LayoutId = mLayoutId;
         this.type = type;
+        httpUtils = new HttpUtils(mContext);
     }
 
     @Override

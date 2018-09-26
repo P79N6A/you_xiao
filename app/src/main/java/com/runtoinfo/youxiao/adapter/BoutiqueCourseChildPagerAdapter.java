@@ -30,5 +30,8 @@ public class BoutiqueCourseChildPagerAdapter extends FragmentPagerAdapter {
         return fragmentList.size();
     }
 
+    @Override
+    public void destroyItem(ViewGroup container, int position, Object object) {
 
+    }
 }

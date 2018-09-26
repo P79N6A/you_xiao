@@ -1781,8 +1781,8 @@ public class HttpUtils<T> {
             @Override
             public void run() {
                 final Request request = new Request.Builder()
-                        .url(requestDataEntity.getUrl() + setUrl(dataMap))
                         .header(Authorization, Bearer + requestDataEntity.getToken())
+                        .url(requestDataEntity.getUrl() + setUrl(dataMap))
                         .build();
                 getClient().newCall(request).enqueue(new Callback() {
                     @Override
@@ -1805,8 +1805,8 @@ public class HttpUtils<T> {
                                                 new Gson().fromJson(item.toString(), new TypeToken<LeaveRecordEntity>() {
                                                 }.getType());
                                         dataList.add(leaveRecordEntity);
-                                        handler.sendEmptyMessage(1);
                                     }
+                                    handler.sendEmptyMessage(1);
                                 } else {
                                     handler.sendEmptyMessage(400);
                                 }
@@ -1820,6 +1820,50 @@ public class HttpUtils<T> {
             }
         });
 
+    }
+
+    public void getCourseRecord(final Handler handler, final RequestDataEntity entity, final Map<String, Object> map, final List<CourseEntity> list){
+        executorService.execute(new Runnable() {
+            @Override
+            public void run() {
+                Request request = new Request.Builder()
+                        .header(Authorization, Bearer + entity.getToken())
+                        .url(entity.getUrl() + setUrl(map))
+                        .build();
+                getClient().newCall(request).enqueue(new Callback() {
+                    @Override
+                    public void onFailure(Call call, IOException e) {
+                        handler.sendEmptyMessage(500);
+                    }
+
+                    @Override
+                    public void onResponse(Call call, Response response) throws IOException {
+                        if (response.isSuccessful()){
+                            try {
+                                JSONObject json = new JSONObject(response.body().string());
+                                boolean sussess = json.getBoolean("success");
+                                if(sussess){
+                                    JSONObject result = json.getJSONObject("result");
+                                    JSONArray array = result.getJSONArray("items");
+                                    for(int i = 0; i < array.length(); i++){
+                                        JSONObject item = array.getJSONObject(i);
+                                        CourseEntity courseEntity = new Gson().fromJson(item.toString(),
+                                                new TypeToken<CourseEntity>(){}.getType());
+                                        list.add(courseEntity);
+                                    }
+                                    handler.sendEmptyMessage(2);
+                                }else{
+                                    handler.sendEmptyMessage(400);
+                                }
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                                handler.sendEmptyMessage(404);
+                            }
+                        }
+                    }
+                });
+            }
+        });
     }
 
     /**

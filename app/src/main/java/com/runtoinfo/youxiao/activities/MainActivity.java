@@ -152,7 +152,7 @@ public class MainActivity extends BaseActivity implements ViewPager.OnPageChange
         reSetSelected();
         tv_menus.get(index).setSelected(true);
         imgv_menus.get(index).setSelected(true);
-        mViewPager.setCurrentItem(index);
+        mViewPager.setCurrentItem(index, false);
     }
 
     /**

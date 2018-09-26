@@ -40,7 +40,7 @@
 
         <RelativeLayout
             android:layout_width="0dp"
-            android:layout_height="100dp"
+            android:layout_height="wrap_content"
             android:layout_marginStart="10dp"
             android:layout_weight="5"
             android:orientation="vertical">
@@ -58,7 +58,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="2dp"
-                android:layout_marginTop="10dp"
+                android:layout_marginTop="8dp"
                 android:drawableLeft="@drawable/home_course_sign_clock"
                 android:drawablePadding="5dp"
                 android:gravity="center"
@@ -69,8 +69,9 @@
 
             <RelativeLayout
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="15dp">
+                android:layout_height="30dp"
+                android:layout_marginTop="8dp"
+                android:layout_below="@+id/home_course_time">
 
                 <TextView
                     android:id="@+id/home_details"
@@ -86,8 +87,8 @@
 
                 <TextView
                     android:id="@+id/home_course_sign"
-                    android:layout_width="54dp"
-                    android:layout_height="36dp"
+                    android:layout_width="50dp"
+                    android:layout_height="28dp"
                     android:layout_alignParentBottom="true"
                     android:layout_alignParentEnd="true"
                     android:background="@drawable/home_sign_in"

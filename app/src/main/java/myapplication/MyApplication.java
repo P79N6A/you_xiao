@@ -31,6 +31,7 @@ import com.runtoinfo.youxiao.R;
 import com.runtoinfo.youxiao.globalTools.utils.DialogMessage;
 import com.runtoinfo.youxiao.globalTools.utils.Entity;
 import com.runtoinfo.youxiao.globalTools.utils.SPUtils;
+import com.taobao.sophix.PatchStatus;
 import com.taobao.sophix.SophixManager;
 import com.taobao.sophix.listener.PatchLoadStatusListener;
 import com.tencent.bugly.crashreport.CrashReport;
@@ -73,7 +74,8 @@ public class MyApplication extends Application {
         initManService();
         initFeedbackService();
         initHttpDnsService();
-        initHotfix();
+        //initHotfix();
+        SophixManager.getInstance().queryAndLoadNewPatch();
         //initPushService(this);
         CrashReport.initCrashReport(getApplicationContext(), "446920bced", true);
     }
@@ -200,6 +202,7 @@ public class MyApplication extends Application {
         //httpdns.setExpiredIPEnabled(true);
     }
 
+    //热修复
     private void initHotfix() {
         String appVersion;
         try {
@@ -215,17 +218,32 @@ public class MyApplication extends Application {
                 .setPatchLoadStatusStub(new PatchLoadStatusListener() {
                     @Override
                     public void onLoad(final int mode, final int code, final String info, final int handlePatchVersion) {
-                        String msg = new StringBuilder("").append("Mode:").append(mode)
-                                .append(" Code:").append(code)
-                                .append(" Info:").append(info)
-                                .append(" HandlePatchVersion:").append(handlePatchVersion).toString();
-                        if (msgDisplayListener != null) {
-                            msgDisplayListener.handle(msg);
+                        // 补丁加载回调通知
+                        if (code == PatchStatus.CODE_LOAD_SUCCESS) {
+                            // 表明补丁加载成功
+                            String msg = new StringBuilder("").append("Mode:").append(mode)
+                                    .append(" Code:").append(code)
+                                    .append(" Info:").append(info)
+                                    .append(" HandlePatchVersion:").append(handlePatchVersion).toString();
+                            if (msgDisplayListener != null) {
+                                msgDisplayListener.handle(msg);
+                            } else {
+                                cacheMsg.append("\n").append(msg);
+                            }
+                        } else if (code == PatchStatus.CODE_LOAD_RELAUNCH) {
+                            // 表明新补丁生效需要重启. 开发者可提示用户或者强制重启;
+                            // 建议: 用户可以监听进入后台事件, 然后调用killProcessSafely自杀，以此加快应用补丁，详见1.3.2.3
                         } else {
-                            cacheMsg.append("\n").append(msg);
+                            // 其它错误信息, 查看PatchStatus类说明
                         }
                     }
                 }).initialize();
+    }
+
+    @Override
+    protected void attachBaseContext(Context base) {
+        super.attachBaseContext(base);
+        initHotfix();
     }
 
     /**

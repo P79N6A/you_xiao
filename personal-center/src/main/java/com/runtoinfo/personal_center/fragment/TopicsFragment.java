@@ -21,6 +21,7 @@ import com.runtoinfo.httpUtils.utils.HttpUtils;
 import com.runtoinfo.personal_center.R;
 import com.runtoinfo.personal_center.adapter.CollectionAdapter;
 import com.runtoinfo.personal_center.databinding.CollectionDataLayoutBinding;
+import com.runtoinfo.youxiao.globalTools.adapter.CommonViewPagerAdapter;
 import com.runtoinfo.youxiao.globalTools.adapter.UniversalRecyclerAdapter;
 import com.runtoinfo.youxiao.globalTools.utils.Entity;
 
@@ -30,35 +31,41 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 /**
- * Created by QiaoJunChao on 2018/9/5.
+ * Created by QiaoJunChao on 2018/9/25.
  */
 
 @SuppressLint("ValidFragment")
-public class TNFragment extends BasePersonalFragment {
+public class TopicsFragment extends BasePersonalFragment {
 
-    public int number;
     public int type;
     public CollectionDataLayoutBinding binding;
     public List<CollectionEntity> list = new ArrayList<>();
     public CollectionAdapter collectionAdapter;
     public HttpUtils httpUtils;
+    public CommonViewPagerAdapter commonViewPagerAdapter;
 
-    public TNFragment(int number, int type){
-        this.number = number;
+
+    public TopicsFragment(int type) {
         this.type = type;
+    }
+
+    public void setAdapter(CommonViewPagerAdapter adapter) {
+        this.commonViewPagerAdapter = adapter;
     }
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         binding = DataBindingUtil.inflate(inflater, R.layout.collection_data_layout, container, false);
+        httpUtils = new HttpUtils(getContext());
         requestServer();
         return binding.getRoot();
     }
 
-    public void requestServer(){
+    public void requestServer() {
         RequestDataEntity entity = new RequestDataEntity();
         entity.setUserId(spUtils.getInt(Entity.USER_ID));
         entity.setToken(spUtils.getString(Entity.TOKEN));
@@ -66,7 +73,8 @@ public class TNFragment extends BasePersonalFragment {
         entity.setType(type);
         httpUtils.getMyCollection(handler, entity);
     }
-    public void initRecyclerData(){
+
+    public void initRecyclerData() {
         collectionAdapter = new CollectionAdapter(getActivity(), list, R.layout.personal_collection_item_layout, type);
         binding.collectionDataRecycler.setLayoutManager(new LinearLayoutManager(getContext()));
         binding.collectionDataRecycler.setHasFixedSize(true);
@@ -83,14 +91,28 @@ public class TNFragment extends BasePersonalFragment {
 
     }
 
-    public Handler handler = new Handler(Looper.getMainLooper()){
+    public void setTitleNumber(int number) {
+        if (commonViewPagerAdapter != null) {
+            for (int i = 0; i < commonViewPagerAdapter.getCount(); i++) {
+                if (commonViewPagerAdapter.getItem(i) == TopicsFragment.this) {
+                    String title = commonViewPagerAdapter.getPageTitle(i).toString();
+                    // 在TabLayout的标题上添加（）
+                    int posBracket = title.indexOf("(");
+                    if (posBracket > 0)
+                        title = title.substring(0, posBracket);
+                    commonViewPagerAdapter.setPageTitle(i, String.format(Locale.CHINESE, "%s(%s)", title, number));
+                }
+            }
+        }
+    }
+
+    public Handler handler = new Handler(Looper.getMainLooper()) {
         @Override
         public void handleMessage(Message msg) {
-            switch (msg.what){
+            switch (msg.what) {
                 case 10:
                     try {
                         JSONArray items = (JSONArray) msg.obj;
-                        number = items.length();
                         for (int i = 0; i < items.length(); i++) {
                             JSONObject item = items.getJSONObject(i);
                             CollectionEntity collectionEntity = new Gson().fromJson(item.toString(),
@@ -98,10 +120,17 @@ public class TNFragment extends BasePersonalFragment {
                                     }.getType());
                             list.add(collectionEntity);
                         }
+                        setTitleNumber(items.length());
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
-                    initRecyclerData();
+
+                    if (list.size() > 0) {
+                        binding.collectionNothingLayout.setVisibility(View.GONE);
+                        initRecyclerData();
+                    } else {
+                        binding.collectionNothingLayout.setVisibility(View.VISIBLE);
+                    }
                     break;
                 case 500:
                     break;

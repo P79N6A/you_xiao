@@ -18,6 +18,7 @@ import android.support.annotation.Nullable;
 import android.support.annotation.RequiresApi;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -37,12 +38,15 @@ import com.runtoinfo.httpUtils.bean.RequestDataEntity;
 import com.runtoinfo.httpUtils.utils.HttpUtils;
 import com.runtoinfo.youxiao.R;
 import com.runtoinfo.youxiao.adapter.CoursePunchAdapter;
+import com.runtoinfo.youxiao.globalTools.adapter.AdapterWrapper;
 import com.runtoinfo.youxiao.globalTools.adapter.UniversalRecyclerAdapter;
 import com.runtoinfo.youxiao.globalTools.utils.DialogMessage;
 import com.runtoinfo.youxiao.globalTools.utils.Entity;
 import com.runtoinfo.youxiao.databinding.FragmentHomeBinding;
 import com.runtoinfo.youxiao.entity.SelectSchoolEntity;
+import com.runtoinfo.youxiao.globalTools.utils.GankContract;
 import com.runtoinfo.youxiao.globalTools.utils.RecyclerViewDecoration;
+import com.runtoinfo.youxiao.globalTools.utils.SwipeToLoadHelper;
 import com.runtoinfo.youxiao.globalTools.utils.TimeUtil;
 import com.runtoinfo.youxiao.ui.FloatDragView;
 import com.runtoinfo.youxiao.ui.MyScrollView;
@@ -157,10 +161,10 @@ public class HomeFragment extends BaseFragment implements MyScrollView.ScrollVie
                     DialogMessage.showToast(getContext(), "请求数据失败");
                     break;
                 case 500:
-                    DialogMessage.showToast(getContext(), "服务器数据异常");
+                    DialogMessage.showToast(getContext(), "服务器异常");
                     break;
                 case 404:
-                    DialogMessage.showToast(getContext(), "数据解析错误");
+                    DialogMessage.showToast(getContext(), "数据解析异常");
                     break;
             }
         }
@@ -212,9 +216,11 @@ public class HomeFragment extends BaseFragment implements MyScrollView.ScrollVie
 
     public void initCourseData(){
 
+
         binding.homeRecyclerView.setHasFixedSize(true);
         binding.homeRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         coursePunchAdapter = new CoursePunchAdapter(getActivity(), getCourseList, R.layout.fragment_home_recyclerview_item);
+
         binding.homeRecyclerView.setAdapter(coursePunchAdapter);
 
         binding.homeRecyclerView.setNestedScrollingEnabled(false);
@@ -241,6 +247,7 @@ public class HomeFragment extends BaseFragment implements MyScrollView.ScrollVie
         Map<String, Object> map = new HashMap<>();
         map.put("studentId", 18);
         map.put("date", TimeUtil.getNowDate());
+        if (getCourseList.size() > 0) getCourseList.clear();
         HttpUtils httpUtils = new HttpUtils(getContext());
         httpUtils.getCourseDataList(handler, requestDataEntity, map, getCourseList);
     }
@@ -465,4 +472,5 @@ public class HomeFragment extends BaseFragment implements MyScrollView.ScrollVie
         }
 
     }
+
 }

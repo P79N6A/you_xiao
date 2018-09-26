@@ -10,7 +10,7 @@ public class HttpEntity {
 
     public final static String IMAGE_HEAD = "https://image.11youxiao.com/";
 
-    public final static String FILE_HEAD = "http://file.11youxiao.com/";
+    public final static String FILE_HEAD = "https://file.11youxiao.com/";
     /**
      * 获取手机号下的信息
      */
@@ -187,4 +187,8 @@ public class HttpEntity {
      * 检测版本
      */
     public final static String CHECK_VERSION = "/api/services/app/AppUpgrade/GetAll";
+    /**
+     * 用户分页加载课程
+     */
+    public final static String GET_COURSE_RECORD = "/api/services/app/CourseSchedule/GetAllTimetableByUser";
 }

@@ -115,8 +115,6 @@ public class TopicsFragment extends BaseFragment {
             binding.topicsRecyclerview.setLayoutManager(new LinearLayoutManager(getContext()));
             articleAdapter = new TopicsArticleAdapter(getActivity(), resultList, R.layout.topics_recyclerview_items);
             binding.topicsRecyclerview.setAdapter(articleAdapter);
-        }else{
-            DialogMessage.showToast(getContext(), "请求数据失败");
         }
     }
     public void initEvent(){
