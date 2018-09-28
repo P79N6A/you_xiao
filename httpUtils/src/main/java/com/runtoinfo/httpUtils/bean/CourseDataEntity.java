@@ -8,6 +8,12 @@ import java.util.List;
 @SuppressWarnings("all")
 public class CourseDataEntity {
 
+    public int tenantId;
+    public int campusId;
+    public int courseLevel;
+    public int courseType;
+    public int courseSubject;
+    public int courseCategory;
     public String name;
     public String description;
     public String price;
@@ -18,6 +24,54 @@ public class CourseDataEntity {
     public String introduction;
     public List<ChildContent> courseContents;
     public int mediaType;
+
+    public int getTenantId() {
+        return tenantId;
+    }
+
+    public void setTenantId(int tenantId) {
+        this.tenantId = tenantId;
+    }
+
+    public int getCampusId() {
+        return campusId;
+    }
+
+    public void setCampusId(int campusId) {
+        this.campusId = campusId;
+    }
+
+    public int getCourseLevel() {
+        return courseLevel;
+    }
+
+    public void setCourseLevel(int courseLevel) {
+        this.courseLevel = courseLevel;
+    }
+
+    public int getCourseType() {
+        return courseType;
+    }
+
+    public void setCourseType(int courseType) {
+        this.courseType = courseType;
+    }
+
+    public int getCourseSubject() {
+        return courseSubject;
+    }
+
+    public void setCourseSubject(int courseSubject) {
+        this.courseSubject = courseSubject;
+    }
+
+    public int getCourseCategory() {
+        return courseCategory;
+    }
+
+    public void setCourseCategory(int courseCategory) {
+        this.courseCategory = courseCategory;
+    }
 
     public int getMediaType() {
         return mediaType;

@@ -15,17 +15,15 @@ import com.dmcbig.mediapicker.entity.Media;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.runtoinfo.httpUtils.CPRCBean.GetAllCPC;
-import com.runtoinfo.httpUtils.CPRCBean.PraiseEntity;
 import com.runtoinfo.httpUtils.CenterEntity.LearnTrackEntity;
 import com.runtoinfo.httpUtils.CenterEntity.LeaveRecordEntity;
 import com.runtoinfo.httpUtils.CenterEntity.PersonalInformationEntity;
 import com.runtoinfo.httpUtils.HttpEntity;
 import com.runtoinfo.httpUtils.bean.AddMemberBean;
 import com.runtoinfo.httpUtils.CPRCBean.CPRCDataEntity;
-import com.runtoinfo.httpUtils.bean.AddMemberResultEntity;
-import com.runtoinfo.httpUtils.bean.ChildContent;
 import com.runtoinfo.httpUtils.bean.CourseDataEntity;
 import com.runtoinfo.httpUtils.bean.CourseEntity;
+import com.runtoinfo.httpUtils.bean.FineClassCourseEntity;
 import com.runtoinfo.httpUtils.bean.GeoAreaEntity;
 import com.runtoinfo.httpUtils.bean.GetSchoolSettingEntity;
 import com.runtoinfo.httpUtils.bean.HandWorkEntity;
@@ -720,13 +718,13 @@ public class HttpUtils<T> {
      * @param url     请求地址
      * @param mapList 返回的结果集合
      */
-    public  void getAllCourseType(final Handler handler, final String url, final List<Map<String, Object>> mapList, final String token) {
+    public  void getAllCourseType(final Handler handler, final RequestDataEntity entity, final List<FineClassCourseEntity> mapList) {
         executorService.execute(new Runnable() {
             @Override
             public void run() {
                 Request request = new Request.Builder()
-                        .header("Authorization", "Bearer " + token)
-                        .url(url + "?CategoryId=2")
+                        .header(Authorization,  Bearer + entity.getToken())
+                        .url(entity.getUrl() + "?CategoryId=111")
                         .build();
 
                 getClient().newCall(request).enqueue(new Callback() {
@@ -740,19 +738,19 @@ public class HttpUtils<T> {
                         if (response.isSuccessful()) {
                             try {
                                 JSONObject json = new JSONObject(response.body().string());
-                                //if (!TextUtils.isEmpty(json.getString("error"))) {handler.sendEmptyMessage(404); return;}
-                                JSONObject result = json.getJSONObject("result");
-                                JSONArray items = result.getJSONArray("items");
+                                boolean success = json.getBoolean("success");
+                                if (success) {
+                                    JSONObject result = json.getJSONObject("result");
+                                    JSONArray items = result.getJSONArray("items");
 
-                                for (int i = 0; i < items.length(); i++) {
-                                    Map<String, Object> dataMap = new HashMap<>();
-                                    JSONObject chileItem = items.getJSONObject(i);
-                                    dataMap.put("name", chileItem.getString("name"));
-                                    dataMap.put("id", chileItem.getInt("id"));
-                                    mapList.add(dataMap);
+                                    for (int i = 0; i < items.length(); i++) {
+                                        JSONObject chileItem = items.getJSONObject(i);
+                                        FineClassCourseEntity fineClassCourseEntity =
+                                                new Gson().fromJson(chileItem.toString(), new TypeToken<FineClassCourseEntity>() {}.getType());
+                                        mapList.add(fineClassCourseEntity);
+                                    }
+                                    handler.sendEmptyMessage(0);
                                 }
-
-                                handler.sendEmptyMessage(0);
                             } catch (JSONException e) {
                                 handler.sendEmptyMessage(500);
                             }
@@ -766,19 +764,19 @@ public class HttpUtils<T> {
     /**
      * 获取子分类
      */
-    public  void getChildType(final Handler handler, final Map<String, Object> dataMap) {
+    public  void getChildType(final Handler handler, final RequestDataEntity requestDataEntity, final Map<String, Object> dataMap, final List<FineClassCourseEntity> dataList) {
         executorService.execute(new Runnable() {
             @Override
             public void run() {
                 Request request = new Request.Builder()
-                        .header("Authorization", "Bearer " + dataMap.get("token"))
-                        .url(dataMap.get("url") + "?CourseType=" + dataMap.get("type") + "&MaxResultCount=5&SkipCount=0")
+                        .header(Authorization,  Bearer + requestDataEntity.getToken())
+                        .url(requestDataEntity.getUrl() + setUrl(dataMap))
                         .build();
 
                 getClient().newCall(request).enqueue(new Callback() {
                     @Override
                     public void onFailure(Call call, IOException e) {
-
+                        handler.sendEmptyMessage(500);
                     }
 
                     @Override
@@ -789,16 +787,11 @@ public class HttpUtils<T> {
                                 List<Map<String, Object>> mapList = new ArrayList<>();
                                 for (int i = 0; i < items.length(); i++) {
                                     JSONObject childItem = items.getJSONObject(i);
-                                    Map<String, Object> map = new HashMap<>();
-                                    map.put("name", childItem.getString("name"));
-                                    map.put("id", childItem.getInt("id"));
-                                    map.put("icon", childItem.getString("icon"));
-                                    mapList.add(map);
+                                    FineClassCourseEntity fineClassCourseEntity = new Gson()
+                                            .fromJson(childItem.toString(), new TypeToken<FineClassCourseEntity>(){}.getType());
+                                    dataList.add(fineClassCourseEntity);
                                 }
-                                Message msg = new Message();
-                                msg.what = 0;
-                                msg.obj = mapList;
-                                handler.sendMessage(msg);
+                                handler.sendEmptyMessage(0);
                             } catch (JSONException e) {
                                 e.printStackTrace();
                             }
@@ -818,25 +811,19 @@ public class HttpUtils<T> {
      * @param list    接受结果集
      */
 
-    public  void getInChildData(final Handler handler, final Map<String, Object> map, final List<CourseDataEntity> list) {
+    public  void getInChildData(final Handler handler,final RequestDataEntity entity, final Map<String, Object> map, final List<CourseDataEntity> list) {
         executorService.execute(new Runnable() {
             @Override
             public void run() {
-                Map<String, Object> url = new HashMap<>();
-                url.put("CourseType", map.get("CourseType") == null ? "" : map.get("CourseType"));
-                url.put("CourseSubject", map.get("CourseSubject") == null ? "" : map.get("CourseSubject"));
-                url.put("MediaType", map.get("MediaType") == null ? "" : map.get("MediaType"));
-                url.put("MaxResultCount", 5);
-                url.put("SkipCount", 0);
 
                 Request request = new Request.Builder()
-                        .header("Authorization", "Bearer " + map.get("token"))
-                        .url(map.get("url") + setUrl(url))
+                        .header(Authorization,  Bearer + entity.getToken())
+                        .url(entity.getUrl() + setUrl(map))
                         .build();
                 getClient().newCall(request).enqueue(new Callback() {
                     @Override
                     public void onFailure(Call call, IOException e) {
-                        handler.sendEmptyMessage(404);
+                        handler.sendEmptyMessage(500);
                     }
 
                     @Override
@@ -846,32 +833,13 @@ public class HttpUtils<T> {
                                 JSONArray items = getItems(response.body().string(), handler);
                                 for (int i = 0; i < items.length(); i++) {
                                     JSONObject childItem = items.getJSONObject(i);
-                                    CourseDataEntity courseDataEntity = new CourseDataEntity();
-                                    courseDataEntity.setName(childItem.getString("name"));
-                                    courseDataEntity.setDescription(childItem.getString("description"));
-                                    courseDataEntity.setPrice(childItem.getInt("price") + "");
-                                    courseDataEntity.setPurchasedNumber(childItem.getInt("purchasedNumber") + "");
-                                    courseDataEntity.setCover(childItem.getString("cover"));
-                                    courseDataEntity.setStartTime(childItem.getString("startTime"));
-                                    courseDataEntity.setMediaType(childItem.getInt("mediaType"));
-                                    JSONObject courseContent = childItem.getJSONObject("courseContents");
-                                    JSONArray childItems = courseContent.getJSONArray("items");
-                                    List<ChildContent> chileList = new ArrayList<>();
-                                    for (int j = 0; j < childItems.length(); j++) {
-                                        JSONObject itemss = childItems.getJSONObject(j);
-                                        ChildContent content = new ChildContent();
-                                        content.setLeaf(itemss.getBoolean("isLeaf"));
-                                        content.setMediaType(itemss.getInt("mediaType"));
-                                        content.setTarget(itemss.getString("target"));
-                                        content.setName(itemss.getString("name"));
-                                        chileList.add(content);
-                                    }
-                                    courseDataEntity.setCourseContents(chileList);
+                                    CourseDataEntity courseDataEntity = new Gson().fromJson(childItem.toString(),
+                                            new TypeToken<CourseDataEntity>(){}.getType());
                                     list.add(courseDataEntity);
                                     handler.sendEmptyMessage(0);
                                 }
                             } catch (JSONException e) {
-                                handler.sendEmptyMessage(500);
+                                handler.sendEmptyMessage(404);
                             }
                         }
                     }
@@ -1822,6 +1790,13 @@ public class HttpUtils<T> {
 
     }
 
+    /**
+     * 上课记录
+     * @param handler
+     * @param entity
+     * @param map
+     * @param list
+     */
     public void getCourseRecord(final Handler handler, final RequestDataEntity entity, final Map<String, Object> map, final List<CourseEntity> list){
         executorService.execute(new Runnable() {
             @Override
@@ -2112,13 +2087,15 @@ public class HttpUtils<T> {
      */
     public static JSONArray getItems(String body, Handler handler) throws JSONException {
         JSONObject json = new JSONObject(body);
-        JSONObject result = json.getJSONObject("result");
-        if (TextUtils.isEmpty(json.getString("error"))) {
+        boolean  success = json.getBoolean("success");
+        if (success){
+            JSONObject result = json.getJSONObject("result");
+            JSONArray items = result.getJSONArray("items");
+            return items;
+        }else{
             handler.sendEmptyMessage(400);
-            return null;
         }
-        JSONArray items = result.getJSONArray("items");
-        return items;
+        return null;
     }
 
     /**

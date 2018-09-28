@@ -1,0 +1,11 @@
+<component name="libraryTable">
+  <library name="com.aliyun.ams:alicloud-android-man-1.2.4">
+    <CLASSES>
+      <root url="file://$USER_HOME$/.gradle/caches/transforms-1/files-1.1/alicloud-android-man-1.2.4.aar/05fe9a661e818da9a983ab1bc3ff0f95/res" />
+      <root url="jar://$USER_HOME$/.gradle/caches/transforms-1/files-1.1/alicloud-android-man-1.2.4.aar/05fe9a661e818da9a983ab1bc3ff0f95/jars/libs/alicloud-android-man-1.2.4.jar!/" />
+      <root url="jar://$USER_HOME$/.gradle/caches/transforms-1/files-1.1/alicloud-android-man-1.2.4.aar/05fe9a661e818da9a983ab1bc3ff0f95/jars/classes.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

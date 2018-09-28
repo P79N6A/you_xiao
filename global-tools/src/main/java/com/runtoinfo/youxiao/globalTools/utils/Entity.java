@@ -19,4 +19,5 @@ public class Entity {
     public final static String SYSTEM = "system";
     public final static String LESSON_REMINDER = "lessonReminder";
     public final static String CAMPUS_NOTICE = "campusNotice";
+    public final static String SOP_HIX_SUCCESS = "SOP_FIX_SUCCESS";
  }

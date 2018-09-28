@@ -68,23 +68,6 @@ public abstract class BaseFragment extends Fragment {
 //            mImmersionBar.destroy();
     }
 
-//    @Override
-//    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
-//        super.onViewCreated(view, savedInstanceState);
-//        if (isLazyLoad()) {
-//            mIsPrepare = true;
-//            mIsImmersion = true;
-//            onLazyLoad();
-//        } else {
-//            initData();
-//            if (isImmersionBarEnabled())
-//                initImmersionBar();
-//        }
-//        initView();
-//        setListener();
-//    }
-
-
     @Override
     public void setUserVisibleHint(boolean isVisibleToUser) {
         super.setUserVisibleHint(isVisibleToUser);

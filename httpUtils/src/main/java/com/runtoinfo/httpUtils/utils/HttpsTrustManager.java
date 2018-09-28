@@ -24,7 +24,7 @@ import okhttp3.OkHttpClient;
 /**
  * Created by QiaoJunChao on 2018/9/5.
  */
-
+@SuppressWarnings("all")
 public class HttpsTrustManager implements X509TrustManager {
 
     public OkHttpClient.Builder mOkHttpClient = new OkHttpClient.Builder();

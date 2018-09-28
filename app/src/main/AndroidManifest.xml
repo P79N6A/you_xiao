@@ -39,7 +39,7 @@
         android:smallScreens="true" />
 
     <application
-        android:name="myapplication.MyApplication"
+        android:name="myapplication.SopHixApplication"
         android:allowBackup="false"
         android:icon="@drawable/youxiao_logo"
         android:label="@string/app_name"

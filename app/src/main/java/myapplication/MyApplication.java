@@ -9,6 +9,8 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Build;
+import android.os.Bundle;
+import android.os.Process;
 import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 import android.view.Window;
@@ -56,6 +58,8 @@ public class MyApplication extends Application {
     private static MyApplication singleton;
     public static SPUtils spUtils;
     public CloudPushService pushService;
+    public boolean isUpdate = false;
+    public int activityCount = 0;
 
     public interface MsgDisplayListener {
         void handle(String msg);
@@ -69,14 +73,14 @@ public class MyApplication extends Application {
         super.onCreate();
         singleton = this;
         spUtils = new SPUtils(this);
+        SophixManager.getInstance().queryAndLoadNewPatch();
         initArouter();
         checkPermission();
         initManService();
         initFeedbackService();
         initHttpDnsService();
-        //initHotfix();
-        SophixManager.getInstance().queryAndLoadNewPatch();
         //initPushService(this);
+        initBackgoundCallBack();
         CrashReport.initCrashReport(getApplicationContext(), "446920bced", true);
     }
 
@@ -156,17 +160,6 @@ public class MyApplication extends Application {
          */
         //默认初始化
         FeedbackAPI.init(this);
-        //FeedbackAPI.init(this, "DEFAULT_APPKEY", "DEFAULT_APPSECRET");
-        /**
-         * 在Activity的onCreate中执行的代码
-         * 可以设置状态栏背景颜色和图标颜色，这里使用com.githang:status-bar-compat来实现
-         */
-        //FeedbackAPI.setActivityCallback(new IActivityCallback() {
-        //    @Override
-        //    public void onCreate(Activity activity) {
-        //        StatusBarCompat.setStatusBarColor(activity,getResources().getColor(R.color.aliwx_setting_bg_nor),true);
-        //    }
-        //});
         /**
          * 自定义参数演示
          */
@@ -202,52 +195,46 @@ public class MyApplication extends Application {
         //httpdns.setExpiredIPEnabled(true);
     }
 
-    //热修复
-    private void initHotfix() {
-        String appVersion;
-        try {
-            appVersion = this.getPackageManager().getPackageInfo(this.getPackageName(), 0).versionName;
-        } catch (Exception e) {
-            appVersion = "1.0.0";
-        }
-        SophixManager.getInstance().setContext(this)
-                .setAppVersion(appVersion)
-                .setAesKey(null)
-                //.setAesKey("0123456789123456")
-                .setEnableDebug(true)
-                .setPatchLoadStatusStub(new PatchLoadStatusListener() {
-                    @Override
-                    public void onLoad(final int mode, final int code, final String info, final int handlePatchVersion) {
-                        // 补丁加载回调通知
-                        if (code == PatchStatus.CODE_LOAD_SUCCESS) {
-                            // 表明补丁加载成功
-                            String msg = new StringBuilder("").append("Mode:").append(mode)
-                                    .append(" Code:").append(code)
-                                    .append(" Info:").append(info)
-                                    .append(" HandlePatchVersion:").append(handlePatchVersion).toString();
-                            if (msgDisplayListener != null) {
-                                msgDisplayListener.handle(msg);
-                            } else {
-                                cacheMsg.append("\n").append(msg);
-                            }
-                        } else if (code == PatchStatus.CODE_LOAD_RELAUNCH) {
-                            // 表明新补丁生效需要重启. 开发者可提示用户或者强制重启;
-                            // 建议: 用户可以监听进入后台事件, 然后调用killProcessSafely自杀，以此加快应用补丁，详见1.3.2.3
-                        } else {
-                            // 其它错误信息, 查看PatchStatus类说明
-                        }
-                    }
-                }).initialize();
-    }
+    /**
+     * 检测应用处在什么状态
+     */
+    public void initBackgoundCallBack() {
+        registerActivityLifecycleCallbacks(new ActivityLifecycleCallbacks() {
+            @Override
+            public void onActivityCreated(Activity activity, Bundle savedInstanceState) {}
 
-    @Override
-    protected void attachBaseContext(Context base) {
-        super.attachBaseContext(base);
-        initHotfix();
+            @Override
+            public void onActivityStarted(Activity activity) {
+                activityCount++;
+            }
+
+            @Override
+            public void onActivityResumed(Activity activity) {}
+
+            @Override
+            public void onActivityPaused(Activity activity) {}
+
+            @Override
+            public void onActivityStopped(Activity activity) {
+                activityCount--;
+                if (activityCount == 0 && spUtils.getBoolean(Entity.SOP_HIX_SUCCESS)) {
+                    SophixManager.getInstance().killProcessSafely();
+                }
+            }
+
+            @Override
+            public void onActivitySaveInstanceState(Activity activity, Bundle outState) {}
+
+            @Override
+            public void onActivityDestroyed(Activity activity) {
+                spUtils.setBoolean(Entity.SOP_HIX_SUCCESS, false);
+            }
+        });
     }
 
     /**
      * 初始化云推送通道
+     *
      * @param applicationContext
      */
     public void initPushService(final Context applicationContext) {
@@ -275,7 +262,7 @@ public class MyApplication extends Application {
         });
     }
 
-    public void unbindAccount(){
+    public void unbindAccount() {
         pushService.unbindAccount(new CommonCallback() {
             @Override
             public void onSuccess(String s) {

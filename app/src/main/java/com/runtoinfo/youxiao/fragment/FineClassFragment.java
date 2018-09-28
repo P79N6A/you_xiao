@@ -13,6 +13,8 @@ import android.view.ViewGroup;
 import android.view.animation.Animation;
 
 import com.runtoinfo.httpUtils.HttpEntity;
+import com.runtoinfo.httpUtils.bean.FineClassCourseEntity;
+import com.runtoinfo.httpUtils.bean.RequestDataEntity;
 import com.runtoinfo.httpUtils.utils.HttpUtils;
 import com.runtoinfo.youxiao.R;
 import com.runtoinfo.youxiao.adapter.BoutiqueCourseViewPagerAdapter;
@@ -36,7 +38,7 @@ public class FineClassFragment extends BaseFragment {
     public List<String> titles = new ArrayList<>();
     public List<Fragment> fragments = new ArrayList<>();
     public View view;
-    public List<Map<String, Object>> dataList = new ArrayList<>();
+    public List<FineClassCourseEntity> dataList = new ArrayList<>();
     public boolean isGetData;
     private boolean mHasLoadedOnce = false;
     private boolean isPrepared = false;
@@ -60,8 +62,12 @@ public class FineClassFragment extends BaseFragment {
         binding.boutiqueCourseTablayout.setupWithViewPager(binding.boutiqueCourseViewpager);
     }
 
+    //请求大分类
     public void initTableView(){
-        httpUtils.getAllCourseType(handler,HttpEntity.MAIN_URL + HttpEntity.GET_COURSE_TYPE, dataList, spUtils.getString(Entity.TOKEN));
+        RequestDataEntity requestDataEntity = new RequestDataEntity();
+        requestDataEntity.setUrl(HttpEntity.MAIN_URL + HttpEntity.GET_COURSE_TYPE);
+        requestDataEntity.setToken(spUtils.getString(Entity.TOKEN));
+        httpUtils.getAllCourseType(handler,requestDataEntity, dataList);
     }
 
     public Handler handler = new Handler(Looper.myLooper()){
@@ -73,11 +79,9 @@ public class FineClassFragment extends BaseFragment {
                     fragments.add(new MusicFragment(-1));
                     if (dataList.size() > 0){
                         for (int i = 0; i < dataList.size(); i++) {
-                            titles.add(String.valueOf(dataList.get(i).get("name")));
-                            fragments.add(new MusicFragment((int) dataList.get(i).get("id")));
+                            titles.add(String.valueOf(dataList.get(i).getName()));
+                            fragments.add(new MusicFragment(dataList.get(i).getId()));
                         }
-                    } else {
-                        fragments.add(new MusicFragment(-1));
                     }
                     initTableData();
                     break;

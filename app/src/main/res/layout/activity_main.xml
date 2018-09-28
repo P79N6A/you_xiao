@@ -19,7 +19,7 @@
             android:visibility="gone"
             android:fitsSystemWindows="true"/>
 
-        <android.support.v4.view.ViewPager
+        <com.runtoinfo.youxiao.globalTools.views.ViewPager
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1"

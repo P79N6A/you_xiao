@@ -1,6 +1,7 @@
 package com.runtoinfo.personal_center.activities;
 
 import android.app.Activity;
+import android.app.Dialog;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.os.Handler;
@@ -12,9 +13,12 @@ import com.alibaba.android.arouter.facade.annotation.Route;
 import com.alibaba.android.arouter.launcher.ARouter;
 import com.runtoinfo.httpUtils.HttpEntity;
 import com.runtoinfo.httpUtils.bean.RequestDataEntity;
+import com.runtoinfo.httpUtils.bean.VersionEntity;
 import com.runtoinfo.httpUtils.utils.HttpUtils;
+import com.runtoinfo.personal_center.BuildConfig;
 import com.runtoinfo.personal_center.R;
 import com.runtoinfo.personal_center.databinding.ActivityPersonalSettingsBinding;
+import com.runtoinfo.youxiao.globalTools.utils.DialogMessage;
 import com.runtoinfo.youxiao.globalTools.utils.Entity;
 
 import java.util.HashMap;
@@ -25,6 +29,7 @@ public class PersonalSettings extends BaseActivity {
 
     public ActivityPersonalSettingsBinding binding;
     public HttpUtils httpUtils;
+    public Dialog dialog;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -34,6 +39,7 @@ public class PersonalSettings extends BaseActivity {
 
     public void initView(){
         binding = DataBindingUtil.setContentView(this, R.layout.activity_personal_settings);
+        dialog = new Dialog(this, R.style.dialog);
         binding.personalSettingPersonLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -57,7 +63,8 @@ public class PersonalSettings extends BaseActivity {
         binding.personalSettingVersionLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                DialogMessage.showLoading(PersonalSettings.this, dialog, true);
+                checkVersionFromServer();
             }
         });
     }
@@ -78,7 +85,25 @@ public class PersonalSettings extends BaseActivity {
     public Handler handler = new Handler(Looper.getMainLooper()){
         @Override
         public void handleMessage(Message msg) {
-
+            switch (msg.what){
+                case 0:
+                    VersionEntity version = (VersionEntity) msg.obj;
+                    String [] versions = version.getVersion().split(".");
+                    StringBuilder strVersion = new StringBuilder("");
+                    for (String s : versions){
+                        strVersion.append(s);
+                    }
+                    String[] locationVersion = BuildConfig.VERSION_NAME.split(".");
+                    StringBuilder locVersion = new StringBuilder("");
+                    for (String l : locationVersion){
+                        locVersion.append(l);
+                    }
+                    if (Integer.parseInt(strVersion.toString()) > Integer.parseInt(locVersion.toString())){
+                        //showUpdate(version.getDescription(), version.getiOSUpgradePath());
+                        DialogMessage.showToast(PersonalSettings.this, "有新的更新！");
+                    }
+                    break;
+            }
         }
     };
 }

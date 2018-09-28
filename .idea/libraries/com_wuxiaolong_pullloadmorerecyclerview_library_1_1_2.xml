@@ -1,0 +1,12 @@
+<component name="libraryTable">
+  <library name="com.wuxiaolong.pullloadmorerecyclerview:library-1.1.2">
+    <CLASSES>
+      <root url="jar://$USER_HOME$/.gradle/caches/transforms-1/files-1.1/library-1.1.2.aar/a57ef9d2ad1d1b522e9384357e76e9b0/jars/classes.jar!/" />
+      <root url="file://$USER_HOME$/.gradle/caches/transforms-1/files-1.1/library-1.1.2.aar/a57ef9d2ad1d1b522e9384357e76e9b0/res" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.wuxiaolong.pullloadmorerecyclerview/library/1.1.2/b56555037a6dc0a7e7e1dee4fd5c145324f6e89c/library-1.1.2-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>

@@ -60,4 +60,8 @@ public class DensityUtil {
         }
         return 0;
     }
+
+    public static int getOffSet(int page){
+        return (page - 1) * 10;
+    }
 }

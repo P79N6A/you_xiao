@@ -1,31 +1,33 @@
 {
   "config": {
-	"emas.appKey":"24881419",
-	"emas.appSecret":"5230e8b220d1da5cd21feba70819262b",
+	"emas.appKey":"24880740",
+	"emas.appSecret":"5d187b5215dd27026457f27caaf33be6",
 	"emas.packageName":"com.runtoinfo.youxiao",
-	"hotfix.idSecret":"24881419-1",
-	"hotfix.rsaSecret":"MIIEvwIBADANBgkqhkiG9w0BAQEFAASCBKkwggSlAgEAAoIBAQDc0xJgxgfEHR4oLjY+TNrDjSwTOFvaXww98RW23OWEIrev9Sz4AhhShJAEQ9Y5c4/iFFMp6CzJuNi72IF534GzBfxH0H09fQi58vkFaF8W0qq6D/sMqSekvlRLmt2MRRXkSzHnNinPjub4LzH1yfJjf1ABHCSPwxUDbjv1FoVnAeJuYJHq96Qu0G7M4sjDN8VPJSjKNxiurx8WO0e2BDXoTPcy6J6F05XtI6nFHkB4U6uuWQYo6R6p1aXJWnCLE1xVdCz+PPv7j4JW1X5AvEx9dxbXGWGXvNLD+FtbwhQxvZ/ab0AuQ/293IWsgSMOgqTMThXj6+LeuIAygtsUxBsJAgMBAAECggEANbL6WCAwCUfPapP6SuIjnMQ6wJ3G8G6GqpVy41oKUjyjEJ39hn3z7jUgVHkuoh/xEFhC9QDpy1AxHFUE/18TyjYdaFVR7171fUqRtffwj7tBGygBs816v3wtQYlycMboEPEcPI6WUkv87MOFUbD/SaTPDsYKOg+Fj6UB3ZLRc/+0gakwW1UbD+TeIvU1ZuilXY89F/PgD8WbWfyFfDaq24EObsVibtdyui8vcSyd8pD0zdqbSsYJr81wVUpTIfu7Z+VJxdk9+sPlt4CPdsGZja61O/FyxO3skgRIbcOoSEDXsvnH5iRwCU/opXYXXa942gbdXznYI69Wz2KqJAAggQKBgQD7K3X1mN/QR5Nkpnk2de0upNZD2tCx5gVjz2NBM/JRdfXoB67P7Zk8Ie9RtDqEDewJvHCbUM+Oo8W3H3IKP8V3H2CySsS+mVNh0T3ndoIGcr4DY1QitR94FypUW/vleRvVTlSQbhI24r2ZnO8BwhUipeYwHiJay4S3jyfvB71gWQKBgQDhEjeyqAIKJhxyYyRZY1A0zf2zO337bDlub8qGU96Z7S1YEQ/MX9DSd4ASeWVpo4b7a5ixb56Cve+s0yXNdqUlCVhIlN5z926rm2rq7JX9Yh5vuaJ5LDSQywWpzKS41Z/IuA/IFnsWKgpYg5FYgvL0B8s57S/ZO+5VmPh+fSS6MQKBgQDqvG5szqf1nr8opNDJziKRoipBlkHO0RuecVbgvCyuZyEf7fY5i2PXqBti7550hhJf8wYGkdq5A2QnxbKt03W349JaLrh7LQ6Zb5V8OexBHIFq5yzdlwrHEFdWKfVcO/iAPMmZhdVuCDCMXPeeXAWmsQdVVwRieKwbZSY8Ja6eWQKBgQCGVMQvejz1Z7e0wd1xCGhXi9ZuwgQ4KmjAtDIxKB+EyV014cEHHuzYoQAsho3zlek7aAWTaWY27Dv/b2pxje2VBFXPxCJdHoHMJI+UtS30NDqsPiRto+efv7yakoyB0OZz+v9YUaqXGPJhz+zQ4h81bO1rnlfflPhz2D//5pskEQKBgQDQtN2QSqYQStm+UYaD4/7WQqtEhyK0RWs4drKL7gqSjHAWU3+Bf2/v1HO6s9l9CCS9iyGHOjCw3cXlwVQJqj40VdTn2Yv7JAJWpyDawqrGrHv7FmCAfKOiGuvpGGEGiy8CWCqK6vqjVpTiXvja3mTjJgsaCAfZtTwL515HydC+Mg=="
+	"hotfix.idSecret":"24880740-1",
+	"hotfix.rsaSecret":"MIIEvQIBADANBgkqhkiG9w0BAQEFAASCBKcwggSjAgEAAoIBAQC401SBxpD2uh8jZZoJRYxUvLYzJDjd9ueV4jjocdkhINN+2bxkcXRWK/Z+hK7kY9B9Yvqf3vNFwGtbSOz2R5frB7I/VNxkNBiHcx+/ODJ1D7DPTKD0R3YnydW1wPciC5GMEgobqmYmexuQO3TuCiQCvbImEgRlR2HDi78aVJpMJhHF7NZNUlXb/R/DqkZ6frGzzUxZibjmZ5YB1w8j6B6uk74QY3JBaT99VWOG+HcmULYelxIuuKZQikI0iceigZHCCt/rlKCsy4vHQwaj3ffODQ/FI+SvcwSuB2Su3iE0eqC4jaioaxLQp8jCHV0ngxz/Pk+6Lncfy5NrqTw5sHlBAgMBAAECggEAVMqO8GKaSrakZmbMPgisEovowpmRhTMql3aLSQhB5pLatE1LwoDSMF5G3VAdtCWelod8Fy//Rza5ic1w+KNrrKWBPtC9szK7Nhi4rc8oRtAF+3RaOvc125ca9iEqv3GzOiFkhcCs0GaWBJtiT3pTfvZr7k9BuP0Aeud3qqq5hskAWBRvOYycDlE83e1NOF24jstUEYlOXYRXcu+jL2tYghGqDUtVk9gsFsvIQTucxZDvfs/YcYk4P9UyJc8G5oKj30IS19yEhN9aR75pqI2/KS1MvJdiSzqMn5/2Kly6j1kq++XTbX54ZTivx6bMSLkaNncDEGmrC+cBrpoUXOe1YQKBgQDnBdj/tLjtZl+0KhHvIh63X/ElPe8AR6nP0K9WyqagO2Qzm/P4kzqtm5fK5P/yXGkGhmwtQwUKbW6rvcOLnJ1pYxB+jiadlSstDxrDiDFT62h4WAjNMdpjGIRni8muqWvR5KoQJd0TMe1IZ6eH4NrYr6vYvDb8lMJXrmfWKUsWjQKBgQDMztoqkTXBquNmdtqkpMKI9bTb6qI7XQCoG4ktXUUsQUWKokzhr0p7NSry5Vbk/l/edf7c8HSjA28VBDV67s21v5FyDduTIWb9IfiIzOcAbmFyM4dw595IKYZG+Q+r4T61TxJHTbJoa51bG4yreTArP13vCSpq6fkyBNknnA1KhQKBgFEETPhHoX6nozJkeouZNJpsS/4afSFlAFk/vu25/bs9eMNckq9+ulo9sXrW2iddXvuJ0pAA69ifTetujg/86XsW4abwJPyoXk7b+C/QKDRc3vMtNFD5hbOw2mYRsLXO9l/SSA2HqcLchHEa4LaXFUheOu6z+riTVqA3KnUBYDLVAoGAbYZFBzSGYd4oI3h17kwpuCJlqKFuRn6yxjOLhVX2kvcI4F1w7dPW6dKB+EkK0gTycb36IF76kN5aPgv1KZuhKIuclTix7pmTQNU02rtw4TsmI3NI/+kPZtnF9Bhm+AzJgx4Y8UasnMjH6pvt+xkg2E/XxOfK5kffOo97LYJ3XR0CgYEAo7+GcM854EsKJoE1v66uZPhhEQD4e1wzv4aooe5XdCCLPOB6v3024knYl91KoVaGPy2VGf03G29s8QypxGTRuLmwsjBy3JqOvIZv9s1i2phz7isbjWn9jTmu5osksk0N1G9+wz4v4FZz4f4h5J6fLjTd3VgaH3ibqrjb0HMEx5I=",
+	"httpdns.accountId":"113738",
+	"httpdns.secretKey":"21a27918558313c3fead0525ed412303"
 },
   "services": {
       "httpdns_service": {
         "status": 1,
-        "version":"1.1.8"
+        "version":"1.2.1"
       },
       "cps_service": {
         "status": 1,
-        "version":"3.1.3"
+        "version":"3.1.4"
       },
       "hotfix_service": {
         "status": 1,
-        "version":"3.2.2"
+        "version":"3.2.6"
       },
       "man_service": {
         "status": 1,
-        "version":"1.2.3"
+        "version":"1.2.4"
       },
       "feedback_service": {
         "status": 1,
-        "version":"3.1.6"
+        "version":"3.1.8"
       }
   },
   "use_maven":true,

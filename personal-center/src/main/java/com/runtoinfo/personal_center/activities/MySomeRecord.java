@@ -27,9 +27,11 @@ import com.runtoinfo.personal_center.fragment.CourseFragment;
 import com.runtoinfo.personal_center.fragment.NewsFragment;
 import com.runtoinfo.personal_center.fragment.TopicsFragment;
 import com.runtoinfo.youxiao.globalTools.adapter.CommonViewPagerAdapter;
+import com.runtoinfo.youxiao.globalTools.utils.DensityUtil;
 import com.runtoinfo.youxiao.globalTools.utils.Entity;
 import com.runtoinfo.youxiao.globalTools.utils.IntentDataType;
 import com.runtoinfo.youxiao.globalTools.utils.RecyclerViewDecoration;
+import com.wuxiaolong.pullloadmorerecyclerview.PullLoadMoreRecyclerView;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -55,6 +57,9 @@ public class MySomeRecord extends BaseActivity {
     public RequestDataEntity requestDataEntity;
     public HttpUtils httpUtils;
 
+    public List tempList;
+    public int page = 1;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -77,17 +82,17 @@ public class MySomeRecord extends BaseActivity {
             case "courseRecord":
                 binding.someRecordTitle.setText("上课记录");
                 hideView(false);
-                requestCourseRecord();
+                requestCourseRecord(1);
                 break;
             case "leaveRecord":
                 binding.someRecordTitle.setText("请假记录");
                 hideView(false);
-                requestLeaveRecord();
+                requestLeaveRecord(1);
                 break;
             case "learnTrack":
                 binding.someRecordTitle.setText("学习轨迹");
                 hideView(false);
-                requestLearnTacks();
+                requestLearnTacks(1);
                 break;
             case "collection":
                 binding.someRecordTitle.setText("我的收藏");
@@ -97,25 +102,27 @@ public class MySomeRecord extends BaseActivity {
         }
     }
 
+    //请假
     public void initLeaveAdapter() {
         leaveAdapter = new LeaveAdapter(MySomeRecord.this, leaveEntityList, R.layout.record_leave_item_layout);
-        binding.myRecordRecycler.setLayoutManager(new LinearLayoutManager(this));
+        binding.myRecordRecycler.setLinearLayout();
         binding.myRecordRecycler.setAdapter(leaveAdapter);
         binding.myRecordRecycler.addItemDecoration(new RecyclerViewDecoration(this, RecyclerViewDecoration.HORIZONTAL_LIST));
     }
-
+    //学习轨迹
     public void initLearnAdapter() {
         learningTrackAdapter = new LearningTrackAdapter(MySomeRecord.this, learnList, R.layout.record_study_item_layout);
-        binding.myRecordRecycler.setLayoutManager(new LinearLayoutManager(this));
+        binding.myRecordRecycler.setLinearLayout();
         binding.myRecordRecycler.setAdapter(learningTrackAdapter);
         binding.myRecordRecycler.addItemDecoration(new RecyclerViewDecoration(this, RecyclerViewDecoration.HORIZONTAL_LIST));
     }
-
+    //上课记录
     public void initCourseAdapter() {
         courseRecordAdapter = new CourseRecordAdapter(MySomeRecord.this, courseList, R.layout.record_course_item_layout);
-        binding.myRecordRecycler.setLayoutManager(new LinearLayoutManager(this));
+        binding.myRecordRecycler.setLinearLayout();
         binding.myRecordRecycler.setAdapter(courseRecordAdapter);
         binding.myRecordRecycler.addItemDecoration(new RecyclerViewDecoration(this, RecyclerViewDecoration.HORIZONTAL_LIST));
+        binding.myRecordRecycler.setOnPullLoadMoreListener(pullLoadMoreListener);
     }
 
     public void hideView(boolean flag) {
@@ -130,37 +137,72 @@ public class MySomeRecord extends BaseActivity {
         requestDataEntity.setTenantId(spUtils.getInt(Entity.TENANT_ID));
     }
 
+    public PullLoadMoreRecyclerView.PullLoadMoreListener pullLoadMoreListener = new PullLoadMoreRecyclerView.PullLoadMoreListener() {
+        @Override
+        public void onRefresh() {
+            page = 1;
+            switch (dataType) {
+                case "courseRecord":
+                    requestCourseRecord(page);
+                    break;
+                case "leaveRecord":
+                    requestLeaveRecord(page);
+                    break;
+                case "learnTrack":
+                    requestLearnTacks(page);
+                    break;
+            }
+        }
+
+        @Override
+        public void onLoadMore() {
+            page += 1;
+            switch (dataType) {
+                case "courseRecord":
+                    requestCourseRecord(page);
+                    break;
+                case "leaveRecord":
+                    requestLeaveRecord(page);
+                    break;
+                case "learnTrack":
+                    requestLearnTacks(page);
+                    break;
+            }
+        }
+    };
+
     //学习轨迹
-    public void requestLearnTacks() {
+    public void requestLearnTacks(int page) {
         requestDataEntity.setUrl(HttpEntity.MAIN_URL + HttpEntity.GET_LEARN_TACKS);
 
         Map<String, Object> requestMap = new HashMap<>();
         requestMap.put("MaxResultCount", 10);
-        requestMap.put("SkipCount", 0);
-
-        httpUtils.getLearnTacks(handler, requestDataEntity, requestMap, learnList);
+        requestMap.put("SkipCount", DensityUtil.getOffSet(page));
+        tempList = new ArrayList();
+        httpUtils.getLearnTacks(handler, requestDataEntity, requestMap, tempList);
     }
 
     //请假记录
-    public void requestLeaveRecord() {
+    public void requestLeaveRecord(int page) {
         requestDataEntity.setUrl(HttpEntity.MAIN_URL + HttpEntity.GET_LEAVE_RECORD);
 
         Map<String, Object> requestMap = new HashMap<>();
         requestMap.put("UserId", spUtils.getInt(Entity.USER_ID));
         requestMap.put("MaxResultCount", 10);
-        requestMap.put("SkipCount", 0);
-
-        httpUtils.getLeaveRecord(handler, requestDataEntity, requestMap, leaveEntityList);
+        requestMap.put("SkipCount", DensityUtil.getOffSet(page));
+        tempList = new ArrayList();
+        httpUtils.getLeaveRecord(handler, requestDataEntity, requestMap, tempList);
     }
 
     //上课记录
-    public void requestCourseRecord() {
+    public void requestCourseRecord(int page) {
         requestDataEntity.setUrl(HttpEntity.MAIN_URL + HttpEntity.GET_COURSE_RECORD);
 
         Map<String, Object> requestMap = new HashMap<>();
-        requestMap.put("skipCount", 0);
+        requestMap.put("skipCount", DensityUtil.getOffSet(page));
         requestMap.put("maxResultCount", 10);
-        httpUtils.getCourseRecord(handler, requestDataEntity, requestMap, courseList);
+        tempList = new ArrayList();
+        httpUtils.getCourseRecord(handler, requestDataEntity, requestMap, tempList);
     }
 
     //我的收藏
@@ -209,6 +251,14 @@ public class MySomeRecord extends BaseActivity {
         public void handleMessage(Message msg) {
             switch (msg.what) {
                 case 0:
+                    if (tempList != null){
+                        binding.myRecordRecycler.setPullLoadMoreCompleted();
+                        leaveEntityList.addAll(tempList);
+                        if (leaveAdapter != null){
+                            leaveAdapter.notifyDataSetChanged();
+                            return;
+                        }
+                    }
                     if (learnList.size() > 0) {
                         hideNothingView(false, 0, "");
                         initLearnAdapter();
@@ -217,6 +267,15 @@ public class MySomeRecord extends BaseActivity {
                     }
                     break;
                 case 1:
+
+                    if (tempList != null){
+                        binding.myRecordRecycler.setPullLoadMoreCompleted();
+                        learnList.addAll(tempList);
+                        if (learningTrackAdapter != null){
+                            learningTrackAdapter.notifyDataSetChanged();
+                            return;
+                        }
+                    }
                     if (leaveEntityList.size() > 0){
                         hideNothingView(false, 0, "");
                         initLeaveAdapter();
@@ -225,6 +284,14 @@ public class MySomeRecord extends BaseActivity {
                     }
                     break;
                 case 2:
+                    if (tempList != null){
+                        binding.myRecordRecycler.setPullLoadMoreCompleted();
+                        courseList.addAll(tempList);
+                        if (courseRecordAdapter != null){
+                            courseRecordAdapter.notifyDataSetChanged();
+                            return;
+                        }
+                    }
                     if (courseList.size() > 0) {
                         hideNothingView(false, 0, "");
                         initCourseAdapter();
@@ -242,5 +309,10 @@ public class MySomeRecord extends BaseActivity {
         }
     };
 
-
+    @Override
+    protected void onPause() {
+        super.onPause();
+        page = 1;
+        tempList.clear();
+    }
 }

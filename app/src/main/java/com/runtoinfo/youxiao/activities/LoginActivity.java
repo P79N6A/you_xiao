@@ -48,6 +48,7 @@ import java.util.TimerTask;
 
 import okhttp3.Response;
 
+@SuppressWarnings("all")
 @Route(path = "/main/LoginActivity")
 public class LoginActivity extends BaseActivity {
 
@@ -60,6 +61,7 @@ public class LoginActivity extends BaseActivity {
     public Dialog dialog;
     public boolean isLoadUserName = true;
     public HttpUtils httpUtils;
+    private long firstTime = 0;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -254,13 +256,13 @@ public class LoginActivity extends BaseActivity {
                 String tag = binding.loginPassword.getTag().toString();
                 switch (tag) {
                     case "PASSWORD_OFF":
-                        binding.loginImgPwVis.setImageDrawable(getResources().getDrawable(R.drawable.login_password_off));
+                        binding.loginImgPwVis.setImageDrawable(getResources().getDrawable(R.drawable.login_password_on));
                         binding.loginPassword.setTransformationMethod(HideReturnsTransformationMethod.getInstance());
                         binding.loginPassword.setSelection(binding.loginPassword.getText().length());
                         binding.loginPassword.setTag("PASSWORD_ON");
                         break;
                     case "PASSWORD_ON":
-                        binding.loginImgPwVis.setImageDrawable(getResources().getDrawable(R.drawable.login_password_on));
+                        binding.loginImgPwVis.setImageDrawable(getResources().getDrawable(R.drawable.login_password_off));
                         binding.loginPassword.setTransformationMethod(PasswordTransformationMethod.getInstance());
                         binding.loginPassword.setSelection(binding.loginPassword.getText().length());
                         binding.loginPassword.setTag("PASSWORD_OFF");
@@ -460,5 +462,16 @@ public class LoginActivity extends BaseActivity {
     public void onPause() {
         super.onPause();
         isLoadUserName = true;
+    }
+
+    @Override
+    public void onBackPressed() {
+        long secondTime = System.currentTimeMillis();
+        if (secondTime - firstTime < 1000) {
+            finished();
+        } else {
+            Toast.makeText(LoginActivity.this, "再按一次退出程序", Toast.LENGTH_SHORT).show();
+            firstTime = System.currentTimeMillis();
+        }
     }
 }

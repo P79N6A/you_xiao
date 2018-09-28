@@ -16,6 +16,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.runtoinfo.httpUtils.HttpEntity;
+import com.runtoinfo.httpUtils.bean.FineClassCourseEntity;
+import com.runtoinfo.httpUtils.bean.RequestDataEntity;
 import com.runtoinfo.httpUtils.utils.HttpUtils;
 import com.runtoinfo.youxiao.R;
 import com.runtoinfo.youxiao.adapter.BoutiqueCourseChildPagerAdapter;
@@ -45,6 +47,7 @@ public class MusicFragment extends BaseFragment{
     public ImageView imageView;
     public int type;
     public HttpUtils httpUtils;
+    public List<FineClassCourseEntity> dataList = new ArrayList<>();
 
     public MusicFragment(int type){
         this.type = type;
@@ -73,11 +76,15 @@ public class MusicFragment extends BaseFragment{
             binding.boutiqueCourseChildTablayout.setVisibility(View.VISIBLE);
             courseTypeEntity.setCourseType(String.valueOf(type));
             Map<String, Object> map = new HashMap<>();
-            map.put("type", type);
-            map.put("token", spUtils.getString(Entity.TOKEN));
-            map.put("url", HttpEntity.MAIN_URL + HttpEntity.GET_COURSE_CHILD_TYPE);
+            map.put("ParentId", type);
+            map.put("CategoryId", 111);
 
-            httpUtils.getChildType(handler, map);
+            RequestDataEntity requestDataEntity = new RequestDataEntity();
+            requestDataEntity.setUrl(HttpEntity.MAIN_URL + HttpEntity.GET_COURSE_TYPE);
+            requestDataEntity.setToken(spUtils.getString(Entity.TOKEN));
+            requestDataEntity.setType(type);
+
+            httpUtils.getChildType(handler,requestDataEntity, map, dataList);
         }
 
     }
@@ -130,12 +137,12 @@ public class MusicFragment extends BaseFragment{
         public void handleMessage(Message msg) {
             switch (msg.what){
                 case 0:
-                    List<Map<String, Object>> dataList = (List<Map<String, Object>>) msg.obj;
+
                     if (dataList.size() > 0) {
                         for (int i = 0; i < dataList.size(); i++) {
-                            titles.add(dataList.get(i).get("name").toString());
-                            fragmentList.add(new BoutiqueCourseChildFragment((int) dataList.get(i).get("id")));
-                            iconPath.add(dataList.get(i).get("icon").toString());
+                            titles.add(dataList.get(i).getName());
+                            fragmentList.add(new BoutiqueCourseChildFragment( dataList.get(i).getId()));
+                            iconPath.add(dataList.get(i).getCategoryName());
                         }
                     }else{
                         fragmentList.add(new BoutiqueCourseChildFragment(-1));

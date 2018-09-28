@@ -84,9 +84,7 @@ dependencies {
     implementation project(':global-tools')
     api project(path: ':event')
     implementation project(':information')
-    implementation project(':mall')
     implementation project(':httpUtils')
-    implementation project(':education')
     implementation 'com.tencent.bugly:crashreport:2.6.6.1'
     //其中latest.release指代最新Bugly SDK版本号，也可以指定明确的版本号，例如2.1.9
     implementation 'com.tencent.bugly:nativecrashreport:3.3.1'
@@ -98,4 +96,6 @@ dependencies {
     implementation files('libs/volley.jar')
     implementation 'org.xwalk:xwalk_core_library:23.53.589.4'
     implementation project(':comment-praise-reply')
+    implementation 'com.wuxiaolong.pullloadmorerecyclerview:library:1.1.2'
+    implementation 'com.aliyun.ams:alicloud-android-hotfix:3.2.6'
 }

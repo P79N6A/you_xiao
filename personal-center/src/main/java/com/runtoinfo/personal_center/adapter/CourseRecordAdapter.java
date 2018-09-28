@@ -5,8 +5,6 @@ import android.content.Context;
 import android.util.Log;
 import android.widget.ImageView;
 
-import com.runtoinfo.httpUtils.CenterEntity.CourseRecordEntity;
-import com.runtoinfo.httpUtils.HttpEntity;
 import com.runtoinfo.httpUtils.bean.CourseEntity;
 import com.runtoinfo.httpUtils.utils.HttpUtils;
 import com.runtoinfo.personal_center.R;
@@ -18,7 +16,7 @@ import java.util.List;
 /**
  * Created by QiaoJunChao on 2018/9/5.
  */
-
+@SuppressWarnings("all")
 public class CourseRecordAdapter extends UniversalRecyclerAdapter<CourseEntity> {
 
 

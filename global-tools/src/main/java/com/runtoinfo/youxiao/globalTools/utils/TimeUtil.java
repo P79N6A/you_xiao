@@ -18,14 +18,15 @@ public class TimeUtil {
 
     /**
      * iso8601时间标准转Date
+     *
      * @param iso8601 时间格式
-     * @param type 是否需要精确到几点几分
+     * @param type    是否需要精确到几点几分
      * @return 时间组合返回结果
      * @throws ParseException
      */
     public static String iso8601ToDate(String iso8601, int type) {
         try {
-            Date date = ISO8601Utils.parse(iso8601 + "Z", new ParsePosition(0));
+            Date date = ISO8601Utils.parse(iso8601, new ParsePosition(0));
             Calendar calendar = Calendar.getInstance();
             calendar.setTime(date);
             StringBuilder buffer = new StringBuilder("");
@@ -41,13 +42,13 @@ public class TimeUtil {
                         .append(calendar.get(Calendar.MINUTE) < 10 ? "0" + calendar.get(Calendar.MINUTE) : calendar.get(Calendar.MINUTE));
             }
             return buffer.toString();
-        }catch (ParseException e){
+        } catch (ParseException e) {
             e.printStackTrace();
         }
         return null;
     }
 
-    public static String getTimeDif(String ISO1806){
+    public static String getTimeDif(String ISO1806) {
         try {
             //Date date = ISO8601Utils.parse(ISO1806, new ParsePosition(0));
 
@@ -57,25 +58,25 @@ public class TimeUtil {
             long now = System.currentTimeMillis() / 1000;
             long dif = now - publish;
             if (dif < 60) return dif + "秒前";
-            else if (60 < dif && dif < 3600){
+            else if (60 < dif && dif < 3600) {
                 long time = dif / 60;
-                return  time + "分钟前";
-            }else if (dif > 3600 && dif < 3600 * 24){
-                return  dif / 3600 + "小时前";
-            }else{
+                return time + "分钟前";
+            } else if (dif > 3600 && dif < 3600 * 24) {
+                return dif / 3600 + "小时前";
+            } else {
                 return format.format(date);
             }
         } catch (ParseException e) {
             e.printStackTrace();
         }
-        return  null;
+        return null;
     }
 
     /**
      * 获取当前时间（年-月-日）
      */
 
-    public static String getNowDate(){
+    public static String getNowDate() {
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
         return format.format(new Date());
     }
