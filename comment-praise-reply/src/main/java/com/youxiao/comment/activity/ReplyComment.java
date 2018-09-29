@@ -110,7 +110,7 @@ public class ReplyComment extends BaseActivity {
     public void initRecyclerData(){
         if (dataList.size() > 0) {
             mAdapter = new CommentPublishAdapter(handler, ReplyComment.this, dataList, R.layout.comment_publish_items);
-            binding.replyRecycler.setLayoutManager(new LinearLayoutManager(ReplyComment.this));
+            binding.replyRecycler.setLinearLayout();
             binding.replyRecycler.setAdapter(mAdapter);
             binding.replyRecycler.addItemDecoration(new RecyclerViewDecoration(ReplyComment.this, RecyclerViewDecoration.HORIZONTAL_LIST));
         }else{
@@ -129,7 +129,7 @@ public class ReplyComment extends BaseActivity {
         cpc.setMaxResultCount(10);
         cpc.setSkipCount(0);
 
-        httpUtils.getCommentAll(handler, cpc);
+        httpUtils.getCommentAll(handler, cpc, dataList);
     }
 
     public Handler handler = new Handler(Looper.getMainLooper()){
@@ -137,18 +137,7 @@ public class ReplyComment extends BaseActivity {
         public void handleMessage(Message msg) {
             switch (msg.what){
                 case 20://获取全部回复 结果
-                    try {
-                        JSONObject result = (JSONObject) msg.obj;
-                        JSONArray items = result.getJSONArray("items");
-                        for (int i =0; i < items.length(); i++){
-                            JSONObject item = items.getJSONObject(i);
-                            CommentRequestResultEntity requestResultEntity = new Gson().fromJson(item.toString(), new TypeToken<CommentRequestResultEntity>() {}.getType());
-                            dataList.add(requestResultEntity);
-                        }
-                        initRecyclerData();
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
+                    initRecyclerData();
                     break;
                 case 1://回复的评论 结果
                     String result = msg.obj.toString();

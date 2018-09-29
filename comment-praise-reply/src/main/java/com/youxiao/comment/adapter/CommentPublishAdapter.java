@@ -5,10 +5,12 @@ import android.content.Context;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 
 import com.alibaba.android.arouter.launcher.ARouter;
+import com.bumptech.glide.Glide;
 import com.google.gson.Gson;
 import com.runtoinfo.httpUtils.CPRCBean.CPRCDataEntity;
 import com.runtoinfo.httpUtils.CPRCBean.CPRCTypeEntity;
@@ -29,7 +31,7 @@ import java.util.List;
 /**
  * Created by QiaoJunChao on 2018/8/31.
  */
-
+@SuppressWarnings("all")
 public class CommentPublishAdapter extends UniversalRecyclerAdapter<CommentRequestResultEntity> {
     public List<CommentRequestResultEntity> dataList = new ArrayList<>();
     public Activity activity;
@@ -60,7 +62,8 @@ public class CommentPublishAdapter extends UniversalRecyclerAdapter<CommentReque
             temResultEntity = null;
             holder.setText(R.id.comment_publish_details, commentPublishItemEntity.getContent());
         }
-        httpUtils.postSrcPhoto(activity, HttpEntity.IMAGE_HEAD + commentPublishItemEntity.getUserAvatar(), (ImageView) holder.getView(R.id.comment_publish_item_img));
+        Glide.with(mContext).load(HttpEntity.IMAGE_HEAD + commentPublishItemEntity.getUserAvatar())
+                .into((ImageView) holder.getView(R.id.comment_publish_item_img));
         String[] time = new String[2];
         if (commentPublishItemEntity.getApprovedTime() != null) {
              time = commentPublishItemEntity.getApprovedTime().split("T");
@@ -68,7 +71,8 @@ public class CommentPublishAdapter extends UniversalRecyclerAdapter<CommentReque
         //时间格式要进行更改，改为“1分钟之前”，目前是显示的日期
         holder.setText(R.id.comment_publish_time, time[0] /*+ "  " + time[1]*/);
         //因数据不完善，本是int类型数据，得到的是null
-        //holder.setText(R.id.comment_publish_reply, commentPublishItemEntity.getReplyNumber());
+        Log.e("comment", String.valueOf(commentPublishItemEntity.getReplyNumber() ));
+        holder.setText(R.id.comment_publish_reply, String.valueOf(commentPublishItemEntity.getReplyNumber() + "回复"));
         if (commentPublishItemEntity.hasPraise) {
             holder.setBackgroundResource(R.id.comment_publish_praise, R.drawable.comment_praised);
         }else {
@@ -129,4 +133,6 @@ public class CommentPublishAdapter extends UniversalRecyclerAdapter<CommentReque
         };
 
     }
+
+
 }

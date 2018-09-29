@@ -49,7 +49,7 @@ public class SchoolDynamics extends BaseActivity {
     public HttpUtils httpUtils;
     @Override
     protected void initView() {
-        binding = DataBindingUtil.setContentView(this, R.layout.school_movment);
+        binding = DataBindingUtil.setContentView(SchoolDynamics.this, R.layout.school_movment);
         httpUtils = new HttpUtils(getApplicationContext());
         changeView();
         initEvent();
@@ -79,7 +79,7 @@ public class SchoolDynamics extends BaseActivity {
         binding.detailsCollection.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {
-                returnType = 1;
+
                 CPRCDataEntity dataEntity = new CPRCDataEntity();
                 dataEntity.setToken(spUtils.getString(Entity.TOKEN));
                 dataEntity.setType(CPRCTypeEntity.COLLECTION);
@@ -93,6 +93,7 @@ public class SchoolDynamics extends BaseActivity {
         binding.detailsPraise.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {
+                returnType = 1;
                 CPRCDataEntity dataEntity = new CPRCDataEntity();
                 dataEntity.setToken(spUtils.getString(Entity.TOKEN));
                 dataEntity.setType(CPRCTypeEntity.PRAISE);
@@ -191,6 +192,7 @@ public class SchoolDynamics extends BaseActivity {
                     break;
                 case 3:
                     binding.detailsCollectionImagView.setBackgroundResource(R.drawable.boutique_course_collectioned);
+                    binding.detailsCollectionText.setText("已收藏");
                     DialogMessage.showToast(SchoolDynamics.this, "收藏成功");
                     break;
 

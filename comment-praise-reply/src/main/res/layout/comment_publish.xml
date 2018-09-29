@@ -58,7 +58,7 @@
             android:layout_below="@+id/comment_all_title"
             android:background="#ebebeb" />
 
-        <android.support.v7.widget.RecyclerView
+        <com.wuxiaolong.pullloadmorerecyclerview.PullLoadMoreRecyclerView
             android:id="@+id/comment_publish_recycle"
             android:layout_width="match_parent"
             android:layout_height="match_parent"

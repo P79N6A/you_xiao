@@ -70,7 +70,7 @@
                 android:paddingEnd="6dp"
                 android:paddingStart="6dp"
                 android:paddingTop="3dp"
-                android:text="10回复"
+                android:text="0回复"
                 android:textColor="#666666"
                 android:textSize="14sp" />
         </LinearLayout>

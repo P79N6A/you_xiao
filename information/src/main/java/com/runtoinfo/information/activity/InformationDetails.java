@@ -1,5 +1,6 @@
 package com.runtoinfo.information.activity;
 
+import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.os.Handler;
@@ -60,6 +61,7 @@ public class InformationDetails extends BaseActivity {
     public List<SystemMessageEntity> noticeList = new ArrayList<>();
     public SystemMessageAdapter messageAdapter;
     public HttpUtils httpUtils;
+    public boolean isReadInformation = false;//标记是否进入过页面，是否更改过消息状态
 
     public String layoutType;
 
@@ -302,6 +304,7 @@ public class InformationDetails extends BaseActivity {
                     }
                     break;
                 case 200:
+                    isReadInformation = true;
                     Log.e("result", "状态更改成功");
                     break;
                 case 400:
@@ -314,4 +317,13 @@ public class InformationDetails extends BaseActivity {
             }
         }
     };
+
+    @Override
+    public void onBackPressed() {
+        if (isReadInformation){
+            setResult(RESULT_OK, new Intent(InformationDetails.this, InformationMainActivity.class));
+            isReadInformation = false;
+        }
+        super.onBackPressed();
+    }
 }

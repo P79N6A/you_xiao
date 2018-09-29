@@ -1,5 +1,6 @@
 package com.runtoinfo.information.activity;
 
+import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.opengl.Visibility;
 import android.os.Bundle;
@@ -68,7 +69,7 @@ public class InformationMainActivity extends BaseActivity {
         binding.infoSystemMsg.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                buildTypeIntent(Entity.SYSTEM);
+                buildTypeIntent(Entity.SYSTEM, 5);
             }
         });
 
@@ -78,7 +79,7 @@ public class InformationMainActivity extends BaseActivity {
         binding.infoClassNoticeLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                buildTypeIntent(Entity.LESSON_REMINDER);
+                buildTypeIntent(Entity.LESSON_REMINDER, 1);
             }
         });
 
@@ -88,7 +89,7 @@ public class InformationMainActivity extends BaseActivity {
         binding.infoSchoolNoticeLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                buildTypeIntent(Entity.CAMPUS_NOTICE);
+                buildTypeIntent(Entity.CAMPUS_NOTICE, 2);
             }
         });
 
@@ -98,7 +99,7 @@ public class InformationMainActivity extends BaseActivity {
         binding.infoCommentRelativeLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                buildTypeIntent("comment");
+                buildTypeIntent("comment", 3);
             }
         });
 
@@ -108,14 +109,14 @@ public class InformationMainActivity extends BaseActivity {
         binding.infoPraiseRelativeLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                buildTypeIntent("praise");
+                buildTypeIntent("praise", 4);
             }
         });
     }
 
-    public void buildTypeIntent(String type){
+    public void buildTypeIntent(String type, int requestCode){
         ARouter.getInstance().build("/information/informationDetails")
-                .withString(IntentDataType.TYPE, type).navigation();
+                .withString(IntentDataType.TYPE, type).navigation(InformationMainActivity.this, requestCode);
     }
 
     public Handler handler = new Handler(Looper.getMainLooper()){
@@ -149,4 +150,24 @@ public class InformationMainActivity extends BaseActivity {
             }
         }
     };
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (resultCode == RESULT_OK)
+        switch (requestCode){
+            case 5:
+                binding.infoSystemLayout.setVisibility(View.GONE);
+                break;
+            case 1:
+                binding.infoLessonLayout.setVisibility(View.GONE);
+                break;
+            case 2:
+                binding.infoCampusLayout.setVisibility(View.GONE);
+                break;
+            case 3:
+                break;
+            case 4:
+                break;
+        }
+    }
 }

@@ -6,7 +6,6 @@ import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
 import android.support.v4.app.Fragment;
-import android.support.v7.widget.LinearLayoutManager;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -253,9 +252,9 @@ public class MySomeRecord extends BaseActivity {
                 case 0:
                     if (tempList != null){
                         binding.myRecordRecycler.setPullLoadMoreCompleted();
-                        leaveEntityList.addAll(tempList);
-                        if (leaveAdapter != null){
-                            leaveAdapter.notifyDataSetChanged();
+                        learnList.addAll(tempList);
+                        if (learningTrackAdapter != null){
+                            learningTrackAdapter.notifyDataSetChanged();
                             return;
                         }
                     }
@@ -270,9 +269,9 @@ public class MySomeRecord extends BaseActivity {
 
                     if (tempList != null){
                         binding.myRecordRecycler.setPullLoadMoreCompleted();
-                        learnList.addAll(tempList);
-                        if (learningTrackAdapter != null){
-                            learningTrackAdapter.notifyDataSetChanged();
+                        leaveEntityList.addAll(tempList);
+                        if (leaveAdapter != null){
+                            leaveAdapter.notifyDataSetChanged();
                             return;
                         }
                     }
@@ -313,6 +312,7 @@ public class MySomeRecord extends BaseActivity {
     protected void onPause() {
         super.onPause();
         page = 1;
-        tempList.clear();
+        if (tempList != null)
+            tempList.clear();
     }
 }

@@ -14,6 +14,7 @@ import android.widget.ImageView;
 import com.dmcbig.mediapicker.entity.Media;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+import com.runtoinfo.httpUtils.CPRCBean.CommentRequestResultEntity;
 import com.runtoinfo.httpUtils.CPRCBean.GetAllCPC;
 import com.runtoinfo.httpUtils.CenterEntity.LearnTrackEntity;
 import com.runtoinfo.httpUtils.CenterEntity.LeaveRecordEntity;
@@ -307,28 +308,28 @@ public class HttpUtils<T> {
         executorService.execute(new Runnable() {
             @Override
             public void run() {
-                    FormBody body = new FormBody.Builder()
-                            .add("phoneNumber", phoneNumber)
-                            .add("newPassword", newPassword)
-                            .build();
+                FormBody body = new FormBody.Builder()
+                        .add("phoneNumber", phoneNumber)
+                        .add("newPassword", newPassword)
+                        .build();
 
-                    Request request = new Request.Builder()
-                            .url(url).post(body).build();
-                    getClient().newCall(request).enqueue(new Callback() {
-                        @Override
-                        public void onFailure(Call call, IOException e) {
+                Request request = new Request.Builder()
+                        .url(url).post(body).build();
+                getClient().newCall(request).enqueue(new Callback() {
+                    @Override
+                    public void onFailure(Call call, IOException e) {
 
+                    }
+
+                    @Override
+                    public void onResponse(Call call, Response response) throws IOException {
+                        if (response.isSuccessful()) {
+                            handler.sendEmptyMessage(0);
+                        } else {
+                            handler.sendEmptyMessage(1);
                         }
-
-                        @Override
-                        public void onResponse(Call call, Response response) throws IOException {
-                            if (response.isSuccessful()) {
-                                handler.sendEmptyMessage(0);
-                            } else {
-                                handler.sendEmptyMessage(1);
-                            }
-                        }
-                    });
+                    }
+                });
 
             }
         });
@@ -660,7 +661,7 @@ public class HttpUtils<T> {
      * @param handler
      * @param entity  请求实体
      */
-    public  void postAddMember(final Handler handler, final RequestDataEntity entity, final AddMemberBean addMemberBean, final int type) {
+    public void postAddMember(final Handler handler, final RequestDataEntity entity, final AddMemberBean addMemberBean, final int type) {
         executorService.execute(new Runnable() {
             @Override
             public void run() {
@@ -718,12 +719,12 @@ public class HttpUtils<T> {
      * @param url     请求地址
      * @param mapList 返回的结果集合
      */
-    public  void getAllCourseType(final Handler handler, final RequestDataEntity entity, final List<FineClassCourseEntity> mapList) {
+    public void getAllCourseType(final Handler handler, final RequestDataEntity entity, final List<FineClassCourseEntity> mapList) {
         executorService.execute(new Runnable() {
             @Override
             public void run() {
                 Request request = new Request.Builder()
-                        .header(Authorization,  Bearer + entity.getToken())
+                        .header(Authorization, Bearer + entity.getToken())
                         .url(entity.getUrl() + "?CategoryId=111")
                         .build();
 
@@ -746,7 +747,8 @@ public class HttpUtils<T> {
                                     for (int i = 0; i < items.length(); i++) {
                                         JSONObject chileItem = items.getJSONObject(i);
                                         FineClassCourseEntity fineClassCourseEntity =
-                                                new Gson().fromJson(chileItem.toString(), new TypeToken<FineClassCourseEntity>() {}.getType());
+                                                new Gson().fromJson(chileItem.toString(), new TypeToken<FineClassCourseEntity>() {
+                                                }.getType());
                                         mapList.add(fineClassCourseEntity);
                                     }
                                     handler.sendEmptyMessage(0);
@@ -764,12 +766,12 @@ public class HttpUtils<T> {
     /**
      * 获取子分类
      */
-    public  void getChildType(final Handler handler, final RequestDataEntity requestDataEntity, final Map<String, Object> dataMap, final List<FineClassCourseEntity> dataList) {
+    public void getChildType(final Handler handler, final RequestDataEntity requestDataEntity, final Map<String, Object> dataMap, final List<FineClassCourseEntity> dataList) {
         executorService.execute(new Runnable() {
             @Override
             public void run() {
                 Request request = new Request.Builder()
-                        .header(Authorization,  Bearer + requestDataEntity.getToken())
+                        .header(Authorization, Bearer + requestDataEntity.getToken())
                         .url(requestDataEntity.getUrl() + setUrl(dataMap))
                         .build();
 
@@ -788,7 +790,8 @@ public class HttpUtils<T> {
                                 for (int i = 0; i < items.length(); i++) {
                                     JSONObject childItem = items.getJSONObject(i);
                                     FineClassCourseEntity fineClassCourseEntity = new Gson()
-                                            .fromJson(childItem.toString(), new TypeToken<FineClassCourseEntity>(){}.getType());
+                                            .fromJson(childItem.toString(), new TypeToken<FineClassCourseEntity>() {
+                                            }.getType());
                                     dataList.add(fineClassCourseEntity);
                                 }
                                 handler.sendEmptyMessage(0);
@@ -811,13 +814,13 @@ public class HttpUtils<T> {
      * @param list    接受结果集
      */
 
-    public  void getInChildData(final Handler handler,final RequestDataEntity entity, final Map<String, Object> map, final List<CourseDataEntity> list) {
+    public void getInChildData(final Handler handler, final RequestDataEntity entity, final Map<String, Object> map, final List<CourseDataEntity> list) {
         executorService.execute(new Runnable() {
             @Override
             public void run() {
 
                 Request request = new Request.Builder()
-                        .header(Authorization,  Bearer + entity.getToken())
+                        .header(Authorization, Bearer + entity.getToken())
                         .url(entity.getUrl() + setUrl(map))
                         .build();
                 getClient().newCall(request).enqueue(new Callback() {
@@ -834,7 +837,8 @@ public class HttpUtils<T> {
                                 for (int i = 0; i < items.length(); i++) {
                                     JSONObject childItem = items.getJSONObject(i);
                                     CourseDataEntity courseDataEntity = new Gson().fromJson(childItem.toString(),
-                                            new TypeToken<CourseDataEntity>(){}.getType());
+                                            new TypeToken<CourseDataEntity>() {
+                                            }.getType());
                                     list.add(courseDataEntity);
                                     handler.sendEmptyMessage(0);
                                 }
@@ -911,7 +915,7 @@ public class HttpUtils<T> {
     /**
      * 签到
      */
-    public  void postSignIn(final Handler handler, final Map<String, Object> map) {
+    public void postSignIn(final Handler handler, final Map<String, Object> map) {
         executorService.execute(new Runnable() {
             @Override
             public void run() {
@@ -962,7 +966,7 @@ public class HttpUtils<T> {
      * @param map
      * @param list
      */
-    public  void postVideoPhoto(final Handler handler, final RequestDataEntity requestDataEntity, final List<Media> list, final List<String> filePathList) {
+    public void postVideoPhoto(final Handler handler, final RequestDataEntity requestDataEntity, final List<Media> list, final List<String> filePathList) {
         executorService.execute(new Runnable() {
             @Override
             public void run() {
@@ -1013,7 +1017,7 @@ public class HttpUtils<T> {
      * @param handler
      * @param entity
      */
-    public  void postOneFile(final Handler handler, final RequestDataEntity entity) {
+    public void postOneFile(final Handler handler, final RequestDataEntity entity) {
         executorService.execute(new Runnable() {
             @Override
             public void run() {
@@ -1060,7 +1064,7 @@ public class HttpUtils<T> {
      * @param requestDataEntity
      * @param entity
      */
-    public  void updateUserInfor(final Handler handler, final RequestDataEntity requestDataEntity, final PersonalInformationEntity entity) {
+    public void updateUserInfor(final Handler handler, final RequestDataEntity requestDataEntity, final PersonalInformationEntity entity) {
         executorService.execute(new Runnable() {
             @Override
             public void run() {
@@ -1105,7 +1109,7 @@ public class HttpUtils<T> {
      * @param
      * @return
      */
-    public  void postHomeWork(final Handler handler, final Map<String, Object> dataMap, final List<Map<String, Object>> filePathList) {
+    public void postHomeWork(final Handler handler, final Map<String, Object> dataMap, final List<Map<String, Object>> filePathList) {
         executorService.execute(new Runnable() {
             @Override
             public void run() {
@@ -1158,7 +1162,7 @@ public class HttpUtils<T> {
      * @param handler
      * @param dataEntity 请求所需要的参数
      */
-    public  void postLeave(final Handler handler, final RequestDataEntity dataEntity) {
+    public void postLeave(final Handler handler, final RequestDataEntity dataEntity) {
         executorService.execute(new Runnable() {
             @Override
             public void run() {
@@ -1196,7 +1200,7 @@ public class HttpUtils<T> {
      * @param handler
      * @param dataEntity
      */
-    public  void getTopics(final Handler handler, final RequestDataEntity dataEntity, final List<TopiceHttpResultEntity> resultList) {
+    public void getTopics(final Handler handler, final RequestDataEntity dataEntity, final List<TopiceHttpResultEntity> resultList) {
         executorService.execute(new Runnable() {
             @Override
             public void run() {
@@ -1265,7 +1269,7 @@ public class HttpUtils<T> {
      *
      * @param handler
      */
-    public  void postComment(final Handler handler, final CPRCDataEntity cprcDataEntity) {
+    public void postComment(final Handler handler, final CPRCDataEntity cprcDataEntity) {
         executorService.execute(new Runnable() {
             @Override
             public void run() {
@@ -1312,34 +1316,26 @@ public class HttpUtils<T> {
      * @param handler
      * @param cpc
      */
-    public  void getCommentAll(final Handler handler, final GetAllCPC cpc) {
+    public void getCommentAll(final Handler handler, final GetAllCPC cpc, final List<CommentRequestResultEntity> dataList) {
         executorService.execute(new Runnable() {
             @Override
             public void run() {
-                /*Map<String, Object> map = new HashMap<>();
-                map.put("UserId", cpc.getUserId());
+                Map<String, Object> map = new HashMap<>();
                 map.put("Type", cpc.getType());
                 map.put("Target", cpc.getTarget());
                 map.put("TargetType", cpc.getTargetType());
-                map.put("ParentType", cpc.getParentType());
-                map.put("ParentId", cpc.getParentId());
-                map.put("IsEmptyContent", cpc.isEmptyContent());
                 map.put("MaxResultCount", cpc.getMaxResultCount());
-                map.put("SkipCount", cpc.getSkipCount());*/
-
-                String json = new Gson().toJson(cpc);
-
-                RequestBody body = RequestBody.create(JSON, json);
-
+                map.put("SkipCount", cpc.getSkipCount());
+                map.put("Sorting", cpc.getSorting());
 
                 Request request = new Request.Builder()
                         .header(Authorization, Bearer + cpc.getToken())
-                        .url(HttpEntity.MAIN_URL + HttpEntity.GET_COMMENT_ALL + "?Type=" + cpc.getType())
+                        .url(HttpEntity.MAIN_URL + HttpEntity.GET_COMMENT_ALL + setUrl(map))
                         .build();
                 getClient().newCall(request).enqueue(new Callback() {
                     @Override
                     public void onFailure(Call call, IOException e) {
-
+                        handler.sendEmptyMessage(500);
                     }
 
                     @Override
@@ -1347,11 +1343,18 @@ public class HttpUtils<T> {
                         if (response.isSuccessful()) {
                             try {
                                 JSONObject json = new JSONObject(response.body().string());
-                                JSONObject result = json.getJSONObject("result");
-                                Message message = new Message();
-                                message.what = 20;
-                                message.obj = result;
-                                handler.sendMessage(message);
+                                boolean success = json.getBoolean("success");
+                                if (success) {
+                                    JSONObject result = json.getJSONObject("result");
+                                    JSONArray array = result.getJSONArray("items");
+                                    for (int i = 0; i < array.length(); i++) {
+                                        String item = array.getJSONObject(i).toString();
+                                        CommentRequestResultEntity requestResultEntity = new Gson().fromJson(item,
+                                                new TypeToken<CommentRequestResultEntity>() {}.getType());
+                                        dataList.add(requestResultEntity);
+                                    }
+                                }
+                                handler.sendEmptyMessage(20);
                             } catch (JSONException e) {
                                 e.printStackTrace();
                             }
@@ -1369,7 +1372,7 @@ public class HttpUtils<T> {
      * @param id
      * @param token
      */
-    public  void putAllStatue(final Handler handler, final int id, final String token) {
+    public void putAllStatue(final Handler handler, final int id, final String token) {
         executorService.execute(new Runnable() {
             @Override
             public void run() {
@@ -1409,7 +1412,7 @@ public class HttpUtils<T> {
      * @param handler
      * @param entity
      */
-    public  void getMyCommentOrPraise(final Handler handler, final RequestDataEntity entity) {
+    public void getMyCommentOrPraise(final Handler handler, final RequestDataEntity entity) {
         executorService.execute(new Runnable() {
             @Override
             public void run() {
@@ -1444,7 +1447,7 @@ public class HttpUtils<T> {
         });
     }
 
-    public  void getMyCollection(final Handler handler, final RequestDataEntity entity) {
+    public void getMyCollection(final Handler handler, final RequestDataEntity entity) {
         executorService.execute(new Runnable() {
             @Override
             public void run() {
@@ -1483,7 +1486,7 @@ public class HttpUtils<T> {
      * @param handler
      * @param requestDataEntity 请求体
      */
-    public  void getUserUnreadNotification(final Handler handler, final RequestDataEntity requestDataEntity, final List<SystemMessageEntity> dataList) {
+    public void getUserUnreadNotification(final Handler handler, final RequestDataEntity requestDataEntity, final List<SystemMessageEntity> dataList) {
         executorService.execute(new Runnable() {
             @Override
             public void run() {
@@ -1540,7 +1543,7 @@ public class HttpUtils<T> {
      * @param handler
      * @param requestDataEntity
      */
-    public  void setNoticeReader(final Handler handler, final RequestDataEntity requestDataEntity, final Map<String, Object> dataMap) {
+    public void setNoticeReader(final Handler handler, final RequestDataEntity requestDataEntity, final Map<String, Object> dataMap) {
         executorService.execute(new Runnable() {
             @Override
             public void run() {
@@ -1587,7 +1590,7 @@ public class HttpUtils<T> {
      * @param requestDataEntity
      * @param dataMap
      */
-    public  void checkVersion(final Handler handler, final RequestDataEntity requestDataEntity, final Map<String, Object> dataMap) {
+    public void checkVersion(final Handler handler, final RequestDataEntity requestDataEntity, final Map<String, Object> dataMap) {
         executorService.execute(new Runnable() {
             @Override
             public void run() {
@@ -1691,7 +1694,7 @@ public class HttpUtils<T> {
      * @param request
      * @return
      */
-    public  void getLearnTacks(final Handler handler, final RequestDataEntity requestDataEntity, final Map<String, Object> map, final List<LearnTrackEntity> dataList) {
+    public void getLearnTacks(final Handler handler, final RequestDataEntity requestDataEntity, final Map<String, Object> map, final List<LearnTrackEntity> dataList) {
         executorService.execute(new Runnable() {
             @Override
             public void run() {
@@ -1744,7 +1747,7 @@ public class HttpUtils<T> {
      * @param dataMap
      * @param dataList
      */
-    public  void getLeaveRecord(final Handler handler, final RequestDataEntity requestDataEntity, final Map<String, Object> dataMap, final List<LeaveRecordEntity> dataList) {
+    public void getLeaveRecord(final Handler handler, final RequestDataEntity requestDataEntity, final Map<String, Object> dataMap, final List<LeaveRecordEntity> dataList) {
         executorService.execute(new Runnable() {
             @Override
             public void run() {
@@ -1792,12 +1795,13 @@ public class HttpUtils<T> {
 
     /**
      * 上课记录
+     *
      * @param handler
      * @param entity
      * @param map
      * @param list
      */
-    public void getCourseRecord(final Handler handler, final RequestDataEntity entity, final Map<String, Object> map, final List<CourseEntity> list){
+    public void getCourseRecord(final Handler handler, final RequestDataEntity entity, final Map<String, Object> map, final List<CourseEntity> list) {
         executorService.execute(new Runnable() {
             @Override
             public void run() {
@@ -1813,21 +1817,22 @@ public class HttpUtils<T> {
 
                     @Override
                     public void onResponse(Call call, Response response) throws IOException {
-                        if (response.isSuccessful()){
+                        if (response.isSuccessful()) {
                             try {
                                 JSONObject json = new JSONObject(response.body().string());
                                 boolean sussess = json.getBoolean("success");
-                                if(sussess){
+                                if (sussess) {
                                     JSONObject result = json.getJSONObject("result");
                                     JSONArray array = result.getJSONArray("items");
-                                    for(int i = 0; i < array.length(); i++){
+                                    for (int i = 0; i < array.length(); i++) {
                                         JSONObject item = array.getJSONObject(i);
                                         CourseEntity courseEntity = new Gson().fromJson(item.toString(),
-                                                new TypeToken<CourseEntity>(){}.getType());
+                                                new TypeToken<CourseEntity>() {
+                                                }.getType());
                                         list.add(courseEntity);
                                     }
                                     handler.sendEmptyMessage(2);
-                                }else{
+                                } else {
                                     handler.sendEmptyMessage(400);
                                 }
                             } catch (JSONException e) {
@@ -1848,7 +1853,7 @@ public class HttpUtils<T> {
      * @param requestDataEntity
      */
 
-    public  void getSchoolSetting(final Handler handler, final RequestDataEntity requestDataEntity) {
+    public void getSchoolSetting(final Handler handler, final RequestDataEntity requestDataEntity) {
         executorService.execute(new Runnable() {
             @Override
             public void run() {
@@ -1899,7 +1904,7 @@ public class HttpUtils<T> {
      * @return
      */
 
-    public  void switchCampusId(final Handler handler, final RequestDataEntity requestDataEntity) {
+    public void switchCampusId(final Handler handler, final RequestDataEntity requestDataEntity) {
         executorService.execute(new Runnable() {
             @Override
             public void run() {
@@ -1951,7 +1956,7 @@ public class HttpUtils<T> {
      * @param entity
      * @param dataList
      */
-    public  void getGeoArea(final Handler handler, final RequestDataEntity entity, final List<GeoAreaEntity> dataList) {
+    public void getGeoArea(final Handler handler, final RequestDataEntity entity, final List<GeoAreaEntity> dataList) {
         executorService.execute(new Runnable() {
             @Override
             public void run() {
@@ -2005,7 +2010,7 @@ public class HttpUtils<T> {
      * @param handler
      * @param entity
      */
-    public  void getNotificationCount(final Handler handler, final RequestDataEntity entity, final Map<String, Object> map) {
+    public void getNotificationCount(final Handler handler, final RequestDataEntity entity, final Map<String, Object> map) {
         executorService.execute(new Runnable() {
             @Override
             public void run() {
@@ -2087,12 +2092,12 @@ public class HttpUtils<T> {
      */
     public static JSONArray getItems(String body, Handler handler) throws JSONException {
         JSONObject json = new JSONObject(body);
-        boolean  success = json.getBoolean("success");
-        if (success){
+        boolean success = json.getBoolean("success");
+        if (success) {
             JSONObject result = json.getJSONObject("result");
             JSONArray items = result.getJSONArray("items");
             return items;
-        }else{
+        } else {
             handler.sendEmptyMessage(400);
         }
         return null;

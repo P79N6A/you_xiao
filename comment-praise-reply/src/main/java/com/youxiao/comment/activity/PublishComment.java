@@ -16,10 +16,12 @@ import com.runtoinfo.httpUtils.CPRCBean.CPRCTypeEntity;
 import com.runtoinfo.httpUtils.CPRCBean.CommentRequestResultEntity;
 import com.runtoinfo.httpUtils.CPRCBean.GetAllCPC;
 import com.runtoinfo.httpUtils.utils.HttpUtils;
+import com.runtoinfo.youxiao.globalTools.utils.DensityUtil;
 import com.runtoinfo.youxiao.globalTools.utils.DialogMessage;
 import com.runtoinfo.youxiao.globalTools.utils.Entity;
 import com.runtoinfo.youxiao.globalTools.utils.IntentDataType;
 import com.runtoinfo.youxiao.globalTools.utils.RecyclerViewDecoration;
+import com.wuxiaolong.pullloadmorerecyclerview.PullLoadMoreRecyclerView;
 import com.youxiao.comment.R;
 import com.youxiao.comment.adapter.CommentPublishAdapter;
 import com.youxiao.comment.databinding.CommentPublishBinding;
@@ -40,14 +42,17 @@ public class PublishComment extends BaseActivity {
     public int targetType;
     public CommentPublishAdapter mAdapter;
     public List<CommentRequestResultEntity> dataList = new ArrayList<>();
+    public List<CommentRequestResultEntity> tempList = new ArrayList<>();
     public HttpUtils httpUtils;
+    public int page = 1;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         binding = DataBindingUtil.setContentView(PublishComment.this, R.layout.comment_publish);
+        httpUtils = new HttpUtils(getApplicationContext());
         initData();
         initEvent();
-        getCommentAll();
+        getCommentAll(1);
     }
 
     public void initData(){
@@ -73,9 +78,10 @@ public class PublishComment extends BaseActivity {
     public Handler mHandler = new Handler(Looper.getMainLooper()){
         @Override
         public void handleMessage(Message msg) {
-            String result = msg.obj.toString();
+
             switch (msg.what){
                 case 0:
+                    String result = msg.obj.toString();
                     DialogMessage.showToast(PublishComment.this, "评论成功");
 
                     CommentRequestResultEntity resultEntity =
@@ -83,6 +89,7 @@ public class PublishComment extends BaseActivity {
                     mAdapter.addItem(resultEntity, 0);
                     break;
                 case 10:
+                    String result1 = msg.obj.toString();
                     DialogMessage.showBottomDialog(mHandler,0, PublishComment.this, false);
 //                    CommentRequestResultEntity resultEntity1 =
 //                            new Gson().fromJson(result, new TypeToken<CommentRequestResultEntity>(){}.getType());
@@ -91,26 +98,20 @@ public class PublishComment extends BaseActivity {
                     cprcDataEntity.setTarget(articleId);
                     cprcDataEntity.setTargetType(targetType);
                     cprcDataEntity.setUserId(spUtils.getInt(Entity.USER_ID));
-                    cprcDataEntity.setContent(result);
+                    cprcDataEntity.setContent(result1);
                     cprcDataEntity.setToken(spUtils.getString(Entity.TOKEN));
                     httpUtils.postComment(mHandler, cprcDataEntity);
                     break;
                 case 20:
-                    try {
-                        JSONObject object = (JSONObject) msg.obj;
-                        JSONArray array = object.getJSONArray("items");
-                        Type type = new TypeToken<CommentRequestResultEntity>(){}.getType();
-                        Gson gson = new Gson();
-                        for (int i =0; i < array.length(); i++){
-                            String item = array.getJSONObject(i).toString();
-                            /*CommentRequestResultEntity requestResultEntity = new Gson().fromJson(item,
-                                    new TypeToken<CommentRequestResultEntity>(){}.getType());*/
-                            dataList.add((CommentRequestResultEntity) gson.fromJson(item, type));
+                    if (tempList != null){
+                        binding.commentPublishRecycle.setPullLoadMoreCompleted();
+                        dataList.addAll(tempList);
+                        if (mAdapter != null) {
+                            mAdapter.notifyDataSetChanged();
+                            return;
                         }
-                        setDataToAdapter();
-                    }catch (JSONException e){
-                        e.printStackTrace();
                     }
+                    setDataToAdapter();
                     break;
                 case 500:
                     DialogMessage.showToast(PublishComment.this, "请求失败");
@@ -121,23 +122,38 @@ public class PublishComment extends BaseActivity {
 
     public void setDataToAdapter(){
         mAdapter = new CommentPublishAdapter(mHandler, PublishComment.this, dataList, R.layout.comment_publish_items);
-        binding.commentPublishRecycle.setHasFixedSize(true);
-        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(PublishComment.this, LinearLayoutManager.VERTICAL, true);
-        binding.commentPublishRecycle.setLayoutManager(linearLayoutManager);
+        binding.commentPublishRecycle.setLinearLayout();
         binding.commentPublishRecycle.setAdapter(mAdapter);
-        binding.commentPublishRecycle.addItemDecoration(new RecyclerViewDecoration(PublishComment.this, RecyclerViewDecoration.VERTICAL_LIST));
+        RecyclerViewDecoration recyclerViewDecoration = new RecyclerViewDecoration(PublishComment.this, RecyclerViewDecoration.VERTICAL_LIST);
+        binding.commentPublishRecycle.addItemDecoration(recyclerViewDecoration);
+        binding.commentPublishRecycle.setOnPullLoadMoreListener(pullLoadMoreListener);
     }
 
-    public void getCommentAll(){
+    public PullLoadMoreRecyclerView.PullLoadMoreListener pullLoadMoreListener = new PullLoadMoreRecyclerView.PullLoadMoreListener() {
+        @Override
+        public void onRefresh() {
+            page = 1;
+            dataList.clear();
+            getCommentAll(page);
+        }
+
+        @Override
+        public void onLoadMore() {
+            page++;
+            getCommentAll(page);
+        }
+    };
+
+    public void getCommentAll(int page){
         GetAllCPC cpc = new GetAllCPC();
         cpc.setToken(spUtils.getString(Entity.TOKEN));
         cpc.setType(CPRCTypeEntity.COMMENT);
-//        cpc.setTarget(articleId);
-//        cpc.setTargetType(targetType);
+        cpc.setTarget(articleId);
+        cpc.setTargetType(targetType);
         cpc.setMaxResultCount(10);
-        cpc.setSkipCount(0);
-
-        httpUtils.getCommentAll(mHandler, cpc);
+        cpc.setSkipCount(DensityUtil.getOffSet(page));
+        tempList = new ArrayList<>();
+        httpUtils.getCommentAll(mHandler, cpc, tempList);
     }
 
 }
