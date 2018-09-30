@@ -25,10 +25,13 @@ import android.view.WindowManager;
 
 import com.alibaba.android.arouter.facade.annotation.Route;
 import com.alibaba.android.arouter.launcher.ARouter;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.lljjcoder.style.citylist.utils.CityListLoader;
 import com.lljjcoder.style.citythreelist.CityBean;
 import com.runtoinfo.httpUtils.CenterEntity.PersonalInformationEntity;
 import com.runtoinfo.httpUtils.HttpEntity;
+import com.runtoinfo.httpUtils.bean.PersonalCenterEntity;
 import com.runtoinfo.httpUtils.bean.RequestDataEntity;
 import com.runtoinfo.httpUtils.utils.HttpUtils;
 import com.runtoinfo.personal_center.R;
@@ -37,6 +40,8 @@ import com.runtoinfo.personal_center.ui.SelectPictureDialog;
 import com.runtoinfo.youxiao.globalTools.timepicker.CustomDatePicker;
 import com.runtoinfo.youxiao.globalTools.utils.DialogMessage;
 import com.runtoinfo.youxiao.globalTools.utils.Entity;
+import com.runtoinfo.youxiao.globalTools.utils.IntentDataType;
+import com.runtoinfo.youxiao.globalTools.utils.TimeUtil;
 import com.squareup.leakcanary.LeakCanary;
 import com.squareup.leakcanary.RefWatcher;
 
@@ -56,15 +61,23 @@ public class PersonalMainActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
     }
 
     @Override
     protected void initView() {
         binding = DataBindingUtil.setContentView(PersonalMainActivity.this, R.layout.activity_personal_main);
-        httpUtils = new HttpUtils(getBaseContext());
+        httpUtils = new HttpUtils(this);
+        initData();
         initEvent();
         initDatePicker();
+    }
+
+    public void initData(){
+            httpUtils.postSrcPhoto(this, HttpEntity.IMAGE_HEAD + spUtils.getString(Entity.AVATAR), binding.personalEditTx);
+            binding.personalUserName.setText(spUtils.getString(Entity.NAME));
+            binding.personalEditSex.setText(spUtils.getInt(Entity.GENDER) == 0 ? "男" : "女");
+            binding.personalEditBirth.setText(TimeUtil.iso8601ToDate(spUtils.getString(Entity.BIRTHDAY), 1));
+            binding.personalEditArea.setText(spUtils.getString(Entity.ADDRESS));
     }
 
     public void initEvent(){

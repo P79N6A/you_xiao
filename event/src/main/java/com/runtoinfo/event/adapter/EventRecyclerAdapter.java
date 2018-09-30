@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.widget.ImageView;
 
+import com.bumptech.glide.Glide;
 import com.runtoinfo.event.R;
 import com.runtoinfo.httpUtils.bean.MyEventEntity;
 import com.runtoinfo.httpUtils.utils.HttpUtils;
@@ -35,12 +36,12 @@ public class EventRecyclerAdapter extends UniversalRecyclerAdapter<MyEventEntity
 
     @Override
     protected void convert(Context mContext, BaseViewHolder holder, MyEventEntity eventEntity, int position) {
-        httpUtils.postPhoto(context, eventEntity.getCover(),((ImageView) holder.getView(R.id.activity_comment_imageView)));
+        Glide.with(mContext).load(eventEntity.getCover()).into((ImageView) holder.getView(R.id.activity_comment_imageView));
         holder.setText(R.id.activity_name, eventEntity.getName());
         if (type == 1) {
-            holder.setText(R.id.activity_time, TimeUtil.iso8601ToDate(eventEntity.getStartDate(), 1) + "至" + TimeUtil.iso8601ToDate(eventEntity.getEndTime(), 1));
+            holder.setText(R.id.activity_time, eventEntity.getStartDate().split(" ")[0] + "至" + eventEntity.getEndTime().split(" ")[0]);
         }else{
-            holder.setText(R.id.activity_time, TimeUtil.iso8601ToDate(eventEntity.getStartDate(), 0));
+            holder.setText(R.id.activity_time, eventEntity.getStartDate());
         }
     }
 }

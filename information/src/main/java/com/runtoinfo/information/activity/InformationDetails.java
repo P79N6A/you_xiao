@@ -68,7 +68,7 @@ public class InformationDetails extends BaseActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        httpUtils = new HttpUtils(getBaseContext());
+        httpUtils = new HttpUtils(this);
         layoutType = getIntent().getExtras().getString(IntentDataType.TYPE);
         switch (layoutType) {
             case Entity.SYSTEM:

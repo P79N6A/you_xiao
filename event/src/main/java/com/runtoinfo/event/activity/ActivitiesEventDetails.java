@@ -30,7 +30,7 @@ public class ActivitiesEventDetails extends EventBaseActivity {
     @Override
     protected void initView() {
         binding = DataBindingUtil.setContentView(this, R.layout.activity_event_details);
-        httpUtils = new HttpUtils(getBaseContext());
+        httpUtils = new HttpUtils(this);
     }
 
     @SuppressLint("SetTextI18n")
@@ -39,9 +39,9 @@ public class ActivitiesEventDetails extends EventBaseActivity {
         type = getIntent().getIntExtra(IntentDataType.TYPE, 0);
         eventEntity = new Gson().fromJson(json, new TypeToken<MyEventEntity>(){}.getType());
         binding.activityEventAddress.setText("地点: " + eventEntity.getLocation());
-        binding.activityEventDescription.setText(eventEntity.getContent());
+        binding.activityEventDescription.setText(eventEntity.getIntroduction());
         httpUtils.postPhoto(this, eventEntity.getCover(), binding.activityEventImg);
-        binding.activityEventTime.setText("时间: " + TimeUtil.iso8601ToDate(eventEntity.getStartDate(), 0));
+        binding.activityEventTime.setText("时间: " + eventEntity.getStartDate());
         binding.activityEventName.setText(eventEntity.getName());
         if (type == 1){
             binding.eventParticipant.setVisibility(View.VISIBLE);

@@ -39,12 +39,12 @@
                     app:civ_border_overlay="true" />
 
                 <TextView
+                    android:id="@+id/personal_center_name"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_below="@+id/personal_avatar"
                     android:layout_centerHorizontal="true"
                     android:layout_marginTop="10dp"
-                    android:text="叶少阳"
                     android:textColor="#ffffff"
                     android:textSize="18sp" />
 

@@ -14,7 +14,6 @@ import android.os.Looper;
 import android.os.Message;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -38,7 +37,6 @@ import com.runtoinfo.youxiao.fragment.PersonalCenterFragment;
 import com.runtoinfo.youxiao.fragment.TopicsFragment;
 import com.runtoinfo.youxiao.globalTools.utils.DialogMessage;
 import com.runtoinfo.youxiao.globalTools.utils.Entity;
-import com.runtoinfo.youxiao.globalTools.utils.IntentDataType;
 import com.runtoinfo.youxiao.globalTools.views.ViewPager;
 import com.runtoinfo.youxiao.service.DownloadManagerService;
 
@@ -80,7 +78,7 @@ public class MainActivity extends BaseActivity implements ViewPager.OnPageChange
     @Override
     protected void initView() {
         binding = DataBindingUtil.setContentView(MainActivity.this, R.layout.activity_main);
-        httpUtils = new HttpUtils(getBaseContext());
+        httpUtils = new HttpUtils(this);
         schoolSelectList = new Gson().fromJson(spUtils.getString(Entity.SCHOOL_DATA), new TypeToken<List<SelectSchoolEntity>>(){}.getType());
         initBottomMenu();
 

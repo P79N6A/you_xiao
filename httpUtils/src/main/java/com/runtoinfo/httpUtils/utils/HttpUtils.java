@@ -32,6 +32,7 @@ import com.runtoinfo.httpUtils.bean.HomeCourseEntity;
 import com.runtoinfo.httpUtils.bean.HttpLoginHead;
 import com.runtoinfo.httpUtils.bean.LeaveEntity;
 import com.runtoinfo.httpUtils.bean.MyEventEntity;
+import com.runtoinfo.httpUtils.bean.PersonalCenterEntity;
 import com.runtoinfo.httpUtils.bean.RequestDataEntity;
 import com.runtoinfo.httpUtils.bean.SystemMessageEntity;
 import com.runtoinfo.httpUtils.bean.TopiceHttpResultEntity;
@@ -637,14 +638,18 @@ public class HttpUtils<T> {
                     public void onResponse(Call call, Response response) throws IOException {
                         if (response.isSuccessful()) {
                             try {
-                                JSONArray items = getItems(response.body().string(), handler);
-                                for (int i = 0; i < items.length(); i++) {
-                                    JSONObject item = items.getJSONObject(i);
-                                    MyEventEntity eventEntity = new Gson().fromJson(item.toString(), new TypeToken<MyEventEntity>() {
-                                    }.getType());
-                                    dataList.add(eventEntity);
+                                JSONObject json = new JSONObject(response.body().string());
+                                boolean success = json.getBoolean("success");
+                                JSONArray result = json.getJSONArray("result");
+                                if (success) {
+                                    for (int i = 0; i < result.length(); i++) {
+                                        JSONObject item = result.getJSONObject(i);
+                                        MyEventEntity eventEntity = new Gson().fromJson(item.toString(), new TypeToken<MyEventEntity>() {
+                                        }.getType());
+                                        dataList.add(eventEntity);
+                                    }
+                                    handler.sendEmptyMessage(0);
                                 }
-                                handler.sendEmptyMessage(0);
                             } catch (JSONException e) {
                                 e.printStackTrace();
                             }
@@ -2155,7 +2160,7 @@ public class HttpUtils<T> {
 
 
     /**
-     * 没有完善 暂时不用
+     * 请求个人信息
      *
      * @param handler
      * @param url
@@ -2163,17 +2168,16 @@ public class HttpUtils<T> {
      * @param token
      */
 
-    public static void postAll(final Handler handler, final String url, final RequestBody body, final String token) {
+    public void postPersonlInfo(final Handler handler, final RequestDataEntity entity, final List<PersonalCenterEntity> dataList) {
         executorService.execute(new Runnable() {
             @Override
             public void run() {
                 Request request = new Request.Builder()
-                        .url(url)
-                        .header("Authorization", "Bearer " + token)
-                        .post(body)
+                        .header(Authorization, Bearer + entity.getToken())
+                        .url(entity.getUrl() + "?id=" + entity.getUserId())
                         .build();
 
-                getHttpsClient().newCall(request).enqueue(new Callback() {
+                getClient().newCall(request).enqueue(new Callback() {
                     @Override
                     public void onFailure(Call call, IOException e) {
                         handler.sendEmptyMessage(500);
@@ -2182,7 +2186,22 @@ public class HttpUtils<T> {
                     @Override
                     public void onResponse(Call call, Response response) throws IOException {
                         if (response.isSuccessful()) {
-
+                            try {
+                                JSONObject json = new JSONObject(response.body().string());
+                                boolean success = json.getBoolean("success");
+                                if (success){
+                                    JSONObject result = json.getJSONObject("result");
+                                    PersonalCenterEntity personalCenterEntity = new Gson().fromJson(result.toString(),
+                                            new TypeToken<PersonalCenterEntity>(){}.getType());
+                                    dataList.add(personalCenterEntity);
+                                    handler.sendEmptyMessage(1);
+                                }else{
+                                    handler.sendEmptyMessage(400);
+                                }
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                                handler.sendEmptyMessage(404);
+                            }
                         }
                     }
                 });

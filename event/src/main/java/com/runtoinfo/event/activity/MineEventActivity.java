@@ -37,7 +37,7 @@ public class MineEventActivity extends EventBaseActivity {
     @Override
     protected void initView() {
         binding = DataBindingUtil.setContentView(MineEventActivity.this, R.layout.activity_mine_event);
-        httpUtils = new HttpUtils(getBaseContext());
+        httpUtils = new HttpUtils(this);
         requestData();
     }
 

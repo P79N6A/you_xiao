@@ -7,11 +7,15 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
+import android.text.TextUtils;
 import android.view.View;
 
 import com.alibaba.android.arouter.facade.annotation.Route;
 import com.alibaba.android.arouter.launcher.ARouter;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.runtoinfo.httpUtils.HttpEntity;
+import com.runtoinfo.httpUtils.bean.PersonalCenterEntity;
 import com.runtoinfo.httpUtils.bean.RequestDataEntity;
 import com.runtoinfo.httpUtils.bean.VersionEntity;
 import com.runtoinfo.httpUtils.utils.HttpUtils;
@@ -20,8 +24,12 @@ import com.runtoinfo.personal_center.R;
 import com.runtoinfo.personal_center.databinding.ActivityPersonalSettingsBinding;
 import com.runtoinfo.youxiao.globalTools.utils.DialogMessage;
 import com.runtoinfo.youxiao.globalTools.utils.Entity;
+import com.runtoinfo.youxiao.globalTools.utils.IntentDataType;
+import com.runtoinfo.youxiao.globalTools.utils.SPUtils;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @Route(path = "/personal/personalSettings")
@@ -30,20 +38,21 @@ public class PersonalSettings extends BaseActivity {
     public ActivityPersonalSettingsBinding binding;
     public HttpUtils httpUtils;
     public Dialog dialog;
+    public String personalInfoData;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        httpUtils = new HttpUtils(getApplicationContext());
         initView();
     }
 
     public void initView(){
         binding = DataBindingUtil.setContentView(this, R.layout.activity_personal_settings);
+        httpUtils = new HttpUtils(this);
         dialog = new Dialog(this, R.style.dialog);
         binding.personalSettingPersonLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ARouter.getInstance().build("/personal/personalMain").navigation();
+                ARouter.getInstance().build("/personal/personalMain").withString(IntentDataType.DATA, personalInfoData).navigation();
             }
         });
         binding.personalSettingBack.setOnClickListener(new View.OnClickListener() {
@@ -67,6 +76,14 @@ public class PersonalSettings extends BaseActivity {
                 checkVersionFromServer();
             }
         });
+
+        initData();
+    }
+
+    public void initData() {
+        binding.perSettingPhoneNumber.setText(spUtils.getString(Entity.PHONE_NUMBER));
+        binding.psSettingName.setText(spUtils.getString(Entity.NAME));
+        httpUtils.postSrcPhoto(PersonalSettings.this, HttpEntity.IMAGE_HEAD + spUtils.getString(Entity.AVATAR), binding.perSettingAvatar);
     }
 
     //获取版本号提示是否更新
@@ -102,6 +119,8 @@ public class PersonalSettings extends BaseActivity {
                         //showUpdate(version.getDescription(), version.getiOSUpgradePath());
                         DialogMessage.showToast(PersonalSettings.this, "有新的更新！");
                     }
+                    break;
+                case 1:
                     break;
             }
         }

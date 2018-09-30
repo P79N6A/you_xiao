@@ -41,7 +41,7 @@ public class ForgetPassWordActivity extends BaseActivity {
     @Override
     protected void initView() {
         binding = DataBindingUtil.setContentView( this,R.layout.login_reset_password);
-        httpUtils = new HttpUtils(getBaseContext());
+        httpUtils = new HttpUtils(this);
         String json = getIntent().getExtras().getString("LoginHttpHead");
         head = new Gson().fromJson(json, new TypeToken<HttpLoginHead>(){}.getType());
         dialog = new ProgressDialog(this);

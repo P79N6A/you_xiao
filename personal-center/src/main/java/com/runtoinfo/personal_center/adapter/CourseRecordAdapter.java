@@ -5,6 +5,7 @@ import android.content.Context;
 import android.util.Log;
 import android.widget.ImageView;
 
+import com.bumptech.glide.Glide;
 import com.runtoinfo.httpUtils.bean.CourseEntity;
 import com.runtoinfo.httpUtils.utils.HttpUtils;
 import com.runtoinfo.personal_center.R;
@@ -33,7 +34,7 @@ public class CourseRecordAdapter extends UniversalRecyclerAdapter<CourseEntity> 
     @Override
     protected void convert(Context mContext, BaseViewHolder holder, CourseEntity courseRecordEntity, int position) {
         Log.e("recordAdapter", courseRecordEntity.getCoverPhoto());
-        httpUtils.postSrcPhoto(activity, courseRecordEntity.getCoverPhoto(), (ImageView) holder.getView(R.id.record_course_img));
+        Glide.with(mContext).load(courseRecordEntity.getCoverPhoto()).into((ImageView) holder.getView(R.id.record_course_img));
         holder.setText(R.id.record_course_title, courseRecordEntity.getCourseName());
         holder.setText(R.id.record_course_teacher, courseRecordEntity.getTeacherName());
         holder.setText(R.id.record_course_update_time, courseRecordEntity.getDate());

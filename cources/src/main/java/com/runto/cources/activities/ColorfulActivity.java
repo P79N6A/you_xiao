@@ -61,6 +61,7 @@ public class ColorfulActivity extends BaseActivity implements
     public ActivityCourceBinding binding;
     public List<CourseEntity> dataList = new ArrayList<>();
     public CustomDatePicker customDatePicker;
+    public HttpUtils httpUtils;
 
     public static void show(Context context) {
         context.startActivity(new Intent(context, ColorfulActivity.class));
@@ -70,6 +71,7 @@ public class ColorfulActivity extends BaseActivity implements
     @Override
     protected void initView() {
         binding = DataBindingUtil.setContentView(ColorfulActivity.this, R.layout.activity_cource);
+        httpUtils = new HttpUtils(this);
         setStatusBarDarkMode();
         mTextYear = (TextView) findViewById(R.id.tv_year);
         mRelativeTool = (RelativeLayout) findViewById(R.id.rl_tool);
@@ -137,8 +139,8 @@ public class ColorfulActivity extends BaseActivity implements
         RequestDataEntity requestDataEntity = new RequestDataEntity();
         requestDataEntity.setUrl(HttpEntity.MAIN_URL + HttpEntity.GET_USER_COURSE_LIST);
         requestDataEntity.setToken(spUtils.getString(Entity.TOKEN));
-        HttpUtils<CourseEntity> utils = new HttpUtils<>(getBaseContext());
-        utils.getCouseAll(handler, requestDataEntity, map, dataList);
+        //HttpUtils<CourseEntity> utils = new HttpUtils<>(this);
+        httpUtils.getCouseAll(handler, requestDataEntity, map, dataList);
     }
 
     public Handler handler = new Handler(Looper.getMainLooper()) {

@@ -3,6 +3,9 @@ package com.runtoinfo.youxiao.fragment;
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
+import android.os.Message;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.util.Log;
@@ -16,10 +19,15 @@ import android.widget.SimpleAdapter;
 import com.alibaba.android.arouter.launcher.ARouter;
 import com.alibaba.sdk.android.feedback.impl.FeedbackAPI;
 import com.google.gson.Gson;
+import com.runtoinfo.httpUtils.HttpEntity;
+import com.runtoinfo.httpUtils.bean.PersonalCenterEntity;
+import com.runtoinfo.httpUtils.bean.RequestDataEntity;
+import com.runtoinfo.httpUtils.utils.HttpUtils;
 import com.runtoinfo.youxiao.R;
 import com.runtoinfo.youxiao.activities.LoginActivity;
 import com.runtoinfo.youxiao.activities.MainActivity;
 import com.runtoinfo.youxiao.databinding.FragmentPersonalCenterBinding;
+import com.runtoinfo.youxiao.globalTools.utils.Entity;
 import com.runtoinfo.youxiao.globalTools.utils.IntentDataType;
 import com.runtoinfo.youxiao.ui.MyGridView;
 
@@ -44,13 +52,16 @@ public class PersonalCenterFragment extends BaseFragment {
     public boolean isGetData;
     private boolean mHasLoadedOnce = false;
     private boolean isPrepared = false;
+    public List<PersonalCenterEntity> personal = new ArrayList<>();
+    public HttpUtils httpUtils;
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
-        //View view = View.inflate(getActivity(), R.layout.fragment_personal_center, null);
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_personal_center, container, false);
+        httpUtils = new HttpUtils(getContext());
         initData();
+        getPersonalInfo();
         lazyLoad();
         return binding.getRoot();
     }
@@ -177,6 +188,39 @@ public class PersonalCenterFragment extends BaseFragment {
             isGetData = false;
         }
         return super.onCreateAnimation(transit, enter, nextAnim);
+    }
+
+    public void getPersonalInfo(){
+        RequestDataEntity requestDataEntity = new RequestDataEntity();
+        requestDataEntity.setToken(spUtils.getString(Entity.TOKEN));
+        requestDataEntity.setUserId(spUtils.getInt(Entity.USER_ID));
+        requestDataEntity.setUrl(HttpEntity.MAIN_URL + HttpEntity.GET_PERSONAL_INFO);
+        httpUtils.postPersonlInfo(handler, requestDataEntity, personal);
+    }
+
+    public Handler handler = new Handler(Looper.getMainLooper()){
+        @Override
+        public void handleMessage(Message msg) {
+            switch (msg.what){
+                case 1:
+                    if (personal.size() > 0){
+                        PersonalCenterEntity entity = personal.get(0);
+                        binding.personalCenterName.setText(entity.getName());
+                        httpUtils.postSrcPhoto(getActivity(), HttpEntity.IMAGE_HEAD + entity.getAvatar(), binding.personalAvatar);
+                        setSpData(entity);
+                    }
+                    break;
+            }
+        }
+    };
+
+    public void setSpData(PersonalCenterEntity entity){
+        spUtils.setString(Entity.NAME, entity.getName());
+        spUtils.setString(Entity.AGE, entity.getAge());
+        spUtils.setInt(Entity.GENDER, entity.getGender());
+        spUtils.setString(Entity.BIRTHDAY, entity.getBirthDay());
+        spUtils.setString(Entity.AVATAR, entity.getAvatar());
+        spUtils.setString(Entity.ADDRESS, entity.getProvince() + entity.getCity()+ entity.getDistrict() + entity.getStreet());
     }
 
     @Override

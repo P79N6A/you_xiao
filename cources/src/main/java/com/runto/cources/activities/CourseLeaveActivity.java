@@ -34,6 +34,7 @@ public class CourseLeaveActivity extends BaseActivity {
 
     public void initView(){
         binding = DataBindingUtil.setContentView(this, R.layout.fragment_course_leave);
+        httpUtils = new HttpUtils(this);
         initDialog();
         initEvent();
     }

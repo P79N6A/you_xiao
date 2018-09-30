@@ -20,4 +20,10 @@ public class Entity {
     public final static String LESSON_REMINDER = "lessonReminder";
     public final static String CAMPUS_NOTICE = "campusNotice";
     public final static String SOP_HIX_SUCCESS = "SOP_FIX_SUCCESS";
+    public final static String NAME = "NAME";
+    public final static String AVATAR = "AVATAR";
+    public final static String ADDRESS = "ADDRESS";
+    public final static String AGE = "AGE";
+    public final static String GENDER = "GENDER";
+    public final static String BIRTHDAY = "BIRTHDAY";
  }

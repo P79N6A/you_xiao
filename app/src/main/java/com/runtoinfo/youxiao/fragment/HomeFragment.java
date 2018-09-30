@@ -3,7 +3,10 @@ package com.runtoinfo.youxiao.fragment;
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.Dialog;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 import android.databinding.DataBindingUtil;
 import android.graphics.Color;
@@ -18,6 +21,7 @@ import android.support.annotation.Nullable;
 import android.support.annotation.RequiresApi;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.util.Log;
@@ -30,6 +34,7 @@ import android.view.animation.Animation;
 import android.widget.AdapterView;
 import android.widget.TextView;
 
+import com.alibaba.android.arouter.facade.annotation.Route;
 import com.alibaba.android.arouter.launcher.ARouter;
 import com.runtoinfo.httpUtils.HttpEntity;
 import com.runtoinfo.httpUtils.bean.GetSchoolSettingEntity;
@@ -44,9 +49,7 @@ import com.runtoinfo.youxiao.globalTools.utils.DialogMessage;
 import com.runtoinfo.youxiao.globalTools.utils.Entity;
 import com.runtoinfo.youxiao.databinding.FragmentHomeBinding;
 import com.runtoinfo.youxiao.entity.SelectSchoolEntity;
-import com.runtoinfo.youxiao.globalTools.utils.GankContract;
 import com.runtoinfo.youxiao.globalTools.utils.RecyclerViewDecoration;
-import com.runtoinfo.youxiao.globalTools.utils.SwipeToLoadHelper;
 import com.runtoinfo.youxiao.globalTools.utils.TimeUtil;
 import com.runtoinfo.youxiao.ui.FloatDragView;
 import com.runtoinfo.youxiao.ui.MyScrollView;
@@ -68,6 +71,7 @@ import java.util.Map;
 
 @SuppressLint("ValidFragment")
 @SuppressWarnings("all")
+@Route(path = "/main/homeFragment")
 public class HomeFragment extends BaseFragment implements MyScrollView.ScrollViewListener{
 
     public FragmentHomeBinding binding;
@@ -83,6 +87,21 @@ public class HomeFragment extends BaseFragment implements MyScrollView.ScrollVie
     private boolean mHasLoadedOnce = false;
     private boolean isPrepared = false;
     public HttpUtils httpUtils;
+
+    public final static IntentFilter intentFilter = new IntentFilter();
+
+    static{
+        intentFilter.addAction(IntentDataType.DATA);
+    }
+
+    public BroadcastReceiver receiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            if (intent.getAction().equals(IntentDataType.DATA)){
+                binding.homeEmailImg.setImageResource(R.drawable.home_emals_off);
+            }
+        }
+    };
 
     public HomeFragment(List<SelectSchoolEntity> schoolSelectList){
         this.schoolSelectList = schoolSelectList;
@@ -180,10 +199,13 @@ public class HomeFragment extends BaseFragment implements MyScrollView.ScrollVie
         initFloatWindow();
         initListener();
         requestNews();
+        registBroadReciver();
         lazyLoad();
-        Log.e("UserId", spUtils.getInt(Entity.USER_ID) + "");
-        Log.e("tenantId", spUtils.getInt(Entity.TENANT_ID) + "");
         return binding.getRoot();
+    }
+
+    public void registBroadReciver(){
+        LocalBroadcastManager.getInstance(getContext()).registerReceiver(receiver, intentFilter);
     }
 
     @Override
@@ -248,7 +270,7 @@ public class HomeFragment extends BaseFragment implements MyScrollView.ScrollVie
         map.put("studentId", 18);
         map.put("date", TimeUtil.getNowDate());
         if (getCourseList.size() > 0) getCourseList.clear();
-        HttpUtils httpUtils = new HttpUtils(getContext());
+
         httpUtils.getCourseDataList(handler, requestDataEntity, map, getCourseList);
     }
 
@@ -374,6 +396,7 @@ public class HomeFragment extends BaseFragment implements MyScrollView.ScrollVie
         binding.homeEmailImg.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                binding.homeEmailImg.setImageResource(R.drawable.home_emals_on);
                 ARouter.getInstance().build("/information/informationActivity").navigation();
             }
         });

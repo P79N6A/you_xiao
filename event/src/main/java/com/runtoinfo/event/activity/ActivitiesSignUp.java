@@ -5,7 +5,9 @@ import android.app.ProgressDialog;
 import android.databinding.DataBindingUtil;
 import android.os.Handler;
 import android.os.Message;
+import android.text.Editable;
 import android.text.TextUtils;
+import android.text.TextWatcher;
 import android.view.View;
 import android.widget.Toast;
 
@@ -19,6 +21,8 @@ import com.runtoinfo.httpUtils.HttpEntity;
 import com.runtoinfo.httpUtils.bean.AddMemberBean;
 import com.runtoinfo.httpUtils.bean.RequestDataEntity;
 import com.runtoinfo.httpUtils.utils.HttpUtils;
+import com.runtoinfo.youxiao.globalTools.utils.DensityUtil;
+import com.runtoinfo.youxiao.globalTools.utils.DialogMessage;
 import com.runtoinfo.youxiao.globalTools.utils.Entity;
 import com.runtoinfo.youxiao.globalTools.utils.IntentDataType;
 
@@ -26,18 +30,18 @@ import com.runtoinfo.youxiao.globalTools.utils.IntentDataType;
 public class ActivitiesSignUp extends EventBaseActivity {
 
     ActivitySiginUpBinding binding;
-    ProgressDialog progressDialog;
     public AddMemberBean addMember;
     public String gender;
     public RequestDataEntity requestDataEntity;
     public int requestType;
     public int campaignId;
     public HttpUtils httpUtils;
+    public boolean isPhone;
 
     @Override
     protected void initView() {
         binding = DataBindingUtil.setContentView(this, R.layout.activity_sigin_up);
-        httpUtils = new HttpUtils(getBaseContext());
+        httpUtils = new HttpUtils(this);
         campaignId = getIntent().getExtras().getInt(IntentDataType.DATA);
         requestDataEntity = new RequestDataEntity();
         requestDataEntity.setToken(spUtils.getString(Entity.TOKEN));
@@ -46,7 +50,23 @@ public class ActivitiesSignUp extends EventBaseActivity {
 
     @Override
     protected void initData() {
+        binding.memberPhoneNumber.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
 
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {}
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                String number = binding.memberPhoneNumber.getText().toString();
+                if (number.length() == 11){
+                    isPhone = DensityUtil.isMobileNO(number);
+                }else{
+                    isPhone = false;
+                }
+            }
+        });
     }
 
     @Override
@@ -77,6 +97,10 @@ public class ActivitiesSignUp extends EventBaseActivity {
 
     public void addDataAndRequest(){
         if (isEmpty()) {
+            if (!isPhone) {
+                DialogMessage.showToast(ActivitiesSignUp.this, "手机号码非法，请重新输入");
+                return;
+            }
             addMember = new AddMemberBean();
             addMember.setAge(binding.activityMemberAge.getText().toString());
             addMember.setName(binding.eventStudentName.getText().toString());

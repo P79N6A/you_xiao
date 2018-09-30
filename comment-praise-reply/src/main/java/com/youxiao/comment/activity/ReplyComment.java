@@ -46,7 +46,7 @@ public class ReplyComment extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         binding = DataBindingUtil.setContentView(ReplyComment.this,R.layout.activity_reply_comment);
-        httpUtils = new HttpUtils(getBaseContext());
+        httpUtils = new HttpUtils(this);
         initView();
         initData();
         requestAll();

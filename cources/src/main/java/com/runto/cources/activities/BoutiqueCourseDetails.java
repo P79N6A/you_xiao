@@ -45,6 +45,7 @@ public class BoutiqueCourseDetails extends FragmentActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         binding = DataBindingUtil.setContentView(this, R.layout.activity_boutique_course_details);
+        httpUtils = new HttpUtils(this);
         courseDataEntity = new Gson().fromJson(getIntent().getExtras().getString("json"), new TypeToken<CourseDataEntity>(){}.getType());
         initData();
     }

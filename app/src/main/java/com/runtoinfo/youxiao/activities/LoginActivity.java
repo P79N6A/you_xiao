@@ -75,7 +75,7 @@ public class LoginActivity extends BaseActivity {
         progressDialog = new ProgressDialog(LoginActivity.this);
         dialog = new Dialog(this, R.style.dialog);
         loginHead = new HttpLoginHead();
-        httpUtils = new HttpUtils(getBaseContext());
+        httpUtils = new HttpUtils(this);
         initEvent();
     }
 

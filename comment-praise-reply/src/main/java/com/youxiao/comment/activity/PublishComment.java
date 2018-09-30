@@ -49,7 +49,7 @@ public class PublishComment extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         binding = DataBindingUtil.setContentView(PublishComment.this, R.layout.comment_publish);
-        httpUtils = new HttpUtils(getApplicationContext());
+        httpUtils = new HttpUtils(this);
         initData();
         initEvent();
         getCommentAll(1);

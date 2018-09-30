@@ -48,7 +48,7 @@ public class EnventActivity extends EventBaseActivity{
     @SuppressLint("CommitPrefEdits")
     public void initView(){
         binding = DataBindingUtil.setContentView(this, R.layout.activity_activities_main);
-        httpUtils = new HttpUtils(getBaseContext());
+        httpUtils = new HttpUtils(this);
         binding.activityImgBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

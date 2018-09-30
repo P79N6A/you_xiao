@@ -52,7 +52,7 @@ public class CourseHandHomeWork extends BaseActivity {
 
     public void initView(){
         binding = DataBindingUtil.setContentView(this, R.layout.course_hand_homework);
-        httpUtils = new HttpUtils(getBaseContext());
+        httpUtils = new HttpUtils(this);
         progressDialog = new Dialog(this, R.style.dialog);
         initDialog();
     }

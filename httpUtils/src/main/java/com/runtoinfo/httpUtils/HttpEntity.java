@@ -16,6 +16,10 @@ public class HttpEntity {
      */
     public final static String GET_ORGANIZATION_INFO = "/api/services/app/User/GetOrganizationInfo";
     /**
+     * 获取个人信息
+     */
+    public final static String GET_PERSONAL_INFO = "/api/services/app/User/Get";
+    /**
      * 验证码登录
      */
     public final static String LOGIN_URL_CAPTCHA = "/api/TokenAuth/LoginByCaptcha";

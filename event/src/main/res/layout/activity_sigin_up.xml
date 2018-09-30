@@ -68,7 +68,6 @@
                         android:focusable="true"
                         android:gravity="center_vertical"
                         android:imeOptions="actionNext"
-                        android:text="叶少阳"
                         android:textColor="#333333"
                         android:textSize="18sp" />
 
@@ -167,7 +166,6 @@
                         android:focusable="true"
                         android:gravity="center_vertical"
                         android:imeOptions="actionNext"
-                        android:text="23"
                         android:textColor="#333333"
                         android:textSize="18sp" />
 
@@ -211,6 +209,7 @@
                         android:textColor="#333333"
                         android:textColorHint="#999999"
                         android:textSize="18sp"
+                        android:inputType="number"
                         tools:ignore="TextFields" />
 
                     <View

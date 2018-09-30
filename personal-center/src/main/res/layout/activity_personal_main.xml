@@ -99,7 +99,6 @@
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
                     android:layout_toStartOf="@+id/personal_next_user"
-                    android:text="姑苏城"
                     android:textColor="#999999"
                     android:textSize="18sp" />
 
@@ -181,7 +180,6 @@
                     android:layout_centerVertical="true"
                     android:layout_toStartOf="@+id/personal_next_sex"
                     android:gravity="center"
-                    android:text="男"
                     android:textColor="#999999"
                     android:textSize="18sp" />
 
