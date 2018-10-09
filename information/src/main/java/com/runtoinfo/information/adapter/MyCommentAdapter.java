@@ -52,6 +52,7 @@ public class MyCommentAdapter extends UniversalRecyclerAdapter<MyCommentEntity> 
         httpUtils.postSrcPhoto(activity, HttpEntity.IMAGE_HEAD + myCommentEntity.getReplyerAvatar(), (ImageView) holder.getView(R.id.infor_praise_user_ava));
         holder.setText(R.id.reply_details, setStringColor(myCommentEntity.getReplyContent()));
         httpUtils.postPhoto(activity, HttpEntity.IMAGE_HEAD + myCommentEntity.getTargetCover(), (ImageView) holder.getView(R.id.reply_image));
+
         holder.setText(R.id.target_title, myCommentEntity.getTargetTitle());
         holder.setText(R.id.target_publish, myCommentEntity.getTargetPublisher());
 
@@ -93,12 +94,15 @@ public class MyCommentAdapter extends UniversalRecyclerAdapter<MyCommentEntity> 
             }
         };
     }
+
     //改变字符串中某字段的样式颜色
-    public SpannableStringBuilder setStringColor(String stringColor){
+    public SpannableStringBuilder setStringColor(String stringColor) {
+        int index = stringColor.indexOf("//@");
         SpannableStringBuilder spanString = new SpannableStringBuilder(stringColor);
-        ForegroundColorSpan span1 = new ForegroundColorSpan(Color.parseColor("#27acf7"));
-        spanString.setSpan(span1, stringColor.indexOf("@"), stringColor.indexOf(":"), Spannable.SPAN_INCLUSIVE_INCLUSIVE);
-        /*spanString.setSpan(span, 0, 11, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);*/
+        if (index >= 0) {
+            ForegroundColorSpan span1 = new ForegroundColorSpan(Color.parseColor("#27acf7"));
+            spanString.setSpan(span1, stringColor.indexOf("@"), stringColor.indexOf(":"), Spannable.SPAN_INCLUSIVE_INCLUSIVE);
+        }
         return spanString;
     }
 

@@ -1,5 +1,6 @@
 package com.runtoinfo.event.activity;
 
+import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.os.Handler;
 import android.os.Looper;
@@ -30,7 +31,7 @@ import java.util.List;
 public class MineEventActivity extends EventBaseActivity {
 
     public ActivityMineEventBinding binding;
-    public List<MyEventEntity> dataList = new ArrayList<>();
+    public List<MyEventEntity> dataList;
     public EventRecyclerAdapter mAdapter;
     public HttpUtils httpUtils;
 
@@ -65,7 +66,11 @@ public class MineEventActivity extends EventBaseActivity {
             public void onItemClick(View view, int position) {
                 MyEventEntity eventEntity = mAdapter.getList().get(position);
                 String json = new Gson().toJson(eventEntity);
-                ARouter.getInstance().build("/event/eventDetails").withString(IntentDataType.DATA, json).withInt(IntentDataType.TYPE, 1).navigation();
+                ARouter.getInstance().build("/event/eventDetails")
+                        .withString(IntentDataType.DATA, json)
+                        .withInt(IntentDataType.TYPE, 1)
+                        .withInt(IntentDataType.POSITION, position)
+                        .navigation();
             }
         });
     }
@@ -75,6 +80,7 @@ public class MineEventActivity extends EventBaseActivity {
         entity.setToken(spUtils.getString(Entity.TOKEN));
         entity.setUrl(HttpEntity.MAIN_URL + HttpEntity.GET_CAMPAIGN_BY_USER);
         entity.setUserId(spUtils.getInt(Entity.USER_ID));
+        dataList = new ArrayList<>();
         httpUtils.getMyEvent(handler, entity, dataList);
     }
 
@@ -88,4 +94,15 @@ public class MineEventActivity extends EventBaseActivity {
             }
         }
     };
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == 1 && data != null){
+            switch (resultCode){
+                case 2:
+                    mAdapter.removeItem(data.getExtras().getInt(IntentDataType.POSITION));
+                    break;
+            }
+        }
+    }
 }

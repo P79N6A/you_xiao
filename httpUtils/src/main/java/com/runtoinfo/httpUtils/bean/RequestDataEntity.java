@@ -15,6 +15,24 @@ public class RequestDataEntity {
     public int campusId;
     public int type;
     public String code;
+    public int signId;
+    public int id;
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public int getSignId() {
+        return signId;
+    }
+
+    public void setSignId(int signId) {
+        this.signId = signId;
+    }
 
     public String getCode() {
         return code;

@@ -17,7 +17,25 @@ public class MyEventEntity {
     public String principal;
     public int participantNumber;
     public String cover;
+    public boolean isSignIn;
+    public int signInId;
     public int id;
+
+    public boolean isSignIn() {
+        return isSignIn;
+    }
+
+    public void setSignIn(boolean signIn) {
+        isSignIn = signIn;
+    }
+
+    public int getSignInId() {
+        return signInId;
+    }
+
+    public void setSignInId(int signInId) {
+        this.signInId = signInId;
+    }
 
     public int getTenantId() {
         return tenantId;

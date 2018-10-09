@@ -218,17 +218,22 @@ public class ArticleAdapter extends GroupRecyclerAdapter<String, Article> {
 
     private static Article create(CourseEntity entity){
         Article article = new Article();
-        article.setCourse_time(entity.getStartTime().split(" ")[1].substring(0, 5) + "-" + entity.getEndTime().split(" ")[1].substring(0, 5));
-        article.setCourse_address(entity.getClassroomName());
-        article.setCourse_teacher(entity.getTeacherName());
-        article.setCourse_progress(entity.getProgress());
-        article.setCourse_home_work(entity.getHomeworkRequirement());
-        article.setCourse_progress_num(entity.getProgress() + "%");
-        article.setCourse_name(entity.getCourseName());
-        article.setCourse_message(entity.getCourseMessage());
-        article.setType(entity.getType());
-        article.setCourseInsId(entity.getCourseInstId());
-        article.setSignIn(entity.isSignIn());
+        if (entity.getType() != 1) {
+            article.setCourse_time(entity.getStartTime().split(" ")[1].substring(0, 5) + "-" + entity.getEndTime().split(" ")[1].substring(0, 5));
+            article.setCourse_address(entity.getClassroomName());
+            article.setCourse_teacher(entity.getTeacherName());
+            article.setCourse_progress(entity.getProgress());
+            article.setCourse_home_work(entity.getHomeworkRequirement());
+            article.setCourse_progress_num(entity.getProgress() + "%");
+            article.setCourse_name(entity.getCourseName());
+            article.setCourse_message(entity.getCourseMessage());
+            article.setType(entity.getType());
+            article.setCourseInsId(entity.getCourseInstId());
+            article.setSignIn(entity.isSignIn());
+        }else{
+            article.setType(entity.getType());
+            article.setCourse_message(entity.getCourseMessage());
+        }
         return article;
     }
 

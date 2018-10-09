@@ -193,15 +193,26 @@ public class InformationDetails extends BaseActivity {
     }
 
     //评论、赞数据解析
-    public List setListPraiseOrComment(JSONArray items) {
+    public List setListPraiseOrComment(JSONArray items, String type) {
         try {
             List list = new ArrayList();
-            for (int i = 0; i < items.length(); i++) {
-                JSONObject item = items.getJSONObject(i);
-                PraiseEntity praiseEntity =
-                        new Gson().fromJson(item.toString(), new TypeToken<PraiseEntity>() {
-                        }.getType());
-                list.add(praiseEntity);
+            switch (type){
+                case "comment":
+                    for (int i = 0; i < items.length(); i++) {
+                        JSONObject item = items.getJSONObject(i);
+                        MyCommentEntity myCommentEntity =
+                                new Gson().fromJson(item.toString(), new TypeToken<MyCommentEntity>() {}.getType());
+                        list.add(myCommentEntity);
+                    }
+                    break;
+                case "praise":
+                    for (int i = 0; i < items.length(); i++) {
+                        JSONObject item = items.getJSONObject(i);
+                        PraiseEntity praiseEntity =
+                                new Gson().fromJson(item.toString(), new TypeToken<PraiseEntity>() {}.getType());
+                        list.add(praiseEntity);
+                    }
+                    break;
             }
             return list;
         } catch (JSONException e) {
@@ -293,12 +304,12 @@ public class InformationDetails extends BaseActivity {
                     switch (layoutType) {
                         case "comment":
                             JSONArray items = (JSONArray) msg.obj;
-                            commentEntityList = setListPraiseOrComment(items);
+                            commentEntityList = setListPraiseOrComment(items, "comment");
                             initCommentRecycleData();
                             break;
                         case "praise":
                             JSONArray result = (JSONArray) msg.obj;
-                            praiseEntityList = setListPraiseOrComment(result);
+                            praiseEntityList = setListPraiseOrComment(result, "praise");
                             initPraiseRecycler();
                             break;
                     }

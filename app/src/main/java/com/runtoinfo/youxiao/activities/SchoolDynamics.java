@@ -17,6 +17,7 @@ import com.runtoinfo.httpUtils.CPRCBean.CPRCDataEntity;
 import com.runtoinfo.httpUtils.CPRCBean.CPRCTypeEntity;
 import com.runtoinfo.httpUtils.HttpEntity;
 import com.runtoinfo.httpUtils.bean.RequestDataEntity;
+import com.runtoinfo.httpUtils.bean.SchoolDynamicsNewEntity;
 import com.runtoinfo.httpUtils.utils.HttpUtils;
 import com.runtoinfo.youxiao.R;
 import com.runtoinfo.youxiao.adapter.SchoolDynamicsRecyclerAdapter;
@@ -47,6 +48,10 @@ public class SchoolDynamics extends BaseActivity {
     public int targetType;
     public int returnType;
     public HttpUtils httpUtils;
+    public List<SchoolDynamicsNewEntity> newDataList ;
+
+    public boolean isClickColl = false;
+    public boolean isClickPraise = false;
     @Override
     protected void initView() {
         binding = DataBindingUtil.setContentView(SchoolDynamics.this, R.layout.school_movment);
@@ -79,14 +84,23 @@ public class SchoolDynamics extends BaseActivity {
         binding.detailsCollection.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {
-
-                CPRCDataEntity dataEntity = new CPRCDataEntity();
-                dataEntity.setToken(spUtils.getString(Entity.TOKEN));
-                dataEntity.setType(CPRCTypeEntity.COLLECTION);
-                dataEntity.setTarget(schoolDynamicsEntity.getId());
-                dataEntity.setTargetType(targetType);
-                dataEntity.setUserId(spUtils.getInt(Entity.USER_ID));
-                httpUtils.postComment(handler, dataEntity);
+                if (!isClickColl) {
+                    isClickColl = true;
+                    CPRCDataEntity dataEntity = new CPRCDataEntity();
+                    dataEntity.setToken(spUtils.getString(Entity.TOKEN));
+                    dataEntity.setType(CPRCTypeEntity.COLLECTION);
+                    dataEntity.setTarget(schoolDynamicsEntity.getId());
+                    dataEntity.setTargetType(targetType);
+                    dataEntity.setUserId(spUtils.getInt(Entity.USER_ID));
+                    httpUtils.postComment(handler, dataEntity);
+                }else{
+                    isClickColl = false;
+                    RequestDataEntity requestDataEntity = new RequestDataEntity();
+                    requestDataEntity.setToken(spUtils.getString(Entity.TOKEN));
+                    requestDataEntity.setUrl(HttpEntity.MAIN_URL + HttpEntity.DELETE_COMMENT_CREATE);
+                    requestDataEntity.setId(schoolDynamicsEntity.getId());
+                    httpUtils.delectColleciton(handler, requestDataEntity);
+                }
             }
         });
 
@@ -94,13 +108,23 @@ public class SchoolDynamics extends BaseActivity {
             @Override
             public void onClick(View v) {
                 returnType = 1;
-                CPRCDataEntity dataEntity = new CPRCDataEntity();
-                dataEntity.setToken(spUtils.getString(Entity.TOKEN));
-                dataEntity.setType(CPRCTypeEntity.PRAISE);
-                dataEntity.setTarget(schoolDynamicsEntity.getId());
-                dataEntity.setTargetType(targetType);
-                dataEntity.setUserId(spUtils.getInt(Entity.USER_ID));
-                httpUtils.postComment(handler, dataEntity);
+                if (isClickPraise){
+                    isClickPraise = false;
+                    RequestDataEntity requestDataEntity = new RequestDataEntity();
+                    requestDataEntity.setToken(spUtils.getString(Entity.TOKEN));
+                    requestDataEntity.setUrl(HttpEntity.MAIN_URL + HttpEntity.DELETE_COMMENT_CREATE);
+                    requestDataEntity.setId(schoolDynamicsEntity.getId());
+                    httpUtils.delectColleciton(handler, requestDataEntity);
+                }else {
+                    isClickPraise = true;
+                    CPRCDataEntity dataEntity = new CPRCDataEntity();
+                    dataEntity.setToken(spUtils.getString(Entity.TOKEN));
+                    dataEntity.setType(CPRCTypeEntity.PRAISE);
+                    dataEntity.setTarget(schoolDynamicsEntity.getId());
+                    dataEntity.setTargetType(targetType);
+                    dataEntity.setUserId(spUtils.getInt(Entity.USER_ID));
+                    httpUtils.postComment(handler, dataEntity);
+                }
             }
         });
     }
@@ -144,7 +168,8 @@ public class SchoolDynamics extends BaseActivity {
         dataEntity.setUrl(HttpEntity.MAIN_URL + HttpEntity.SCHOOL_NEWS_ALL);
         dataEntity.setType(type);
         dataEntity.setToken(spUtils.getString(Entity.TOKEN));
-        httpUtils.getSchoolNewsAll(handler, dataEntity);
+        newDataList = new ArrayList<>();
+        httpUtils.getSchoolNewsAll(handler, dataEntity, newDataList);
     }
 
     @Override
@@ -177,6 +202,7 @@ public class SchoolDynamics extends BaseActivity {
                 case 2:
                     if (returnType == 1){
                         binding.detailsPraiseImagView.setBackgroundResource(R.drawable.comment_praised);
+                        returnType = 0;
                     }else {
                         schoolDynamicsEntity = (SchoolDynamicsEntity) msg.obj;
                         times++;
@@ -188,6 +214,13 @@ public class SchoolDynamics extends BaseActivity {
                                 spUtils.getString(Entity.TOKEN),
                                 schoolDynamicsEntity.getId());
                         binding.dynamicsWebview.loadData(schoolDynamicsEntity.getContent(), "text/html; charset=UTF-8", null);
+                        if (schoolDynamicsEntity.hasFavorite){
+                            binding.detailsCollectionImagView.setBackgroundResource(R.drawable.boutique_course_collectioned);
+                            binding.detailsCollectionText.setText("已收藏");
+                        }
+                        if (schoolDynamicsEntity.hasPraise){
+                            binding.detailsPraiseImagView.setBackgroundResource(R.drawable.comment_praised);
+                        }
                     }
                     break;
                 case 3:
@@ -197,13 +230,19 @@ public class SchoolDynamics extends BaseActivity {
                     break;
 
                 case 5:
-                    String json = msg.obj.toString();
-                    Log.e("school", json);
-                    fromJson(json);
+                    fromJson();
                     initRecyclerData();
                     break;
                 case 4:
                     binding.dynamicsReadNumber.setText(msg.obj.toString());
+                    break;
+                case 200:
+                    if (returnType == 1){
+                        binding.detailsPraiseImagView.setBackgroundResource(R.drawable.dynamics_z);
+                    }else{
+                        binding.detailsCollectionImagView.setBackgroundResource(R.drawable.dynamics_collection);
+                        binding.detailsCollectionText.setText("收藏");
+                    }
                     break;
                 case 500:
                     Utils.showToast(SchoolDynamics.this, "请检查您的网络");
@@ -212,32 +251,25 @@ public class SchoolDynamics extends BaseActivity {
         }
     };
 
-    public void fromJson(String json){
-        try {
-            JSONObject object = new JSONObject(json);
-            JSONObject result = object.getJSONObject("result");
-            JSONArray items = result.getJSONArray("items");
-            for (int item = 0; item < items.length(); item++){
-                JSONObject childItem = items.getJSONObject(item);
-                setDataList(childItem);
+    public void fromJson(){
+        int size = newDataList.size();
+        if (size > 0){
+            for (int i = 0; i < size; i++) {
+                setDataList(newDataList.get(i));
             }
-        } catch (JSONException e) {
-            e.printStackTrace();
         }
     }
 
-    public void setDataList(JSONObject childItem) throws JSONException{
+    public void setDataList(SchoolDynamicsNewEntity newEntity){
         schoolDynamicsList = new ArrayList<>();
-        JSONArray images = childItem.getJSONArray("coverImgs");
+
         SchoolDynamicsEntity entity = new SchoolDynamicsEntity();
-        int coverType = childItem.getInt("coverType");
-        List<String> imageList = new ArrayList<>();
-        for (int i = 0; i < images.length(); i++){
-            imageList.add(images.getString(i));
-        }
+        int coverType = newEntity.getCoverType();//childItem.getInt("coverType");
+        List<String> imageList = newEntity.getCoverImgs();
+        int imageListSize = imageList.size();
         switch (coverType){
             case 0://图片
-                switch (images.length()){
+                switch (imageListSize){
                     case 1:
                     case 2:
                         entity.setType(1);
@@ -253,16 +285,18 @@ public class SchoolDynamics extends BaseActivity {
                 break;
         }
 
-        entity.setTile(childItem.getString("title"));
-        entity.setId(childItem.getInt("id"));
+        entity.setTile(newEntity.getTitle());//childItem.getString("title"));
+        entity.setId(newEntity.getId());//childItem.getInt("id"));
         entity.setImagList(imageList);
-        entity.setCoverType(childItem.getInt("coverType"));
-        //entity.setReadNumber(childItem.getInt("pageView"));
-        entity.setStatus(childItem.getString("status"));
-        entity.setVideoPath(childItem.getString("videoPath"));
-        entity.setContent(childItem.getString("content"));
-        entity.setMessage(childItem.getString("subtitle"));
-        entity.setPublishTime(childItem.getString("publishTime"));
+        entity.setCoverType(newEntity.getCoverType());//childItem.getInt("coverType"));
+        entity.setReadNumber(newEntity.getPageView());//childItem.getInt("pageView"));
+        entity.setStatus(newEntity.getStatus());//childItem.getString("status"));
+        entity.setVideoPath(newEntity.getVideoPath());//childItem.getString("videoPath"));
+        entity.setContent(newEntity.getContent());//childItem.getString("content"));
+        entity.setMessage(newEntity.getSubtitle());//childItem.getString("subtitle"));
+        entity.setPublishTime(newEntity.getPublishTime());//.getString("publishTime"));
+        entity.setHasPraise(newEntity.hasPraised);
+        entity.setHasFavorite(newEntity.hasFavorited);
         schoolDynamicsList.add(entity);
     }
 

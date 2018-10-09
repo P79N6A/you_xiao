@@ -22,9 +22,27 @@ public class SchoolDynamicsEntity {
     //新闻或者头条
     public int dataType;
     //发布状态
-    public String status;
+    public int status;
     public String content;
     public String publishTime;
+    public boolean hasPraise;
+    public boolean hasFavorite;
+
+    public boolean isHasPraise() {
+        return hasPraise;
+    }
+
+    public void setHasPraise(boolean hasPraise) {
+        this.hasPraise = hasPraise;
+    }
+
+    public boolean isHasFavorite() {
+        return hasFavorite;
+    }
+
+    public void setHasFavorite(boolean hasFavorite) {
+        this.hasFavorite = hasFavorite;
+    }
 
     public String getPublishTime() {
         return publishTime;
@@ -66,11 +84,11 @@ public class SchoolDynamicsEntity {
         this.dataType = dataType;
     }
 
-    public String getStatus() {
+    public int getStatus() {
         return status;
     }
 
-    public void setStatus(String status) {
+    public void setStatus(int status) {
         this.status = status;
     }
 

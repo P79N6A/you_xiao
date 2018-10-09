@@ -24,4 +24,5 @@ public class IntentDataType {
 
     public final static String TYPE = "TYPE";
 
+    public final static String POSITION = "POSITION";
 }

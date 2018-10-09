@@ -23,6 +23,7 @@ import com.runtoinfo.personal_center.adapter.CollectionAdapter;
 import com.runtoinfo.personal_center.databinding.CollectionDataLayoutBinding;
 import com.runtoinfo.youxiao.globalTools.adapter.CommonViewPagerAdapter;
 import com.runtoinfo.youxiao.globalTools.adapter.UniversalRecyclerAdapter;
+import com.runtoinfo.youxiao.globalTools.utils.DialogMessage;
 import com.runtoinfo.youxiao.globalTools.utils.Entity;
 
 import org.json.JSONArray;
@@ -85,6 +86,11 @@ public class NewsFragment extends BasePersonalFragment {
             @Override
             public void onItemClick(View view, int position) {
                 collectionAdapter.removeItem(position);
+                RequestDataEntity requestDataEntity = new RequestDataEntity();
+                requestDataEntity.setToken(spUtils.getString(Entity.TOKEN));
+                requestDataEntity.setUrl(HttpEntity.MAIN_URL + HttpEntity.DELETE_COMMENT_CREATE);
+                requestDataEntity.setId(collectionAdapter.getList().get(position).getId());
+                httpUtils.delectColleciton(handler, requestDataEntity);
             }
         });
 
@@ -130,6 +136,9 @@ public class NewsFragment extends BasePersonalFragment {
                     }else{
                         binding.collectionNothingLayout.setVisibility(View.VISIBLE);
                     }
+                    break;
+                case 200:
+                    DialogMessage.showToast(getContext(), "删除成功");
                     break;
                 case 500:
                     break;

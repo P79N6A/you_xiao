@@ -40,6 +40,7 @@ import com.runtoinfo.httpUtils.HttpEntity;
 import com.runtoinfo.httpUtils.bean.GetSchoolSettingEntity;
 import com.runtoinfo.httpUtils.bean.HomeCourseEntity;
 import com.runtoinfo.httpUtils.bean.RequestDataEntity;
+import com.runtoinfo.httpUtils.bean.SchoolDynamicsNewEntity;
 import com.runtoinfo.httpUtils.utils.HttpUtils;
 import com.runtoinfo.youxiao.R;
 import com.runtoinfo.youxiao.adapter.CoursePunchAdapter;
@@ -72,7 +73,7 @@ import java.util.Map;
 @SuppressLint("ValidFragment")
 @SuppressWarnings("all")
 @Route(path = "/main/homeFragment")
-public class HomeFragment extends BaseFragment implements MyScrollView.ScrollViewListener{
+public class HomeFragment extends BaseFragment implements MyScrollView.ScrollViewListener {
 
     public FragmentHomeBinding binding;
     public CoursePunchAdapter coursePunchAdapter;
@@ -87,23 +88,24 @@ public class HomeFragment extends BaseFragment implements MyScrollView.ScrollVie
     private boolean mHasLoadedOnce = false;
     private boolean isPrepared = false;
     public HttpUtils httpUtils;
+    public List<SchoolDynamicsNewEntity> dataList;
 
     public final static IntentFilter intentFilter = new IntentFilter();
 
-    static{
+    static {
         intentFilter.addAction(IntentDataType.DATA);
     }
 
     public BroadcastReceiver receiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            if (intent.getAction().equals(IntentDataType.DATA)){
+            if (intent.getAction().equals(IntentDataType.DATA)) {
                 binding.homeEmailImg.setImageResource(R.drawable.home_emals_off);
             }
         }
     };
 
-    public HomeFragment(List<SelectSchoolEntity> schoolSelectList){
+    public HomeFragment(List<SelectSchoolEntity> schoolSelectList) {
         this.schoolSelectList = schoolSelectList;
     }
 
@@ -117,41 +119,36 @@ public class HomeFragment extends BaseFragment implements MyScrollView.ScrollVie
         }
     };
 
-    public Handler handler = new Handler(Looper.getMainLooper()){
+    public Handler handler = new Handler(Looper.getMainLooper()) {
         @Override
         public void handleMessage(Message msg) {
-            switch (msg.what){
+            switch (msg.what) {
                 case 0:
                     initCourseData();
                     /**
                      * 暂时使用
                      */
-                    for(int i = 0; i < getCourseList.size(); i++){
+                    for (int i = 0; i < getCourseList.size(); i++) {
                         HomeCourseEntity entity = getCourseList.get(i);
                         spUtils.setInt(com.runtoinfo.youxiao.globalTools.utils.Entity.COURSE_ID, entity.getCourseId());
-                        spUtils.setInt(com.runtoinfo.youxiao.globalTools.utils.Entity.COURSE_INST_ID,entity.getCourseInstId());
+                        spUtils.setInt(com.runtoinfo.youxiao.globalTools.utils.Entity.COURSE_INST_ID, entity.getCourseInstId());
                     }
                     break;
                 case 5:
-                    try{
-                        JSONObject json = new JSONObject(msg.obj.toString());
-                        JSONObject result = json.getJSONObject("result");
-                        JSONArray items = result.getJSONArray("items");
-                        if (items.length() > 1) {
-                            JSONObject item1 = items.getJSONObject(0);
-                            binding.homeSystemContent.setText(item1.getString("title"));
-                            if (TimeUtil.getTimeDif(item1.getString("publishTime")) != null) {
-                                binding.homeSystemContentTime.setText(TimeUtil.getTimeDif(item1.getString("publishTime")));
-                            }
-                            JSONObject item2 = items.getJSONObject(1);
-                            binding.homeActivityContent.setText(item2.getString("title"));
-                            if (TimeUtil.getTimeDif(item2.getString("publishTime")) != null) {
-                                binding.homeActivityContentTime.setText(TimeUtil.getTimeDif(item2.getString("publishTime")));
-                            }
+
+                    if (dataList.size() > 1) {
+                        SchoolDynamicsNewEntity item1 = dataList.get(0);
+                        binding.homeSystemContent.setText(item1.getTitle());
+                        if (TimeUtil.getTimeDif(item1.getPublishTime()) != null) {
+                            binding.homeSystemContentTime.setText(TimeUtil.getTimeDif(item1.getPublishTime()));
                         }
-                    }catch (JSONException e){
-                        e.printStackTrace();
+                        SchoolDynamicsNewEntity item2 = dataList.get(1);
+                        binding.homeActivityContent.setText(item2.getTitle());
+                        if (TimeUtil.getTimeDif(item2.getPublishTime()) != null) {
+                            binding.homeActivityContentTime.setText(TimeUtil.getTimeDif(item2.getPublishTime()));
+                        }
                     }
+
                     break;
                 case 10://获取校长电话
                     GetSchoolSettingEntity entity = (GetSchoolSettingEntity) msg.obj;
@@ -170,9 +167,9 @@ public class HomeFragment extends BaseFragment implements MyScrollView.ScrollVie
                     break;
                 case 30:
                     int count = (int) msg.obj;
-                    if (count > 0){
+                    if (count > 0) {
                         binding.homeEmailImg.setImageResource(R.drawable.home_emals_off);
-                    }else{
+                    } else {
                         binding.homeEmailImg.setImageResource(R.drawable.home_emals_on);
                     }
                     break;
@@ -204,7 +201,7 @@ public class HomeFragment extends BaseFragment implements MyScrollView.ScrollVie
         return binding.getRoot();
     }
 
-    public void registBroadReciver(){
+    public void registBroadReciver() {
         LocalBroadcastManager.getInstance(getContext()).registerReceiver(receiver, intentFilter);
     }
 
@@ -223,7 +220,7 @@ public class HomeFragment extends BaseFragment implements MyScrollView.ScrollVie
     }
 
 
-    public void requestPermission(){
+    public void requestPermission() {
         if (ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
             //如果应用之前请求过此权限但用户拒绝了请求，此方法将返回 true。
             if (ActivityCompat.shouldShowRequestPermissionRationale(getActivity(), Manifest.permission.CALL_PHONE)) {
@@ -236,7 +233,7 @@ public class HomeFragment extends BaseFragment implements MyScrollView.ScrollVie
     }
 
 
-    public void initCourseData(){
+    public void initCourseData() {
 
 
         binding.homeRecyclerView.setHasFixedSize(true);
@@ -260,7 +257,7 @@ public class HomeFragment extends BaseFragment implements MyScrollView.ScrollVie
     /**
      * 请求接口获取今日课程
      */
-    public void initCourseDataList(){
+    public void initCourseDataList() {
 
         RequestDataEntity requestDataEntity = new RequestDataEntity();
         requestDataEntity.setToken(spUtils.getString(Entity.TOKEN));
@@ -277,27 +274,30 @@ public class HomeFragment extends BaseFragment implements MyScrollView.ScrollVie
     /**
      * 获取动态
      */
-    public void requestNews(){
+    public void requestNews() {
         RequestDataEntity requestDataEntity = new RequestDataEntity();
         requestDataEntity.setToken(spUtils.getString(Entity.TOKEN));
         Log.e("Token", spUtils.getString(Entity.TOKEN));
         requestDataEntity.setUrl(HttpEntity.MAIN_URL + HttpEntity.SCHOOL_NEWS_ALL);
         requestDataEntity.setType(0);
-        httpUtils.getSchoolNewsAll(handler, requestDataEntity);
+        dataList = new ArrayList<>();
+        httpUtils.getSchoolNewsAll(handler, requestDataEntity, dataList);
     }
+
     /**
      * 获取校长电话
      */
-    public void requestSchoolSetting(){
+    public void requestSchoolSetting() {
         RequestDataEntity requestDataEntity = new RequestDataEntity();
         requestDataEntity.setToken(spUtils.getString(Entity.TOKEN));
         requestDataEntity.setUrl(HttpEntity.MAIN_URL + HttpEntity.GET_SCHOOL_SETTING);
         httpUtils.getSchoolSetting(handler, requestDataEntity);
     }
+
     /**
      * 获取用户未读消息
      */
-    public void requestUserInformationCount(){
+    public void requestUserInformationCount() {
         RequestDataEntity requestDataEntity = new RequestDataEntity();
         requestDataEntity.setTenantId(spUtils.getInt(Entity.TENANT_ID));
         requestDataEntity.setUrl(HttpEntity.MAIN_URL + HttpEntity.GET_NOTIFICATION_COUNT);
@@ -312,7 +312,7 @@ public class HomeFragment extends BaseFragment implements MyScrollView.ScrollVie
     /**
      * 悬浮按钮
      */
-    public void initFloatWindow(){
+    public void initFloatWindow() {
         ViewTreeObserver vto = binding.homeHeadImage.getViewTreeObserver();
         vto.addOnPreDrawListener(new ViewTreeObserver.OnPreDrawListener() {
             public boolean onPreDraw() {
@@ -324,12 +324,12 @@ public class HomeFragment extends BaseFragment implements MyScrollView.ScrollVie
         requestSchoolSetting();
     }
 
-    public void initFloatWindowListener(){
+    public void initFloatWindowListener() {
         //悬浮按钮
         FloatDragView.addFloatDragView(getActivity(), binding.homeFrameLayout, new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (phoneNumber != null){
+                if (phoneNumber != null) {
                     final Dialog dialog = DialogMessage.showDialogWithLayout(getContext(), R.layout.show_school_phone_number_layout);
                     dialog.show();
                     dialog.findViewById(R.id.call_number_cancel).setOnClickListener(new View.OnClickListener() {
@@ -357,8 +357,7 @@ public class HomeFragment extends BaseFragment implements MyScrollView.ScrollVie
     }
 
 
-
-    public void initListener(){
+    public void initListener() {
 
         /**
          * 选择学校
@@ -387,8 +386,8 @@ public class HomeFragment extends BaseFragment implements MyScrollView.ScrollVie
                     }
                 });
                 popupWindow.showPopupWindows(schoolSelectList, binding.fragmentHomeImagview);
-                WindowManager.LayoutParams params=getActivity().getWindow().getAttributes();
-                params.alpha=0.7f;
+                WindowManager.LayoutParams params = getActivity().getWindow().getAttributes();
+                params.alpha = 0.7f;
                 getActivity().getWindow().setAttributes(params);
                 return true;
             }
@@ -484,14 +483,14 @@ public class HomeFragment extends BaseFragment implements MyScrollView.ScrollVie
     @Override
     public void onScrollChanged(MyScrollView scrollView, int x, int y, int oldx, int oldy) {
         if (y <= 0) {  //设置标题的背景颜色
-            binding.homeTitleRelative.setBackgroundColor(Color.argb((int) 0, 144,151,166));
+            binding.homeTitleRelative.setBackgroundColor(Color.argb((int) 0, 144, 151, 166));
         } else if (y > 0 && y <= mHeight) { //滑动距离小于banner图的高度时，设置背景和字体颜色颜色透明度渐变
             float scale = (float) y / mHeight;
             float alpha = (255 * scale);
             //binding.homeTitleRelative.setTextColor(Color.argb((int) alpha, 255,255,255));
-            binding.homeTitleRelative.setBackgroundColor(Color.argb((int) alpha, 139,185,247));
+            binding.homeTitleRelative.setBackgroundColor(Color.argb((int) alpha, 139, 185, 247));
         } else {  //滑动到banner下面设置普通颜色
-            binding.homeTitleRelative.setBackgroundColor(Color.argb((int) 255, 82,151,248));
+            binding.homeTitleRelative.setBackgroundColor(Color.argb((int) 255, 82, 151, 248));
         }
 
     }

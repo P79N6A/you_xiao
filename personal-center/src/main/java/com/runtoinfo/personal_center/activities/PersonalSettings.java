@@ -39,6 +39,7 @@ public class PersonalSettings extends BaseActivity {
     public HttpUtils httpUtils;
     public Dialog dialog;
     public String personalInfoData;
+    public Dialog exitDialog;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -64,9 +65,24 @@ public class PersonalSettings extends BaseActivity {
         binding.exitNowSystem.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {
-                spUtils.setString(Entity.TOKEN, "");
-                ARouter.getInstance().build("/main/LoginActivity").navigation();
-                PersonalSettings.this.finish();
+                exitDialog = DialogMessage.showDialogWithLayout(PersonalSettings.this, R.layout.exit_now_user);
+                exitDialog.show();
+                exitDialog.findViewById(R.id.cancel_exit).setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        exitDialog.dismiss();
+                    }
+                });
+                exitDialog.findViewById(R.id.exit_now).setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        exitDialog.dismiss();
+                        exitDialog = null;
+                        spUtils.setString(Entity.TOKEN, "");
+                        ARouter.getInstance().build("/main/LoginActivity").navigation();
+                        PersonalSettings.this.finish();
+                    }
+                });
             }
         });
         binding.personalSettingVersionLayout.setOnClickListener(new View.OnClickListener() {

@@ -10,6 +10,7 @@ import android.text.TextUtils;
 import android.view.View;
 
 import com.alibaba.android.arouter.facade.annotation.Route;
+import com.bumptech.glide.Glide;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.runtoinfo.httpUtils.CPRCBean.CPRCDataEntity;
@@ -60,7 +61,7 @@ public class ReplyComment extends BaseActivity {
 
     public void initData(){
         binding.replyPublishName.setText(resultEntity.getNickName());
-        httpUtils.postSrcPhoto(ReplyComment.this, HttpEntity.IMAGE_HEAD + resultEntity.getUserAvatar(), binding.replyCommentAvatar);
+        Glide.with(this).load(HttpEntity.IMAGE_HEAD + resultEntity.getUserAvatar()).into(binding.replyCommentAvatar);
         binding.replyPublishDetails.setText(resultEntity.getContent());
         if (resultEntity.hasPraise){
             binding.replyPublishPraise.setImageResource(R.drawable.comment_praised);

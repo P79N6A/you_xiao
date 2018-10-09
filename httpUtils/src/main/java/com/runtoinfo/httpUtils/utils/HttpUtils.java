@@ -34,6 +34,7 @@ import com.runtoinfo.httpUtils.bean.LeaveEntity;
 import com.runtoinfo.httpUtils.bean.MyEventEntity;
 import com.runtoinfo.httpUtils.bean.PersonalCenterEntity;
 import com.runtoinfo.httpUtils.bean.RequestDataEntity;
+import com.runtoinfo.httpUtils.bean.SchoolDynamicsNewEntity;
 import com.runtoinfo.httpUtils.bean.SystemMessageEntity;
 import com.runtoinfo.httpUtils.bean.TopiceHttpResultEntity;
 import com.runtoinfo.httpUtils.bean.VersionEntity;
@@ -476,10 +477,98 @@ public class HttpUtils<T> {
     }
 
     /**
-     * delete
+     * delete 删除报名人员
      */
-    public static void delete() {
+    public void deleteMember(final Handler handler, final RequestDataEntity requestDataEntity) {
+        executorService.execute(new Runnable() {
+            @Override
+            public void run() {
+//                    JSONObject json = new JSONObject();
+//                    json.put("MemberId", requestDataEntity.getSignId());
+//                    RequestBody body = RequestBody.create(JSON, json.toString());
+                    FormBody formBody = new FormBody.Builder()
+                            .add("MemberId", requestDataEntity.getSignId() + "")
+                            .build();
 
+                    Request request = new Request.Builder()
+                            .header(Authorization, Bearer + requestDataEntity.getToken())
+                            .url(requestDataEntity.getUrl())
+                            .delete(formBody)
+                            .build();
+
+                    getClient().newCall(request).enqueue(new Callback() {
+                        @Override
+                        public void onFailure(Call call, IOException e) {
+                            handler.sendEmptyMessage(500);
+                        }
+
+                        @Override
+                        public void onResponse(Call call, Response response) throws IOException {
+                            if (response.isSuccessful()){
+                                try {
+                                    JSONObject jsonObject = new JSONObject(response.body().string());
+                                    boolean success = jsonObject.getBoolean("success");
+                                    if (success){
+                                        handler.sendEmptyMessage(200);
+                                    }else{
+                                        handler.sendEmptyMessage(400);
+                                    }
+                                } catch (JSONException e) {
+                                    e.printStackTrace();
+                                    handler.sendEmptyMessage(404);
+                                }
+                            }else{
+                                handler.sendEmptyMessage(400);
+                            }
+                        }
+                    });
+            }
+        });
+    }
+
+    /**
+     * 删除评论、赞、收藏
+     * @param handler
+     * @param requestDataEntity
+     */
+    public void delectColleciton(final Handler handler,  final RequestDataEntity requestDataEntity){
+        executorService.execute(new Runnable() {
+            @Override
+            public void run() {
+                FormBody formBody = new FormBody.Builder()
+                        .add("Id", requestDataEntity.getId() + "")
+                        .build();
+                Request request = new Request.Builder()
+                        .header(Authorization, Bearer + requestDataEntity.getToken())
+                        .url(requestDataEntity.getUrl())
+                        .delete(formBody)
+                        .build();
+                getClient().newCall(request).enqueue(new Callback() {
+                    @Override
+                    public void onFailure(Call call, IOException e) {
+                        handler.sendEmptyMessage(500);
+                    }
+
+                    @Override
+                    public void onResponse(Call call, Response response) throws IOException {
+                        if (response.isSuccessful()){
+                            try {
+                                JSONObject json = new JSONObject(response.body().string());
+                                boolean success = json.getBoolean("success");
+                                if(success){
+                                    handler.sendEmptyMessage(200);
+                                }else{
+                                    handler.sendEmptyMessage(400);
+                                }
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                                handler.sendEmptyMessage(404);
+                            }
+                        }
+                    }
+                });
+            }
+        });
     }
 
     /**
@@ -489,7 +578,7 @@ public class HttpUtils<T> {
      * @param url
      * @param token   登录后的标识
      */
-    public void getSchoolNewsAll(final Handler handler, final RequestDataEntity requestDataEntity) {
+    public void getSchoolNewsAll(final Handler handler, final RequestDataEntity requestDataEntity, final List<SchoolDynamicsNewEntity> dataList) {
         executorService.execute(new Runnable() {
             @Override
             public void run() {
@@ -505,17 +594,33 @@ public class HttpUtils<T> {
                 getClient().newCall(request).enqueue(new Callback() {
                     @Override
                     public void onFailure(Call call, IOException e) {
-
+                        handler.sendEmptyMessage(500);
                     }
 
                     @Override
                     public void onResponse(Call call, Response response) throws IOException {
                         if (response.isSuccessful()) {
-                            String result = response.body().string();
-                            Message message = new Message();
-                            message.what = 5;
-                            message.obj = result;
-                            handler.sendMessage(message);
+                            try {
+                                JSONObject json = new JSONObject(response.body().string());
+                                boolean success = json.getBoolean("success");
+                                if (success){
+                                    JSONObject result = json.getJSONObject("result");
+                                    JSONArray items = result.getJSONArray("items");
+                                    for (int item = 0; item < items.length(); item++){
+                                        JSONObject childItem = items.getJSONObject(item);
+                                        SchoolDynamicsNewEntity entity = new Gson().fromJson(childItem.toString(),
+                                                new TypeToken<SchoolDynamicsNewEntity>(){}.getType());
+                                        dataList.add(entity);
+                                    }
+                                    handler.sendEmptyMessage(5);
+                                }else{
+                                    handler.sendEmptyMessage(400);
+                                }
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                                handler.sendEmptyMessage(404);
+                            }
+
                         }
                     }
                 });
