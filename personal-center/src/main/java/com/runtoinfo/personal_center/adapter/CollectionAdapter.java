@@ -3,9 +3,11 @@ package com.runtoinfo.personal_center.adapter;
 import android.app.Activity;
 import android.content.Context;
 import android.text.TextUtils;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.runtoinfo.httpUtils.CenterEntity.CollectionEntity;
 import com.runtoinfo.httpUtils.HttpEntity;
 import com.runtoinfo.httpUtils.utils.HttpUtils;
@@ -25,6 +27,7 @@ public class CollectionAdapter extends UniversalRecyclerAdapter<CollectionEntity
     public Activity activity;
     public int type;
     public HttpUtils httpUtils;
+    private OnDeleteClickLister mDeleteClickListener;
     public CollectionAdapter(Activity mContext, List<CollectionEntity> mDatas, int mLayoutId, int type) {
         super(mContext, mDatas, mLayoutId);
         this.activity = mContext;
@@ -34,7 +37,7 @@ public class CollectionAdapter extends UniversalRecyclerAdapter<CollectionEntity
 
     @Override
     protected void convert(Context mContext, BaseViewHolder holder, CollectionEntity collectionEntity, int position) {
-        httpUtils.postSrcPhoto(activity, HttpEntity.IMAGE_HEAD + collectionEntity.getTargetCover(), (ImageView) holder.getView(R.id.record_course_img));
+        Glide.with(activity).load(HttpEntity.IMAGE_HEAD + collectionEntity.getTargetCover()).into((ImageView) holder.getView(R.id.record_course_img));
         holder.setText(R.id.record_title, collectionEntity.getTargetTitle());
         switch (type){
             case 0:
@@ -46,5 +49,13 @@ public class CollectionAdapter extends UniversalRecyclerAdapter<CollectionEntity
                 holder.setText(R.id.record_collection_price, "￥" + collectionEntity.getTargetPrice());
                 break;
         }
+    }
+
+    public void setOnDeleteClickListener(OnDeleteClickLister listener) {
+        this.mDeleteClickListener = listener;
+    }
+
+    public interface OnDeleteClickLister {
+        void onDeleteClick(View view, int position);
     }
 }

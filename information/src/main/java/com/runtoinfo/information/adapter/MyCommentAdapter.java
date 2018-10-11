@@ -12,6 +12,7 @@ import android.text.style.ForegroundColorSpan;
 import android.view.View;
 import android.widget.ImageView;
 
+import com.bumptech.glide.Glide;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.runtoinfo.information.R;
@@ -49,9 +50,9 @@ public class MyCommentAdapter extends UniversalRecyclerAdapter<MyCommentEntity> 
         handlerHolder = holder;
         holder.setText(R.id.reply_user_name, myCommentEntity.getReplyer());
         holder.setText(R.id.reply_time, myCommentEntity.getReplyTime());
-        httpUtils.postSrcPhoto(activity, HttpEntity.IMAGE_HEAD + myCommentEntity.getReplyerAvatar(), (ImageView) holder.getView(R.id.infor_praise_user_ava));
-        holder.setText(R.id.reply_details, setStringColor(myCommentEntity.getReplyContent()));
-        httpUtils.postPhoto(activity, HttpEntity.IMAGE_HEAD + myCommentEntity.getTargetCover(), (ImageView) holder.getView(R.id.reply_image));
+        Glide.with(mContext).load(HttpEntity.IMAGE_HEAD + myCommentEntity.getReplyerAvatar()).into((ImageView) holder.getView(R.id.infor_praise_user_ava));
+        holder.setText(R.id.reply_details, myCommentEntity.getReplyContent());
+        Glide.with(mContext).load(HttpEntity.IMAGE_HEAD + myCommentEntity.getTargetCover()).into((ImageView) holder.getView(R.id.reply_image));
 
         holder.setText(R.id.target_title, myCommentEntity.getTargetTitle());
         holder.setText(R.id.target_publish, myCommentEntity.getTargetPublisher());

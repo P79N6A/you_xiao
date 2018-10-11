@@ -19,10 +19,12 @@ import com.runtoinfo.httpUtils.CPRCBean.CommentRequestResultEntity;
 import com.runtoinfo.httpUtils.CPRCBean.GetAllCPC;
 import com.runtoinfo.httpUtils.HttpEntity;
 import com.runtoinfo.httpUtils.utils.HttpUtils;
+import com.runtoinfo.youxiao.globalTools.utils.DensityUtil;
 import com.runtoinfo.youxiao.globalTools.utils.DialogMessage;
 import com.runtoinfo.youxiao.globalTools.utils.Entity;
 import com.runtoinfo.youxiao.globalTools.utils.IntentDataType;
 import com.runtoinfo.youxiao.globalTools.utils.RecyclerViewDecoration;
+import com.wuxiaolong.pullloadmorerecyclerview.PullLoadMoreRecyclerView;
 import com.youxiao.comment.R;
 import com.youxiao.comment.adapter.CommentPublishAdapter;
 import com.youxiao.comment.databinding.ActivityReplyCommentBinding;
@@ -43,6 +45,7 @@ public class ReplyComment extends BaseActivity {
     public CommentRequestResultEntity dialogEntity;
     public boolean selected = true;
     public HttpUtils httpUtils;
+    public int page = 1;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -50,7 +53,7 @@ public class ReplyComment extends BaseActivity {
         httpUtils = new HttpUtils(this);
         initView();
         initData();
-        requestAll();
+        requestAll(1);
         initEvent();
     }
 
@@ -114,21 +117,37 @@ public class ReplyComment extends BaseActivity {
             binding.replyRecycler.setLinearLayout();
             binding.replyRecycler.setAdapter(mAdapter);
             binding.replyRecycler.addItemDecoration(new RecyclerViewDecoration(ReplyComment.this, RecyclerViewDecoration.HORIZONTAL_LIST));
+            binding.replyRecycler.setOnPullLoadMoreListener(pullLoadMoreListener);
         }else{
             DialogMessage.showToast(ReplyComment.this, "暂无回复");
         }
     }
 
-    public void requestAll(){
+    public PullLoadMoreRecyclerView.PullLoadMoreListener pullLoadMoreListener = new PullLoadMoreRecyclerView.PullLoadMoreListener() {
+        @Override
+        public void onRefresh() {
+            page = 1;
+            dataList.clear();
+            requestAll(page);
+        }
+
+        @Override
+        public void onLoadMore() {
+            page++;
+            requestAll(page);
+        }
+    };
+
+    public void requestAll(int page){
         GetAllCPC cpc = new GetAllCPC();
         cpc.setToken(spUtils.getString(Entity.TOKEN));
         cpc.setType(CPRCTypeEntity.REPLY);
         cpc.setParentId(resultEntity.getId());
-        cpc.setParentType(CPRCTypeEntity.PARENT_COMMENT);
+        cpc.setParentType(CPRCTypeEntity.PARENT_REPLY);
         cpc.setTarget(resultEntity.getTarget());
-        cpc.setTargetType(resultEntity.getTargetType());
+        cpc.setTargetType(CPRCTypeEntity.TARGET_COMMENT);
         cpc.setMaxResultCount(10);
-        cpc.setSkipCount(0);
+        cpc.setSkipCount(DensityUtil.getOffSet(page));
 
         httpUtils.getCommentAll(handler, cpc, dataList);
     }
@@ -138,12 +157,20 @@ public class ReplyComment extends BaseActivity {
         public void handleMessage(Message msg) {
             switch (msg.what){
                 case 20://获取全部回复 结果
+                    binding.replyRecycler.setPullLoadMoreCompleted();
                     initRecyclerData();
                     break;
                 case 1://回复的评论 结果
                     String result = msg.obj.toString();
                     CommentRequestResultEntity requestResultEntity = new Gson().fromJson(result,
                             new TypeToken<CommentRequestResultEntity>(){}.getType());
+                    if (mAdapter == null){
+                        mAdapter = new CommentPublishAdapter(handler, ReplyComment.this, dataList, R.layout.comment_publish_items);
+                        binding.replyRecycler.setLinearLayout();
+                        binding.replyRecycler.setAdapter(mAdapter);
+                        binding.replyRecycler.addItemDecoration(new RecyclerViewDecoration(ReplyComment.this, RecyclerViewDecoration.HORIZONTAL_LIST));
+                        binding.replyRecycler.setOnPullLoadMoreListener(pullLoadMoreListener);
+                    }
                     mAdapter.addItem(requestResultEntity, 0);
                     break;
                 case 2:
@@ -161,10 +188,11 @@ public class ReplyComment extends BaseActivity {
                     cprcDataEntity.setTarget(resultEntity.getTarget());
                     cprcDataEntity.setTargetType(CPRCTypeEntity.TARGET_COMMENT);
                     cprcDataEntity.setParentId(resultEntity.getId());
-                    cprcDataEntity.setParentType(CPRCTypeEntity.PARENT_COMMENT);
+                    cprcDataEntity.setParentType(CPRCTypeEntity.PARENT_REPLY);
                     cprcDataEntity.setUserId(spUtils.getInt(Entity.USER_ID));
                     cprcDataEntity.setContent(json);
                     cprcDataEntity.setToken(spUtils.getString(Entity.TOKEN));
+                    cprcDataEntity.setLevel(2);
                     httpUtils.postComment(handler, cprcDataEntity);
                     break;
                 case 12://来自dialogMessage中发送按钮 回复回复请求

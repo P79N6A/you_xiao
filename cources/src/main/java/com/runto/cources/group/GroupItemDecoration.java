@@ -212,7 +212,6 @@ public class GroupItemDecoration<Group, Child> extends RecyclerView.ItemDecorati
             if (i == 0) {
                 mGroup.put(isHasHeader ? 1 : 0, adapter.getGroup(i));
                 key += adapter.getChildCount(i) + (isHasHeader ? 1 : 0);
-                ;
             } else {
                 mGroup.put(key, adapter.getGroup(i));
                 key += adapter.getChildCount(i);

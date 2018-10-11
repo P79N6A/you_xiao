@@ -183,7 +183,7 @@ public class MySomeRecord extends BaseActivity {
 
     //请假记录
     public void requestLeaveRecord(int page) {
-        requestDataEntity.setUrl(HttpEntity.MAIN_URL + HttpEntity.GET_LEAVE_RECORD);
+        requestDataEntity.setUrl(HttpEntity.MAIN_URL + HttpEntity.GET_COURSE_HISTORY);
 
         Map<String, Object> requestMap = new HashMap<>();
         requestMap.put("UserId", spUtils.getInt(Entity.USER_ID));

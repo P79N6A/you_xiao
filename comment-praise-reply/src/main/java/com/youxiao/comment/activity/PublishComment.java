@@ -100,6 +100,7 @@ public class PublishComment extends BaseActivity {
                     cprcDataEntity.setUserId(spUtils.getInt(Entity.USER_ID));
                     cprcDataEntity.setContent(result1);
                     cprcDataEntity.setToken(spUtils.getString(Entity.TOKEN));
+                    cprcDataEntity.setLevel(1);
                     httpUtils.postComment(mHandler, cprcDataEntity);
                     break;
                 case 20:

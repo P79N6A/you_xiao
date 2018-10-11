@@ -50,8 +50,8 @@ public class SchoolDynamics extends BaseActivity {
     public HttpUtils httpUtils;
     public List<SchoolDynamicsNewEntity> newDataList ;
 
-    public boolean isClickColl = false;
-    public boolean isClickPraise = false;
+    public boolean isClickColl;
+    public boolean isClickPraise;
     @Override
     protected void initView() {
         binding = DataBindingUtil.setContentView(SchoolDynamics.this, R.layout.school_movment);
@@ -215,10 +215,12 @@ public class SchoolDynamics extends BaseActivity {
                                 schoolDynamicsEntity.getId());
                         binding.dynamicsWebview.loadData(schoolDynamicsEntity.getContent(), "text/html; charset=UTF-8", null);
                         if (schoolDynamicsEntity.hasFavorite){
+                            isClickColl = true;
                             binding.detailsCollectionImagView.setBackgroundResource(R.drawable.boutique_course_collectioned);
                             binding.detailsCollectionText.setText("已收藏");
                         }
                         if (schoolDynamicsEntity.hasPraise){
+                            isClickColl = true;
                             binding.detailsPraiseImagView.setBackgroundResource(R.drawable.comment_praised);
                         }
                     }

@@ -37,6 +37,7 @@ public class CommentPublishAdapter extends UniversalRecyclerAdapter<CommentReque
     public Activity activity;
     public SPUtils spUtils ;
     public BaseViewHolder baseViewHolder;
+    public boolean isPraise;
 
     public CommentRequestResultEntity temResultEntity;
     public Handler dataHandler;
@@ -74,8 +75,10 @@ public class CommentPublishAdapter extends UniversalRecyclerAdapter<CommentReque
         Log.e("comment", String.valueOf(commentPublishItemEntity.getReplyNumber() ));
         holder.setText(R.id.comment_publish_reply, String.valueOf(commentPublishItemEntity.getReplyNumber() + "回复"));
         if (commentPublishItemEntity.hasPraise) {
+            isPraise = true;
             holder.setBackgroundResource(R.id.comment_publish_praise, R.drawable.comment_praised);
         }else {
+            isPraise = false;
             holder.setBackgroundResource(R.id.comment_publish_praise, R.drawable.comment_praise);
         }
         //赞的点击事件
@@ -83,7 +86,7 @@ public class CommentPublishAdapter extends UniversalRecyclerAdapter<CommentReque
         imageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (!commentPublishItemEntity.hasPraise) {
+                if (!isPraise) {
                     CPRCDataEntity entity = new CPRCDataEntity();
                     entity.setToken(spUtils.getString(Entity.TOKEN));
                     entity.setUserId(spUtils.getInt(Entity.USER_ID));
@@ -91,8 +94,10 @@ public class CommentPublishAdapter extends UniversalRecyclerAdapter<CommentReque
                     entity.setTarget(commentPublishItemEntity.getId());
                     entity.setTargetType(CPRCTypeEntity.TARGET_COMMENT);
                     httpUtils.postComment(handler, entity);
+                    isPraise = true;
                     imageView.setBackgroundResource(R.drawable.comment_praised);
                 }else{
+                    isPraise = false;
                     httpUtils.putAllStatue(handler, commentPublishItemEntity.getId(), spUtils.getString(Entity.TOKEN));
                     imageView.setBackgroundResource(R.drawable.comment_praise);
                 }

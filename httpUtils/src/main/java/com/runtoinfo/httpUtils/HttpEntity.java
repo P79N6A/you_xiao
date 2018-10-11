@@ -124,11 +124,15 @@ public class HttpEntity {
      */
     public final static String DELETE_COMMENT_CREATE = "/api/services/app/Comment/Delete";
     /**
-     * 获取评论
+     * 获取全部评论
      */
     public final static String GET_COMMENT_ALL = "/api/services/app/Comment/GetAll";
     /**
-     * 更新状态
+     * 获取单个评论
+     */
+    public final static String GET_COMMENT_ID = "/api/services/app/Comment/Get";
+    /**
+     * 更新评论状态
      */
     public final static String UPDATE_COMMENT_ALL = "/api/services/app/Comment/Update";
     /**
@@ -195,4 +199,8 @@ public class HttpEntity {
      * 用户分页加载课程
      */
     public final static String GET_COURSE_RECORD = "/api/services/app/CourseSchedule/GetAllTimetableByUser";
+    /**
+     * 获取上课记录
+     */
+    public final static String GET_COURSE_HISTORY = "/api/services/app/CourseSchedule/GetUserCourseHistory";
 }

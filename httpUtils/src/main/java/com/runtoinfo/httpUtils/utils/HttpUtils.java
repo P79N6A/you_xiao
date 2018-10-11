@@ -486,52 +486,53 @@ public class HttpUtils<T> {
 //                    JSONObject json = new JSONObject();
 //                    json.put("MemberId", requestDataEntity.getSignId());
 //                    RequestBody body = RequestBody.create(JSON, json.toString());
-                    FormBody formBody = new FormBody.Builder()
-                            .add("MemberId", requestDataEntity.getSignId() + "")
-                            .build();
+                FormBody formBody = new FormBody.Builder()
+                        .add("MemberId", requestDataEntity.getSignId() + "")
+                        .build();
 
-                    Request request = new Request.Builder()
-                            .header(Authorization, Bearer + requestDataEntity.getToken())
-                            .url(requestDataEntity.getUrl())
-                            .delete(formBody)
-                            .build();
+                Request request = new Request.Builder()
+                        .header(Authorization, Bearer + requestDataEntity.getToken())
+                        .url(requestDataEntity.getUrl())
+                        .delete(formBody)
+                        .build();
 
-                    getClient().newCall(request).enqueue(new Callback() {
-                        @Override
-                        public void onFailure(Call call, IOException e) {
-                            handler.sendEmptyMessage(500);
-                        }
+                getClient().newCall(request).enqueue(new Callback() {
+                    @Override
+                    public void onFailure(Call call, IOException e) {
+                        handler.sendEmptyMessage(500);
+                    }
 
-                        @Override
-                        public void onResponse(Call call, Response response) throws IOException {
-                            if (response.isSuccessful()){
-                                try {
-                                    JSONObject jsonObject = new JSONObject(response.body().string());
-                                    boolean success = jsonObject.getBoolean("success");
-                                    if (success){
-                                        handler.sendEmptyMessage(200);
-                                    }else{
-                                        handler.sendEmptyMessage(400);
-                                    }
-                                } catch (JSONException e) {
-                                    e.printStackTrace();
-                                    handler.sendEmptyMessage(404);
+                    @Override
+                    public void onResponse(Call call, Response response) throws IOException {
+                        if (response.isSuccessful()) {
+                            try {
+                                JSONObject jsonObject = new JSONObject(response.body().string());
+                                boolean success = jsonObject.getBoolean("success");
+                                if (success) {
+                                    handler.sendEmptyMessage(200);
+                                } else {
+                                    handler.sendEmptyMessage(400);
                                 }
-                            }else{
-                                handler.sendEmptyMessage(400);
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                                handler.sendEmptyMessage(404);
                             }
+                        } else {
+                            handler.sendEmptyMessage(400);
                         }
-                    });
+                    }
+                });
             }
         });
     }
 
     /**
      * 删除评论、赞、收藏
+     *
      * @param handler
      * @param requestDataEntity
      */
-    public void delectColleciton(final Handler handler,  final RequestDataEntity requestDataEntity){
+    public void delectColleciton(final Handler handler, final RequestDataEntity requestDataEntity) {
         executorService.execute(new Runnable() {
             @Override
             public void run() {
@@ -551,13 +552,13 @@ public class HttpUtils<T> {
 
                     @Override
                     public void onResponse(Call call, Response response) throws IOException {
-                        if (response.isSuccessful()){
+                        if (response.isSuccessful()) {
                             try {
                                 JSONObject json = new JSONObject(response.body().string());
                                 boolean success = json.getBoolean("success");
-                                if(success){
+                                if (success) {
                                     handler.sendEmptyMessage(200);
-                                }else{
+                                } else {
                                     handler.sendEmptyMessage(400);
                                 }
                             } catch (JSONException e) {
@@ -603,17 +604,18 @@ public class HttpUtils<T> {
                             try {
                                 JSONObject json = new JSONObject(response.body().string());
                                 boolean success = json.getBoolean("success");
-                                if (success){
+                                if (success) {
                                     JSONObject result = json.getJSONObject("result");
                                     JSONArray items = result.getJSONArray("items");
-                                    for (int item = 0; item < items.length(); item++){
+                                    for (int item = 0; item < items.length(); item++) {
                                         JSONObject childItem = items.getJSONObject(item);
                                         SchoolDynamicsNewEntity entity = new Gson().fromJson(childItem.toString(),
-                                                new TypeToken<SchoolDynamicsNewEntity>(){}.getType());
+                                                new TypeToken<SchoolDynamicsNewEntity>() {
+                                                }.getType());
                                         dataList.add(entity);
                                     }
                                     handler.sendEmptyMessage(5);
-                                }else{
+                                } else {
                                     handler.sendEmptyMessage(400);
                                 }
                             } catch (JSONException e) {
@@ -1402,17 +1404,22 @@ public class HttpUtils<T> {
                         if (response.isSuccessful()) {
                             try {
                                 JSONObject json = new JSONObject(response.body().string());
-                                JSONObject result = json.getJSONObject("result");
-                                Message msg = new Message();
-                                if (cprcDataEntity.getType() == 1 && cprcDataEntity.getTargetType() == 3)
-                                    msg.what = 2;
-                                else msg.what = cprcDataEntity.getType();
-                                msg.obj = result;
-                                handler.sendMessage(msg);
+                                boolean success = json.getBoolean("success");
+                                if (success) {
+                                    JSONObject result = json.getJSONObject("result");
+                                    Message msg = new Message();
+                                    if (cprcDataEntity.getType() == 1 && cprcDataEntity.getTargetType() == 3)
+                                        msg.what = 2;
+                                    else msg.what = cprcDataEntity.getType();
+                                    msg.obj = result;
+                                    handler.sendMessage(msg);
+                                } else {
+                                    handler.sendEmptyMessage(400);
+                                }
                             } catch (JSONException e) {
                                 e.printStackTrace();
+                                handler.sendEmptyMessage(404);
                             }
-
                         }
                     }
                 });
@@ -1434,6 +1441,8 @@ public class HttpUtils<T> {
                 map.put("Type", cpc.getType());
                 map.put("Target", cpc.getTarget());
                 map.put("TargetType", cpc.getTargetType());
+                map.put("ParentType", cpc.getParentType());
+                map.put("ParentId", cpc.getParentId());
                 map.put("MaxResultCount", cpc.getMaxResultCount());
                 map.put("SkipCount", cpc.getSkipCount());
                 map.put("Sorting", cpc.getSorting());
@@ -1460,13 +1469,51 @@ public class HttpUtils<T> {
                                     for (int i = 0; i < array.length(); i++) {
                                         String item = array.getJSONObject(i).toString();
                                         CommentRequestResultEntity requestResultEntity = new Gson().fromJson(item,
-                                                new TypeToken<CommentRequestResultEntity>() {}.getType());
+                                                new TypeToken<CommentRequestResultEntity>() {
+                                                }.getType());
                                         dataList.add(requestResultEntity);
                                     }
                                 }
                                 handler.sendEmptyMessage(20);
                             } catch (JSONException e) {
                                 e.printStackTrace();
+                            }
+                        }
+                    }
+                });
+            }
+        });
+    }
+
+    public void getComment(final Handler handler, final RequestDataEntity requestDataEntity, final List<CommentRequestResultEntity> dataList) {
+        executorService.execute(new Runnable() {
+            @Override
+            public void run() {
+                Request request = new Request.Builder()
+                        .header(Authorization, Bearer + requestDataEntity.getToken())
+                        .url(requestDataEntity.getUrl() + "?Id=" + requestDataEntity.getId())
+                        .build();
+
+                getClient().newCall(request).enqueue(new Callback() {
+                    @Override
+                    public void onFailure(Call call, IOException e) {
+                        handler.sendEmptyMessage(500);
+                    }
+
+                    @Override
+                    public void onResponse(Call call, Response response) throws IOException {
+                        if (response.isSuccessful()) {
+                            try {
+                                JSONObject json = new JSONObject(response.body().string());
+                                boolean success = json.getBoolean("success");
+                                if (success) {
+
+                                } else {
+                                    handler.sendEmptyMessage(400);
+                                }
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                                handler.sendEmptyMessage(404);
                             }
                         }
                     }
@@ -1527,8 +1574,8 @@ public class HttpUtils<T> {
             @Override
             public void run() {
                 Request request = new Request.Builder()
-                        .url(entity.getUrl() + "?userId=" + entity.getUserId())
                         .header(Authorization, Bearer + entity.getToken())
+                        .url(entity.getUrl() + "?userId=" + entity.getUserId())
                         .build();
 
                 getClient().newCall(request).enqueue(new Callback() {
@@ -1755,7 +1802,7 @@ public class HttpUtils<T> {
     /**
      * 检索课程
      */
-    public void getCouseAll(final Handler handler, final RequestDataEntity entity, final Map<String, Object> dataMap, final List<T> dataList) {
+    public void getCouseAll(final Handler handler, final RequestDataEntity entity, final Map<String, Object> dataMap, final List<CourseEntity> dataList) {
         executorService.execute(new Runnable() {
             @Override
             public void run() {
@@ -1780,9 +1827,8 @@ public class HttpUtils<T> {
                                     JSONArray result = json.getJSONArray("result");
                                     for (int i = 0; i < result.length(); i++) {
                                         JSONObject item = result.getJSONObject(i);
-                                        CourseEntity courseEntity = new Gson().fromJson(item.toString(), new TypeToken<CourseEntity>() {
-                                        }.getType());
-                                        dataList.add((T) courseEntity);
+                                        CourseEntity courseEntity = new Gson().fromJson(item.toString(), new TypeToken<CourseEntity>() {}.getType());
+                                        dataList.add(courseEntity);
                                     }
                                     handler.sendEmptyMessage(0);
                                 } else {
@@ -2294,13 +2340,14 @@ public class HttpUtils<T> {
                             try {
                                 JSONObject json = new JSONObject(response.body().string());
                                 boolean success = json.getBoolean("success");
-                                if (success){
+                                if (success) {
                                     JSONObject result = json.getJSONObject("result");
                                     PersonalCenterEntity personalCenterEntity = new Gson().fromJson(result.toString(),
-                                            new TypeToken<PersonalCenterEntity>(){}.getType());
+                                            new TypeToken<PersonalCenterEntity>() {
+                                            }.getType());
                                     dataList.add(personalCenterEntity);
                                     handler.sendEmptyMessage(1);
-                                }else{
+                                } else {
                                     handler.sendEmptyMessage(400);
                                 }
                             } catch (JSONException e) {

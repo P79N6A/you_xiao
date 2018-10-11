@@ -7,6 +7,7 @@ import android.os.Looper;
 import android.os.Message;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -45,23 +46,21 @@ import uk.co.dolphin_com.sscore.LoadWarning;
 public class ArticleAdapter extends GroupRecyclerAdapter<String, Article> {
 
 
-    private RequestManager mLoader;
+    //private RequestManager mLoader;
     private Context context;
-    private List<CourseEntity> dataList = new ArrayList<>();
-    private View.OnClickListener onClickListener;
     public SPUtils spUtils;
     public Handler handler;
     public HttpUtils httpUtils;
+    LinkedHashMap<String, List<Article>> map = new LinkedHashMap<>();
+    List<String> titles = new ArrayList<>();
 
     public ArticleAdapter(Context context, List<CourseEntity> dataList, Handler handler) {
         super(context);
         this.context = context;
-        this.dataList = dataList;
         httpUtils = new HttpUtils(context);
         spUtils = new SPUtils(context);
-        mLoader = Glide.with(context.getApplicationContext());
-        LinkedHashMap<String, List<Article>> map = new LinkedHashMap<>();
-        List<String> titles = new ArrayList<>();
+        //mLoader = Glide.with(context.getApplicationContext());
+
         map.put("今日课程", create(dataList));
         if (dataList.size() == 1){
             if (dataList.get(0).getType() != 1){

@@ -13,6 +13,7 @@ import android.os.Message;
 import android.os.PersistableBundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
@@ -60,8 +61,14 @@ public class ColorfulActivity extends BaseActivity implements
     public ImageView imgMenu;
     public ActivityCourceBinding binding;
     public List<CourseEntity> dataList = new ArrayList<>();
+    public List<CourseEntity> requestDataList;
     public CustomDatePicker customDatePicker;
     public HttpUtils httpUtils;
+    public ArticleAdapter articleAdapter;
+
+    public GroupItemDecoration<String, Article> groupItemDecoration;
+    public LinearLayoutManager linearLayoutManager;
+
 
     public static void show(Context context) {
         context.startActivity(new Intent(context, ColorfulActivity.class));
@@ -72,6 +79,7 @@ public class ColorfulActivity extends BaseActivity implements
     protected void initView() {
         binding = DataBindingUtil.setContentView(ColorfulActivity.this, R.layout.activity_cource);
         httpUtils = new HttpUtils(this);
+        //initAdapterData();
         setStatusBarDarkMode();
         mTextYear = (TextView) findViewById(R.id.tv_year);
         mRelativeTool = (RelativeLayout) findViewById(R.id.rl_tool);
@@ -128,46 +136,59 @@ public class ColorfulActivity extends BaseActivity implements
                 mCalendarView.scrollToNext();
             }
         });
+
     }
 
     @Override
     protected void initData() {
-        dataList.clear();
+
+    }
+
+    public void initAdapterData(){
+        groupItemDecoration = new GroupItemDecoration<String, Article>();
+        linearLayoutManager = new LinearLayoutManager(ColorfulActivity.this);
+    }
+
+    public void initAdapter() {
+        binding.recyclerView.setHasFixedSize(true);
+        binding.recyclerView.setLayoutManager(new LinearLayoutManager(ColorfulActivity.this));
+        binding.recyclerView.addItemDecoration(new GroupItemDecoration<String, Article>());
+        articleAdapter = new ArticleAdapter(ColorfulActivity.this, dataList, handler);
+        binding.recyclerView.setAdapter(articleAdapter);
+    }
+
+    public void requestCourseData(int year, int month, int day) {
         Map<String, Object> map = new HashMap<>();
-        map.put("startDate", mCalendarView.getCurYear() + "-" + mCalendarView.getCurMonth() + "-" + mCalendarView.getCurDay());
-        map.put("endDate", mCalendarView.getCurYear() + "-" + mCalendarView.getCurMonth() + "-" + (mCalendarView.getCurDay() + 1));
+        map.put("startDate", year + "-" + month + "-" + day);
+        map.put("endDate", year + "-" + month + "-" + (day + 1));
         RequestDataEntity requestDataEntity = new RequestDataEntity();
         requestDataEntity.setUrl(HttpEntity.MAIN_URL + HttpEntity.GET_USER_COURSE_LIST);
         requestDataEntity.setToken(spUtils.getString(Entity.TOKEN));
-        //HttpUtils<CourseEntity> utils = new HttpUtils<>(this);
-        httpUtils.getCouseAll(handler, requestDataEntity, map, dataList);
+        requestDataList = new ArrayList<>();
+        httpUtils.getCouseAll(handler, requestDataEntity, map, requestDataList);
     }
 
     public Handler handler = new Handler(Looper.getMainLooper()) {
+        @SuppressLint("SetTextI18n")
         @Override
         public void handleMessage(Message msg) {
             switch (msg.what) {
                 case 0:
-                    mRecyclerView = (GroupRecyclerView) findViewById(R.id.recyclerView);
-                    List<Calendar> schemes = new ArrayList<>();
-                    int year = mCalendarView.getCurYear();
-                    int month = mCalendarView.getCurMonth();
-                    mRecyclerView.setLayoutManager(new LinearLayoutManager(ColorfulActivity.this));
-                    mRecyclerView.addItemDecoration(new GroupItemDecoration<String, Article>());
-                    //etListData();
-                    if (dataList.size() == 0){
+                    if (requestDataList.size() == 0) {
                         CourseEntity entity = new CourseEntity();
                         entity.setType(1);
                         entity.setCourseMessage("今日没有课程");
-                        dataList.add(entity);
+                        requestDataList.add(entity);
                     }
-
-                    schemes.add(getSchemeCalendar(year, month, 3, Color.parseColor("#3aa6fe"), "假"));
-                    schemes.add(getSchemeCalendar(year, month, 8, Color.parseColor("#999999"), ""));
-                    mCalendarView.setSchemeDate(schemes);
-
-                    mRecyclerView.setAdapter(new ArticleAdapter(ColorfulActivity.this, dataList, handler));
-                    mRecyclerView.notifyDataSetChanged();
+                    dataList.clear();
+                    dataList.addAll(requestDataList);
+                    if (articleAdapter != null) {
+                        articleAdapter = new ArticleAdapter(ColorfulActivity.this, dataList, handler);
+                        binding.recyclerView.setAdapter(articleAdapter);
+                    }else{
+                        initAdapter();
+                    }
+                    binding.recyclerView.notifyDataSetChanged();
                     break;
                 case 1:
                     break;
@@ -176,8 +197,20 @@ public class ColorfulActivity extends BaseActivity implements
         }
     };
 
+    /**
+     * 需要标记的日期 添加下标点
+     */
+    public void setSchemes(){
+        List<Calendar> schemes = new ArrayList<>();
+        int year = mCalendarView.getCurYear();
+        int month = mCalendarView.getCurMonth();
+        schemes.add(getSchemeCalendar(year, month, 3, Color.parseColor("#3aa6fe"), "假"));
+        schemes.add(getSchemeCalendar(year, month, 8, Color.parseColor("#999999"), ""));
+        mCalendarView.setSchemeDate(schemes);
+    }
 
-    public void setListData(){
+
+    public void setListData() {
         CourseEntity entity = new CourseEntity();
         entity.setType(0);
         entity.setCourseName("钢琴");
@@ -188,7 +221,7 @@ public class ColorfulActivity extends BaseActivity implements
         entity.setStartTime("18:00");
         entity.setEndTime("20:00");
         entity.setHomeworkRequirement("练习曲谱");
-        dataList.add(entity);
+        requestDataList.add(entity);
     }
 
 
@@ -213,6 +246,7 @@ public class ColorfulActivity extends BaseActivity implements
         mTextYear.setVisibility(View.VISIBLE);
         mTextYear.setText(String.valueOf(calendar.getYear()) + "年" + calendar.getMonth() + "月");
         mYear = calendar.getYear();
+        requestCourseData(calendar.getYear(), calendar.getMonth(), calendar.getDay());
     }
 
 
@@ -220,6 +254,13 @@ public class ColorfulActivity extends BaseActivity implements
     public void onYearChange(int year) {
         //mTextMonthDay.setText(String.valueOf(year));
     }
+
+    CalendarView.OnMonthChangeListener onMonthChangeListener = new CalendarView.OnMonthChangeListener() {
+        @Override
+        public void onMonthChange(int year, int month) {
+
+        }
+    };
 
     //时间选择器
     private void initDatePicker() {
@@ -231,8 +272,8 @@ public class ColorfulActivity extends BaseActivity implements
         customDatePicker = new CustomDatePicker(this, new CustomDatePicker.ResultHandler() {
             @Override
             public void handle(String time) { // 回调接口，获得选中的时间
-                String result= time.split(" ")[0];
-                String [] part = result.split("-");
+                String result = time.split(" ")[0];
+                String[] part = result.split("-");
                 mCalendarView.scrollToCalendar(Integer.parseInt(part[0]), Integer.parseInt(part[1]), Integer.parseInt(part[2]));
             }
         }, "1970-01-01 00:00", now); // 初始化日期格式请用：yyyy-MM-dd HH:mm，否则不能正常运行

@@ -36,7 +36,7 @@ public abstract class GroupRecyclerAdapter<Parent, Child> extends BaseRecyclerAd
      *
      * @return 组的数量
      */
-     int getGroupCount() {
+     protected int getGroupCount() {
         return mGroupTitles.size();
     }
 
@@ -46,7 +46,7 @@ public abstract class GroupRecyclerAdapter<Parent, Child> extends BaseRecyclerAd
      * @param groupPosition groupPosition
      * @return 某一组的数量
      */
-     int getChildCount(int groupPosition) {
+     protected int getChildCount(int groupPosition) {
         if (mGroupTitles == null || mGroups.size() == 0)
             return 0;
         if (mGroups.get(mGroupTitles.get(groupPosition)) == null)

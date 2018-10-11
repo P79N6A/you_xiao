@@ -88,6 +88,7 @@ public class CourseFragment extends BasePersonalFragment{
             }
         });
 
+
     }
 
     public void setTitleNumber(int number){
