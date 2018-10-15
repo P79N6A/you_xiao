@@ -95,17 +95,4 @@ public class MyCommentAdapter extends UniversalRecyclerAdapter<MyCommentEntity> 
             }
         };
     }
-
-    //改变字符串中某字段的样式颜色
-    public SpannableStringBuilder setStringColor(String stringColor) {
-        int index = stringColor.indexOf("//@");
-        SpannableStringBuilder spanString = new SpannableStringBuilder(stringColor);
-        if (index >= 0) {
-            ForegroundColorSpan span1 = new ForegroundColorSpan(Color.parseColor("#27acf7"));
-            spanString.setSpan(span1, stringColor.indexOf("@"), stringColor.indexOf(":"), Spannable.SPAN_INCLUSIVE_INCLUSIVE);
-        }
-        return spanString;
-    }
-
-
 }

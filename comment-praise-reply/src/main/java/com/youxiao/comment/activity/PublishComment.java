@@ -154,7 +154,7 @@ public class PublishComment extends BaseActivity {
         cpc.setMaxResultCount(10);
         cpc.setSkipCount(DensityUtil.getOffSet(page));
         tempList = new ArrayList<>();
-        httpUtils.getCommentAll(mHandler, cpc, tempList);
+        httpUtils.getCommentAll(mHandler, cpc, 0, tempList);
     }
 
 }

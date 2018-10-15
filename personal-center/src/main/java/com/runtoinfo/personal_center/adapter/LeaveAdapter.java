@@ -31,7 +31,7 @@ public class LeaveAdapter extends UniversalRecyclerAdapter<LeaveRecordEntity>{
         String iso8601 = TimeUtil.iso8601ToDate(leaveRecodEntity.getDate(), 1);
         holder.setText(R.id.record_leave_title, date.equals(iso8601)? "今日请假": iso8601);
         holder.setText(R.id.leave_course_name, "请假课程:" + leaveRecodEntity.getCourseName());
-        holder.setText(R.id.leave_type, "请假类型:" + leaveRecodEntity.getReason());
+        holder.setText(R.id.leave_type, "请假原因:" + leaveRecodEntity.getReason().equals("null"));
         holder.setText(R.id.leave_status, leaveRecodEntity.getStatus() == 1? "审核通过" : "审核中");
         TextView textView = holder.getView(R.id.leave_status);
         if (leaveRecodEntity.getStatus() == 1){

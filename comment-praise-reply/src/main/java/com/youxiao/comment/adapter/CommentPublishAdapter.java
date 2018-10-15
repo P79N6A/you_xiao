@@ -16,9 +16,11 @@ import com.runtoinfo.httpUtils.CPRCBean.CPRCDataEntity;
 import com.runtoinfo.httpUtils.CPRCBean.CPRCTypeEntity;
 import com.runtoinfo.httpUtils.CPRCBean.CommentRequestResultEntity;
 import com.runtoinfo.httpUtils.HttpEntity;
+import com.runtoinfo.httpUtils.bean.RequestDataEntity;
 import com.runtoinfo.httpUtils.utils.HttpUtils;
 import com.runtoinfo.youxiao.globalTools.adapter.BaseViewHolder;
 import com.runtoinfo.youxiao.globalTools.adapter.UniversalRecyclerAdapter;
+import com.runtoinfo.youxiao.globalTools.utils.DensityUtil;
 import com.runtoinfo.youxiao.globalTools.utils.DialogMessage;
 import com.runtoinfo.youxiao.globalTools.utils.Entity;
 import com.runtoinfo.youxiao.globalTools.utils.IntentDataType;
@@ -56,13 +58,14 @@ public class CommentPublishAdapter extends UniversalRecyclerAdapter<CommentReque
     protected void convert(final Context mContext, final BaseViewHolder holder, final CommentRequestResultEntity commentPublishItemEntity, int position) {
         this.baseViewHolder = holder;
         holder.setText(R.id.comment_publish_name, commentPublishItemEntity.getNickName());
-        if (commentPublishItemEntity.getCr() == 2 && temResultEntity != null){
-            holder.setText(R.id.comment_publish_details,
-                    commentPublishItemEntity.getContent() + " //@" + temResultEntity.getNickName() + ":" + temResultEntity.getContent());
-        }else {
-            temResultEntity = null;
-            holder.setText(R.id.comment_publish_details, commentPublishItemEntity.getContent());
-        }
+        //int targetType = commentPublishItemEntity.getTargetType();
+        //if (commentPublishItemEntity.getCr() == 2 && targetType == 3){
+            String text = commentPublishItemEntity.getContent();// + " //@" + commentPublishItemEntity.getNickName() + ":" + commentPublishItemEntity.getContent();
+            holder.setText(R.id.comment_publish_details, DensityUtil.setStringColor(text));
+        //}else {
+            //temResultEntity = null;
+            //holder.setText(R.id.comment_publish_details, commentPublishItemEntity.getContent());
+        //}
         Glide.with(mContext).load(HttpEntity.IMAGE_HEAD + commentPublishItemEntity.getUserAvatar())
                 .into((ImageView) holder.getView(R.id.comment_publish_item_img));
         String[] time = new String[2];
@@ -108,7 +111,7 @@ public class CommentPublishAdapter extends UniversalRecyclerAdapter<CommentReque
             @Override
             public void onClick(View v) {
                 String json = new Gson().toJson(commentPublishItemEntity);
-                temResultEntity = commentPublishItemEntity;
+                //temResultEntity = commentPublishItemEntity;
                 switch (commentPublishItemEntity.getType()){
                     case 0://回复的评论
                         ARouter.getInstance().build("/comment/replyComment").withString(IntentDataType.DATA, json)
@@ -129,10 +132,16 @@ public class CommentPublishAdapter extends UniversalRecyclerAdapter<CommentReque
         handler = new Handler(Looper.getMainLooper()){
             @Override
             public void handleMessage(Message msg) {
-                if (msg.what == 2){
-                    DialogMessage.showToast(activity, "点赞成功");
-                }else if (msg.what == 30){
-                    holder.setBackgroundResource(R.id.comment_publish_praise, R.drawable.comment_praise);
+
+                switch (msg.what){
+                    case 2:
+                        DialogMessage.showToast(activity, "点赞成功");
+                        break;
+                    case 40:
+                        holder.setBackgroundResource(R.id.comment_publish_praise, R.drawable.comment_praise);
+                        break;
+                    case 50:
+                        break;
                 }
             }
         };

@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.runtoinfo.httpUtils.bean.SchoolDynamicsNewEntity;
 import com.runtoinfo.httpUtils.utils.HttpUtils;
 import com.runtoinfo.youxiao.R;
 import com.runtoinfo.youxiao.entity.SchoolDynamicsEntity;
@@ -30,7 +31,7 @@ public class SchoolDynamicsRecyclerAdapter extends RecyclerView.Adapter {
     public final static int SECOND_PIC_TYPE = 1;
     public final static int THREE_PIC_TYPE = 2;
 
-    public List<SchoolDynamicsEntity> dataList = new ArrayList<>();
+    public List<SchoolDynamicsNewEntity> dataList = new ArrayList<>();
     public Activity context;
     public int type;
     public Handler handler;
@@ -55,12 +56,12 @@ public class SchoolDynamicsRecyclerAdapter extends RecyclerView.Adapter {
         }
     };
 
-    public SchoolDynamicsRecyclerAdapter(Activity mContext, List<SchoolDynamicsEntity> mDatas, int mLayoutId) {
+    public SchoolDynamicsRecyclerAdapter(Activity mContext, List<SchoolDynamicsNewEntity> mDatas, int mLayoutId) {
         this.dataList = mDatas;
         this.context = mContext;
     }
 
-    public SchoolDynamicsRecyclerAdapter(Activity mContext, List<SchoolDynamicsEntity> mDatas, Handler handler){
+    public SchoolDynamicsRecyclerAdapter(Activity mContext, List<SchoolDynamicsNewEntity> mDatas, Handler handler){
         this.dataList = mDatas;
         this.context = mContext;
         this.handler = handler;
@@ -101,35 +102,35 @@ public class SchoolDynamicsRecyclerAdapter extends RecyclerView.Adapter {
 
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
-        SchoolDynamicsEntity schoolDynamicsEntity = dataList.get(position);
-        type = schoolDynamicsEntity.getType();
+        SchoolDynamicsNewEntity schoolDynamicsEntity = dataList.get(position);
+        type = schoolDynamicsEntity.getDataType();
         if (type == ONE_PIC_TYPE){
             ViewHolder viewHolder =(ViewHolder) holder;
-            viewHolder.oneTitle.setText(schoolDynamicsEntity.getTile());
+            viewHolder.oneTitle.setText(schoolDynamicsEntity.getTitle());
             viewHolder.video.setUp(schoolDynamicsEntity.getVideoPath(), JZVideoPlayer.SCREEN_WINDOW_NORMAL,"");
-            httpUtils.postAsynchronous(context, schoolDynamicsEntity.getImagList().get(0), viewHolder.video.thumbImageView);
-            viewHolder.onReader.setText(schoolDynamicsEntity.getReadNumber());
+            httpUtils.postAsynchronous(context, schoolDynamicsEntity.getCoverImgs().get(0), viewHolder.video.thumbImageView);
+            viewHolder.onReader.setText(schoolDynamicsEntity.getPageView());
         }else if (type == SECOND_PIC_TYPE){
             SecondViewHolder secondViewHolder = (SecondViewHolder) holder;
-            secondViewHolder.secondTitle.setText(schoolDynamicsEntity.getTile());
-            secondViewHolder.secondMsg.setText(schoolDynamicsEntity.getMessage());
-            httpUtils.postAsynchronous(context, schoolDynamicsEntity.getImagList().get(0), secondViewHolder.second_img);
-            secondViewHolder.secondRead.setText(schoolDynamicsEntity.getReadNumber() + "");
+            secondViewHolder.secondTitle.setText(schoolDynamicsEntity.getTitle());
+            secondViewHolder.secondMsg.setText(schoolDynamicsEntity.getSubtitle());
+            httpUtils.postAsynchronous(context, schoolDynamicsEntity.getCoverImgs().get(0), secondViewHolder.second_img);
+            secondViewHolder.secondRead.setText(String.valueOf(schoolDynamicsEntity.getPageView()));
         }else{
             ThreeViewHolder threeViewHolder = (ThreeViewHolder) holder;
-            threeViewHolder.threeTitle.setText(schoolDynamicsEntity.getTile());
-            httpUtils.postAsynchronous(context, schoolDynamicsEntity.getImagList().get(0), threeViewHolder.three_img1);
-            httpUtils.postAsynchronous(context, schoolDynamicsEntity.getImagList().get(1), threeViewHolder.three_img2);
-            httpUtils.postAsynchronous(context, schoolDynamicsEntity.getImagList().get(2), threeViewHolder.three_img3);
+            threeViewHolder.threeTitle.setText(schoolDynamicsEntity.getTitle());
+            httpUtils.postAsynchronous(context, schoolDynamicsEntity.getCoverImgs().get(0), threeViewHolder.three_img1);
+            httpUtils.postAsynchronous(context, schoolDynamicsEntity.getCoverImgs().get(1), threeViewHolder.three_img2);
+            httpUtils.postAsynchronous(context, schoolDynamicsEntity.getCoverImgs().get(2), threeViewHolder.three_img3);
         }
     }
 
     @Override
     public int getItemViewType(int position) {
-        SchoolDynamicsEntity dynamicsEntity = dataList.get(position);
-        if (dynamicsEntity.getType() == 0){
+        SchoolDynamicsNewEntity dynamicsEntity = dataList.get(position);
+        if (dynamicsEntity.getDataType() == 0){
             return ONE_PIC_TYPE;
-        }else if (dynamicsEntity.getType() == 1){
+        }else if (dynamicsEntity.getDataType() == 1){
             return SECOND_PIC_TYPE;
         }else{
             return THREE_PIC_TYPE;
@@ -211,7 +212,7 @@ public class SchoolDynamicsRecyclerAdapter extends RecyclerView.Adapter {
     }
 
     public void listener(int position, int type){
-        SchoolDynamicsEntity dynamicsEntity = dataList.get(position);
+        SchoolDynamicsNewEntity dynamicsEntity = dataList.get(position);
         //String html = dataList.get(position).getContent();
         Message message = new Message();
         message.what = type;

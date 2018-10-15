@@ -101,12 +101,14 @@ public class MySomeRecord extends BaseActivity {
         }
     }
 
+
     //请假
     public void initLeaveAdapter() {
         leaveAdapter = new LeaveAdapter(MySomeRecord.this, leaveEntityList, R.layout.record_leave_item_layout);
         binding.myRecordRecycler.setLinearLayout();
         binding.myRecordRecycler.setAdapter(leaveAdapter);
         binding.myRecordRecycler.addItemDecoration(new RecyclerViewDecoration(this, RecyclerViewDecoration.HORIZONTAL_LIST));
+        binding.myRecordRecycler.setOnPullLoadMoreListener(pullLoadMoreListener);
     }
     //学习轨迹
     public void initLearnAdapter() {
@@ -114,6 +116,7 @@ public class MySomeRecord extends BaseActivity {
         binding.myRecordRecycler.setLinearLayout();
         binding.myRecordRecycler.setAdapter(learningTrackAdapter);
         binding.myRecordRecycler.addItemDecoration(new RecyclerViewDecoration(this, RecyclerViewDecoration.HORIZONTAL_LIST));
+        binding.myRecordRecycler.setOnPullLoadMoreListener(pullLoadMoreListener);
     }
     //上课记录
     public void initCourseAdapter() {
@@ -155,7 +158,7 @@ public class MySomeRecord extends BaseActivity {
 
         @Override
         public void onLoadMore() {
-            page += 1;
+            page ++;
             switch (dataType) {
                 case "courseRecord":
                     requestCourseRecord(page);
@@ -183,7 +186,7 @@ public class MySomeRecord extends BaseActivity {
 
     //请假记录
     public void requestLeaveRecord(int page) {
-        requestDataEntity.setUrl(HttpEntity.MAIN_URL + HttpEntity.GET_COURSE_HISTORY);
+        requestDataEntity.setUrl(HttpEntity.MAIN_URL + HttpEntity.GET_LEAVE_RECORD);
 
         Map<String, Object> requestMap = new HashMap<>();
         requestMap.put("UserId", spUtils.getInt(Entity.USER_ID));
@@ -195,7 +198,7 @@ public class MySomeRecord extends BaseActivity {
 
     //上课记录
     public void requestCourseRecord(int page) {
-        requestDataEntity.setUrl(HttpEntity.MAIN_URL + HttpEntity.GET_COURSE_RECORD);
+        requestDataEntity.setUrl(HttpEntity.MAIN_URL + HttpEntity.GET_COURSE_HISTORY);
 
         Map<String, Object> requestMap = new HashMap<>();
         requestMap.put("skipCount", DensityUtil.getOffSet(page));
@@ -225,6 +228,7 @@ public class MySomeRecord extends BaseActivity {
         courseFragment.setAdapter(viewPagerAdapter);
         binding.personalCollectionViewPager.setAdapter(viewPagerAdapter);
         binding.personalCollectionViewPager.setOffscreenPageLimit(collectionTile.size());
+        binding.personalCollectionViewPager.setScanScroll(false);
         binding.personalCollectionTabLayout.setupWithViewPager(binding.personalCollectionViewPager);
     }
 

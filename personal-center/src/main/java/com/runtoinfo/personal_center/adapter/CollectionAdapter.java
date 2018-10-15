@@ -37,7 +37,22 @@ public class CollectionAdapter extends UniversalRecyclerAdapter<CollectionEntity
 
     @Override
     protected void convert(Context mContext, BaseViewHolder holder, CollectionEntity collectionEntity, int position) {
-        Glide.with(activity).load(HttpEntity.IMAGE_HEAD + collectionEntity.getTargetCover()).into((ImageView) holder.getView(R.id.record_course_img));
+
+        View view = holder.getView(R.id.delete_collection);
+        view.setTag(position);
+        if (!view.hasOnClickListeners()) {
+            view.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (mDeleteClickListener != null) {
+                        mDeleteClickListener.onDeleteClick(v, (Integer) v.getTag());
+                    }
+                }
+            });
+        }
+
+        //Glide.with(activity).load(HttpEntity.IMAGE_HEAD + collectionEntity.getTargetCover()).into((ImageView) holder.getView(R.id.record_course_img));
+        httpUtils.postSrcPhoto(activity, HttpEntity.IMAGE_HEAD + collectionEntity.getTargetCover(), (ImageView) holder.getView(R.id.record_course_img));
         holder.setText(R.id.record_title, collectionEntity.getTargetTitle());
         switch (type){
             case 0:

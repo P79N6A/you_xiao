@@ -75,6 +75,7 @@ public class DialogMessage {
                 public void onClick(View v) {
                     EditText editText = (EditText) bottomDialog.findViewById(R.id.comment_msg_edit);
                     Message msg= new Message();
+                    String content = editText.getText().toString();
                     switch (type){
                         case 0:
                             msg.what = 10;//直接评论
@@ -88,7 +89,7 @@ public class DialogMessage {
                             default:
                                 msg.what = 20;
                     }
-                    msg.obj = editText.getText().toString();
+                    msg.obj = content;
                     handler.sendMessage(msg);
                 }
             });

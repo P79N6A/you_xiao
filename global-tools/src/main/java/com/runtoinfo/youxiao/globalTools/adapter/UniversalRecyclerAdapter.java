@@ -13,7 +13,7 @@ import java.util.List;
  * Created by Administrator on 2018/7/31 0031.
  */
 
-public abstract class UniversalRecyclerAdapter<T> extends RecyclerView.Adapter<BaseViewHolder>{
+public abstract class UniversalRecyclerAdapter<T> extends RecyclerView.Adapter<BaseViewHolder> implements View.OnClickListener {
 
     private Context mContext;
     private List<T> mDatas;
@@ -82,6 +82,7 @@ public abstract class UniversalRecyclerAdapter<T> extends RecyclerView.Adapter<B
     @Override
     public BaseViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(mContext).inflate(mLayoutId, parent, false);
+        view.setOnClickListener(this);
         return new BaseViewHolder(view);
     }
 
@@ -92,6 +93,7 @@ public abstract class UniversalRecyclerAdapter<T> extends RecyclerView.Adapter<B
 
     @Override
     public void onBindViewHolder(BaseViewHolder holder, final int position) {
+        holder.itemView.setTag(position);
         convert(mContext, holder, mDatas.get(position), position);
         if (mItemClickListener != null) {
             holder.mItemView.setOnClickListener(new View.OnClickListener() {
@@ -114,6 +116,13 @@ public abstract class UniversalRecyclerAdapter<T> extends RecyclerView.Adapter<B
     }
 
     protected abstract void convert(Context mContext, BaseViewHolder holder, T t, int position);
+
+    @Override
+    public void onClick(View v) {
+        if (mItemClickListener != null){
+            mItemClickListener.onItemClick(v, (Integer) v.getTag());
+        }
+    }
 
     public interface OnItemClickListener {
         void onItemClick(View view, int position);

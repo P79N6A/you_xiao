@@ -19,6 +19,9 @@ package com.runtoinfo.youxiao.globalTools.views;
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
+ *
+ * 老版本源码复制，目的：取消预加载模式
+ * 默认缓存页数为1
  */
 
 

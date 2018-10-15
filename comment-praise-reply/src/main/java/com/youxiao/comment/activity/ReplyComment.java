@@ -46,6 +46,7 @@ public class ReplyComment extends BaseActivity {
     public boolean selected = true;
     public HttpUtils httpUtils;
     public int page = 1;
+    public List<CommentRequestResultEntity> replayList;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -112,15 +113,11 @@ public class ReplyComment extends BaseActivity {
     }
 
     public void initRecyclerData(){
-        if (dataList.size() > 0) {
             mAdapter = new CommentPublishAdapter(handler, ReplyComment.this, dataList, R.layout.comment_publish_items);
             binding.replyRecycler.setLinearLayout();
             binding.replyRecycler.setAdapter(mAdapter);
             binding.replyRecycler.addItemDecoration(new RecyclerViewDecoration(ReplyComment.this, RecyclerViewDecoration.HORIZONTAL_LIST));
             binding.replyRecycler.setOnPullLoadMoreListener(pullLoadMoreListener);
-        }else{
-            DialogMessage.showToast(ReplyComment.this, "暂无回复");
-        }
     }
 
     public PullLoadMoreRecyclerView.PullLoadMoreListener pullLoadMoreListener = new PullLoadMoreRecyclerView.PullLoadMoreListener() {
@@ -138,6 +135,10 @@ public class ReplyComment extends BaseActivity {
         }
     };
 
+    /**
+     * 获取评论
+     * @param page 用于计算偏移量
+     */
     public void requestAll(int page){
         GetAllCPC cpc = new GetAllCPC();
         cpc.setToken(spUtils.getString(Entity.TOKEN));
@@ -149,7 +150,32 @@ public class ReplyComment extends BaseActivity {
         cpc.setMaxResultCount(10);
         cpc.setSkipCount(DensityUtil.getOffSet(page));
 
-        httpUtils.getCommentAll(handler, cpc, dataList);
+        httpUtils.getCommentAll(handler, cpc, 1, dataList);
+    }
+
+    /**
+     * 用户获取回复的回复
+     *
+     * 回复的回复 根据评论下的回复而请求
+     */
+    public void requestReplayAll(CommentRequestResultEntity commentRequestResultEntity){
+        GetAllCPC cpc = new GetAllCPC();
+        cpc.setUserId(spUtils.getInt(Entity.USER_ID));
+        cpc.setType(CPRCTypeEntity.REPLY);
+        cpc.setParentId(commentRequestResultEntity.getId());
+        cpc.setParentType(CPRCTypeEntity.PARENT_REPLY);
+        cpc.setTargetType(CPRCTypeEntity.TARGET_REPLY);
+        cpc.setTarget(commentRequestResultEntity.getTarget());
+        cpc.setToken(spUtils.getString(Entity.TOKEN));
+        cpc.setMaxResultCount(10);
+        replayList = new ArrayList<>();
+        httpUtils.getCommentAll(handler, cpc, 2, replayList);
+    }
+
+    public void requestReplayReplay(){
+        for (int i = 0; i < dataList.size(); i++){
+            requestReplayAll(dataList.get(i));
+        }
     }
 
     public Handler handler = new Handler(Looper.getMainLooper()){
@@ -158,7 +184,20 @@ public class ReplyComment extends BaseActivity {
             switch (msg.what){
                 case 20://获取全部回复 结果
                     binding.replyRecycler.setPullLoadMoreCompleted();
+                    if (dataList.size() <= 0) {
+                        DialogMessage.showToast(ReplyComment.this, "暂无回复");
+                        return;
+                    }
                     initRecyclerData();
+                    requestReplayReplay();
+                    break;
+                case 30://获取回复的回复结果
+                    if (replayList.size() > 0){
+                        for (int i = 0; i < replayList.size(); i++){
+                            replayList.get(i).setCr(2);
+                        }
+                        mAdapter.addAll(replayList);
+                    }
                     break;
                 case 1://回复的评论 结果
                     String result = msg.obj.toString();
@@ -204,7 +243,9 @@ public class ReplyComment extends BaseActivity {
                     replyReply.setParentType(CPRCTypeEntity.PARENT_REPLY);
                     replyReply.setTarget(dialogEntity.getTarget());
                     replyReply.setParentId(dialogEntity.getId());
-                    replyReply.setContent(content);
+                    replyReply.setContent(content.concat("//@").concat(dialogEntity.getNickName()).concat(":").concat(dialogEntity.getContent()));
+                    replyReply.setUserId(spUtils.getInt(Entity.USER_ID));
+                    replyReply.setLevel(3);
                     replyReply.setToken(spUtils.getString(Entity.TOKEN));
                     httpUtils.postComment(handler, replyReply);
                     break;

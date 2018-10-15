@@ -2,6 +2,11 @@ package com.runtoinfo.youxiao.globalTools.utils;
 
 import android.app.Activity;
 import android.content.Context;
+import android.graphics.Color;
+import android.text.Spannable;
+import android.text.SpannableStringBuilder;
+import android.text.TextUtils;
+import android.text.style.ForegroundColorSpan;
 import android.util.DisplayMetrics;
 
 import java.util.regex.Matcher;
@@ -81,6 +86,19 @@ public class DensityUtil {
         Pattern p = Pattern.compile("^((13[0-9])|(15[^4])|(18[0-9])|(17[0-9])|(147))\\d{8}$");
         Matcher m = p.matcher(mobiles);
         return m.matches();
+    }
+
+    //改变字符串中某字段的样式颜色
+    public static SpannableStringBuilder setStringColor(String stringColor) {
+        if (!TextUtils.isEmpty(stringColor)) {
+            SpannableStringBuilder spanString = new SpannableStringBuilder(stringColor);
+            if (stringColor.contains("//@")) {
+                ForegroundColorSpan span1 = new ForegroundColorSpan(Color.parseColor("#27acf7"));
+                spanString.setSpan(span1, stringColor.indexOf("@"), stringColor.indexOf(":"), Spannable.SPAN_INCLUSIVE_INCLUSIVE);
+            }
+            return spanString;
+        }
+        return null;
     }
 
 }

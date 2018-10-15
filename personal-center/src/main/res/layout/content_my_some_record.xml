@@ -87,7 +87,7 @@
                 app:tabTextAppearance="@style/Table_text_style"
                 app:tabTextColor="#333333" />
 
-            <com.runtoinfo.youxiao.globalTools.views.CustomViewPager
+            <com.runtoinfo.youxiao.globalTools.views.ScanScrollViewPager
                 android:id="@+id/personal_collection_viewPager"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"

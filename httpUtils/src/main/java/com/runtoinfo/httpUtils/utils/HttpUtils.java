@@ -1429,11 +1429,11 @@ public class HttpUtils<T> {
 
     /**
      * 获取全部评论或者回复
-     *
      * @param handler
      * @param cpc
+     * @param requestType 请求类型，0，评论，1，评论的回复，2，回复的回复
      */
-    public void getCommentAll(final Handler handler, final GetAllCPC cpc, final List<CommentRequestResultEntity> dataList) {
+    public void getCommentAll(final Handler handler, final GetAllCPC cpc, final int requestType, final List<CommentRequestResultEntity> dataList) {
         executorService.execute(new Runnable() {
             @Override
             public void run() {
@@ -1445,7 +1445,7 @@ public class HttpUtils<T> {
                 map.put("ParentId", cpc.getParentId());
                 map.put("MaxResultCount", cpc.getMaxResultCount());
                 map.put("SkipCount", cpc.getSkipCount());
-                map.put("Sorting", cpc.getSorting());
+                map.put("Sorting", "approvedTime desc");
 
                 Request request = new Request.Builder()
                         .header(Authorization, Bearer + cpc.getToken())
@@ -1469,12 +1469,14 @@ public class HttpUtils<T> {
                                     for (int i = 0; i < array.length(); i++) {
                                         String item = array.getJSONObject(i).toString();
                                         CommentRequestResultEntity requestResultEntity = new Gson().fromJson(item,
-                                                new TypeToken<CommentRequestResultEntity>() {
-                                                }.getType());
+                                                new TypeToken<CommentRequestResultEntity>() {}.getType());
                                         dataList.add(requestResultEntity);
                                     }
                                 }
-                                handler.sendEmptyMessage(20);
+                                if (requestType != 2)
+                                    handler.sendEmptyMessage(20);
+                                else
+                                    handler.sendEmptyMessage(30);
                             } catch (JSONException e) {
                                 e.printStackTrace();
                             }
@@ -1485,11 +1487,17 @@ public class HttpUtils<T> {
         });
     }
 
-    public void getComment(final Handler handler, final RequestDataEntity requestDataEntity, final List<CommentRequestResultEntity> dataList) {
+    /**
+     * 获取单条评论
+     * @param handler
+     * @param requestDataEntity
+     * @param dataList
+     */
+    public void getComment(final Handler handler, final RequestDataEntity requestDataEntity) {
         executorService.execute(new Runnable() {
             @Override
             public void run() {
-                Request request = new Request.Builder()
+                final Request request = new Request.Builder()
                         .header(Authorization, Bearer + requestDataEntity.getToken())
                         .url(requestDataEntity.getUrl() + "?Id=" + requestDataEntity.getId())
                         .build();
@@ -1507,7 +1515,13 @@ public class HttpUtils<T> {
                                 JSONObject json = new JSONObject(response.body().string());
                                 boolean success = json.getBoolean("success");
                                 if (success) {
-
+                                    JSONObject result = json.getJSONObject("result");
+                                    CommentRequestResultEntity resultEntity = new Gson().fromJson(result.toString(),
+                                            new TypeToken<CommentRequestResultEntity>(){}.getType());
+                                    Message message = new Message();
+                                    message.obj = resultEntity;
+                                    message.what = 50;
+                                    handler.sendMessage(message);
                                 } else {
                                     handler.sendEmptyMessage(400);
                                 }
@@ -1552,7 +1566,7 @@ public class HttpUtils<T> {
                         @Override
                         public void onResponse(Call call, Response response) throws IOException {
                             if (response.isSuccessful()) {
-                                handler.sendEmptyMessage(30);
+                                handler.sendEmptyMessage(40);
                             }
                         }
                     });

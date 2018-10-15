@@ -8,6 +8,7 @@ import android.os.Looper;
 import android.os.Message;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -76,21 +77,38 @@ public class NewsFragment extends BasePersonalFragment {
 
     public void initRecyclerData() {
         collectionAdapter = new CollectionAdapter(getActivity(), list, R.layout.personal_collection_item_layout, type);
-        binding.collectionDataRecycler.setLayoutManager(new LinearLayoutManager(getContext()));
-        binding.collectionDataRecycler.setHasFixedSize(true);
-        binding.collectionDataRecycler.setNestedScrollingEnabled(false);
-        binding.collectionDataRecycler.setItemLayout(R.id.item_layout);
-        binding.collectionDataRecycler.setItem_delete(R.id.delete_collection);
+        binding.collectionDataRecycler.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false));
+        //binding.collectionDataRecycler.setHasFixedSize(true);
+        //binding.collectionDataRecycler.setNestedScrollingEnabled(false);
+        //binding.collectionDataRecycler.setItemLayout(R.id.item_layout);
+        //binding.collectionDataRecycler.setItem_delete(R.id.delete_collection);
         binding.collectionDataRecycler.setAdapter(collectionAdapter);
-        binding.collectionDataRecycler.setmListener(new UniversalRecyclerAdapter.OnItemClickListener() {
+//        binding.collectionDataRecycler.setmListener(new UniversalRecyclerAdapter.OnItemClickListener() {
+//            @Override
+//            public void onItemClick(View view, int position) {
+//                collectionAdapter.removeItem(position);
+//                RequestDataEntity requestDataEntity = new RequestDataEntity();
+//                requestDataEntity.setToken(spUtils.getString(Entity.TOKEN));
+//                requestDataEntity.setUrl(HttpEntity.MAIN_URL + HttpEntity.DELETE_COMMENT_CREATE);
+//                requestDataEntity.setId(collectionAdapter.getList().get(position).getId());
+//                httpUtils.delectColleciton(handler, requestDataEntity);
+//            }
+//        });
+
+        collectionAdapter.setOnDeleteClickListener(new CollectionAdapter.OnDeleteClickLister() {
             @Override
-            public void onItemClick(View view, int position) {
-                collectionAdapter.removeItem(position);
+            public void onDeleteClick(View view, int position) {
+
                 RequestDataEntity requestDataEntity = new RequestDataEntity();
                 requestDataEntity.setToken(spUtils.getString(Entity.TOKEN));
                 requestDataEntity.setUrl(HttpEntity.MAIN_URL + HttpEntity.DELETE_COMMENT_CREATE);
-                requestDataEntity.setId(collectionAdapter.getList().get(position).getId());
+                int id = collectionAdapter.getList().get(position).getId();
+                requestDataEntity.setId(id);
+                Log.e("WenzId", "News" + id);
                 httpUtils.delectColleciton(handler, requestDataEntity);
+
+                collectionAdapter.removeItem(position);
+                binding.collectionDataRecycler.closeMenu();
             }
         });
 
@@ -138,6 +156,7 @@ public class NewsFragment extends BasePersonalFragment {
                     }
                     break;
                 case 200:
+                    setTitleNumber(collectionAdapter.getList().size());
                     DialogMessage.showToast(getContext(), "删除成功");
                     break;
                 case 500:

@@ -5,7 +5,7 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
-        <com.runtoinfo.youxiao.globalTools.views.MyRecyclerView
+        <com.runtoinfo.youxiao.globalTools.views.SlideRecyclerView
             android:id="@+id/collection_data_recycler"
             android:layout_width="match_parent"
             android:layout_height="match_parent"/>

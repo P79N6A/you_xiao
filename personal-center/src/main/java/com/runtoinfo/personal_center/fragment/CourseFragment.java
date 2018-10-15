@@ -78,16 +78,23 @@ public class CourseFragment extends BasePersonalFragment{
         binding.collectionDataRecycler.setLayoutManager(new LinearLayoutManager(getContext()));
         binding.collectionDataRecycler.setHasFixedSize(true);
         binding.collectionDataRecycler.setNestedScrollingEnabled(false);
-        binding.collectionDataRecycler.setItemLayout(R.id.item_layout);
-        binding.collectionDataRecycler.setItem_delete(R.id.delete_collection);
+//        binding.collectionDataRecycler.setItemLayout(R.id.item_layout);
+//        binding.collectionDataRecycler.setItem_delete(R.id.delete_collection);
+//        binding.collectionDataRecycler.setAdapter(collectionAdapter);
+//        binding.collectionDataRecycler.setmListener(new UniversalRecyclerAdapter.OnItemClickListener() {
+//            @Override
+//            public void onItemClick(View view, int position) {
+//                collectionAdapter.removeItem(position);
+//            }
+//        });
         binding.collectionDataRecycler.setAdapter(collectionAdapter);
-        binding.collectionDataRecycler.setmListener(new UniversalRecyclerAdapter.OnItemClickListener() {
+        collectionAdapter.setOnDeleteClickListener(new CollectionAdapter.OnDeleteClickLister() {
             @Override
-            public void onItemClick(View view, int position) {
+            public void onDeleteClick(View view, int position) {
                 collectionAdapter.removeItem(position);
+                binding.collectionDataRecycler.closeMenu();
             }
         });
-
 
     }
 

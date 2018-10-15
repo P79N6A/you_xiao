@@ -29,6 +29,15 @@ public class SchoolDynamicsNewEntity {
     public boolean hasFavorited;
     public int userFavoriteId;
     public int id;
+    public int dataType;//用于区分布局类型
+
+    public int getDataType() {
+        return dataType;
+    }
+
+    public void setDataType(int dataType) {
+        this.dataType = dataType;
+    }
 
     public int getTenantId() {
         return tenantId;
