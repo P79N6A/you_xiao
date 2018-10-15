@@ -520,6 +520,10 @@ CalendarView extends FrameLayout {
         }
     }
 
+    public int getMonthCount(int year, int month){
+       return CalendarUtil.getMonthDaysCount(year, month);
+    }
+
     /**
      * 设置日期选中事件
      *

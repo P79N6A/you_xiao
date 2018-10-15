@@ -1,5 +1,6 @@
 package com.runtoinfo.httpUtils.utils;
 
+import android.Manifest;
 import android.app.Activity;
 import android.content.Context;
 import android.content.IntentFilter;
@@ -1433,22 +1434,22 @@ public class HttpUtils<T> {
      * @param cpc
      * @param requestType 请求类型，0，评论，1，评论的回复，2，回复的回复
      */
-    public void getCommentAll(final Handler handler, final GetAllCPC cpc, final int requestType, final List<CommentRequestResultEntity> dataList) {
+    public void getCommentAll(final Handler handler, final Map<String, Object> map /*final GetAllCPC cpc*/, final int requestType, final List<CommentRequestResultEntity> dataList) {
         executorService.execute(new Runnable() {
             @Override
             public void run() {
-                Map<String, Object> map = new HashMap<>();
-                map.put("Type", cpc.getType());
-                map.put("Target", cpc.getTarget());
-                map.put("TargetType", cpc.getTargetType());
-                map.put("ParentType", cpc.getParentType());
-                map.put("ParentId", cpc.getParentId());
-                map.put("MaxResultCount", cpc.getMaxResultCount());
-                map.put("SkipCount", cpc.getSkipCount());
-                map.put("Sorting", "approvedTime desc");
+//                Map<String, Object> map = new HashMap<>();
+//                map.put("Type", cpc.getType());
+//                map.put("Target", cpc.getTarget());
+//                map.put("TargetType", cpc.getTargetType());
+//                map.put("ParentType", cpc.getParentType());
+//                map.put("ParentId", cpc.getParentId());
+//                map.put("MaxResultCount", cpc.getMaxResultCount());
+//                map.put("SkipCount", cpc.getSkipCount());
+//                map.put("Sorting", "approvedTime desc");
 
                 Request request = new Request.Builder()
-                        .header(Authorization, Bearer + cpc.getToken())
+                        .header(Authorization, Bearer.concat(map.get("token").toString()))
                         .url(HttpEntity.MAIN_URL + HttpEntity.GET_COMMENT_ALL + setUrl(map))
                         .build();
                 getClient().newCall(request).enqueue(new Callback() {
@@ -1815,8 +1816,13 @@ public class HttpUtils<T> {
 
     /**
      * 检索课程
+     * @param handler
+     * @param entity 请求类
+     * @param dataMap 参数
+     * @param dataList 结果集
+     * @param type 结果类型0，年；1，月；2，日
      */
-    public void getCouseAll(final Handler handler, final RequestDataEntity entity, final Map<String, Object> dataMap, final List<CourseEntity> dataList) {
+    public void getCouseAll(final Handler handler, final RequestDataEntity entity, final Map<String, Object> dataMap, final List<CourseEntity> dataList, final int type) {
         executorService.execute(new Runnable() {
             @Override
             public void run() {
@@ -1844,7 +1850,8 @@ public class HttpUtils<T> {
                                         CourseEntity courseEntity = new Gson().fromJson(item.toString(), new TypeToken<CourseEntity>() {}.getType());
                                         dataList.add(courseEntity);
                                     }
-                                    handler.sendEmptyMessage(0);
+
+                                    handler.sendEmptyMessage(type);
                                 } else {
                                     handler.sendEmptyMessage(400);
                                 }

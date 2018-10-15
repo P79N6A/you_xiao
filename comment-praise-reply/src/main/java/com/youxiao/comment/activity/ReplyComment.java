@@ -34,7 +34,9 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Route(path = "/comment/replyComment")
 public class ReplyComment extends BaseActivity {
@@ -140,17 +142,24 @@ public class ReplyComment extends BaseActivity {
      * @param page 用于计算偏移量
      */
     public void requestAll(int page){
-        GetAllCPC cpc = new GetAllCPC();
-        cpc.setToken(spUtils.getString(Entity.TOKEN));
-        cpc.setType(CPRCTypeEntity.REPLY);
-        cpc.setParentId(resultEntity.getId());
-        cpc.setParentType(CPRCTypeEntity.PARENT_REPLY);
-        cpc.setTarget(resultEntity.getTarget());
-        cpc.setTargetType(CPRCTypeEntity.TARGET_COMMENT);
-        cpc.setMaxResultCount(10);
-        cpc.setSkipCount(DensityUtil.getOffSet(page));
+//        GetAllCPC cpc = new GetAllCPC();
+//        cpc.setToken(spUtils.getString(Entity.TOKEN));
+//        //cpc.setType(CPRCTypeEntity.REPLY);
+//        cpc.setParentId(resultEntity.getId() + "");
+//        //cpc.setParentType(CPRCTypeEntity.PARENT_REPLY);
+//        //cpc.setTarget(resultEntity.getTarget());
+//        //cpc.setTargetType(CPRCTypeEntity.TARGET_COMMENT);
+//        cpc.setMaxResultCount(10);
+//        cpc.setSkipCount(DensityUtil.getOffSet(page));
 
-        httpUtils.getCommentAll(handler, cpc, 1, dataList);
+        Map<String, Object> map = new HashMap<>();
+        map.put("token", spUtils.getString(Entity.TOKEN));
+        map.put("ParentId", resultEntity.getId());
+        map.put("MaxResultCount", 10);
+        map.put("SkipCount", DensityUtil.getOffSet(page));
+        map.put("Sorting", "approvedTime desc");
+
+        httpUtils.getCommentAll(handler, map, 1, dataList);
     }
 
     /**
@@ -159,17 +168,25 @@ public class ReplyComment extends BaseActivity {
      * 回复的回复 根据评论下的回复而请求
      */
     public void requestReplayAll(CommentRequestResultEntity commentRequestResultEntity){
-        GetAllCPC cpc = new GetAllCPC();
-        cpc.setUserId(spUtils.getInt(Entity.USER_ID));
-        cpc.setType(CPRCTypeEntity.REPLY);
-        cpc.setParentId(commentRequestResultEntity.getId());
-        cpc.setParentType(CPRCTypeEntity.PARENT_REPLY);
-        cpc.setTargetType(CPRCTypeEntity.TARGET_REPLY);
-        cpc.setTarget(commentRequestResultEntity.getTarget());
-        cpc.setToken(spUtils.getString(Entity.TOKEN));
-        cpc.setMaxResultCount(10);
+//        GetAllCPC cpc = new GetAllCPC();
+//        //cpc.setUserId(spUtils.getInt(Entity.USER_ID));
+//        //cpc.setType(CPRCTypeEntity.REPLY);
+//        cpc.setParentId(commentRequestResultEntity.getId() + "");
+//        //cpc.setParentType(CPRCTypeEntity.PARENT_REPLY);
+//        //cpc.setTargetType(CPRCTypeEntity.TARGET_REPLY);
+//        //cpc.setTarget(commentRequestResultEntity.getTarget());
+//        cpc.setToken(spUtils.getString(Entity.TOKEN));
+//        cpc.setMaxResultCount(10);
+
+        Map<String, Object> map = new HashMap<>();
+        map.put("token", spUtils.getString(Entity.TOKEN));
+        map.put("ParentId",commentRequestResultEntity.getId());
+        map.put("MaxResultCount", 10);
+        map.put("SkipCount", DensityUtil.getOffSet(page));
+        map.put("Sorting", "approvedTime desc");
+
         replayList = new ArrayList<>();
-        httpUtils.getCommentAll(handler, cpc, 2, replayList);
+        httpUtils.getCommentAll(handler, map, 2, replayList);
     }
 
     public void requestReplayReplay(){
@@ -189,7 +206,7 @@ public class ReplyComment extends BaseActivity {
                         return;
                     }
                     initRecyclerData();
-                    requestReplayReplay();
+                    //requestReplayReplay();
                     break;
                 case 30://获取回复的回复结果
                     if (replayList.size() > 0){
@@ -242,10 +259,9 @@ public class ReplyComment extends BaseActivity {
                     replyReply.setTargetType(CPRCTypeEntity.TARGET_REPLY);
                     replyReply.setParentType(CPRCTypeEntity.PARENT_REPLY);
                     replyReply.setTarget(dialogEntity.getTarget());
-                    replyReply.setParentId(dialogEntity.getId());
+                    replyReply.setParentId(dialogEntity.parentId);
                     replyReply.setContent(content.concat("//@").concat(dialogEntity.getNickName()).concat(":").concat(dialogEntity.getContent()));
                     replyReply.setUserId(spUtils.getInt(Entity.USER_ID));
-                    replyReply.setLevel(3);
                     replyReply.setToken(spUtils.getString(Entity.TOKEN));
                     httpUtils.postComment(handler, replyReply);
                     break;

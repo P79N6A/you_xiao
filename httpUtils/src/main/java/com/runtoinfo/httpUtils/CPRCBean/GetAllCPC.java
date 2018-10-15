@@ -5,15 +5,15 @@ package com.runtoinfo.httpUtils.CPRCBean;
  */
 @SuppressWarnings("all")
 public class GetAllCPC {
-    public int UserId;
-    public int Type;
-    public int Target;
-    public int TargetType;
-    public int ParentType;
-    public int ParentId;
+    public String UserId;
+    public String Type;
+    public String Target;
+    public String TargetType;
+    public String ParentType;
+    public String ParentId;
     public int MaxResultCount;
     public int SkipCount;
-    public int Sorting;
+    public String Sorting;
     public boolean IsEmptyContent;
     public String token;
 
@@ -25,51 +25,51 @@ public class GetAllCPC {
         this.token = token;
     }
 
-    public int getUserId() {
+    public String getUserId() {
         return UserId;
     }
 
-    public void setUserId(int userId) {
+    public void setUserId(String userId) {
         UserId = userId;
     }
 
-    public int getType() {
+    public String getType() {
         return Type;
     }
 
-    public void setType(int type) {
+    public void setType(String type) {
         Type = type;
     }
 
-    public int getTarget() {
+    public String getTarget() {
         return Target;
     }
 
-    public void setTarget(int target) {
+    public void setTarget(String target) {
         Target = target;
     }
 
-    public int getTargetType() {
+    public String getTargetType() {
         return TargetType;
     }
 
-    public void setTargetType(int targetType) {
+    public void setTargetType(String targetType) {
         TargetType = targetType;
     }
 
-    public int getParentType() {
+    public String getParentType() {
         return ParentType;
     }
 
-    public void setParentType(int parentType) {
+    public void setParentType(String parentType) {
         ParentType = parentType;
     }
 
-    public int getParentId() {
+    public String getParentId() {
         return ParentId;
     }
 
-    public void setParentId(int parentId) {
+    public void setParentId(String parentId) {
         ParentId = parentId;
     }
 
@@ -89,11 +89,11 @@ public class GetAllCPC {
         SkipCount = skipCount;
     }
 
-    public int getSorting() {
+    public String getSorting() {
         return Sorting;
     }
 
-    public void setSorting(int sorting) {
+    public void setSorting(String sorting) {
         Sorting = sorting;
     }
 

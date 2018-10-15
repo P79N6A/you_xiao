@@ -55,6 +55,7 @@
                 <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:padding="5dp"
                     android:id="@+id/month_up"
                     android:layout_marginEnd="15dp"
                     android:layout_toStartOf="@+id/tv_year"
@@ -63,6 +64,7 @@
                 <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:padding="5dp"
                     android:id="@+id/month_next"
                     android:layout_marginStart="15dp"
                     android:layout_toEndOf="@+id/tv_year"
@@ -75,7 +77,6 @@
                     android:layout_height="wrap_content"
                     android:layout_centerHorizontal="true"
                     android:layout_centerVertical="true"
-                    android:drawablePadding="15dp"
                     android:gravity="center"
                     android:text="2018年7月"
                     android:textColor="#fff"
@@ -132,8 +133,6 @@
                 app:year_view_month_text_size="20sp"
                 app:year_view_scheme_color="#f17706" />
 
-
-
             <com.runto.cources.group.GroupRecyclerView
                 android:id="@+id/recyclerView"
                 android:layout_width="match_parent"
@@ -148,8 +147,6 @@
                 app:group_padding_right="16dp"
                 app:group_text_color="#555555"
                 app:group_text_size="15sp"/>
-
-
         </com.runto.cources.ui.CalendarLayout>
     </LinearLayout>
 </layout>

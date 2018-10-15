@@ -32,7 +32,9 @@ import org.json.JSONObject;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Route(path = "/comment/publishComment")
 public class PublishComment extends BaseActivity {
@@ -146,15 +148,25 @@ public class PublishComment extends BaseActivity {
     };
 
     public void getCommentAll(int page){
-        GetAllCPC cpc = new GetAllCPC();
-        cpc.setToken(spUtils.getString(Entity.TOKEN));
-        cpc.setType(CPRCTypeEntity.COMMENT);
-        cpc.setTarget(articleId);
-        cpc.setTargetType(targetType);
-        cpc.setMaxResultCount(10);
-        cpc.setSkipCount(DensityUtil.getOffSet(page));
+//        GetAllCPC cpc = new GetAllCPC();
+//        cpc.setToken(spUtils.getString(Entity.TOKEN));
+//        cpc.setType(String.valueOf(CPRCTypeEntity.COMMENT));
+//        cpc.setTarget(articleId + "");
+//        cpc.setTargetType(targetType + "");
+//        cpc.setMaxResultCount(10);
+//        cpc.setSkipCount(DensityUtil.getOffSet(page));
+
+        Map<String, Object> map = new HashMap<>();
+        map.put("token", spUtils.getString(Entity.TOKEN));
+        map.put("Type", CPRCTypeEntity.COMMENT);
+        map.put("Target", articleId);
+        map.put("TargetType", targetType);
+        map.put("MaxResultCount", 10);
+        map.put("SkipCount", DensityUtil.getOffSet(page));
+        map.put("Sorting", "approvedTime desc");
+
         tempList = new ArrayList<>();
-        httpUtils.getCommentAll(mHandler, cpc, 0, tempList);
+        httpUtils.getCommentAll(mHandler, map, 0, tempList);
     }
 
 }
