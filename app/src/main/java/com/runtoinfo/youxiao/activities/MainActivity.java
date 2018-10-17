@@ -22,6 +22,7 @@ import android.widget.Toast;
 import com.alibaba.android.arouter.facade.annotation.Route;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+import com.jaeger.library.StatusBarUtil;
 import com.runtoinfo.httpUtils.HttpEntity;
 import com.runtoinfo.httpUtils.bean.RequestDataEntity;
 import com.runtoinfo.httpUtils.bean.VersionEntity;
@@ -35,10 +36,12 @@ import com.runtoinfo.youxiao.fragment.FineClassFragment;
 import com.runtoinfo.youxiao.fragment.HomeFragment;
 import com.runtoinfo.youxiao.fragment.PersonalCenterFragment;
 import com.runtoinfo.youxiao.fragment.TopicsFragment;
+import com.runtoinfo.youxiao.globalTools.utils.DensityUtil;
 import com.runtoinfo.youxiao.globalTools.utils.DialogMessage;
 import com.runtoinfo.youxiao.globalTools.utils.Entity;
 import com.runtoinfo.youxiao.globalTools.views.ViewPager;
 import com.runtoinfo.youxiao.service.DownloadManagerService;
+import com.squareup.haha.perflib.Main;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -81,7 +84,6 @@ public class MainActivity extends BaseActivity implements ViewPager.OnPageChange
         httpUtils = new HttpUtils(this);
         schoolSelectList = new Gson().fromJson(spUtils.getString(Entity.SCHOOL_DATA), new TypeToken<List<SelectSchoolEntity>>(){}.getType());
         initBottomMenu();
-
     }
 
     public void initBottomMenu(){
@@ -248,6 +250,12 @@ public class MainActivity extends BaseActivity implements ViewPager.OnPageChange
         ((TextView) dialog.findViewById(R.id.check_version_details)).setText(details);
     }
 
+    @Override
+    protected void setStatusBar() {
+        binding.mainViewPager.setPadding(0, DensityUtil.getToolBarHeight(MainActivity.this), 0,0);
+
+        StatusBarUtil.setTransparentForImageViewInFragment(MainActivity.this, null);
+    }
 
     public Handler handler = new Handler(Looper.getMainLooper()){
         @Override

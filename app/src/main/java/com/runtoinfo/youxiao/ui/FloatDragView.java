@@ -4,11 +4,13 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.graphics.Point;
+import android.graphics.Rect;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewTreeObserver;
+import android.view.Window;
 import android.view.WindowManager;
 import android.view.animation.Animation;
 import android.view.animation.TranslateAnimation;
@@ -22,7 +24,7 @@ import com.runtoinfo.youxiao.utils.Utils;
 /**
  * Created by Administrator on 2018/8/1 0001.
  */
-
+@SuppressWarnings("all")
 public class FloatDragView {
 
     private Activity context; // 上下文
@@ -37,6 +39,7 @@ public class FloatDragView {
     private static int[] lastPosition; // 用于记录上一次的位置(坐标0对应x,坐标1对应y)
     private static int startX = 0, startY = 0;
     public static int[] startPosition;
+    public static int hImageView = 0;
 
     /**
      * @param context 上下文
@@ -68,6 +71,7 @@ public class FloatDragView {
             mImageView.setClickable(true);
             mImageView.setFocusable(true);
             mImageView.setImageResource(R.drawable.home_float_phone);
+            //getHeightImageView(mImageView);
             setFloatDragViewParams(mImageView);
             mImageView.setOnClickListener(clickListener);
             setFloatDragViewTouch(mImageView);
@@ -91,6 +95,9 @@ public class FloatDragView {
         return  result;
     }
 
+
+
+
     // 设置可拖动按钮的位置参数
     private void setFloatDragViewParams(View floatDragView) {
 
@@ -109,10 +116,17 @@ public class FloatDragView {
 
             FrameLayout.LayoutParams lpFeedback = new FrameLayout.LayoutParams(
                     FrameLayout.LayoutParams.WRAP_CONTENT, FrameLayout.LayoutParams.WRAP_CONTENT);
-            //lpFeedback.setMargins(900, 536, 0, 0);
-            lpFeedback.setMargins(getHeiOrWid(context)[0] - getHeiOrWid(context)[0] / 6, getHeiOrWid(context)[1] / 7 * 2, 0, 0);
-            Log.e("X", startX + "");
-            Log.e("Y", startY + "");
+
+            int left = getHeiOrWid(context)[0] - getHeiOrWid(context)[0] / 6;
+
+            int w = View.MeasureSpec.makeMeasureSpec(0,View.MeasureSpec.UNSPECIFIED);
+            int h = View.MeasureSpec.makeMeasureSpec(0,View.MeasureSpec.UNSPECIFIED);
+            floatDragView.measure(w, h);
+
+            int height = startPosition[1] - floatDragView.getMeasuredHeight() / 2;
+
+            lpFeedback.setMargins(left, height, 0, 0);
+            Log.e("HomeFragment", getHeiOrWid(context)[0]  + "; height:" + height);
             floatDragView.setLayoutParams(lpFeedback);
         }
 

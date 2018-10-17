@@ -3,11 +3,14 @@ package com.runtoinfo.youxiao.globalTools.utils;
 import android.app.Activity;
 import android.content.Context;
 import android.graphics.Color;
+import android.graphics.Rect;
 import android.text.Spannable;
 import android.text.SpannableStringBuilder;
 import android.text.TextUtils;
 import android.text.style.ForegroundColorSpan;
 import android.util.DisplayMetrics;
+import android.view.View;
+import android.view.Window;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -99,6 +102,21 @@ public class DensityUtil {
             return spanString;
         }
         return null;
+    }
+
+    /**
+     * 获取状态栏高度
+     * @param activity 上下文
+     * @return 状态栏高度
+     */
+    public static int getToolBarHeight(Activity activity){
+        Rect frame = new Rect();//创建一个空的矩形对象
+        activity.getWindow().getDecorView().getWindowVisibleDisplayFrame(frame);//获得顶层窗口的装饰视图，即状态栏，然后把状态栏显示的框架填充给刚刚我们创建的矩形对象，再通过矩形对象来获取状态栏高度
+        int statusBarHeight = frame.top;// 获取状态栏高度：frame.top
+        //Log.v("zxy1", statusBarHeight+"");//打印出来的值为：38，即状态栏高度为38px
+        View v = activity.getWindow().findViewById(Window.ID_ANDROID_CONTENT);// /获得根视图，
+        int allHeight = v.getTop();// 状态栏和标题栏的总高度
+        return statusBarHeight;
     }
 
 }

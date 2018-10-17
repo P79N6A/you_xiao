@@ -1584,13 +1584,13 @@ public class HttpUtils<T> {
      * @param handler
      * @param entity
      */
-    public void getMyCommentOrPraise(final Handler handler, final RequestDataEntity entity) {
+    public void getMyCommentOrPraise(final Handler handler, final RequestDataEntity entity, final Map<String, Object> dataMap) {
         executorService.execute(new Runnable() {
             @Override
             public void run() {
                 Request request = new Request.Builder()
                         .header(Authorization, Bearer + entity.getToken())
-                        .url(entity.getUrl() + "?userId=" + entity.getUserId())
+                        .url(entity.getUrl() + setUrl(dataMap))
                         .build();
 
                 getClient().newCall(request).enqueue(new Callback() {

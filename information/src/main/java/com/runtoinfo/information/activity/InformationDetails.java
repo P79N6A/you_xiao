@@ -30,9 +30,11 @@ import com.runtoinfo.httpUtils.CPRCBean.MyCommentEntity;
 import com.runtoinfo.httpUtils.HttpEntity;
 import com.runtoinfo.httpUtils.bean.RequestDataEntity;
 import com.runtoinfo.httpUtils.utils.HttpUtils;
+import com.runtoinfo.youxiao.globalTools.utils.DensityUtil;
 import com.runtoinfo.youxiao.globalTools.utils.Entity;
 import com.runtoinfo.youxiao.globalTools.utils.IntentDataType;
 import com.runtoinfo.youxiao.globalTools.utils.RecyclerViewDecoration;
+import com.wuxiaolong.pullloadmorerecyclerview.PullLoadMoreRecyclerView;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -62,6 +64,7 @@ public class InformationDetails extends BaseActivity {
     public SystemMessageAdapter messageAdapter;
     public HttpUtils httpUtils;
     public boolean isReadInformation = false;//标记是否进入过页面，是否更改过消息状态
+    public int page = 1;
 
     public String layoutType;
 
@@ -85,12 +88,12 @@ public class InformationDetails extends BaseActivity {
                 break;
             case "comment":
                 commentBinding = DataBindingUtil.setContentView(this, R.layout.comment_information);
-                setCommentRequestData();
-                initCommentData();
+                setCommentRequestData(page);
+                initCommentEvent();
                 break;
             case "praise":
                 praiseBinding = DataBindingUtil.setContentView(this, R.layout.praise_information);
-                requestPraiseData();
+                requestPraiseData(page);
                 initPraiseData();
                 break;
             default:
@@ -161,35 +164,65 @@ public class InformationDetails extends BaseActivity {
     }
 
     //请求赞的数据
-    public void requestPraiseData() {
+    public void requestPraiseData(int page) {
         RequestDataEntity entity = new RequestDataEntity();
-        entity.setUrl(HttpEntity.MAIN_URL + HttpEntity.GET_PRAISE_ME);
-        entity.setUserId(spUtils.getInt(Entity.USER_ID));
+        entity.setUrl(HttpEntity.MAIN_URL + HttpEntity.GET_PRAISE_ME/**/);
         entity.setToken(spUtils.getString(Entity.TOKEN));
-        httpUtils.getMyCommentOrPraise(handler, entity);
+
+        Map<String, Object> map = new HashMap<>();
+        map.put("skipCount", DensityUtil.getOffSet(page));
+        map.put("maxResultCount", 10);
+        map.put("userId", spUtils.getInt(Entity.USER_ID));
+
+        httpUtils.getMyCommentOrPraise(handler, entity, map);
     }
 
     //为赞准备展现数据
     public void initPraiseRecycler() {
         PraiseAdapter praiseAdapter = new PraiseAdapter(InformationDetails.this, praiseEntityList, R.layout.info_praise_item_layout);
-        praiseBinding.praiseRecycler.setLayoutManager(new LinearLayoutManager(this));
-        praiseBinding.praiseRecycler.setHasFixedSize(true);
+        praiseBinding.praiseRecycler.setLinearLayout();
         praiseBinding.praiseRecycler.setAdapter(praiseAdapter);
         praiseBinding.praiseRecycler.addItemDecoration(new RecyclerViewDecoration(InformationDetails.this, RecyclerViewDecoration.HORIZONTAL_LIST));
+        praiseBinding.praiseRecycler.setOnPullLoadMoreListener(pullLoadMoreListener);
     }
 
-    public void initCommentData() {
-        initCommentEvent();
-        //initCommentRecycleData();
+    public PullLoadMoreRecyclerView.PullLoadMoreListener pullLoadMoreListener = new PullLoadMoreRecyclerView.PullLoadMoreListener() {
+        @Override
+        public void onRefresh() {
+            page = 1;
+            refreshData();
+        }
+
+        @Override
+        public void onLoadMore() {
+            page++;
+            refreshData();
+        }
+    };
+
+    public void refreshData() {
+        switch (layoutType){
+            case "comment":
+                setCommentRequestData(page);
+                break;
+            case "praise":
+                requestPraiseData(page);
+                break;
+        }
     }
 
     //获取评论
-    public void setCommentRequestData() {
+    public void setCommentRequestData(int page) {
         RequestDataEntity entity = new RequestDataEntity();
-        entity.setUserId(spUtils.getInt(Entity.USER_ID));
         entity.setUrl(HttpEntity.MAIN_URL + HttpEntity.GET_REPLY_ME);
         entity.setToken(spUtils.getString(Entity.TOKEN));
-        httpUtils.getMyCommentOrPraise(handler, entity);
+
+        Map<String, Object> map = new HashMap<>();
+        map.put("skipCount", DensityUtil.getOffSet(page));
+        map.put("maxResultCount", 10);
+        map.put("userId", spUtils.getInt(Entity.USER_ID));
+
+        httpUtils.getMyCommentOrPraise(handler, entity, map);
     }
 
     //评论、赞数据解析
@@ -224,10 +257,10 @@ public class InformationDetails extends BaseActivity {
     //加载我的评论
     public void initCommentRecycleData() {
         MyCommentAdapter commentAdapter = new MyCommentAdapter(handler, InformationDetails.this, commentEntityList, R.layout.info_comment_item_layout);
-        commentBinding.infoCommentRecycler.setLayoutManager(new LinearLayoutManager(this));
-        commentBinding.infoCommentRecycler.setHasFixedSize(true);
+        commentBinding.infoCommentRecycler.setLinearLayout();
         commentBinding.infoCommentRecycler.setAdapter(commentAdapter);
         commentBinding.infoCommentRecycler.addItemDecoration(new RecyclerViewDecoration(this, RecyclerViewDecoration.HORIZONTAL_LIST));
+        commentBinding.infoCommentRecycler.setOnPullLoadMoreListener(pullLoadMoreListener);
     }
 
     public void initCommentEvent() {
@@ -305,11 +338,13 @@ public class InformationDetails extends BaseActivity {
                         case "comment":
                             JSONArray items = (JSONArray) msg.obj;
                             commentEntityList = setListPraiseOrComment(items, "comment");
+                            commentBinding.infoCommentRecycler.setPullLoadMoreCompleted();
                             initCommentRecycleData();
                             break;
                         case "praise":
                             JSONArray result = (JSONArray) msg.obj;
                             praiseEntityList = setListPraiseOrComment(result, "praise");
+                            praiseBinding.praiseRecycler.setPullLoadMoreCompleted();
                             initPraiseRecycler();
                             break;
                     }

@@ -98,4 +98,5 @@ dependencies {
     implementation project(':comment-praise-reply')
     implementation 'com.wuxiaolong.pullloadmorerecyclerview:library:1.1.2'
     implementation 'com.aliyun.ams:alicloud-android-hotfix:3.2.6'
+    implementation 'com.jaeger.statusbarutil:library:1.4.0'
 }

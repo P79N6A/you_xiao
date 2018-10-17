@@ -16,6 +16,8 @@ import android.widget.LinearLayout;
 import com.alibaba.sdk.android.man.MANService;
 import com.alibaba.sdk.android.man.MANServiceProvider;
 import com.gyf.barlibrary.ImmersionBar;
+import com.jaeger.library.StatusBarUtil;
+import com.runtoinfo.youxiao.R;
 import com.runtoinfo.youxiao.globalTools.utils.SPUtils;
 
 import java.lang.reflect.Field;
@@ -54,6 +56,11 @@ public abstract class BaseActivity extends FragmentActivity {
         //添加Activity到堆栈
         MyApplication.getInstance().addActivity(this);
         initData();
+        setStatusBar();
+    }
+
+    protected void setStatusBar() {
+        StatusBarUtil.setColor(this, getResources().getColor(R.color.colorPrimary));
     }
 
     public void checkPermission() {

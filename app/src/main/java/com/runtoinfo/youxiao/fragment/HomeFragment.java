@@ -10,6 +10,7 @@ import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 import android.databinding.DataBindingUtil;
 import android.graphics.Color;
+import android.graphics.Point;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -25,6 +26,7 @@ import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.util.Log;
+import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -32,6 +34,7 @@ import android.view.ViewTreeObserver;
 import android.view.WindowManager;
 import android.view.animation.Animation;
 import android.widget.AdapterView;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.alibaba.android.arouter.facade.annotation.Route;
@@ -314,11 +317,13 @@ public class HomeFragment extends BaseFragment implements MyScrollView.ScrollVie
      */
     public void initFloatWindow() {
         ViewTreeObserver vto = binding.homeHeadImage.getViewTreeObserver();
-        vto.addOnPreDrawListener(new ViewTreeObserver.OnPreDrawListener() {
-            public boolean onPreDraw() {
-                startLocation[1] = binding.homeHeadImage.getMeasuredHeight();
-                startLocation[0] = binding.homeHeadImage.getMeasuredWidth();
-                return true;
+        vto.addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+            @Override
+            public void onGlobalLayout() {
+                binding.homeHeadImage.getViewTreeObserver().removeGlobalOnLayoutListener(this);
+                startLocation[0] = binding.homeHeadImage.getWidth();
+                startLocation[1] = binding.homeHeadImage.getHeight();
+                Log.e("HomeFragment", "width:" + startLocation[0] + "; height:" + startLocation[1]);
             }
         });
         requestSchoolSetting();
@@ -326,7 +331,7 @@ public class HomeFragment extends BaseFragment implements MyScrollView.ScrollVie
 
     public void initFloatWindowListener() {
         //悬浮按钮
-        FloatDragView.addFloatDragView(getActivity(), binding.homeFrameLayout, new View.OnClickListener() {
+        ImageView imageView = FloatDragView.addFloatDragView(getActivity(), binding.homeFrameLayout, new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (phoneNumber != null) {
