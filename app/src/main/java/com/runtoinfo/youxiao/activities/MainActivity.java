@@ -252,8 +252,6 @@ public class MainActivity extends BaseActivity implements ViewPager.OnPageChange
 
     @Override
     protected void setStatusBar() {
-        binding.mainViewPager.setPadding(0, DensityUtil.getToolBarHeight(MainActivity.this), 0,0);
-
         StatusBarUtil.setTransparentForImageViewInFragment(MainActivity.this, null);
     }
 

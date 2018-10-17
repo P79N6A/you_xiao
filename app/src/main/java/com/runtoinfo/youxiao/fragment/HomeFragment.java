@@ -34,11 +34,15 @@ import android.view.ViewTreeObserver;
 import android.view.WindowManager;
 import android.view.animation.Animation;
 import android.widget.AdapterView;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.alibaba.android.arouter.facade.annotation.Route;
 import com.alibaba.android.arouter.launcher.ARouter;
+import com.jaeger.library.StatusBarUtil;
 import com.runtoinfo.httpUtils.HttpEntity;
 import com.runtoinfo.httpUtils.bean.GetSchoolSettingEntity;
 import com.runtoinfo.httpUtils.bean.HomeCourseEntity;
@@ -49,6 +53,7 @@ import com.runtoinfo.youxiao.R;
 import com.runtoinfo.youxiao.adapter.CoursePunchAdapter;
 import com.runtoinfo.youxiao.globalTools.adapter.AdapterWrapper;
 import com.runtoinfo.youxiao.globalTools.adapter.UniversalRecyclerAdapter;
+import com.runtoinfo.youxiao.globalTools.utils.DensityUtil;
 import com.runtoinfo.youxiao.globalTools.utils.DialogMessage;
 import com.runtoinfo.youxiao.globalTools.utils.Entity;
 import com.runtoinfo.youxiao.databinding.FragmentHomeBinding;
@@ -92,6 +97,7 @@ public class HomeFragment extends BaseFragment implements MyScrollView.ScrollVie
     private boolean isPrepared = false;
     public HttpUtils httpUtils;
     public List<SchoolDynamicsNewEntity> dataList;
+    public Context context;
 
     public final static IntentFilter intentFilter = new IntentFilter();
 
@@ -193,7 +199,9 @@ public class HomeFragment extends BaseFragment implements MyScrollView.ScrollVie
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_home, container, false);
-        httpUtils = new HttpUtils(getContext());
+        context = getContext();
+        DensityUtil.setViewHeight(getActivity(), binding.fragmentHomeView);
+        httpUtils = new HttpUtils(context);
         requestPermission();
         initCourseDataList();
         initFloatWindow();
@@ -489,15 +497,16 @@ public class HomeFragment extends BaseFragment implements MyScrollView.ScrollVie
     public void onScrollChanged(MyScrollView scrollView, int x, int y, int oldx, int oldy) {
         if (y <= 0) {  //设置标题的背景颜色
             binding.homeTitleRelative.setBackgroundColor(Color.argb((int) 0, 144, 151, 166));
+            binding.fragmentHomeView.setBackgroundColor(Color.argb((int) 0, 144, 151, 166));
         } else if (y > 0 && y <= mHeight) { //滑动距离小于banner图的高度时，设置背景和字体颜色颜色透明度渐变
             float scale = (float) y / mHeight;
             float alpha = (255 * scale);
             //binding.homeTitleRelative.setTextColor(Color.argb((int) alpha, 255,255,255));
             binding.homeTitleRelative.setBackgroundColor(Color.argb((int) alpha, 139, 185, 247));
+            binding.fragmentHomeView.setBackgroundColor(Color.argb((int) alpha, 139, 185, 247));
         } else {  //滑动到banner下面设置普通颜色
             binding.homeTitleRelative.setBackgroundColor(Color.argb((int) 255, 82, 151, 248));
+            binding.fragmentHomeView.setBackgroundColor(Color.argb((int) 255, 82, 151, 248));
         }
-
     }
-
 }

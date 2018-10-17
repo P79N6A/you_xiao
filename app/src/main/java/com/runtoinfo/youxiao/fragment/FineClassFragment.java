@@ -18,6 +18,7 @@ import com.runtoinfo.httpUtils.bean.RequestDataEntity;
 import com.runtoinfo.httpUtils.utils.HttpUtils;
 import com.runtoinfo.youxiao.R;
 import com.runtoinfo.youxiao.adapter.BoutiqueCourseViewPagerAdapter;
+import com.runtoinfo.youxiao.globalTools.utils.DensityUtil;
 import com.runtoinfo.youxiao.globalTools.utils.DialogMessage;
 import com.runtoinfo.youxiao.globalTools.utils.Entity;
 import com.runtoinfo.youxiao.databinding.FragmentFineClassBinding;
@@ -47,6 +48,8 @@ public class FineClassFragment extends BaseFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_fine_class, container, false);
+        DensityUtil.setViewHeight(getActivity(), binding.findClassHeadLayout, 0);
+        DensityUtil.setMargin(getActivity(), binding.homeSearchRelative, 10);
         httpUtils = new HttpUtils(getContext());
         initTableView();
         lazyLoad();

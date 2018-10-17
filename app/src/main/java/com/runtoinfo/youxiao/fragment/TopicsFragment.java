@@ -26,6 +26,7 @@ import com.runtoinfo.youxiao.adapter.ViewPageAdapter;
 import com.runtoinfo.youxiao.databinding.FragmentTopicsBinding;
 import com.runtoinfo.youxiao.entity.SchoolDynamicsEntity;
 import com.runtoinfo.youxiao.globalTools.adapter.UniversalRecyclerAdapter;
+import com.runtoinfo.youxiao.globalTools.utils.DensityUtil;
 import com.runtoinfo.youxiao.globalTools.utils.DialogMessage;
 import com.runtoinfo.youxiao.globalTools.utils.Entity;
 import com.runtoinfo.youxiao.globalTools.utils.IntentDataType;
@@ -57,6 +58,8 @@ public class TopicsFragment extends BaseFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_topics, container, false);
+        DensityUtil.setViewHeight(getActivity(), binding.topicsStatuesView);
+        //getActivity().getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
         httpUtils = new HttpUtils(getContext());
         viewPages();
         startImageViewScroll();

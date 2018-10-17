@@ -27,6 +27,7 @@ import com.runtoinfo.youxiao.R;
 import com.runtoinfo.youxiao.activities.LoginActivity;
 import com.runtoinfo.youxiao.activities.MainActivity;
 import com.runtoinfo.youxiao.databinding.FragmentPersonalCenterBinding;
+import com.runtoinfo.youxiao.globalTools.utils.DensityUtil;
 import com.runtoinfo.youxiao.globalTools.utils.Entity;
 import com.runtoinfo.youxiao.globalTools.utils.IntentDataType;
 import com.runtoinfo.youxiao.ui.MyGridView;
@@ -59,6 +60,8 @@ public class PersonalCenterFragment extends BaseFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_personal_center, container, false);
+        //DensityUtil.setMargin(getActivity(), binding.personalStatuesLayout);
+        binding.personalStatuesLayout.setPadding(0, DensityUtil.getStatuesBarHeight(getActivity()), 0, 0);
         httpUtils = new HttpUtils(getContext());
         initData();
         getPersonalInfo();
