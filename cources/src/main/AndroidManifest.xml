@@ -18,7 +18,6 @@
             </intent-filter>
         </activity>
         <activity android:name=".activities.CourseHandHomeWork" />
-        <activity android:name=".activities.CourseLeaveCodeActivity" />
         <activity android:name=".activities.CourseLeaveActivity" />
         <activity
             android:name="com.donkingliang.imageselector.ImageSelectorActivity"

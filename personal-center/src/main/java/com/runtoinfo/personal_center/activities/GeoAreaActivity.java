@@ -50,6 +50,7 @@ public class GeoAreaActivity extends BaseActivity {
     @Override
     protected void initView() {
         binding = DataBindingUtil.setContentView(GeoAreaActivity.this, R.layout.activity_geo_area);
+        setStatusBar(binding.geoAreaTitleLayout);
         context = GeoAreaActivity.this;
         httpUtils = new HttpUtils(context);
         initRequestData();

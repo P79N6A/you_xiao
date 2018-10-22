@@ -49,7 +49,7 @@ public class FineClassFragment extends BaseFragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_fine_class, container, false);
         DensityUtil.setViewHeight(getActivity(), binding.findClassHeadLayout, 0);
-        DensityUtil.setMargin(getActivity(), binding.homeSearchRelative, 10);
+        DensityUtil.setMargin(getActivity(), binding.homeSearchRelative, DensityUtil.dip2px(getContext(), 10));
         httpUtils = new HttpUtils(getContext());
         initTableView();
         lazyLoad();

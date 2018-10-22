@@ -31,15 +31,26 @@ public class LeaveAdapter extends UniversalRecyclerAdapter<LeaveRecordEntity>{
         String iso8601 = TimeUtil.iso8601ToDate(leaveRecodEntity.getDate(), 1);
         holder.setText(R.id.record_leave_title, date.equals(iso8601)? "今日请假": iso8601);
         holder.setText(R.id.leave_course_name, "请假课程:" + leaveRecodEntity.getCourseName());
-        holder.setText(R.id.leave_type, "请假原因:" + leaveRecodEntity.getReason().equals("null"));
-        holder.setText(R.id.leave_status, leaveRecodEntity.getStatus() == 1? "审核通过" : "审核中");
+        holder.setText(R.id.leave_type, "请假原因:" + leaveRecodEntity.getReason());
         TextView textView = holder.getView(R.id.leave_status);
-        if (leaveRecodEntity.getStatus() == 1){
-            textView.setText("审核通过");
-            textView.setTextColor(Color.parseColor("#3aa6fe"));
-        }else{
-            textView.setText("审核中");
-            textView.setTextColor(Color.parseColor("#f08d00"));
+        String statues;
+        switch (leaveRecodEntity.getStatus()){
+            case 1:
+                statues = "已提交";
+                textView.setTextColor(Color.parseColor("#3aa6fe"));
+                break;
+            case 2:
+                statues = "审核中";
+                textView.setTextColor(Color.parseColor("#f08d00"));
+                break;
+            case 3:
+                statues = "审核通过";
+                textView.setTextColor(Color.parseColor("#3aa6fe"));
+                break;
+                default:
+                    statues = "";
+                    break;
         }
+        holder.setText(R.id.leave_status, statues);
     }
 }

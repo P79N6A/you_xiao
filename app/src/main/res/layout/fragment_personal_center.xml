@@ -38,11 +38,10 @@
                     android:id="@+id/personal_avatar"
                     android:layout_width="80dp"
                     android:layout_height="80dp"
+                    app:civ_border_overlay="true"
                     android:layout_alignTop="@+id/personal_setting"
                     android:layout_centerHorizontal="true"
-                    android:layout_marginTop="11dp"
-                    android:src="@drawable/home_taekwondo_img"
-                    app:civ_border_overlay="true" />
+                    android:layout_marginTop="11dp" />
 
                 <TextView
                     android:id="@+id/personal_center_name"

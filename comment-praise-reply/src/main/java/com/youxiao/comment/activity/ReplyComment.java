@@ -13,6 +13,7 @@ import com.alibaba.android.arouter.facade.annotation.Route;
 import com.bumptech.glide.Glide;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+import com.jaeger.library.StatusBarUtil;
 import com.runtoinfo.httpUtils.CPRCBean.CPRCDataEntity;
 import com.runtoinfo.httpUtils.CPRCBean.CPRCTypeEntity;
 import com.runtoinfo.httpUtils.CPRCBean.CommentRequestResultEntity;
@@ -53,6 +54,7 @@ public class ReplyComment extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         binding = DataBindingUtil.setContentView(ReplyComment.this,R.layout.activity_reply_comment);
+        StatusBarUtil.setColor(this, 0xffffff, 80);
         httpUtils = new HttpUtils(this);
         initView();
         initData();
@@ -115,11 +117,15 @@ public class ReplyComment extends BaseActivity {
     }
 
     public void initRecyclerData(){
-            mAdapter = new CommentPublishAdapter(handler, ReplyComment.this, dataList, R.layout.comment_publish_items);
-            binding.replyRecycler.setLinearLayout();
-            binding.replyRecycler.setAdapter(mAdapter);
-            binding.replyRecycler.addItemDecoration(new RecyclerViewDecoration(ReplyComment.this, RecyclerViewDecoration.HORIZONTAL_LIST));
-            binding.replyRecycler.setOnPullLoadMoreListener(pullLoadMoreListener);
+        if (mAdapter != null) {
+            mAdapter.notifyDataSetChanged();
+            return;
+        }
+        mAdapter = new CommentPublishAdapter(handler, ReplyComment.this, dataList, R.layout.comment_publish_items);
+        binding.replyRecycler.setLinearLayout();
+        binding.replyRecycler.setAdapter(mAdapter);
+        binding.replyRecycler.addItemDecoration(new RecyclerViewDecoration(ReplyComment.this, RecyclerViewDecoration.HORIZONTAL_LIST));
+        binding.replyRecycler.setOnPullLoadMoreListener(pullLoadMoreListener);
     }
 
     public PullLoadMoreRecyclerView.PullLoadMoreListener pullLoadMoreListener = new PullLoadMoreRecyclerView.PullLoadMoreListener() {

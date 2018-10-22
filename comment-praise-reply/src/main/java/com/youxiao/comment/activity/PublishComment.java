@@ -11,6 +11,7 @@ import android.view.View;
 import com.alibaba.android.arouter.facade.annotation.Route;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+import com.jaeger.library.StatusBarUtil;
 import com.runtoinfo.httpUtils.CPRCBean.CPRCDataEntity;
 import com.runtoinfo.httpUtils.CPRCBean.CPRCTypeEntity;
 import com.runtoinfo.httpUtils.CPRCBean.CommentRequestResultEntity;
@@ -51,6 +52,7 @@ public class PublishComment extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         binding = DataBindingUtil.setContentView(PublishComment.this, R.layout.comment_publish);
+        StatusBarUtil.setColor(this, 0xffffff, 80);
         httpUtils = new HttpUtils(this);
         initData();
         initEvent();

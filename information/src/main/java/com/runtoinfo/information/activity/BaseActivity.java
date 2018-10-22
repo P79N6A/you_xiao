@@ -4,7 +4,11 @@ import android.app.Activity;
 import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.view.View;
 
+import com.qjc.library.StatusBarUtil;
+import com.runtoinfo.information.R;
+import com.runtoinfo.youxiao.globalTools.utils.DensityUtil;
 import com.runtoinfo.youxiao.globalTools.utils.SPUtils;
 
 /**
@@ -19,5 +23,10 @@ public class BaseActivity extends Activity {
         super.onCreate(savedInstanceState);
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         spUtils = new SPUtils(this);
+    }
+
+    public void setStatues(View view){
+        StatusBarUtil.setColor(this, getResources().getColor(R.color.white));
+        //DensityUtil.setViewHeight(this, view);
     }
 }

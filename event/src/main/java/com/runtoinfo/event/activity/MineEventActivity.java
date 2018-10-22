@@ -39,6 +39,7 @@ public class MineEventActivity extends EventBaseActivity {
     protected void initView() {
         binding = DataBindingUtil.setContentView(MineEventActivity.this, R.layout.activity_mine_event);
         httpUtils = new HttpUtils(this);
+        setStatusBar(binding.eventMineTitleLayout);
         requestData();
     }
 

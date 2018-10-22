@@ -12,6 +12,7 @@ import android.view.View;
 
 import com.alibaba.android.arouter.facade.annotation.Route;
 import com.alibaba.android.arouter.launcher.ARouter;
+import com.bumptech.glide.Glide;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.runtoinfo.httpUtils.HttpEntity;
@@ -48,6 +49,7 @@ public class PersonalSettings extends BaseActivity {
 
     public void initView(){
         binding = DataBindingUtil.setContentView(this, R.layout.activity_personal_settings);
+        setStatusBar(R.color.dialog_button_text_color);
         httpUtils = new HttpUtils(this);
         dialog = new Dialog(this, R.style.dialog);
         binding.personalSettingPersonLayout.setOnClickListener(new View.OnClickListener() {
@@ -99,7 +101,9 @@ public class PersonalSettings extends BaseActivity {
     public void initData() {
         binding.perSettingPhoneNumber.setText(spUtils.getString(Entity.PHONE_NUMBER));
         binding.psSettingName.setText(spUtils.getString(Entity.NAME));
-        httpUtils.postSrcPhoto(PersonalSettings.this, HttpEntity.IMAGE_HEAD + spUtils.getString(Entity.AVATAR), binding.perSettingAvatar);
+        //httpUtils.postSrcPhoto(PersonalSettings.this, HttpEntity.IMAGE_HEAD + spUtils.getString(Entity.AVATAR), binding.perSettingAvatar);
+        Glide.with(this).load(HttpEntity.IMAGE_HEAD + spUtils.getString(Entity.AVATAR))
+                .into(binding.perSettingAvatar);
     }
 
     //获取版本号提示是否更新

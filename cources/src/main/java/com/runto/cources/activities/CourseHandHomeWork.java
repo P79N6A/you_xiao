@@ -28,6 +28,7 @@ import com.runtoinfo.httpUtils.HttpEntity;
 import com.runtoinfo.httpUtils.bean.RequestDataEntity;
 import com.runtoinfo.httpUtils.utils.HttpUtils;
 import com.runtoinfo.youxiao.globalTools.adapter.UniversalRecyclerAdapter;
+import com.runtoinfo.youxiao.globalTools.utils.DensityUtil;
 import com.runtoinfo.youxiao.globalTools.utils.DialogMessage;
 import com.runtoinfo.youxiao.globalTools.utils.Entity;
 
@@ -55,6 +56,8 @@ public class CourseHandHomeWork extends BaseActivity {
         httpUtils = new HttpUtils(this);
         progressDialog = new Dialog(this, R.style.dialog);
         initDialog();
+        setStatusBar();
+        DensityUtil.setMargin(this, binding.handWordRelative);
     }
 
     public Handler handler = new Handler(Looper.getMainLooper()){

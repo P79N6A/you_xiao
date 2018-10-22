@@ -16,6 +16,7 @@ import android.widget.Toast;
 import com.alibaba.android.arouter.facade.annotation.Route;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+import com.jaeger.library.StatusBarUtil;
 import com.runtoinfo.httpUtils.HttpEntity;
 import com.runtoinfo.httpUtils.bean.HttpLoginHead;
 import com.runtoinfo.httpUtils.utils.HttpUtils;
@@ -41,6 +42,7 @@ public class ForgetPassWordActivity extends BaseActivity {
     @Override
     protected void initView() {
         binding = DataBindingUtil.setContentView( this,R.layout.login_reset_password);
+        StatusBarUtil.setTranslucent(this);
         httpUtils = new HttpUtils(this);
         String json = getIntent().getExtras().getString("LoginHttpHead");
         head = new Gson().fromJson(json, new TypeToken<HttpLoginHead>(){}.getType());

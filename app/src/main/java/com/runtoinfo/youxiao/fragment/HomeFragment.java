@@ -99,8 +99,16 @@ public class HomeFragment extends BaseFragment implements MyScrollView.ScrollVie
     public List<SchoolDynamicsNewEntity> dataList;
     public Context context;
 
-    public final static IntentFilter intentFilter = new IntentFilter();
+    public HomeFragment(List<SelectSchoolEntity> schoolSelectList) {
+        this.schoolSelectList = schoolSelectList;
+    }
 
+    public static HomeFragment getInstance(List<SelectSchoolEntity> schoolSelectList){
+        HomeFragment homeFragment = new HomeFragment(schoolSelectList);
+        return homeFragment;
+    }
+
+    public final static IntentFilter intentFilter = new IntentFilter();
     static {
         intentFilter.addAction(IntentDataType.DATA);
     }
@@ -113,11 +121,6 @@ public class HomeFragment extends BaseFragment implements MyScrollView.ScrollVie
             }
         }
     };
-
-    public HomeFragment(List<SelectSchoolEntity> schoolSelectList) {
-        this.schoolSelectList = schoolSelectList;
-    }
-
     public View.OnClickListener listener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {

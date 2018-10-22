@@ -8,4 +8,5 @@
     <color name="content_background">#ffffff</color>
     <color name="solar_background">#ffffff</color>
     <color name="text_blue">#3aa6fe</color>
+    <color name="status_bar">#159ff1</color>
 </resources>

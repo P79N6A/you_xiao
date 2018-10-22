@@ -45,6 +45,7 @@ public class SignUpAddEntourage extends EventBaseActivity {
 
     public void initView(){
         binding = DataBindingUtil.setContentView( SignUpAddEntourage.this, R.layout.activity_add_entourage);
+        setStatusBar(binding.eventAddLayout);
         httpUtils = new HttpUtils(this);
         requestDataEntity = new RequestDataEntity();
         requestDataEntity.setUrl(HttpEntity.MAIN_URL + HttpEntity.CAMPAIGN_ADD_MEMBER);

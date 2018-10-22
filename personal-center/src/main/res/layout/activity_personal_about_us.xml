@@ -9,6 +9,11 @@
     android:background="#f7f7f7"
     tools:context="com.runtoinfo.personal_center.activities.PersonalAboutUs">
 
+    <View
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:id="@+id/about_us_title_layout"/>
+
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

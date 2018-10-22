@@ -54,4 +54,5 @@ dependencies {
     implementation 'com.github.bumptech.glide:glide:4.8.0'
     annotationProcessor 'com.github.bumptech.glide:compiler:4.8.0'
     implementation 'com.wuxiaolong.pullloadmorerecyclerview:library:1.1.2'
+    implementation 'com.github.UserNameQC:StatuesBarUtils:v1.0.1'
 }

@@ -12,6 +12,7 @@ import android.view.View;
 import com.alibaba.android.arouter.facade.annotation.Route;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+import com.qjc.library.StatusBarUtil;
 import com.runto.cources.R;
 import com.runto.cources.databinding.ActivityBoutiqueCourseDetailsBinding;
 import com.runto.cources.fragment.CourseIntroductionFragment;
@@ -29,7 +30,7 @@ import cn.jzvd.JZVideoPlayer;
 import static cn.jzvd.JZVideoPlayerStandard.*;
 
 @Route(path = "/course/boutiqueCourseDetails")
-public class BoutiqueCourseDetails extends FragmentActivity {
+public class BoutiqueCourseDetails extends BaseActivity {
 
     public ActivityBoutiqueCourseDetailsBinding binding;
     public List<String> titles = new ArrayList<>();
@@ -44,10 +45,14 @@ public class BoutiqueCourseDetails extends FragmentActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+    }
+
+    @Override
+    protected void initView() {
         binding = DataBindingUtil.setContentView(this, R.layout.activity_boutique_course_details);
+        setStatusBar();
         httpUtils = new HttpUtils(this);
         courseDataEntity = new Gson().fromJson(getIntent().getExtras().getString("json"), new TypeToken<CourseDataEntity>(){}.getType());
-        initData();
     }
 
     @SuppressLint("SetTextI18n")

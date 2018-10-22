@@ -60,7 +60,7 @@ public abstract class BaseActivity extends FragmentActivity {
     }
 
     protected void setStatusBar() {
-        StatusBarUtil.setColor(this, getResources().getColor(R.color.colorPrimary));
+        StatusBarUtil.setColor(this, 0xffffff, 80);
     }
 
     public void checkPermission() {

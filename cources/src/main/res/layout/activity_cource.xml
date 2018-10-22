@@ -11,12 +11,17 @@
         android:orientation="vertical"
         tools:ignore="RtlHardcoded,HardcodedText,RtlSymmetry,SmallSp">
 
+        <View
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:id="@+id/course_head_view"/>
+
         <LinearLayout
+            android:id="@+id/course_heard_layout"
             android:layout_width="match_parent"
             android:layout_height="97dp"
             android:background="@drawable/course_img_head"
             android:orientation="vertical">
-
 
             <RelativeLayout
                 android:layout_width="match_parent"

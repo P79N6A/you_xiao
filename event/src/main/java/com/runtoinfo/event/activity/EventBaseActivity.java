@@ -4,7 +4,11 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.pm.ActivityInfo;
 import android.os.Bundle;
+import android.view.View;
 
+import com.qjc.library.StatusBarUtil;
+import com.runtoinfo.event.R;
+import com.runtoinfo.youxiao.globalTools.utils.DensityUtil;
 import com.runtoinfo.youxiao.globalTools.utils.SPUtils;
 
 /**
@@ -32,5 +36,10 @@ public abstract class EventBaseActivity extends Activity {
 
     public void initShared(){
         spUtils = new SPUtils(this);
+    }
+
+    public void setStatusBar(View view){
+        StatusBarUtil.setColor(this, getResources().getColor(R.color.white));
+        //DensityUtil.setMargin(this, view);
     }
 }

@@ -7,6 +7,7 @@ import android.graphics.Paint;
 import android.graphics.Paint.Align;
 import android.graphics.Paint.FontMetricsInt;
 import android.graphics.Paint.Style;
+import android.graphics.Typeface;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v4.content.ContextCompat;

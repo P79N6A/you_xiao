@@ -67,6 +67,7 @@ public class MySomeRecord extends BaseActivity {
     @Override
     protected void initView() {
         binding = DataBindingUtil.setContentView(MySomeRecord.this, R.layout.content_my_some_record);
+        setStatusBar(binding.recordTitleLayout);
         httpUtils = new HttpUtils(getBaseContext());
         layoutInflater = LayoutInflater.from(this);
         initRequestData();

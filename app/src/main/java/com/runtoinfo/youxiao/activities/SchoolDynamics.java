@@ -13,6 +13,7 @@ import com.alibaba.android.arouter.facade.annotation.Route;
 import com.alibaba.android.arouter.launcher.ARouter;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+import com.jaeger.library.StatusBarUtil;
 import com.runtoinfo.httpUtils.CPRCBean.CPRCDataEntity;
 import com.runtoinfo.httpUtils.CPRCBean.CPRCTypeEntity;
 import com.runtoinfo.httpUtils.HttpEntity;
@@ -50,14 +51,19 @@ public class SchoolDynamics extends BaseActivity {
     public HttpUtils httpUtils;
     public List<SchoolDynamicsNewEntity> newDataList;
 
-    public boolean isClickColl;
-    public boolean isClickPraise;
+    public boolean isClickColl = false;
+    public boolean isClickPraise = false;
     @Override
     protected void initView() {
         binding = DataBindingUtil.setContentView(SchoolDynamics.this, R.layout.school_movment);
         httpUtils = new HttpUtils(this);
         changeView();
         initEvent();
+    }
+
+    @Override
+    protected void setStatusBar() {
+        super.setStatusBar();
     }
 
     public void initEvent(){
@@ -222,7 +228,7 @@ public class SchoolDynamics extends BaseActivity {
                             binding.detailsCollectionText.setText("已收藏");
                         }
                         if (schoolDynamicsEntity.isHasPraised()){
-                            isClickColl = true;
+                            isClickPraise = true;
                             binding.detailsPraiseImagView.setBackgroundResource(R.drawable.comment_praised);
                         }
                     }
@@ -269,9 +275,6 @@ public class SchoolDynamics extends BaseActivity {
     }
 
     public void setDataList(SchoolDynamicsNewEntity newEntity){
-        //schoolDynamicsList = new ArrayList<>();
-
-        //SchoolDynamicsEntity entity = new SchoolDynamicsEntity();
         int coverType = newEntity.getCoverType();//childItem.getInt("coverType");
         List<String> imageList = newEntity.getCoverImgs();
         int imageListSize = imageList.size();
@@ -280,35 +283,19 @@ public class SchoolDynamics extends BaseActivity {
                 switch (imageListSize){
                     case 1:
                     case 2:
-                        //entity.setType(1);
                         newEntity.setDataType(1);
                         break;
                     case 3:
                     default:
-                        //entity.setType(2);
                         newEntity.setDataType(2);
                         break;
                 }
                 break;
             case 1://视频
-                //entity.setType(0);
                 newEntity.setDataType(0);
                 break;
         }
 
-//        entity.setTile(newEntity.getTitle());//childItem.getString("title"));
-//        entity.setId(newEntity.getId());//childItem.getInt("id"));
-//        entity.setImagList(imageList);
-//        entity.setCoverType(newEntity.getCoverType());//childItem.getInt("coverType"));
-//        entity.setReadNumber(newEntity.getPageView());//childItem.getInt("pageView"));
-//        entity.setStatus(newEntity.getStatus());//childItem.getString("status"));
-//        entity.setVideoPath(newEntity.getVideoPath());//childItem.getString("videoPath"));
-//        entity.setContent(newEntity.getContent());//childItem.getString("content"));
-//        entity.setMessage(newEntity.getSubtitle());//childItem.getString("subtitle"));
-//        entity.setPublishTime(newEntity.getPublishTime());//.getString("publishTime"));
-//        entity.setHasPraise(newEntity.hasPraised);
-//        entity.setHasFavorite(newEntity.hasFavorited);
-//        schoolDynamicsList.add(entity);
     }
 
     public void hideView(boolean flag){

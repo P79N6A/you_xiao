@@ -25,6 +25,7 @@ import android.view.WindowManager;
 
 import com.alibaba.android.arouter.facade.annotation.Route;
 import com.alibaba.android.arouter.launcher.ARouter;
+import com.bumptech.glide.Glide;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.lljjcoder.style.citylist.utils.CityListLoader;
@@ -66,18 +67,19 @@ public class PersonalMainActivity extends BaseActivity {
     @Override
     protected void initView() {
         binding = DataBindingUtil.setContentView(PersonalMainActivity.this, R.layout.activity_personal_main);
+        setStatusBar(R.color.dialog_button_text_color);
         httpUtils = new HttpUtils(this);
         initData();
         initEvent();
         initDatePicker();
     }
 
-    public void initData(){
-            httpUtils.postSrcPhoto(this, HttpEntity.IMAGE_HEAD + spUtils.getString(Entity.AVATAR), binding.personalEditTx);
-            binding.personalUserName.setText(spUtils.getString(Entity.NAME));
-            binding.personalEditSex.setText(spUtils.getInt(Entity.GENDER) == 0 ? "男" : "女");
-            binding.personalEditBirth.setText(TimeUtil.iso8601ToDate(spUtils.getString(Entity.BIRTHDAY), 1));
-            binding.personalEditArea.setText(spUtils.getString(Entity.ADDRESS));
+    public void initData() {
+        Glide.with(this).load(HttpEntity.IMAGE_HEAD + spUtils.getString(Entity.AVATAR)).into(binding.personalEditTx);
+        binding.personalUserName.setText(spUtils.getString(Entity.NAME));
+        binding.personalEditSex.setText(spUtils.getInt(Entity.GENDER) == 0 ? "男" : "女");
+        binding.personalEditBirth.setText(TimeUtil.iso8601ToDate(spUtils.getString(Entity.BIRTHDAY), 1));
+        binding.personalEditArea.setText(spUtils.getString(Entity.ADDRESS));
     }
 
     public void initEvent(){
@@ -155,6 +157,7 @@ public class PersonalMainActivity extends BaseActivity {
         binding.personalTitleLayout.setVisibility(flag?View.GONE:View.VISIBLE);
         binding.personalSettingLayout.setVisibility(flag?View.GONE:View.VISIBLE);
         binding.updateUserNameLayout.setVisibility(flag?View.VISIBLE:View.GONE);
+        setStatusBar(binding.userNameTitleLayout);
     }
 
     public void initSexSelectionDialog(){

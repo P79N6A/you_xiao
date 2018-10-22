@@ -6,10 +6,13 @@ import android.content.pm.ActivityInfo;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.app.FragmentActivity;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 
+import com.qjc.library.StatusBarUtil;
+import com.runto.cources.R;
 import com.runtoinfo.youxiao.globalTools.utils.SPUtils;
 
 import java.lang.reflect.Field;
@@ -20,7 +23,7 @@ import java.lang.reflect.Method;
  * Created by huanghaibin on 2017/11/16.
  */
 
-public abstract class BaseActivity extends Activity {
+public abstract class BaseActivity extends FragmentActivity {
 
     private static boolean isMiUi = false;
     public SPUtils spUtils;
@@ -42,7 +45,6 @@ public abstract class BaseActivity extends Activity {
         initView();
         initData();
     }
-
 
     /**
      * 设置小米黑色状态栏字体
@@ -146,5 +148,10 @@ public abstract class BaseActivity extends Activity {
         } else if (type == 3) {
             getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN | View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
         }
+    }
+
+    public void setStatusBar(){
+        StatusBarUtil.setColor(this, getResources().getColor(R.color.content_background), 30);
+        StatusBarUtil.setLightMode(this);
     }
 }

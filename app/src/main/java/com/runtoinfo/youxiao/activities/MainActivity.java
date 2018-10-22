@@ -41,7 +41,6 @@ import com.runtoinfo.youxiao.globalTools.utils.DialogMessage;
 import com.runtoinfo.youxiao.globalTools.utils.Entity;
 import com.runtoinfo.youxiao.globalTools.views.ViewPager;
 import com.runtoinfo.youxiao.service.DownloadManagerService;
-import com.squareup.haha.perflib.Main;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -84,6 +83,7 @@ public class MainActivity extends BaseActivity implements ViewPager.OnPageChange
         httpUtils = new HttpUtils(this);
         schoolSelectList = new Gson().fromJson(spUtils.getString(Entity.SCHOOL_DATA), new TypeToken<List<SelectSchoolEntity>>(){}.getType());
         initBottomMenu();
+
     }
 
     public void initBottomMenu(){
@@ -104,7 +104,7 @@ public class MainActivity extends BaseActivity implements ViewPager.OnPageChange
     @Override
     protected void initData() {
         mFragments = new ArrayList<>();
-        mFragments.add(new HomeFragment(schoolSelectList));
+        mFragments.add(HomeFragment.getInstance(schoolSelectList));
         mFragments.add(new FineClassFragment());
         mFragments.add(new TopicsFragment());
         mFragments.add(new PersonalCenterFragment());
@@ -250,9 +250,12 @@ public class MainActivity extends BaseActivity implements ViewPager.OnPageChange
         ((TextView) dialog.findViewById(R.id.check_version_details)).setText(details);
     }
 
+    /**
+     * 设置状态栏半透明
+     */
     @Override
     protected void setStatusBar() {
-        StatusBarUtil.setTransparentForImageViewInFragment(MainActivity.this, null);
+        StatusBarUtil.setTranslucentForImageViewInFragment(MainActivity.this,80, null);
     }
 
     public Handler handler = new Handler(Looper.getMainLooper()){

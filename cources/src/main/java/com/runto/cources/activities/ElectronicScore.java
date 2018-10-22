@@ -25,7 +25,7 @@ import org.wlf.filedownloader.FileDownloader;
 import java.io.File;
 
 @Route(path = "/electronic/electronicScore")
-public class ElectronicScore extends Activity {
+public class ElectronicScore extends BaseActivity {
 
     public ActivityElectronicScoreBinding binding;
     public int clickCount = 0;
@@ -35,11 +35,6 @@ public class ElectronicScore extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        binding = DataBindingUtil.setContentView(this, R.layout.activity_electronic_score);
-        verifyStoragePermissions(this);
-        initFileDownload();
-        initData();
-        initProgressDialog(this);
     }
 
     public void initFileDownload() {
@@ -80,6 +75,17 @@ public class ElectronicScore extends Activity {
         if (dialog != null) dialog.cancel();
     }
 
+    @Override
+    protected void initView() {
+        binding = DataBindingUtil.setContentView(this, R.layout.activity_electronic_score);
+        setStatusBar();
+        verifyStoragePermissions(this);
+        initFileDownload();
+        //initData();
+        initProgressDialog(this);
+    }
+
+    @Override
     public void initData(){
         binding.courseLeaveBack.setOnClickListener(new View.OnClickListener() {
             @Override

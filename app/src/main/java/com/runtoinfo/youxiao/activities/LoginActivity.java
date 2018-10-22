@@ -24,6 +24,7 @@ import android.widget.Toast;
 import com.alibaba.android.arouter.facade.annotation.Route;
 import com.alibaba.android.arouter.launcher.ARouter;
 import com.google.gson.Gson;
+import com.jaeger.library.StatusBarUtil;
 import com.runtoinfo.httpUtils.HttpEntity;
 import com.runtoinfo.httpUtils.bean.HttpLoginHead;
 import com.runtoinfo.httpUtils.utils.HttpUtils;
@@ -72,6 +73,7 @@ public class LoginActivity extends BaseActivity {
     protected void initView() {
         //FitStatusUI.setImmersionStateMode(this);
         binding = DataBindingUtil.setContentView(LoginActivity.this, R.layout.activity_login);
+
         progressDialog = new ProgressDialog(LoginActivity.this);
         dialog = new Dialog(this, R.style.dialog);
         loginHead = new HttpLoginHead();
@@ -82,6 +84,11 @@ public class LoginActivity extends BaseActivity {
     @Override
     protected void initData() {
         setUserName();
+    }
+
+    @Override
+    protected void setStatusBar() {
+        StatusBarUtil.setColor(this, 0xfcf5f7, 80);
     }
 
     public void initEvent() {

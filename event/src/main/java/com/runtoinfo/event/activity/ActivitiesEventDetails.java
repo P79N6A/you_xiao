@@ -39,6 +39,7 @@ public class ActivitiesEventDetails extends EventBaseActivity {
     protected void initView() {
         binding = DataBindingUtil.setContentView(this, R.layout.activity_event_details);
         httpUtils = new HttpUtils(this);
+        setStatusBar(binding.eventTitleLayout);
     }
 
     @SuppressLint("SetTextI18n")

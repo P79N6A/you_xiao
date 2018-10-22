@@ -76,31 +76,38 @@ public class InformationDetails extends BaseActivity {
         switch (layoutType) {
             case Entity.SYSTEM:
                 systemBinding = DataBindingUtil.setContentView(this, R.layout.system_information);
+                setStatues(systemBinding.systemTitleLayout);
                 initSystemData();
                 break;
             case Entity.LESSON_REMINDER:
                 reminderBinding = DataBindingUtil.setContentView(this, R.layout.class_reminder);
+                setStatues(reminderBinding.classTitleLayout);
                 initClassReminderData();
                 break;
             case Entity.CAMPUS_NOTICE:
                 schoolNoticeBinding = DataBindingUtil.setContentView(this, R.layout.school_notice);
+                setStatues(schoolNoticeBinding.schoolTitleLayout);
                 initSchoolData();
                 break;
             case "comment":
                 commentBinding = DataBindingUtil.setContentView(this, R.layout.comment_information);
+                setStatues(commentBinding.commentTitleLayout);
                 setCommentRequestData(page);
                 initCommentEvent();
                 break;
             case "praise":
                 praiseBinding = DataBindingUtil.setContentView(this, R.layout.praise_information);
+                setStatues(praiseBinding.praiseTitleLayout);
                 requestPraiseData(page);
                 initPraiseData();
                 break;
             default:
                 systemBinding = DataBindingUtil.setContentView(this, R.layout.system_information);
+                setStatues(systemBinding.systemTitleLayout);
                 initSystemData();
                 break;
         }
+
     }
 
     //初始系统消息

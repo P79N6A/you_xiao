@@ -33,6 +33,7 @@ public class InformationMainActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         binding = DataBindingUtil.setContentView(this, R.layout.information_main_center);
         httpUtils = new HttpUtils(this);
+        setStatues(binding.inforTitleLayout);
         initData();
         requestCount();
     }

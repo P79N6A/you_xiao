@@ -27,7 +27,9 @@ import com.runtoinfo.httpUtils.bean.RequestDataEntity;
 import com.runtoinfo.httpUtils.utils.HttpUtils;
 import com.runtoinfo.youxiao.globalTools.utils.DialogMessage;
 import com.runtoinfo.youxiao.globalTools.utils.Entity;
+import com.runtoinfo.youxiao.globalTools.utils.IntentDataType;
 import com.runtoinfo.youxiao.globalTools.utils.SPUtils;
+import com.runtoinfo.youxiao.globalTools.utils.TimeUtil;
 import com.runtoinfo.youxiao.globalTools.views.RoundCornerProgressBar;
 
 import java.util.ArrayList;
@@ -46,20 +48,20 @@ import uk.co.dolphin_com.sscore.LoadWarning;
 public class ArticleAdapter extends GroupRecyclerAdapter<String, Article> {
 
 
-    //private RequestManager mLoader;
     private Context context;
     public SPUtils spUtils;
     public Handler handler;
     public HttpUtils httpUtils;
     LinkedHashMap<String, List<Article>> map = new LinkedHashMap<>();
     List<String> titles = new ArrayList<>();
+    List<CourseEntity> dataList = new ArrayList<>();
 
     public ArticleAdapter(Context context, List<CourseEntity> dataList, Handler handler) {
         super(context);
         this.context = context;
+        this.dataList = dataList;
         httpUtils = new HttpUtils(context);
         spUtils = new SPUtils(context);
-        //mLoader = Glide.with(context.getApplicationContext());
 
         map.put("今日课程", create(dataList));
         if (dataList.size() == 1){
@@ -113,6 +115,25 @@ public class ArticleAdapter extends GroupRecyclerAdapter<String, Article> {
                     httpUtils.postSignIn(handler,dataMap);
                 }
             });
+
+            h.leave_layout.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    ARouter.getInstance().build("/course/leaveActivity")
+                            .withInt(IntentDataType.DATA, item.getTeacherId()).navigation();
+                }
+            });
+
+            String now = TimeUtil.getNowDates();
+            String time = dataList.get(position).getDate();
+
+            if (now.compareTo(time) > 0){
+                h.leave_layout.setEnabled(false);
+                h.signIn_layout.setEnabled(false);
+            }else{
+                h.leave_layout.setEnabled(true);
+                h.signIn_layout.setEnabled(true);
+            }
         }else{
             h.no_course_layout.setVisibility(View.VISIBLE);
             h.course_item_layout.setVisibility(View.GONE);
@@ -186,20 +207,6 @@ public class ArticleAdapter extends GroupRecyclerAdapter<String, Article> {
                 }
             });
 
-            leave_layout.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    ARouter.getInstance().build("/course/leaveActivity").navigation();
-                }
-            });
-
-//            signIn_layout.setOnClickListener(new View.OnClickListener() {
-//                @Override
-//                public void onClick(View v) {
-//                    course_signIn_tv.setText("已签");
-//                    course_signIn_tv.setTextColor(Color.parseColor("#999999"));
-//                }
-//            });
         }
     }
 
@@ -229,6 +236,7 @@ public class ArticleAdapter extends GroupRecyclerAdapter<String, Article> {
             article.setType(entity.getType());
             article.setCourseInsId(entity.getCourseInstId());
             article.setSignIn(entity.isSignIn());
+            article.setTeacherId(entity.getTeacherId());
         }else{
             article.setType(entity.getType());
             article.setCourse_message(entity.getCourseMessage());

@@ -11,16 +11,21 @@ import com.runto.cources.R;
 import com.runto.cources.databinding.ActivityElectronicPlayerBinding;
 
 @Route(path = "/electronic/playerActivity")
-public class ElectronicPlayerActivity extends FragmentActivity {
+public class ElectronicPlayerActivity extends BaseActivity {
 
     ActivityElectronicPlayerBinding binding;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        binding = DataBindingUtil.setContentView(this, R.layout.activity_electronic_player);
-        initData();
     }
 
+    @Override
+    protected void initView() {
+        binding = DataBindingUtil.setContentView(this, R.layout.activity_electronic_player);
+        setStatusBar();
+    }
+
+    @Override
     public void initData(){
         binding.courseLeaveBack.setOnClickListener(new View.OnClickListener() {
             @Override

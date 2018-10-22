@@ -22,6 +22,15 @@ public class Article implements Serializable {
     private int type;
     private int courseInsId;
     private boolean isSignIn;
+    private int teacherId;
+
+    public int getTeacherId() {
+        return teacherId;
+    }
+
+    public void setTeacherId(int teacherId) {
+        this.teacherId = teacherId;
+    }
 
     public boolean isSignIn() {
         return isSignIn;

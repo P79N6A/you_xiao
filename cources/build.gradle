@@ -79,6 +79,7 @@ dependencies {
     //noinspection GradleDynamicVersion
     //implementation 'com.dmcBig:mediapicker:+'
     implementation project (':mediapicker')
+    implementation 'com.github.UserNameQC:StatuesBarUtils:v1.0.1'
 }
 apply from: '../script/gradle-jcenter-push.gradle'
 

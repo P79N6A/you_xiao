@@ -1,34 +1,24 @@
 package com.runto.cources.activities;
 
 import android.annotation.SuppressLint;
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.databinding.DataBindingUtil;
 import android.graphics.Color;
-import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
-import android.os.PersistableBundle;
-import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
-import android.util.Log;
 import android.view.View;
-import android.widget.ImageView;
-import android.widget.RelativeLayout;
-import android.widget.TextView;
 
 
 import com.alibaba.android.arouter.facade.annotation.Route;
-import com.alibaba.android.arouter.launcher.ARouter;
+import com.qjc.library.StatusBarUtil;
 import com.runto.cources.R;
 import com.runto.cources.adapter.ArticleAdapter;
 import com.runto.cources.bean.Article;
 import com.runto.cources.databinding.ActivityCourceBinding;
 import com.runto.cources.group.GroupItemDecoration;
-import com.runto.cources.group.GroupRecyclerView;
 import com.runto.cources.ui.Calendar;
 import com.runto.cources.ui.CalendarLayout;
 import com.runto.cources.ui.CalendarView;
@@ -43,25 +33,20 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
 @Route(path = "/cources/colorfulActivity")
+@SuppressWarnings("all")
 public class ColorfulActivity extends BaseActivity implements
         CalendarView.OnDateSelectedListener,
         CalendarView.OnYearChangeListener,
         CalendarView.OnMonthChangeListener,
         View.OnClickListener {
 
-    TextView mTextYear;
-    CalendarView mCalendarView;
-    RelativeLayout mRelativeTool;
     private int mYear;
     CalendarLayout mCalendarLayout;
-    GroupRecyclerView mRecyclerView;
-    public ImageView imgMenu;
     public ActivityCourceBinding binding;
     public List<CourseEntity> dataList = new ArrayList<>();
     public List<CourseEntity> requestDataList;
@@ -69,56 +54,49 @@ public class ColorfulActivity extends BaseActivity implements
     public CustomDatePicker customDatePicker;
     public HttpUtils httpUtils;
     public ArticleAdapter articleAdapter;
-
-    public GroupItemDecoration<String, Article> groupItemDecoration;
-    public LinearLayoutManager linearLayoutManager;
     public final String N = "-";
 
+    public final long MIN_CLICK_TIME = 1000;
+    public long lastClickTime = 0;
 
     public static void show(Context context) {
         context.startActivity(new Intent(context, ColorfulActivity.class));
     }
 
-
     @Override
     protected void initView() {
         binding = DataBindingUtil.setContentView(ColorfulActivity.this, R.layout.activity_cource);
         httpUtils = new HttpUtils(this);
-        setStatusBarDarkMode();
-        mTextYear = (TextView) findViewById(R.id.tv_year);
-        mRelativeTool = (RelativeLayout) findViewById(R.id.rl_tool);
-        mCalendarView = (CalendarView) findViewById(R.id.calendarView);
-        imgMenu = findViewById(R.id.course_message_menu);
-        imgMenu.setOnClickListener(new View.OnClickListener() {
+        //setStatusBarDarkMode();
+        binding.courseMessageMenu.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //ARouter.getInstance().build("/information/informationActivity").navigation();
                 initDatePicker();
-                customDatePicker.show(mCalendarView.getCurYear() + "-" + mCalendarView.getCurMonth() + "-" + mCalendarView.getCurDay());
+                customDatePicker.show(binding.calendarView.getCurYear() + "-" + binding.calendarView.getCurMonth() + "-" + binding.calendarView.getCurDay());
             }
         });
-        mTextYear.setOnClickListener(new View.OnClickListener() {
+        binding.tvYear.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (!mCalendarLayout.isExpand()) {
-                    mCalendarView.showYearSelectLayout(mYear);
+                    binding.calendarView.showYearSelectLayout(mYear);
                     return;
                 }
-                mCalendarView.showYearSelectLayout(mYear);
+                binding.calendarView.showYearSelectLayout(mYear);
             }
         });
         findViewById(R.id.tv_today).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mCalendarView.scrollToCurrent();
+                binding.calendarView.scrollToCurrent();
             }
         });
         mCalendarLayout = (CalendarLayout) findViewById(R.id.calendarLayout);
-        mCalendarView.setOnDateSelectedListener(this);
-        mCalendarView.setOnYearChangeListener(this);
-        mCalendarView.setOnMonthChangeListener(this);
-        mTextYear.setText(String.valueOf(mCalendarView.getCurYear()));
-        mYear = mCalendarView.getCurYear();
+        binding.calendarView.setOnDateSelectedListener(this);
+        binding.calendarView.setOnYearChangeListener(this);
+        binding.calendarView.setOnMonthChangeListener(this);
+        binding.tvYear.setText(String.valueOf(binding.calendarView.getCurYear()));
+        mYear = binding.calendarView.getCurYear();
 
 
         findViewById(R.id.activity_img_back).setOnClickListener(new View.OnClickListener() {
@@ -131,21 +109,25 @@ public class ColorfulActivity extends BaseActivity implements
         binding.monthUp.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mCalendarView.scrollToPre();
+                binding.calendarView.scrollToPre();
             }
         });
 
         binding.monthNext.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mCalendarView.scrollToNext();
+                binding.calendarView.scrollToNext();
             }
         });
     }
 
     @Override
     protected void initData() {
+        setStatusBar();
+    }
 
+    public void setStatusBar() {
+        StatusBarUtil.setColor(this, getResources().getColor(R.color.status_bar));
     }
 
     public void initAdapter() {
@@ -161,7 +143,7 @@ public class ColorfulActivity extends BaseActivity implements
         RequestDataEntity requestDataEntity = new RequestDataEntity();
         requestDataEntity.setUrl(HttpEntity.MAIN_URL + HttpEntity.GET_USER_COURSE_LIST);
         requestDataEntity.setToken(spUtils.getString(Entity.TOKEN));
-        int dayCount = mCalendarView.getMonthCount(mCalendarView.getCurYear(), mCalendarView.getCurMonth());
+        int dayCount = binding.calendarView.getMonthCount(binding.calendarView.getCurYear(), binding.calendarView.getCurMonth());
         switch (type){
             case 0:
                 break;
@@ -216,7 +198,7 @@ public class ColorfulActivity extends BaseActivity implements
                         for (int i = 0; i < monthSize; i++){
                             CourseEntity entity = monthDataList.get(i);
                             String[] splitDate = entity.getDate().split(N);
-                            String now = mCalendarView.getCurYear() + N + mCalendarView.getCurMonth() + N + mCalendarView.getCurDay();
+                            String now = binding.calendarView.getCurYear() + N + binding.calendarView.getCurMonth() + N + binding.calendarView.getCurDay();
                             int result = now.compareTo(entity.getDate());
                             if (result <= 0){
                                 schemes.add(getSchemeCalendar(Integer.parseInt(splitDate[0]),
@@ -226,7 +208,7 @@ public class ColorfulActivity extends BaseActivity implements
                                         Integer.parseInt(splitDate[1]), Integer.parseInt(splitDate[2]), Color.parseColor("#999999"), "假"));
                             }
                         }
-                        mCalendarView.setSchemeDate(schemes);
+                        binding.calendarView.setSchemeDate(schemes);
                     }
                     break;
                 case 2:
@@ -256,11 +238,11 @@ public class ColorfulActivity extends BaseActivity implements
      */
     public void setSchemes(){
         List<Calendar> schemes = new ArrayList<>();
-        int year = mCalendarView.getCurYear();
-        int month = mCalendarView.getCurMonth();
+        int year = binding.calendarView.getCurYear();
+        int month = binding.calendarView.getCurMonth();
         schemes.add(getSchemeCalendar(year, month, 3, Color.parseColor("#3aa6fe"), "假"));
         schemes.add(getSchemeCalendar(year, month, 8, Color.parseColor("#999999"), ""));
-        mCalendarView.setSchemeDate(schemes);
+        binding.calendarView.setSchemeDate(schemes);
     }
 
 
@@ -297,10 +279,14 @@ public class ColorfulActivity extends BaseActivity implements
     @SuppressLint("SetTextI18n")
     @Override
     public void onDateSelected(Calendar calendar, boolean isClick) {
-        mTextYear.setVisibility(View.VISIBLE);
-        mTextYear.setText(String.valueOf(calendar.getYear()) + "年" + calendar.getMonth() + "月");
+        binding.tvYear.setVisibility(View.VISIBLE);
+        binding.tvYear.setText(String.valueOf(calendar.getYear()) + "年" + calendar.getMonth() + "月");
         mYear = calendar.getYear();
-        requestCourseData(calendar, 2);
+        long curTime = System.currentTimeMillis();
+        if ((curTime - lastClickTime) > MIN_CLICK_TIME){
+            lastClickTime = curTime;
+            requestCourseData(calendar, 2);
+        }
     }
 
 
@@ -330,9 +316,9 @@ public class ColorfulActivity extends BaseActivity implements
             public void handle(String time) { // 回调接口，获得选中的时间
                 String result = time.split(" ")[0];
                 String[] part = result.split("-");
-                mCalendarView.scrollToCalendar(Integer.parseInt(part[0]), Integer.parseInt(part[1]), Integer.parseInt(part[2]));
+                binding.calendarView.scrollToCalendar(Integer.parseInt(part[0]), Integer.parseInt(part[1]), Integer.parseInt(part[2]));
             }
-        }, "1970-01-01 00:00", (mCalendarView.getCurYear() + 10) + "-12-31 00:00"); // 初始化日期格式请用：yyyy-MM-dd HH:mm，否则不能正常运行
+        }, "1970-01-01 00:00", (binding.calendarView.getCurYear() + 10) + "-12-31 00:00"); // 初始化日期格式请用：yyyy-MM-dd HH:mm，否则不能正常运行
         customDatePicker.showSpecificTime(false); // 不显示时和分
         customDatePicker.setIsLoop(true); // 不允许循环滚动
 

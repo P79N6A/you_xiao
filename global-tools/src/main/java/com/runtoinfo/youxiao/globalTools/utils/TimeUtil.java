@@ -80,4 +80,9 @@ public class TimeUtil {
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
         return format.format(new Date());
     }
+
+    public static String getNowDates(){
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        return format.format(new Date());
+    }
 }

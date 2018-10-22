@@ -6,7 +6,11 @@ import android.os.Bundle;
 import android.os.PersistableBundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.FragmentActivity;
+import android.view.View;
 
+import com.qjc.library.StatusBarUtil;
+import com.runtoinfo.personal_center.R;
+import com.runtoinfo.youxiao.globalTools.utils.DensityUtil;
 import com.runtoinfo.youxiao.globalTools.utils.SPUtils;
 
 /**
@@ -26,4 +30,13 @@ public abstract class BaseActivity extends FragmentActivity {
     }
 
     protected abstract void initView();
+
+    public void setStatusBar(int color){
+        StatusBarUtil.setColor(this, getResources().getColor(color));
+    }
+
+    public void setStatusBar(View view){
+        StatusBarUtil.setColor(this, getResources().getColor(R.color.relative_background_color));
+        //DensityUtil.setViewHeight(this, view);
+    }
 }

@@ -18,6 +18,7 @@ import android.widget.SimpleAdapter;
 
 import com.alibaba.android.arouter.launcher.ARouter;
 import com.alibaba.sdk.android.feedback.impl.FeedbackAPI;
+import com.bumptech.glide.Glide;
 import com.google.gson.Gson;
 import com.runtoinfo.httpUtils.HttpEntity;
 import com.runtoinfo.httpUtils.bean.PersonalCenterEntity;
@@ -60,9 +61,9 @@ public class PersonalCenterFragment extends BaseFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_personal_center, container, false);
-        //DensityUtil.setMargin(getActivity(), binding.personalStatuesLayout);
         binding.personalStatuesLayout.setPadding(0, DensityUtil.getStatuesBarHeight(getActivity()), 0, 0);
-        httpUtils = new HttpUtils(getContext());
+        DensityUtil.setViewHeight(getActivity(), binding.personalStatuesLayout, 0);
+        httpUtils = new HttpUtils(getActivity());
         initData();
         getPersonalInfo();
         lazyLoad();
@@ -209,7 +210,8 @@ public class PersonalCenterFragment extends BaseFragment {
                     if (personal.size() > 0){
                         PersonalCenterEntity entity = personal.get(0);
                         binding.personalCenterName.setText(entity.getName());
-                        httpUtils.postSrcPhoto(getActivity(), HttpEntity.IMAGE_HEAD + entity.getAvatar(), binding.personalAvatar);
+                        //httpUtils.postSrcPhoto(getActivity(), HttpEntity.IMAGE_HEAD + entity.getAvatar(), binding.personalAvatar);
+                        Glide.with(getActivity()).load(HttpEntity.IMAGE_HEAD + entity.getAvatar()).into(binding.personalAvatar);
                         setSpData(entity);
                     }
                     break;

@@ -11,6 +11,7 @@ import com.alibaba.android.arouter.facade.annotation.Route;
 import com.alibaba.android.arouter.launcher.ARouter;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+import com.qjc.library.StatusBarUtil;
 import com.runtoinfo.event.R;
 import com.runtoinfo.event.adapter.EventRecyclerAdapter;
 import com.runtoinfo.event.databinding.ActivityActivitiesMainBinding;
@@ -48,6 +49,7 @@ public class EnventActivity extends EventBaseActivity{
     @SuppressLint("CommitPrefEdits")
     public void initView(){
         binding = DataBindingUtil.setContentView(this, R.layout.activity_activities_main);
+        setStatuesBar();
         httpUtils = new HttpUtils(this);
         binding.activityImgBack.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -81,6 +83,10 @@ public class EnventActivity extends EventBaseActivity{
 
             adapter.setOnItemClickListener(onItemClickListener);
         }
+    }
+
+    public void setStatuesBar(){
+        StatusBarUtil.setColor(this, getResources().getColor(R.color.color_blue));
     }
 
     @SuppressLint("HandlerLeak")

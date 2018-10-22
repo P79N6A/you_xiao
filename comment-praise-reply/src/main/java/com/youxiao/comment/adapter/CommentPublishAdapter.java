@@ -75,7 +75,6 @@ public class CommentPublishAdapter extends UniversalRecyclerAdapter<CommentReque
         //时间格式要进行更改，改为“1分钟之前”，目前是显示的日期
         holder.setText(R.id.comment_publish_time, time[0] /*+ "  " + time[1]*/);
         //因数据不完善，本是int类型数据，得到的是null
-        Log.e("comment", String.valueOf(commentPublishItemEntity.getReplyNumber() ));
         holder.setText(R.id.comment_publish_reply, String.valueOf(commentPublishItemEntity.getReplyNumber() + "回复"));
         if (commentPublishItemEntity.hasPraise) {
             isPraise = true;

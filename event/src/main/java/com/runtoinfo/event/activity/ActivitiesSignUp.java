@@ -42,6 +42,7 @@ public class ActivitiesSignUp extends EventBaseActivity {
     protected void initView() {
         binding = DataBindingUtil.setContentView(this, R.layout.activity_sigin_up);
         httpUtils = new HttpUtils(this);
+        setStatusBar(binding.eventSignUpLayout);
         campaignId = getIntent().getExtras().getInt(IntentDataType.DATA);
         requestDataEntity = new RequestDataEntity();
         requestDataEntity.setToken(spUtils.getString(Entity.TOKEN));

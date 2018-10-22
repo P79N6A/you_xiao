@@ -79,7 +79,7 @@ public class HttpUtils<T> {
     public static final OkHttpClient client = new OkHttpClient();
     private static final String Authorization = "Authorization";
     private static final String Bearer = "Bearer ";
-    private static Context context;
+    private Context context;
 
     public HttpUtils(Context context) {
         this.context = context;
@@ -1275,18 +1275,16 @@ public class HttpUtils<T> {
      * @param handler
      * @param dataEntity 请求所需要的参数
      */
-    public void postLeave(final Handler handler, final RequestDataEntity dataEntity) {
+    public void postLeave(final Handler handler, final RequestDataEntity dataEntity, final LeaveEntity entity) {
         executorService.execute(new Runnable() {
             @Override
             public void run() {
-                LeaveEntity leaveEntity = new LeaveEntity();
-                leaveEntity.setUserId(dataEntity.getUserId());
-                leaveEntity.setScheduledCourseId(dataEntity.getCourseId());
-                leaveEntity.setReason(dataEntity.getMsg());
-                String json = new Gson().toJson(leaveEntity);
+
+                String json = new Gson().toJson(entity);
                 RequestBody body = RequestBody.create(JSON, json);
                 Request request = new Request.Builder()
                         .header(Authorization, Bearer + dataEntity.getToken())
+                        .url(dataEntity.getUrl())
                         .post(body)
                         .build();
 

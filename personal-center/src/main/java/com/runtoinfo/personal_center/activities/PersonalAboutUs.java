@@ -21,7 +21,7 @@ public class PersonalAboutUs extends BaseActivity {
     @Override
     protected void initView() {
         binding = DataBindingUtil.setContentView(this, R.layout.activity_personal_about_us);
-
+        setStatusBar(binding.aboutUsTitleLayout);
         binding.activityImgBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

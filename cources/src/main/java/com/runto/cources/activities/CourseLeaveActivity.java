@@ -16,13 +16,18 @@ import com.alibaba.android.arouter.facade.annotation.Route;
 import com.runto.cources.R;
 import com.runto.cources.databinding.FragmentCourseLeaveBinding;
 import com.runtoinfo.httpUtils.HttpEntity;
+import com.runtoinfo.httpUtils.bean.LeaveEntity;
 import com.runtoinfo.httpUtils.bean.RequestDataEntity;
 import com.runtoinfo.httpUtils.utils.HttpUtils;
 import com.runtoinfo.youxiao.globalTools.timepicker.DatePickerView;
+import com.runtoinfo.youxiao.globalTools.utils.DensityUtil;
 import com.runtoinfo.youxiao.globalTools.utils.DialogMessage;
 import com.runtoinfo.youxiao.globalTools.utils.Entity;
+import com.runtoinfo.youxiao.globalTools.utils.IntentDataType;
 
 import java.util.ArrayList;
+
+import uk.co.dolphin_com.sscore.LoadWarning;
 
 @Route(path = "/course/leaveActivity")
 public class CourseLeaveActivity extends BaseActivity {
@@ -31,9 +36,13 @@ public class CourseLeaveActivity extends BaseActivity {
     private Dialog dialog;
     private DatePickerView leave_code;
     public HttpUtils httpUtils;
+    public int teacherId;
 
     public void initView(){
         binding = DataBindingUtil.setContentView(this, R.layout.fragment_course_leave);
+        teacherId = getIntent().getExtras().getInt(IntentDataType.DATA);
+        setStatusBar();
+        DensityUtil.setMargin(this, binding.leaveBarRelative);
         httpUtils = new HttpUtils(this);
         initDialog();
         initEvent();
@@ -57,11 +66,14 @@ public class CourseLeaveActivity extends BaseActivity {
             public void onClick(View v) {
                 RequestDataEntity requestDataEntity = new RequestDataEntity();
                 requestDataEntity.setUrl(HttpEntity.MAIN_URL + HttpEntity.COURSE_LEAVE);
-                requestDataEntity.setCourseId(spUtils.getInt(Entity.COURSE_ID));
-                requestDataEntity.setUserId(spUtils.getInt(Entity.USER_ID));
                 requestDataEntity.setToken(spUtils.getString(Entity.TOKEN));
-                requestDataEntity.setMsg(binding.courseLeaveComment.getText().toString());
-                httpUtils.postLeave(handler, requestDataEntity);
+
+                LeaveEntity leaveEntity = new LeaveEntity();
+                leaveEntity.setAskTo(teacherId);
+                leaveEntity.setUserId(spUtils.getInt(Entity.USER_ID));
+                leaveEntity.setScheduledCourseId(spUtils.getInt(Entity.COURSE_ID));
+                leaveEntity.setReason(binding.courseLeaveComment.getText().toString());
+                httpUtils.postLeave(handler, requestDataEntity, leaveEntity);
             }
         });
     }
