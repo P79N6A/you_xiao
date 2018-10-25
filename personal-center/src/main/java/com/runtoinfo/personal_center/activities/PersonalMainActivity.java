@@ -1,20 +1,24 @@
 package com.runtoinfo.personal_center.activities;
 
+import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.databinding.DataBindingUtil;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
 import android.provider.MediaStore;
+import android.support.v4.app.ActivityCompat;
 import android.text.TextUtils;
 import android.util.DisplayMetrics;
 import android.util.Log;
@@ -69,6 +73,7 @@ public class PersonalMainActivity extends BaseActivity {
         binding = DataBindingUtil.setContentView(PersonalMainActivity.this, R.layout.activity_personal_main);
         setStatusBar(R.color.dialog_button_text_color);
         httpUtils = new HttpUtils(this);
+        checkPermission();
         initData();
         initEvent();
         initDatePicker();
@@ -80,6 +85,14 @@ public class PersonalMainActivity extends BaseActivity {
         binding.personalEditSex.setText(spUtils.getInt(Entity.GENDER) == 0 ? "男" : "女");
         binding.personalEditBirth.setText(TimeUtil.iso8601ToDate(spUtils.getString(Entity.BIRTHDAY), 1));
         binding.personalEditArea.setText(spUtils.getString(Entity.ADDRESS));
+    }
+
+    public void checkPermission(){
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M){
+            if (ActivityCompat.checkSelfPermission(this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED){
+                ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.CAMERA}, 1);
+            }
+        }
     }
 
     public void initEvent(){

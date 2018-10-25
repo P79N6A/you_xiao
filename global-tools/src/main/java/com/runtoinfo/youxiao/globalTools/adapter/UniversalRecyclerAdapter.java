@@ -16,7 +16,7 @@ import java.util.List;
 public abstract class UniversalRecyclerAdapter<T> extends RecyclerView.Adapter<BaseViewHolder> implements View.OnClickListener {
 
     private Context mContext;
-    private List<T> mDatas;
+    public List<T> mDatas;
     private int mLayoutId;
     private OnItemClickListener mItemClickListener;
     private onLongItemClickListener mLongItemClickListener;
@@ -141,12 +141,8 @@ public abstract class UniversalRecyclerAdapter<T> extends RecyclerView.Adapter<B
         this.mLongItemClickListener = listener;
     }
 
-
-
-    @Override
-    public int getItemViewType(int position) {
-        T t = mDatas.get(position);
-
-        return super.getItemViewType(position);
+    protected final void clear(){
+        mDatas.clear();
+        notifyDataSetChanged();
     }
 }

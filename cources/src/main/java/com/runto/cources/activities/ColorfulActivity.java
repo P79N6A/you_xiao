@@ -13,6 +13,7 @@ import android.view.View;
 
 
 import com.alibaba.android.arouter.facade.annotation.Route;
+import com.alibaba.android.arouter.launcher.ARouter;
 import com.qjc.library.StatusBarUtil;
 import com.runto.cources.R;
 import com.runto.cources.adapter.ArticleAdapter;
@@ -28,6 +29,7 @@ import com.runtoinfo.httpUtils.bean.RequestDataEntity;
 import com.runtoinfo.httpUtils.utils.HttpUtils;
 import com.runtoinfo.youxiao.globalTools.timepicker.CustomDatePicker;
 import com.runtoinfo.youxiao.globalTools.utils.Entity;
+import com.runtoinfo.youxiao.globalTools.utils.IntentDataType;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -134,9 +136,39 @@ public class ColorfulActivity extends BaseActivity implements
         binding.recyclerView.setHasFixedSize(true);
         binding.recyclerView.setLayoutManager(new LinearLayoutManager(ColorfulActivity.this));
         binding.recyclerView.addItemDecoration(new GroupItemDecoration<String, Article>());
-        articleAdapter = new ArticleAdapter(ColorfulActivity.this, dataList, handler);
+        articleAdapter = new ArticleAdapter(ColorfulActivity.this, dataList);
         binding.recyclerView.setAdapter(articleAdapter);
+
+        articleAdapter.setHandWorkListener(handHomeWork);
+        articleAdapter.setLeaveListener(leaveListener);
+        articleAdapter.setSignInListener(signInListener);
     }
+
+    public ArticleAdapter.setOnClickListeners handHomeWork = new ArticleAdapter.setOnClickListeners() {
+        @Override
+        public void onLayoutClick(View view, int position, CourseEntity entity) {
+            ARouter.getInstance().build("/course/handHomeWork").navigation();
+        }
+    };
+
+    public ArticleAdapter.setOnClickListeners leaveListener = new ArticleAdapter.setOnClickListeners() {
+        @Override
+        public void onLayoutClick(View view, int position, CourseEntity entity) {
+            ARouter.getInstance().build("/course/leaveActivity")
+                    .withInt(IntentDataType.DATA, entity.getTeacherId()).navigation();
+        }
+    };
+
+    public ArticleAdapter.setOnClickListeners signInListener = new ArticleAdapter.setOnClickListeners() {
+        @Override
+        public void onLayoutClick(View view, int position, CourseEntity entity) {
+            Map<String, Object> dataMap = new HashMap<>();
+            dataMap.put("token", spUtils.getString(Entity.TOKEN));
+            dataMap.put("CourseInstId", entity.getCourseInstId());
+            dataMap.put("url", HttpEntity.MAIN_URL + HttpEntity.POST_SIGNIN_COURSE);
+            httpUtils.postSignIn(handler,dataMap);
+        }
+    };
 
     public void requestCourseData(Calendar calendar, int type) {
         Map<String, Object> map = new HashMap<>();
@@ -152,12 +184,8 @@ public class ColorfulActivity extends BaseActivity implements
                 int year = calendar.getYear();
                 int day = calendar.getDay();
                 map.put("startDate", year + N + month + N + day);
-                month += 1;
-                if (month > 12){
-                    year+=1;
-                    month = 1;
-                }
-                map.put("endDate", year + N + month + N + day);
+
+                map.put("endDate", year + N + month + N + dayCount);
                 monthDataList = new ArrayList<>();
                 httpUtils.getCouseAll(handler, requestDataEntity, map, monthDataList, type);
                 break;
@@ -166,15 +194,6 @@ public class ColorfulActivity extends BaseActivity implements
                 int months = calendar.getMonth();
                 int years = calendar.getYear();
                 map.put("startDate", years + N + months + N + days);
-                days += 1;
-                if (days > dayCount){
-                    months += 1;
-                    days = 1;
-                    if (months > 12){
-                        years += 1;
-                        months = 1;
-                    }
-                }
                 map.put("endDate", years + N + months + N + days);
                 requestDataList = new ArrayList<>();
                 httpUtils.getCouseAll(handler, requestDataEntity, map, requestDataList, type);
@@ -221,7 +240,7 @@ public class ColorfulActivity extends BaseActivity implements
                     dataList.clear();
                     dataList.addAll(requestDataList);
                     if (articleAdapter != null) {
-                        articleAdapter = new ArticleAdapter(ColorfulActivity.this, dataList, handler);
+                        articleAdapter = new ArticleAdapter(ColorfulActivity.this, dataList);
                         binding.recyclerView.setAdapter(articleAdapter);
                     }else{
                         initAdapter();

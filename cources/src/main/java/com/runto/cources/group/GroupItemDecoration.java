@@ -219,6 +219,12 @@ public class GroupItemDecoration<Group, Child> extends RecyclerView.ItemDecorati
         }
     }
 
+//    public void notifyDataSetChanged(GroupRecyclerAdapter<Group, Child> adapter){
+//        mGroup.clear();
+//        if (adapter == null) return;
+//        mGroup.put(isHasHeader?1:0, adapter.getGroup());
+//    }
+
     public void setChildItemOffset(int childItemOffset){
         this.mChildItemOffset = childItemOffset;
     }

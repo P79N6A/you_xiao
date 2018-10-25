@@ -18,7 +18,6 @@ import com.runtoinfo.event.R;
 import com.runtoinfo.event.adapter.EventAddMemberAdapter;
 import com.runtoinfo.event.databinding.ActivityAddEntourageBinding;
 import com.runtoinfo.event.dialog.SignUpSuccess;
-import com.runtoinfo.event.entity.AddMemberEntity;
 import com.runtoinfo.httpUtils.HttpEntity;
 import com.runtoinfo.httpUtils.bean.AddMemberBean;
 import com.runtoinfo.httpUtils.bean.RequestDataEntity;
@@ -28,13 +27,14 @@ import com.runtoinfo.youxiao.globalTools.utils.Entity;
 import com.runtoinfo.youxiao.globalTools.utils.IntentDataType;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 @Route(path = "/event/signUpAddMember")
 public class SignUpAddEntourage extends EventBaseActivity {
 
     public ActivityAddEntourageBinding binding;
-    public List<AddMemberBean> dataList = new ArrayList<>();
+    public List<AddMemberBean> dataList = new LinkedList<>();
     public LayoutInflater inflate;
     public ProgressDialog progressDialog;
     public SignUpSuccess signUpSuccess;
@@ -61,6 +61,7 @@ public class SignUpAddEntourage extends EventBaseActivity {
         adapter = new EventAddMemberAdapter(SignUpAddEntourage.this, dataList, R.layout.activity_add_item_layout);
         binding.addMemberRecyclerView.setHasFixedSize(false);
         binding.addMemberRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+        adapter.setHasStableIds(true);
         binding.addMemberRecyclerView.setAdapter(adapter);
         progressDialog = new ProgressDialog(this);
         signUpSuccess = new SignUpSuccess(SignUpAddEntourage.this);
@@ -77,7 +78,16 @@ public class SignUpAddEntourage extends EventBaseActivity {
         binding.activityAddAgain.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-               upLoadMember(2);
+                upLoadMember(2);
+                dataList.add(new AddMemberBean());
+                adapter.notifyDataSetChanged();
+            }
+        });
+
+        binding.activityImgBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onBackPressed();
             }
         });
     }
@@ -101,8 +111,7 @@ public class SignUpAddEntourage extends EventBaseActivity {
             switch (msg.what){
                 case 0:
                     progressDialog.dismiss();
-                    AddMemberBean addMemberBean =new AddMemberBean();
-                    adapter.addItem(addMemberBean, adapter.getItemCount());
+
                     break;
                 case 3:
                     if (progressDialog != null){

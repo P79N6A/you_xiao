@@ -28,8 +28,8 @@ public class LeaveAdapter extends UniversalRecyclerAdapter<LeaveRecordEntity>{
     protected void convert(Context mContext, BaseViewHolder holder, LeaveRecordEntity leaveRecodEntity, int position) {
         SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd");//设置日期格式
         String date = df.format(new Date());// new Date()为获取当前系统时间
-        String iso8601 = TimeUtil.iso8601ToDate(leaveRecodEntity.getDate(), 1);
-        holder.setText(R.id.record_leave_title, date.equals(iso8601)? "今日请假": iso8601);
+        //String iso8601 = TimeUtil.iso8601ToDate(leaveRecodEntity.getDate(), 1);
+        holder.setText(R.id.record_leave_title, date.compareTo(leaveRecodEntity.getDate()) == 0? "今日请假": leaveRecodEntity.getDate());
         holder.setText(R.id.leave_course_name, "请假课程:" + leaveRecodEntity.getCourseName());
         holder.setText(R.id.leave_type, "请假原因:" + leaveRecodEntity.getReason());
         TextView textView = holder.getView(R.id.leave_status);
@@ -40,11 +40,11 @@ public class LeaveAdapter extends UniversalRecyclerAdapter<LeaveRecordEntity>{
                 textView.setTextColor(Color.parseColor("#3aa6fe"));
                 break;
             case 2:
-                statues = "审核中";
-                textView.setTextColor(Color.parseColor("#f08d00"));
+                statues = "审核通过";
+                textView.setTextColor(Color.parseColor("#3aa6fe"));
                 break;
             case 3:
-                statues = "审核通过";
+                statues = "审核拒绝";
                 textView.setTextColor(Color.parseColor("#3aa6fe"));
                 break;
                 default:

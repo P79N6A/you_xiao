@@ -22,11 +22,9 @@ import java.util.Map;
 
 public class EventAddMemberAdapter extends UniversalRecyclerAdapter<AddMemberBean> {
 
-    public List<AddMemberBean> dataList = new ArrayList<>();
-    public List<AddMemberBean> newList = new ArrayList<>();
+    public List<AddMemberBean> dataList;
     public Context context;
     public int layoutId;
-    public List<Map<String, String>> mapList = new ArrayList<>();
 
     public EventAddMemberAdapter(Context mContext, List<AddMemberBean> mDatas, int mLayoutId) {
         super(mContext, mDatas, mLayoutId);
@@ -42,86 +40,147 @@ public class EventAddMemberAdapter extends UniversalRecyclerAdapter<AddMemberBea
         EditText memberType = holder.getView(R.id.activity_add_call);
         EditText phone = holder.getView(R.id.activity_add_phone);
 
-        if (name.getTag() instanceof TextWatcher){
+        holder.getView(R.id.activity_delete_item).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                removeItem(position);
+            }
+        });
+
+        if (name.getTag() instanceof TextWatcher) {
             name.removeTextChangedListener((TextWatcher) name.getTag());
         }
+        name.setText(bean.getName());
 
-        if (memberType.getTag() instanceof TextWatcher){
-            name.removeTextChangedListener((TextWatcher) memberType.getTag());
-        }
-
-        if (phone.getTag() instanceof TextWatcher){
-            name.removeTextChangedListener((TextWatcher) phone.getTag());
-        }
-
-        holder.getView(R.id.activity_delete_item).setOnClickListener(new View.OnClickListener() {
+        TextWatcher nameTextWatch = new TextWatcher() {
             @Override
-            public void onClick(View v) {
-                removeItem(position);
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
             }
-        });
 
-        if (!TextUtils.isEmpty(bean.getName()) && !TextUtils.isEmpty(bean.getMemberType()) && !TextUtils.isEmpty(bean.getPhoneNumber())){
-            holder.setText(R.id.activity_add_name, bean.getName())
-                    .setText(R.id.activity_add_call, bean.getMemberType())
-                    .setText(R.id.activity_add_phone, bean.getPhoneNumber());
-        }else{
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
 
-            TextWatcher nameTextWatch = new TextWatcher() {
-                @Override
-                public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+            }
 
-                @Override
-                public void onTextChanged(CharSequence s, int start, int before, int count) {}
-
-                @Override
-                public void afterTextChanged(Editable s) {
+            @Override
+            public void afterTextChanged(Editable s) {
+                if (TextUtils.isEmpty(s.toString())) {
+                    bean.setName("");
+                } else {
                     bean.setName(s.toString());
                 }
-            };
+            }
+        };
+        name.addTextChangedListener(nameTextWatch);
+        name.setTag(nameTextWatch);
 
-            name.addTextChangedListener(nameTextWatch);
-            name.setTag(nameTextWatch);
+///////////////////////////////////////////////////////////////////////////////////////////////////
+        if (memberType.getTag() instanceof TextWatcher) {
+            memberType.removeTextChangedListener((TextWatcher) memberType.getTag());
+        }
+        memberType.setText(bean.getMemberType());
 
-            TextWatcher memberWatcher = new TextWatcher() {
-                @Override
-                public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+        TextWatcher ageTextWatch = new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
-                @Override
-                public void onTextChanged(CharSequence s, int start, int before, int count) {}
+            }
 
-                @Override
-                public void afterTextChanged(Editable s) {
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                if (TextUtils.isEmpty(s.toString())) {
+                    bean.setMemberType("");
+                } else {
                     bean.setMemberType(s.toString());
                 }
-            };
+            }
+        };
+        memberType.addTextChangedListener(ageTextWatch);
+        memberType.setTag(ageTextWatch);
+//////////////////////////////////////////////////////////////////////////////////////////////////
+        if (phone.getTag() instanceof TextWatcher) {
+            phone.removeTextChangedListener((TextWatcher) phone.getTag());
+        }
+        phone.setText(bean.getPhoneNumber());
 
-            memberType.addTextChangedListener(memberWatcher);
-            memberType.setTag(memberWatcher);
+        TextWatcher addressTextWatch = new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
-            TextWatcher phoneNum = new TextWatcher() {
-                @Override
-                public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+            }
 
-                @Override
-                public void onTextChanged(CharSequence s, int start, int before, int count) {}
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
 
-                @Override
-                public void afterTextChanged(Editable s) {
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                if (TextUtils.isEmpty(s.toString())) {
+                    bean.setPhoneNumber("");
+                } else {
                     bean.setPhoneNumber(s.toString());
                 }
-            };
-
-            phone.addTextChangedListener(phoneNum);
-            phone.setTag(phoneNum);
-        }
-
-        holder.getView(R.id.activity_delete_item).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                removeItem(position);
             }
-        });
+        };
+        phone.addTextChangedListener(addressTextWatch);
+        phone.setTag(addressTextWatch);
+    }
+
+
+
+    public TextWatcher setNameTextWatch(final AddMemberBean bean){
+        TextWatcher nameTextWatch = new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {}
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                bean.setName(s.toString());
+            }
+        };
+        return nameTextWatch;
+    }
+
+    public TextWatcher setMemberTextWatch(final AddMemberBean bean){
+        TextWatcher memberWatcher = new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {}
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                bean.setMemberType(s.toString());
+            }
+        };
+        return memberWatcher;
+    }
+
+    public TextWatcher setPhoneTextWatch(final AddMemberBean bean){
+        TextWatcher phoneNum = new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {}
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                bean.setPhoneNumber(s.toString());
+            }
+        };
+        return phoneNum;
     }
 
 

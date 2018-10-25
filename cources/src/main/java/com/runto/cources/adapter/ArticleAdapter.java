@@ -7,6 +7,7 @@ import android.os.Looper;
 import android.os.Message;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,10 +22,12 @@ import com.bumptech.glide.RequestManager;
 import com.runto.cources.R;
 import com.runto.cources.bean.Article;
 import com.runto.cources.group.GroupRecyclerAdapter;
+import com.runto.cources.ui.BaseView;
 import com.runtoinfo.httpUtils.HttpEntity;
 import com.runtoinfo.httpUtils.bean.CourseEntity;
 import com.runtoinfo.httpUtils.bean.RequestDataEntity;
 import com.runtoinfo.httpUtils.utils.HttpUtils;
+import com.runtoinfo.youxiao.globalTools.adapter.BaseViewHolder;
 import com.runtoinfo.youxiao.globalTools.utils.DialogMessage;
 import com.runtoinfo.youxiao.globalTools.utils.Entity;
 import com.runtoinfo.youxiao.globalTools.utils.IntentDataType;
@@ -45,25 +48,28 @@ import uk.co.dolphin_com.sscore.LoadWarning;
  * Created by huanghaibin on 2017/12/4.
  */
 
-public class ArticleAdapter extends GroupRecyclerAdapter<String, Article> {
+public class ArticleAdapter extends GroupRecyclerAdapter<String, CourseEntity> {
 
+    setOnClickListeners signInListener;
+    setOnClickListeners handHomeWorkListener;
+    setOnClickListeners leaveListener;
 
     private Context context;
     public SPUtils spUtils;
     public Handler handler;
     public HttpUtils httpUtils;
-    LinkedHashMap<String, List<Article>> map = new LinkedHashMap<>();
+    LinkedHashMap<String, List<CourseEntity>> map = new LinkedHashMap<>();
     List<String> titles = new ArrayList<>();
     List<CourseEntity> dataList = new ArrayList<>();
 
-    public ArticleAdapter(Context context, List<CourseEntity> dataList, Handler handler) {
+    public ArticleAdapter(Context context, List<CourseEntity> dataList) {
         super(context);
         this.context = context;
         this.dataList = dataList;
         httpUtils = new HttpUtils(context);
         spUtils = new SPUtils(context);
 
-        map.put("今日课程", create(dataList));
+        map.put("今日课程", dataList);
         if (dataList.size() == 1){
             if (dataList.get(0).getType() != 1){
                 titles.add("今日课程共" + dataList.size() + "节");
@@ -77,192 +83,113 @@ public class ArticleAdapter extends GroupRecyclerAdapter<String, Article> {
 
     @Override
     protected RecyclerView.ViewHolder onCreateDefaultViewHolder(ViewGroup parent, int type) {
-        return new ArticleViewHolder(mInflater.inflate(R.layout.item_list_article, parent, false));
+        return new BaseViewHolder(mInflater.inflate(R.layout.item_list_article, parent, false));
     }
+
+
 
     @Override
-    protected void onBindViewHolder(RecyclerView.ViewHolder holder, final Article item, int position) {
-        final ArticleViewHolder h = (ArticleViewHolder) holder;
-        if (item.getType() == 0) {
-            h.course_name.setText(item.getCourse_name());
-            h.course_time.setText(item.getCourse_time());
-            h.course_teacher.setText(item.getCourse_teacher());
-            h.course_address.setText(item.getCourse_address());
-            h.course_progress.setProgress(item.getCourse_progress());
-            h.course_home_work.setText(item.getCourse_home_work());
-            h.course_progress_num.setText(item.getCourse_progress_num());
+    protected void onBindViewHolder(RecyclerView.ViewHolder holders, final CourseEntity courseEntity, final int position) {
+        BaseViewHolder holder = (BaseViewHolder) holders;
+        switch (courseEntity.getType()){
+            case 1:
+                holder.getView(R.id.no_course_layout).setVisibility(View.VISIBLE);
+                holder.getView(R.id.course_details_layout).setVisibility(View.GONE);
+                holder.setText(R.id.course_no_message, courseEntity.getCourseMessage());
+                break;
+            case 0:
+                holder.setText(R.id.course_name, courseEntity.getCourseName())
+                        .setText(R.id.course_teacher_name, courseEntity.getTeacherName())
+                        .setText(R.id.course_address, courseEntity.getClassroomName())
+                        .setText(R.id.course_time, courseEntity.getStartTime().split(" ")[1].substring(0, 5) + "-" + courseEntity.getEndTime().split(" ")[1].substring(0, 5))
+                        .setText(R.id.course_homework, courseEntity.getHomeworkRequirement())
+                        .setText(R.id.course_progress_num, String.valueOf(courseEntity.getProgress()) + "%");
+                ((ProgressBar)holder.getView(R.id.course_progress)).setProgress(courseEntity.getProgress());
 
-            h.tv_time.setText("时间：");
-            h.tv_teacher.setText("老师：");
-            h.tv_address.setText("地点：");
-            h.tv_progress.setText("进度：");
-            h.tv_homework.setText("作业：");
-            if (item.isSignIn()){
-                h.course_signIn_tv.setText("已签");
-                h.course_signIn_tv.setTextColor(Color.parseColor("#999999"));
-            }else{
-                h.course_signIn_tv.setText("签到");
-                h.course_signIn_tv.setTextColor(Color.parseColor("#666666"));
-            }
+                holder.setText(R.id.course_tv_time, "时间:")
+                        .setText(R.id.course_tv_address, "地点:")
+                        .setText(R.id.course_tv_homework, "作业:")
+                        .setText(R.id.course_tv_teacher, "老师:")
+                        .setText(R.id.course_tv_progress, "进度:");
 
-            h.signIn_layout.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Map<String, Object> dataMap = new HashMap<>();
-                    dataMap.put("token", spUtils.getString(Entity.TOKEN));
-                    dataMap.put("CourseInstId", item.getCourseInsId());
-                    dataMap.put("url", HttpEntity.MAIN_URL + HttpEntity.POST_SIGNIN_COURSE);
-                    httpUtils.postSignIn(handler,dataMap);
+                if (courseEntity.isSignIn()){
+                    holder.setText(R.id.course_sign_in_tv, "已签");
+                    ((TextView) holder.getView(R.id.course_sign_in_tv)).setTextColor(Color.parseColor("#999999"));
+                }else{
+                    holder.setText(R.id.course_sign_in_tv, "签到");
+                    ((TextView) holder.getView(R.id.course_sign_in_tv)).setTextColor(Color.parseColor("#666666"));
                 }
-            });
 
-            h.leave_layout.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    ARouter.getInstance().build("/course/leaveActivity")
-                            .withInt(IntentDataType.DATA, item.getTeacherId()).navigation();
-                }
-            });
-
-            String now = TimeUtil.getNowDates();
-            String time = dataList.get(position).getDate();
-
-            if (now.compareTo(time) > 0){
-                h.leave_layout.setEnabled(false);
-                h.signIn_layout.setEnabled(false);
-            }else{
-                h.leave_layout.setEnabled(true);
-                h.signIn_layout.setEnabled(true);
-            }
-        }else{
-            h.no_course_layout.setVisibility(View.VISIBLE);
-            h.course_item_layout.setVisibility(View.GONE);
-            h.no_course_message.setText(item.getCourse_message());
-        }
-
-        handler = new Handler(Looper.getMainLooper()){
-            @Override
-            public void handleMessage(Message msg) {
-                switch (msg.what){
+                String now = TimeUtil.getNowDate();
+                String time = courseEntity.getDate();
+                int result = now.compareTo(time);
+                switch (result){
+                    case -1:
+                        holder.getView(R.id.course_leave_layout).setEnabled(true);
+                        holder.getView(R.id.course_sign_in_layout).setEnabled(false);
+                        break;
+                    case 0:
+                        holder.getView(R.id.course_sign_in_layout).setEnabled(true);
+                        holder.getView(R.id.course_leave_layout).setEnabled(true);
+                        break;
                     case 1:
-                        h.course_signIn_tv.setText("已签");
-                        h.course_signIn_tv.setTextColor(Color.parseColor("#999999"));
-                        break;
-                    case 400:
-                        DialogMessage.showToast(context, "签到失败");
-                        break;
-                    case 404:
-                        DialogMessage.showToast(context, "数据解析错误");
-                        break;
-                    case 500:
-                        DialogMessage.showToast(context, "服务器异常");
+                        holder.getView(R.id.course_leave_layout).setEnabled(false);
+                        holder.getView(R.id.course_sign_in_layout).setEnabled(false);
                         break;
                 }
-            }
-        };
-    }
 
-    private static class ArticleViewHolder extends RecyclerView.ViewHolder {
-        private TextView tv_teacher, tv_time,tv_address, tv_homework, tv_progress;
-        private ProgressBar course_progress;
-        private TextView course_time, course_address, course_teacher, course_home_work, course_progress_num, course_signIn_tv, course_name;
-        private LinearLayout hand_homework, leave_layout, signIn_layout;
-        private ImageView course_signIn_img;
-        private LinearLayout course_item_layout;
-        private LinearLayout no_course_layout;
-        private TextView no_course_message;
-
-        private ArticleViewHolder(View itemView) {
-            super(itemView);
-
-            course_name = itemView.findViewById(R.id.course_name);
-            course_teacher = (TextView) itemView.findViewById(R.id.course_teacher_name);//老师姓名
-            course_address = (TextView) itemView.findViewById(R.id.course_address);//教室类别
-            course_home_work = itemView.findViewById(R.id.course_homework);//作业内容
-            course_progress = itemView.findViewById(R.id.course_progress);//上课进度
-            course_time = itemView.findViewById(R.id.course_time);
-            course_progress_num = itemView.findViewById(R.id.course_progress_num);
-
-            tv_time = itemView.findViewById(R.id.course_tv_time);
-            tv_address = itemView.findViewById(R.id.course_tv_address);
-            tv_teacher = itemView.findViewById(R.id.course_tv_teacher);
-            tv_progress = itemView.findViewById(R.id.course_tv_progress);
-            tv_homework = itemView.findViewById(R.id.course_tv_homework);
-
-            hand_homework = itemView.findViewById(R.id.course_hand_homework_layout);
-            leave_layout = itemView.findViewById(R.id.course_leave_layout);
-            signIn_layout = itemView.findViewById(R.id.course_sign_in_layout);
-
-            course_signIn_img = itemView.findViewById(R.id.course_sign_in_img);
-            course_signIn_tv = itemView.findViewById(R.id.course_sign_in_tv);
-
-            course_item_layout = itemView.findViewById(R.id.course_details_layout);
-            no_course_layout = itemView.findViewById(R.id.no_course_layout);
-            no_course_message = itemView.findViewById(R.id.course_no_message);
-
-            hand_homework.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    ARouter.getInstance().build("/course/handHomeWork").navigation();
+                String homeWork = courseEntity.getHomeworkRequirement();
+                if (!TextUtils.isEmpty(homeWork)){
+                    holder.getView(R.id.course_hand_homework_layout).setEnabled(true);
+                }else{
+                    holder.getView(R.id.course_hand_homework_layout).setEnabled(false);
                 }
-            });
 
-        }
-    }
+                if (handHomeWorkListener != null) {
+                    holder.getView(R.id.course_hand_homework_layout).setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            handHomeWorkListener.onLayoutClick(v, position, courseEntity);
+                        }
+                    });
+                }
 
+                if (signInListener != null) {
+                    holder.getView(R.id.course_sign_in_layout).setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            signInListener.onLayoutClick(v, position, courseEntity);
+                        }
+                    });
+                }
 
-    private static Article create(String time, String address, String teacher, int progress, String homeWork, String progressNum,int id) {
-        Article article = new Article();
-        article.setCourse_time(time);
-        article.setCourse_address(address);
-        article.setCourse_teacher(teacher);
-        article.setCourse_progress(progress);
-        article.setCourse_home_work(homeWork);
-        article.setCourse_progress_num(progressNum);
-        return article;
-    }
-
-    private static Article create(CourseEntity entity){
-        Article article = new Article();
-        if (entity.getType() != 1) {
-            article.setCourse_time(entity.getStartTime().split(" ")[1].substring(0, 5) + "-" + entity.getEndTime().split(" ")[1].substring(0, 5));
-            article.setCourse_address(entity.getClassroomName());
-            article.setCourse_teacher(entity.getTeacherName());
-            article.setCourse_progress(entity.getProgress());
-            article.setCourse_home_work(entity.getHomeworkRequirement());
-            article.setCourse_progress_num(entity.getProgress() + "%");
-            article.setCourse_name(entity.getCourseName());
-            article.setCourse_message(entity.getCourseMessage());
-            article.setType(entity.getType());
-            article.setCourseInsId(entity.getCourseInstId());
-            article.setSignIn(entity.isSignIn());
-            article.setTeacherId(entity.getTeacherId());
-        }else{
-            article.setType(entity.getType());
-            article.setCourse_message(entity.getCourseMessage());
-        }
-        return article;
-    }
-
-    private static List<Article> create(int p) {
-        List<Article> list = new ArrayList<>();
-
-        if (p == 0)
-        {
-            //list.add(create("", "", "", 0,"","",0));
-            //list.add(create("15:00-16:00", "美术", "黄老师", 8,"美术阶梯教室", "8%",0));
-            CourseEntity courseEntity = new CourseEntity();
-            courseEntity.setCourseName("暂无课程");
-            list.add(create(courseEntity));
+                if (leaveListener != null) {
+                    holder.getView(R.id.course_leave_layout).setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            leaveListener.onLayoutClick(v, position, courseEntity);
+                        }
+                    });
+                }
+                break;
         }
 
-        return list;
     }
-    private static List<Article> create(List<CourseEntity> dataList){
-        List<Article> list = new ArrayList<>();
-        for (int i = 0; i < dataList.size(); i++){
-            list.add(create(dataList.get(i)));
-        }
-        return list;
+
+    public interface setOnClickListeners{
+        void onLayoutClick(View view, int position, CourseEntity entity);
     }
+
+    public void setSignInListener(setOnClickListeners listener){
+        this.signInListener = listener;
+    }
+
+    public void setHandWorkListener(setOnClickListeners clickListener){
+        this.handHomeWorkListener = clickListener;
+    }
+
+    public void setLeaveListener(setOnClickListeners leaveListener){
+        this.leaveListener = leaveListener;
+    }
+
 }

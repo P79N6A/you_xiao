@@ -23,6 +23,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.runto.cources.R;
+import com.runtoinfo.youxiao.globalTools.adapter.BaseViewHolder;
 
 final class YearAdapter extends BaseRecyclerAdapter<Month> {
     private CalendarViewDelegate mDelegate;
@@ -46,6 +47,7 @@ final class YearAdapter extends BaseRecyclerAdapter<Month> {
     protected RecyclerView.ViewHolder onCreateDefaultViewHolder(ViewGroup parent, int type) {
         return new YearViewHolder(mInflater.inflate(R.layout.cv_item_list_year, parent, false), mDelegate);
     }
+
 
     @Override
     protected void onBindViewHolder(RecyclerView.ViewHolder holder, Month item, int position) {

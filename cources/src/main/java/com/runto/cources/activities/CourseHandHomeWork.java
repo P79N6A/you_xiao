@@ -1,12 +1,16 @@
 package com.runto.cources.activities;
 
+import android.Manifest;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.databinding.DataBindingUtil;
+import android.os.Build;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
+import android.support.v4.app.ActivityCompat;
 import android.support.v7.widget.GridLayoutManager;
 import android.util.DisplayMetrics;
 import android.util.Log;
@@ -55,6 +59,7 @@ public class CourseHandHomeWork extends BaseActivity {
         binding = DataBindingUtil.setContentView(this, R.layout.course_hand_homework);
         httpUtils = new HttpUtils(this);
         progressDialog = new Dialog(this, R.style.dialog);
+        checkPermission();
         initDialog();
         setStatusBar();
         DensityUtil.setMargin(this, binding.handWordRelative);
@@ -76,6 +81,14 @@ public class CourseHandHomeWork extends BaseActivity {
             }
         }
     };
+
+    public void checkPermission(){
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M){
+            if (ActivityCompat.checkSelfPermission(this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED){
+                ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.CAMERA}, 1);
+            }
+        }
+    }
 
     public void postHomeWork(){
         List<Map<String, Object>> listMap = new ArrayList<>();

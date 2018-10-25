@@ -769,6 +769,56 @@ public class HttpUtils<T> {
     }
 
     /**
+     * 获取精品课类别
+     *
+     * @param url     请求地址
+     * @param mapList 返回的结果集合
+     */
+    public void getAllCourseType(final Handler handler, final RequestDataEntity entity, final List<FineClassCourseEntity> mapList) {
+        executorService.execute(new Runnable() {
+            @Override
+            public void run() {
+                Request request = new Request.Builder()
+                        .header(Authorization, Bearer + entity.getToken())
+                        .url(entity.getUrl() + "?CategoryId=111")
+                        .build();
+
+                getClient().newCall(request).enqueue(new Callback() {
+                    @Override
+                    public void onFailure(Call call, IOException e) {
+                        handler.sendEmptyMessage(404);
+                    }
+
+                    @Override
+                    public void onResponse(Call call, Response response) throws IOException {
+                        if (response.isSuccessful()) {
+                            try {
+                                JSONObject json = new JSONObject(response.body().string());
+                                boolean success = json.getBoolean("success");
+                                if (success) {
+                                    JSONObject result = json.getJSONObject("result");
+                                    JSONArray items = result.getJSONArray("items");
+
+                                    for (int i = 0; i < items.length(); i++) {
+                                        JSONObject chileItem = items.getJSONObject(i);
+                                        FineClassCourseEntity fineClassCourseEntity =
+                                                new Gson().fromJson(chileItem.toString(), new TypeToken<FineClassCourseEntity>() {
+                                                }.getType());
+                                        mapList.add(fineClassCourseEntity);
+                                    }
+                                    handler.sendEmptyMessage(0);
+                                }
+                            } catch (JSONException e) {
+                                handler.sendEmptyMessage(500);
+                            }
+                        }
+                    }
+                });
+            }
+        });
+    }
+
+    /**
      * 添加报名人员
      *
      * @param handler
@@ -819,56 +869,6 @@ public class HttpUtils<T> {
                                     break;
                             }
 
-                        }
-                    }
-                });
-            }
-        });
-    }
-
-    /**
-     * 获取精品课类别
-     *
-     * @param url     请求地址
-     * @param mapList 返回的结果集合
-     */
-    public void getAllCourseType(final Handler handler, final RequestDataEntity entity, final List<FineClassCourseEntity> mapList) {
-        executorService.execute(new Runnable() {
-            @Override
-            public void run() {
-                Request request = new Request.Builder()
-                        .header(Authorization, Bearer + entity.getToken())
-                        .url(entity.getUrl() + "?CategoryId=111")
-                        .build();
-
-                getClient().newCall(request).enqueue(new Callback() {
-                    @Override
-                    public void onFailure(Call call, IOException e) {
-                        handler.sendEmptyMessage(404);
-                    }
-
-                    @Override
-                    public void onResponse(Call call, Response response) throws IOException {
-                        if (response.isSuccessful()) {
-                            try {
-                                JSONObject json = new JSONObject(response.body().string());
-                                boolean success = json.getBoolean("success");
-                                if (success) {
-                                    JSONObject result = json.getJSONObject("result");
-                                    JSONArray items = result.getJSONArray("items");
-
-                                    for (int i = 0; i < items.length(); i++) {
-                                        JSONObject chileItem = items.getJSONObject(i);
-                                        FineClassCourseEntity fineClassCourseEntity =
-                                                new Gson().fromJson(chileItem.toString(), new TypeToken<FineClassCourseEntity>() {
-                                                }.getType());
-                                        mapList.add(fineClassCourseEntity);
-                                    }
-                                    handler.sendEmptyMessage(0);
-                                }
-                            } catch (JSONException e) {
-                                handler.sendEmptyMessage(500);
-                            }
                         }
                     }
                 });

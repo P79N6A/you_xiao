@@ -68,22 +68,15 @@ public class MainActivity extends BaseActivity implements ViewPager.OnPageChange
     public List<SelectSchoolEntity> schoolSelectList;
     public DownloadManagerService.DownloadBinder mDownloadBinder;
 
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        initEvent();
-        checkVersionFromServer();
-        ((MyApplication) getApplication()).initPushService(MyApplication.getInstance());
-    }
-
     // 初始化控件
     @Override
     protected void initView() {
         binding = DataBindingUtil.setContentView(MainActivity.this, R.layout.activity_main);
         httpUtils = new HttpUtils(this);
-        schoolSelectList = new Gson().fromJson(spUtils.getString(Entity.SCHOOL_DATA), new TypeToken<List<SelectSchoolEntity>>(){}.getType());
         initBottomMenu();
-
+        checkVersionFromServer();
+        ((MyApplication) getApplication()).initPushService(MyApplication.getInstance());
+        schoolSelectList = new Gson().fromJson(spUtils.getString(Entity.SCHOOL_DATA), new TypeToken<List<SelectSchoolEntity>>(){}.getType());
     }
 
     public void initBottomMenu(){
@@ -110,6 +103,7 @@ public class MainActivity extends BaseActivity implements ViewPager.OnPageChange
         mFragments.add(new PersonalCenterFragment());
         mMainMenuAdapter = new FragmentAdapter(getSupportFragmentManager(), mFragments);
         setMenuSelector(0); // 默认选中第一个菜单项“微信”
+        initEvent();
     }
 
     // 初始化事件

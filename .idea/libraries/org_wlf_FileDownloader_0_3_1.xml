@@ -1,8 +1,8 @@
 <component name="libraryTable">
   <library name="org.wlf:FileDownloader-0.3.1">
     <CLASSES>
-      <root url="jar://$USER_HOME$/.gradle/caches/transforms-1/files-1.1/FileDownloader-0.3.1.aar/e2a7bceb7643f33ef25a65c0b4775996/jars/classes.jar!/" />
-      <root url="file://$USER_HOME$/.gradle/caches/transforms-1/files-1.1/FileDownloader-0.3.1.aar/e2a7bceb7643f33ef25a65c0b4775996/res" />
+      <root url="jar://$USER_HOME$/.gradle/caches/transforms-1/files-1.1/FileDownloader-0.3.1.aar/3bb3c1c9df9d3fffbb2288b0f3b562df/jars/classes.jar!/" />
+      <root url="file://$USER_HOME$/.gradle/caches/transforms-1/files-1.1/FileDownloader-0.3.1.aar/3bb3c1c9df9d3fffbb2288b0f3b562df/res" />
     </CLASSES>
     <JAVADOC />
     <SOURCES>

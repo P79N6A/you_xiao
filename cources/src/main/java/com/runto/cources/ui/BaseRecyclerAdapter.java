@@ -21,6 +21,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.runtoinfo.youxiao.globalTools.adapter.BaseViewHolder;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -67,8 +69,11 @@ public abstract class BaseRecyclerAdapter<T> extends RecyclerView.Adapter {
 
     protected abstract RecyclerView.ViewHolder onCreateDefaultViewHolder(ViewGroup parent, int type);
 
+    //protected abstract BaseViewHolder onCreateViewHolders(ViewGroup parent, int type);
+
     protected abstract void onBindViewHolder(RecyclerView.ViewHolder holder, T item, int position);
 
+    //protected abstract void onBindViewHolder(RecyclerView.ViewHolder holder, T item, int position);
     @Override
     public int getItemCount() {
         return mItems.size();

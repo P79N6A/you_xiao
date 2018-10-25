@@ -8,7 +8,6 @@ import android.util.AttributeSet;
 
 import com.runto.cources.R;
 
-
 /**
  * 带分组浮动的RecyclerView
  */
@@ -25,11 +24,15 @@ public class GroupRecyclerView extends RecyclerView {
     private OnGroupChangeListener mListener;
 
     public GroupRecyclerView(Context context) {
-        super(context);
+        this(context, null);
+    }
+
+    public GroupRecyclerView(Context context, AttributeSet attributeSet, int defStyle){
+        super(context, attributeSet, defStyle);
     }
 
     public GroupRecyclerView(Context context, @Nullable AttributeSet attrs) {
-        super(context, attrs);
+        this(context, attrs, 0);
         TypedArray array = context.obtainStyledAttributes(attrs, R.styleable.GroupRecyclerView);
         mTextSize = array.getDimensionPixelSize(R.styleable.GroupRecyclerView_group_text_size, 16);
         mGroupHeight = (int) array.getDimension(R.styleable.GroupRecyclerView_group_height, 52);
