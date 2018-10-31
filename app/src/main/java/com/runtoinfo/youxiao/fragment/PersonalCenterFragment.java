@@ -57,6 +57,9 @@ public class PersonalCenterFragment extends BaseFragment {
     public List<PersonalCenterEntity> personal = new ArrayList<>();
     public HttpUtils httpUtils;
 
+    public PersonalCenterFragment(){
+        super();
+    }
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {

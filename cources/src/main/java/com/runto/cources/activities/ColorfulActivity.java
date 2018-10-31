@@ -1,6 +1,7 @@
 package com.runto.cources.activities;
 
 import android.annotation.SuppressLint;
+import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
@@ -9,11 +10,19 @@ import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
 import android.support.v7.widget.LinearLayoutManager;
+import android.util.Log;
+import android.view.Gravity;
 import android.view.View;
+import android.view.ViewGroup;
+import android.view.Window;
+import android.widget.FrameLayout;
 
 
 import com.alibaba.android.arouter.facade.annotation.Route;
 import com.alibaba.android.arouter.launcher.ARouter;
+import com.bigkoo.pickerview.builder.TimePickerBuilder;
+import com.bigkoo.pickerview.listener.OnTimeSelectListener;
+import com.bigkoo.pickerview.view.TimePickerView;
 import com.qjc.library.StatusBarUtil;
 import com.runto.cources.R;
 import com.runto.cources.adapter.ArticleAdapter;
@@ -57,7 +66,7 @@ public class ColorfulActivity extends BaseActivity implements
     public HttpUtils httpUtils;
     public ArticleAdapter articleAdapter;
     public final String N = "-";
-
+    public TimePickerView timePickerView;
     public final long MIN_CLICK_TIME = 1000;
     public long lastClickTime = 0;
 
@@ -69,12 +78,16 @@ public class ColorfulActivity extends BaseActivity implements
     protected void initView() {
         binding = DataBindingUtil.setContentView(ColorfulActivity.this, R.layout.activity_cource);
         httpUtils = new HttpUtils(this);
+        initTimePicker();
         //setStatusBarDarkMode();
         binding.courseMessageMenu.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                initDatePicker();
-                customDatePicker.show(binding.calendarView.getCurYear() + "-" + binding.calendarView.getCurMonth() + "-" + binding.calendarView.getCurDay());
+                //initDatePicker();
+                //customDatePicker.show(binding.calendarView.getCurYear() + "-" + binding.calendarView.getCurMonth() + "-" + binding.calendarView.getCurDay());
+                if (timePickerView != null){
+                    timePickerView.show();
+                }
             }
         });
         binding.tvYear.setOnClickListener(new View.OnClickListener() {
@@ -166,7 +179,7 @@ public class ColorfulActivity extends BaseActivity implements
             dataMap.put("token", spUtils.getString(Entity.TOKEN));
             dataMap.put("CourseInstId", entity.getCourseInstId());
             dataMap.put("url", HttpEntity.MAIN_URL + HttpEntity.POST_SIGNIN_COURSE);
-            httpUtils.postSignIn(handler,dataMap);
+            httpUtils.postSignIn(handler, dataMap);
         }
     };
 
@@ -176,7 +189,7 @@ public class ColorfulActivity extends BaseActivity implements
         requestDataEntity.setUrl(HttpEntity.MAIN_URL + HttpEntity.GET_USER_COURSE_LIST);
         requestDataEntity.setToken(spUtils.getString(Entity.TOKEN));
         int dayCount = binding.calendarView.getMonthCount(binding.calendarView.getCurYear(), binding.calendarView.getCurMonth());
-        switch (type){
+        switch (type) {
             case 0:
                 break;
             case 1:
@@ -202,7 +215,6 @@ public class ColorfulActivity extends BaseActivity implements
     }
 
 
-
     public Handler handler = new Handler(Looper.getMainLooper()) {
         @SuppressLint("SetTextI18n")
         @Override
@@ -213,16 +225,16 @@ public class ColorfulActivity extends BaseActivity implements
                 case 1:
                     int monthSize = monthDataList.size();
                     List<Calendar> schemes = new ArrayList<>();
-                    if (monthSize > 0){
-                        for (int i = 0; i < monthSize; i++){
+                    if (monthSize > 0) {
+                        for (int i = 0; i < monthSize; i++) {
                             CourseEntity entity = monthDataList.get(i);
                             String[] splitDate = entity.getDate().split(N);
                             String now = binding.calendarView.getCurYear() + N + binding.calendarView.getCurMonth() + N + binding.calendarView.getCurDay();
                             int result = now.compareTo(entity.getDate());
-                            if (result <= 0){
+                            if (result <= 0) {
                                 schemes.add(getSchemeCalendar(Integer.parseInt(splitDate[0]),
                                         Integer.parseInt(splitDate[1]), Integer.parseInt(splitDate[2]), Color.parseColor("#3aa6fe"), "假"));
-                            }else{
+                            } else {
                                 schemes.add(getSchemeCalendar(Integer.parseInt(splitDate[0]),
                                         Integer.parseInt(splitDate[1]), Integer.parseInt(splitDate[2]), Color.parseColor("#999999"), "假"));
                             }
@@ -242,7 +254,7 @@ public class ColorfulActivity extends BaseActivity implements
                     if (articleAdapter != null) {
                         articleAdapter = new ArticleAdapter(ColorfulActivity.this, dataList);
                         binding.recyclerView.setAdapter(articleAdapter);
-                    }else{
+                    } else {
                         initAdapter();
                     }
                     binding.recyclerView.notifyDataSetChanged();
@@ -255,7 +267,7 @@ public class ColorfulActivity extends BaseActivity implements
     /**
      * 需要标记的日期 添加下标点
      */
-    public void setSchemes(){
+    public void setSchemes() {
         List<Calendar> schemes = new ArrayList<>();
         int year = binding.calendarView.getCurYear();
         int month = binding.calendarView.getCurMonth();
@@ -302,7 +314,7 @@ public class ColorfulActivity extends BaseActivity implements
         binding.tvYear.setText(String.valueOf(calendar.getYear()) + "年" + calendar.getMonth() + "月");
         mYear = calendar.getYear();
         long curTime = System.currentTimeMillis();
-        if ((curTime - lastClickTime) > MIN_CLICK_TIME){
+        if ((curTime - lastClickTime) > MIN_CLICK_TIME) {
             lastClickTime = curTime;
             requestCourseData(calendar, 2);
         }
@@ -324,23 +336,35 @@ public class ColorfulActivity extends BaseActivity implements
     }
 
     //时间选择器
-    private void initDatePicker() {
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.CHINA);
-        String now = sdf.format(new Date());
-        //binding.personalEditBirth.setText(now.split(" ")[0]);
-        //currentTime.setText(now);
-
-        customDatePicker = new CustomDatePicker(this, new CustomDatePicker.ResultHandler() {
+    public void initTimePicker() {
+        timePickerView = new TimePickerBuilder(this, new OnTimeSelectListener() {
             @Override
-            public void handle(String time) { // 回调接口，获得选中的时间
-                String result = time.split(" ")[0];
-                String[] part = result.split("-");
+            public void onTimeSelect(Date date, View view) {
+                SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+                String time = format.format(date);
+                String[] part = time.split("-");
                 binding.calendarView.scrollToCalendar(Integer.parseInt(part[0]), Integer.parseInt(part[1]), Integer.parseInt(part[2]));
             }
-        }, "1970-01-01 00:00", (binding.calendarView.getCurYear() + 10) + "-12-31 00:00"); // 初始化日期格式请用：yyyy-MM-dd HH:mm，否则不能正常运行
-        customDatePicker.showSpecificTime(false); // 不显示时和分
-        customDatePicker.setIsLoop(true); // 不允许循环滚动
+        }).isCyclic(true).isDialog(true).build();
 
+        Dialog mDialog = timePickerView.getDialog();
+        if (mDialog != null) {
+
+            FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(
+                    ViewGroup.LayoutParams.MATCH_PARENT,
+                    ViewGroup.LayoutParams.WRAP_CONTENT,
+                    Gravity.BOTTOM);
+
+            params.leftMargin = 0;
+            params.rightMargin = 0;
+            timePickerView.getDialogContainerLayout().setLayoutParams(params);
+
+            Window dialogWindow = mDialog.getWindow();
+            if (dialogWindow != null) {
+                dialogWindow.setWindowAnimations(com.bigkoo.pickerview.R.style.picker_view_slide_anim);//修改动画样式
+                dialogWindow.setGravity(Gravity.BOTTOM);//改成Bottom,底部显示
+            }
+        }
     }
 
 

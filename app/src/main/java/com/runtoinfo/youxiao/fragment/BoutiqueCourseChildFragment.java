@@ -33,6 +33,9 @@ public class BoutiqueCourseChildFragment extends BaseFragment {
     public List<Fragment> fragmentList = new ArrayList<>();
     public BoutiqueCourseViewPagerAdapter viewPagerAdapter;
     public int type;
+    public BoutiqueCourseChildFragment(){
+        super();
+    }
     public BoutiqueCourseChildFragment(int type){
         this.type = type;
     }

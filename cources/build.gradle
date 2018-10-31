@@ -61,7 +61,7 @@ dependencies {
     implementation 'com.android.support:support-v4:26.1.0'
     implementation 'com.android.support:appcompat-v7:26.1.0'
     implementation 'com.android.support:recyclerview-v7:26.1.0'
-    implementation 'com.github.bumptech.glide:glide:4.6.1'
+    implementation 'com.github.bumptech.glide:glide:4.8.0'
     androidTestImplementation('com.android.support:support-annotations:26.1.0') {
         force = true
     }
@@ -80,6 +80,7 @@ dependencies {
     //implementation 'com.dmcBig:mediapicker:+'
     implementation project (':mediapicker')
     implementation 'com.github.UserNameQC:StatuesBarUtils:v1.0.1'
+    implementation 'com.github.UserNameQC:Time-PickerView:1.0.0'
 }
 apply from: '../script/gradle-jcenter-push.gradle'
 

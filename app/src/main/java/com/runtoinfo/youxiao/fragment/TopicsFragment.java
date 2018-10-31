@@ -59,6 +59,10 @@ public class TopicsFragment extends BaseFragment {
     private HttpUtils httpUtils;
 
     public List<Integer> images = new ArrayList<>();
+
+    public TopicsFragment(){
+        super();
+    }
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {

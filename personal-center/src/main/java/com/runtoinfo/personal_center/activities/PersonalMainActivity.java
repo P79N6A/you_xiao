@@ -2,7 +2,6 @@ package com.runtoinfo.personal_center.activities;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
-import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
@@ -24,19 +23,20 @@ import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.FrameLayout;
 
 import com.alibaba.android.arouter.facade.annotation.Route;
 import com.alibaba.android.arouter.launcher.ARouter;
+import com.bigkoo.pickerview.builder.TimePickerBuilder;
+import com.bigkoo.pickerview.listener.OnTimeSelectListener;
+import com.bigkoo.pickerview.view.TimePickerView;
 import com.bumptech.glide.Glide;
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
 import com.lljjcoder.style.citylist.utils.CityListLoader;
-import com.lljjcoder.style.citythreelist.CityBean;
 import com.runtoinfo.httpUtils.CenterEntity.PersonalInformationEntity;
 import com.runtoinfo.httpUtils.HttpEntity;
-import com.runtoinfo.httpUtils.bean.PersonalCenterEntity;
 import com.runtoinfo.httpUtils.bean.RequestDataEntity;
 import com.runtoinfo.httpUtils.utils.HttpUtils;
 import com.runtoinfo.personal_center.R;
@@ -52,6 +52,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.Locale;
 
+@SuppressWarnings("all")
 @Route(path = "/personal/personalMain")
 public class PersonalMainActivity extends BaseActivity {
 
@@ -59,6 +60,7 @@ public class PersonalMainActivity extends BaseActivity {
     //在自己的Application中添加如下代码
     private CustomDatePicker customDatePicker1, customDatePicker2;
     public HttpUtils httpUtils;
+    public TimePickerView timePickerView;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -72,7 +74,7 @@ public class PersonalMainActivity extends BaseActivity {
         checkPermission();
         initData();
         initEvent();
-        initDatePicker();
+        initTimePicker();
     }
 
     public void initData() {
@@ -117,7 +119,10 @@ public class PersonalMainActivity extends BaseActivity {
         binding.personalRelativeBirthday.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                customDatePicker1.show(binding.personalEditBirth.getText().toString());
+                //customDatePicker1.show(binding.personalEditBirth.getText().toString());
+                if (timePickerView != null){
+                    timePickerView.show();
+                }
             }
         });
         //地区
@@ -334,12 +339,6 @@ public class PersonalMainActivity extends BaseActivity {
         //refWatcher = LeakCanary.install(getApplication());
     }
 
-    //在自己的Application中添加如下代码
-//    public static RefWatcher getRefWatcher(Context context) {
-//        PersonalApplication application = (PersonalApplication) context.getApplicationContext();
-//        return application.refWatcher;
-//    }
-
     //时间选择器
     private void initDatePicker() {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.CHINA);
@@ -358,16 +357,39 @@ public class PersonalMainActivity extends BaseActivity {
         }, "1970-01-01 00:00", now); // 初始化日期格式请用：yyyy-MM-dd HH:mm，否则不能正常运行
         customDatePicker1.showSpecificTime(false); // 不显示时和分
         customDatePicker1.setIsLoop(true); // 不允许循环滚动
-
-//        customDatePicker2 = new CustomDatePicker(this, new CustomDatePicker.ResultHandler() {
-//            @Override
-//            public void handle(String time) { // 回调接口，获得选中的时间
-//                currentTime.setText(time);
-//            }
-//        }, "2010-01-01 00:00", now); // 初始化日期格式请用：yyyy-MM-dd HH:mm，否则不能正常运行
-//        customDatePicker2.showSpecificTime(true); // 显示时和分
-//        customDatePicker2.setIsLoop(true); // 允许循环滚动
     }
+
+    public void initTimePicker(){
+        timePickerView = new TimePickerBuilder(this, new OnTimeSelectListener() {
+            @Override
+            public void onTimeSelect(Date date, View view) {
+                SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+                binding.personalEditBirth.setText(format.format(date));
+            }
+        })
+                .isCyclic(true)
+                .isDialog(true)
+                .build();
+
+        Dialog mDialog = timePickerView.getDialog();
+        if (mDialog != null) {
+
+        FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(
+                ViewGroup.LayoutParams.MATCH_PARENT,
+                ViewGroup.LayoutParams.WRAP_CONTENT,
+                Gravity.BOTTOM);
+
+        params.leftMargin = 0;
+        params.rightMargin = 0;
+        timePickerView.getDialogContainerLayout().setLayoutParams(params);
+
+        Window dialogWindow = mDialog.getWindow();
+        if (dialogWindow != null) {
+            dialogWindow.setWindowAnimations(com.bigkoo.pickerview.R.style.picker_view_slide_anim);//修改动画样式
+            dialogWindow.setGravity(Gravity.BOTTOM);//改成Bottom,底部显示
+        }
+    }
+}
 
     //性别选择
     //头像选择方式

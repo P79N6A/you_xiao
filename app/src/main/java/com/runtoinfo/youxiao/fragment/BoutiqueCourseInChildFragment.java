@@ -45,13 +45,17 @@ public class BoutiqueCourseInChildFragment extends BaseFragment {
     public List<CourseDataEntity> tempList;
     public int type;
     public List<CourseDataEntity> dataList = new ArrayList<>();
-    public BoutiqueCourseInChildFragment(int type){
-        this.type = type;
-    }
     public HttpUtils httpUtils;
     public int offset = 0, page = 1;
     public RequestDataEntity requestDataEntity;
     public Map<String, Object> requestMap = new HashMap<>();
+
+    public BoutiqueCourseInChildFragment(int type){
+        this.type = type;
+    }
+    public BoutiqueCourseInChildFragment(){
+        super();
+    }
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {

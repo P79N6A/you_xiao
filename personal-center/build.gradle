@@ -53,4 +53,6 @@ dependencies {
     implementation 'com.github.bumptech.glide:glide:4.8.0'
     annotationProcessor 'com.github.bumptech.glide:compiler:4.8.0'
     implementation 'com.github.UserNameQC:StatuesBarUtils:v1.0.1'
+    //implementation 'com.contrarywind:Android-PickerView:4.1.6'
+    implementation 'com.github.UserNameQC:Time-PickerView:1.0.0'
 }

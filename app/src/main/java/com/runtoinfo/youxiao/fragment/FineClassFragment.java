@@ -44,6 +44,8 @@ public class FineClassFragment extends BaseFragment {
     private boolean mHasLoadedOnce = false;
     private boolean isPrepared = false;
     private HttpUtils httpUtils;
+
+    public FineClassFragment(){super();}
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {

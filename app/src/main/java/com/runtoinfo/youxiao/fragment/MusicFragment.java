@@ -52,6 +52,9 @@ public class MusicFragment extends BaseFragment{
     public MusicFragment(int type){
         this.type = type;
     }
+    public MusicFragment(){
+        super();
+    }
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {

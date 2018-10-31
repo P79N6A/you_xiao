@@ -67,7 +67,6 @@
                     android:layout_height="60dp"
                     android:layout_centerVertical="true"
                     android:layout_toStartOf="@+id/personal_next"
-                    android:src="@drawable/ic_launcher"
                     app:civ_border_overlay="true" />
 
                 <ImageView
