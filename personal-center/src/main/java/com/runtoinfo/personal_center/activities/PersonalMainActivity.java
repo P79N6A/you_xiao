@@ -45,10 +45,7 @@ import com.runtoinfo.personal_center.ui.SelectPictureDialog;
 import com.runtoinfo.youxiao.globalTools.timepicker.CustomDatePicker;
 import com.runtoinfo.youxiao.globalTools.utils.DialogMessage;
 import com.runtoinfo.youxiao.globalTools.utils.Entity;
-import com.runtoinfo.youxiao.globalTools.utils.IntentDataType;
 import com.runtoinfo.youxiao.globalTools.utils.TimeUtil;
-import com.squareup.leakcanary.LeakCanary;
-import com.squareup.leakcanary.RefWatcher;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -60,7 +57,6 @@ public class PersonalMainActivity extends BaseActivity {
 
     private ActivityPersonalMainBinding binding;
     //在自己的Application中添加如下代码
-    private RefWatcher refWatcher;
     private CustomDatePicker customDatePicker1, customDatePicker2;
     public HttpUtils httpUtils;
     @Override
@@ -321,7 +317,7 @@ public class PersonalMainActivity extends BaseActivity {
     protected void onResume() {
         super.onResume();
         initARouter();
-        initCity();
+        //initCity();
     }
 
     public void initARouter(){
@@ -335,14 +331,14 @@ public class PersonalMainActivity extends BaseActivity {
         CityListLoader.getInstance().loadCityData(this);
         //预先加载三级列表显示省市区的数据
         CityListLoader.getInstance().loadProData(this);
-        refWatcher = LeakCanary.install(getApplication());
+        //refWatcher = LeakCanary.install(getApplication());
     }
 
     //在自己的Application中添加如下代码
-    public static RefWatcher getRefWatcher(Context context) {
-        PersonalApplication application = (PersonalApplication) context.getApplicationContext();
-        return application.refWatcher;
-    }
+//    public static RefWatcher getRefWatcher(Context context) {
+//        PersonalApplication application = (PersonalApplication) context.getApplicationContext();
+//        return application.refWatcher;
+//    }
 
     //时间选择器
     private void initDatePicker() {

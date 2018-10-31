@@ -89,34 +89,36 @@ public class CameraActivity extends BaseActivity {
 
     public void initView() {
         //设置视频保存路径
-        cameraView = findViewById(R.id.jcameraview);
-        String path = Environment.getExternalStorageDirectory().getPath() + File.separator + "YouXiao";
-        File filePath = new File(path);
-        if (!filePath.exists())
-        {
-            filePath.mkdirs();
-            //filePath = new File(path);
-        }
-        Log.e("PATH-1", path);
-        cameraView.setSaveVideoPath(path);
-        cameraView.setFeatures(JCameraView.BUTTON_STATE_ONLY_CAPTURE);
-        //cameraView.setTip("轻触拍照,长按录制视频");
-        cameraView.setMediaQuality(JCameraView.MEDIA_QUALITY_MIDDLE);
-        cameraView.setErrorLisenter(new ErrorListener() {
-            @Override
-            public void onError() {
-                //错误监听
-                Log.e(TAG, "camera error");
-                Intent intent = new Intent();
-                setResult(RESULT_ERROR_CODE, intent);
-                finish();
+        try {
+            cameraView = findViewById(R.id.jcameraview);
+            String path = Environment.getExternalStorageDirectory().getPath() + File.separator + "YouXiao";
+            File filePath = new File(path);
+            if (!filePath.exists()) {
+                filePath.mkdirs();
+                //filePath = new File(path);
             }
+            cameraView.setSaveVideoPath(path);
+            cameraView.setFeatures(JCameraView.BUTTON_STATE_ONLY_CAPTURE);
+            //cameraView.setTip("轻触拍照,长按录制视频");
+            cameraView.setMediaQuality(JCameraView.MEDIA_QUALITY_MIDDLE);
+            cameraView.setErrorLisenter(new ErrorListener() {
+                @Override
+                public void onError() {
+                    //错误监听
+                    Log.e(TAG, "camera error");
+                    Intent intent = new Intent();
+                    setResult(RESULT_ERROR_CODE, intent);
+                    finish();
+                }
 
-            @Override
-            public void AudioPermissionError() {
-                Toast.makeText(CameraActivity.this, "请检查是否允许录音权限", Toast.LENGTH_SHORT).show();
-            }
-        });
+                @Override
+                public void AudioPermissionError() {
+                    Toast.makeText(CameraActivity.this, "请检查是否允许录音权限", Toast.LENGTH_SHORT).show();
+                }
+            });
+        }catch (NullPointerException e){
+            e.printStackTrace();
+        }
         //JCameraView监听
         cameraView.setJCameraLisenter(new JCameraListener() {
             @Override

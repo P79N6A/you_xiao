@@ -185,8 +185,13 @@ public class InformationDetails extends BaseActivity {
     }
 
     //为赞准备展现数据
+    public PraiseAdapter praiseAdapter;
     public void initPraiseRecycler() {
-        PraiseAdapter praiseAdapter = new PraiseAdapter(InformationDetails.this, praiseEntityList, R.layout.info_praise_item_layout);
+        if (praiseAdapter != null){
+            praiseAdapter.notifyDataSetChanged();
+            return;
+        }
+        praiseAdapter = new PraiseAdapter(InformationDetails.this, praiseEntityList, R.layout.info_praise_item_layout);
         praiseBinding.praiseRecycler.setLinearLayout();
         praiseBinding.praiseRecycler.setAdapter(praiseAdapter);
         praiseBinding.praiseRecycler.addItemDecoration(new RecyclerViewDecoration(InformationDetails.this, RecyclerViewDecoration.HORIZONTAL_LIST));
@@ -262,12 +267,18 @@ public class InformationDetails extends BaseActivity {
     }
 
     //加载我的评论
+    public MyCommentAdapter commentAdapter;
     public void initCommentRecycleData() {
-        MyCommentAdapter commentAdapter = new MyCommentAdapter(handler, InformationDetails.this, commentEntityList, R.layout.info_comment_item_layout);
-        commentBinding.infoCommentRecycler.setLinearLayout();
-        commentBinding.infoCommentRecycler.setAdapter(commentAdapter);
-        commentBinding.infoCommentRecycler.addItemDecoration(new RecyclerViewDecoration(this, RecyclerViewDecoration.HORIZONTAL_LIST));
-        commentBinding.infoCommentRecycler.setOnPullLoadMoreListener(pullLoadMoreListener);
+        if (commentAdapter == null){
+            commentAdapter = new MyCommentAdapter(handler, InformationDetails.this, commentEntityList, R.layout.info_comment_item_layout);
+            commentBinding.infoCommentRecycler.setLinearLayout();
+            commentBinding.infoCommentRecycler.setAdapter(commentAdapter);
+            commentBinding.infoCommentRecycler.addItemDecoration(new RecyclerViewDecoration(this, RecyclerViewDecoration.HORIZONTAL_LIST));
+            commentBinding.infoCommentRecycler.setOnPullLoadMoreListener(pullLoadMoreListener);
+        }else{
+            commentAdapter.notifyDataSetChanged();
+        }
+
     }
 
     public void initCommentEvent() {
@@ -344,7 +355,7 @@ public class InformationDetails extends BaseActivity {
                     switch (layoutType) {
                         case "comment":
                             JSONArray items = (JSONArray) msg.obj;
-                            commentEntityList = setListPraiseOrComment(items, "comment");
+                            commentEntityList.addAll(setListPraiseOrComment(items, "comment"));
                             commentBinding.infoCommentRecycler.setPullLoadMoreCompleted();
                             initCommentRecycleData();
                             break;

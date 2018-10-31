@@ -42,7 +42,7 @@ public class SchoolDynamics extends BaseActivity {
     public SchoolMovmentBinding binding;
     public List<SchoolDynamicsEntity> schoolDynamicsList = new ArrayList<>();
     public SchoolDynamicsRecyclerAdapter adapter;
-    public String dataType = null;
+    public String dataType;
     public int times = 0;
     public SchoolDynamicsNewEntity schoolDynamicsEntity;
     public int type;

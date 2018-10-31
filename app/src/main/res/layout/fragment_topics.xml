@@ -53,20 +53,26 @@
                 android:layout_width="match_parent"
                 android:layout_height="130dp">
 
-                <android.support.v4.view.ViewPager
-                    android:id="@+id/topics_viewpage"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content" />
+                <!--<android.support.v4.view.ViewPager-->
+                    <!--android:id="@+id/topics_viewpage"-->
+                    <!--android:layout_width="match_parent"-->
+                    <!--android:layout_height="wrap_content" />-->
 
-                <me.relex.circleindicator.CircleIndicator
-                    android:id="@+id/topics_indicator"
+                <!--<me.relex.circleindicator.CircleIndicator-->
+                    <!--android:id="@+id/topics_indicator"-->
+                    <!--android:layout_width="match_parent"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:layout_alignBottom="@+id/topics_viewpage"-->
+                    <!--android:paddingBottom="10dp"-->
+                    <!--app:ci_gravity="center"-->
+                    <!--app:ci_drawable="@drawable/gray_unselect_dot"-->
+                    <!--app:ci_drawable_unselected="@drawable/gray_dot"/>-->
+
+
+                <com.youth.banner.Banner
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_alignBottom="@+id/topics_viewpage"
-                    android:paddingBottom="10dp"
-                    app:ci_gravity="center"
-                    app:ci_drawable="@drawable/gray_unselect_dot"
-                    app:ci_drawable_unselected="@drawable/gray_dot"/>
+                    android:id="@+id/topics_banner"/>
 
                 <RelativeLayout
                     android:id="@+id/rl_dots"

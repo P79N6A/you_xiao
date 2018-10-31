@@ -112,7 +112,7 @@ public class DialogMessage {
     }
 
     public static Dialog showDialogWithLayout(Context context, int layoutId){
-        Dialog dialog = new Dialog(context, R.style.dialog);
+        Dialog dialog = new Dialog(context, R.style.my_dialog);
         dialog.setContentView(layoutId);
         //setWindowTransparent(dialog);
         dialog.setCanceledOnTouchOutside(false);

@@ -64,8 +64,6 @@ public abstract class BaseFragment extends Fragment {
         super.onDestroy();
         MANService manService = MANServiceProvider.getService();
         manService.getMANPageHitHelper().pageDisAppear(getActivity());
-//        if (mImmersionBar != null)
-//            mImmersionBar.destroy();
     }
 
     @Override
@@ -171,17 +169,7 @@ public abstract class BaseFragment extends Fragment {
         ft.commit();
     }
 
-    /**
-     * 找到activity的控件
-     *
-     * @param <T> the type parameter
-     * @param id  the id
-     * @return the t
-     */
-    /*@SuppressWarnings("unchecked")
-    protected <T extends View> T findActivityViewById(@IdRes int id) {
-        return (T) mActivity.findViewById(id);
-    }*/
+
 
 
 }

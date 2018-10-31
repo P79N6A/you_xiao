@@ -2,6 +2,7 @@ package com.runtoinfo.youxiao.fragment;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
+import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -42,6 +43,7 @@ import android.widget.TextView;
 
 import com.alibaba.android.arouter.facade.annotation.Route;
 import com.alibaba.android.arouter.launcher.ARouter;
+import com.google.gson.Gson;
 import com.jaeger.library.StatusBarUtil;
 import com.runtoinfo.httpUtils.HttpEntity;
 import com.runtoinfo.httpUtils.bean.GetSchoolSettingEntity;
@@ -90,11 +92,11 @@ public class HomeFragment extends BaseFragment implements MyScrollView.ScrollVie
     public int mHeight = 0;
     public List<SelectSchoolEntity> schoolSelectList;
     public TextView tSignUp;
-    public String phoneNumber;
+    public String phoneNumber = "15606344426";
     public final int[] startLocation = new int[2];
     public boolean isGetData = false;
-    private boolean mHasLoadedOnce = false;
-    private boolean isPrepared = false;
+    public boolean mHasLoadedOnce = false;
+    public boolean isPrepared = false;
     public HttpUtils httpUtils;
     public List<SchoolDynamicsNewEntity> dataList;
     public Context context;
@@ -102,9 +104,14 @@ public class HomeFragment extends BaseFragment implements MyScrollView.ScrollVie
     public HomeFragment(List<SelectSchoolEntity> schoolSelectList) {
         this.schoolSelectList = schoolSelectList;
     }
+    public HomeFragment(){super();}
 
     public static HomeFragment getInstance(List<SelectSchoolEntity> schoolSelectList){
+        Bundle bundle = new Bundle();
+        String gson = new Gson().toJson(schoolSelectList);
+        bundle.putString(IntentDataType.DATA, gson);
         HomeFragment homeFragment = new HomeFragment(schoolSelectList);
+        homeFragment.setArguments(bundle);
         return homeFragment;
     }
 
@@ -220,7 +227,7 @@ public class HomeFragment extends BaseFragment implements MyScrollView.ScrollVie
     }
 
     @Override
-    protected void lazyLoad() {
+    public void lazyLoad() {
         if (mHasLoadedOnce || !isPrepared)
             return;
         mHasLoadedOnce = true;
@@ -338,6 +345,7 @@ public class HomeFragment extends BaseFragment implements MyScrollView.ScrollVie
             }
         });
         requestSchoolSetting();
+
     }
 
     public void initFloatWindowListener() {

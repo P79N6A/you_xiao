@@ -30,6 +30,9 @@ import com.runtoinfo.youxiao.globalTools.utils.DensityUtil;
 import com.runtoinfo.youxiao.globalTools.utils.DialogMessage;
 import com.runtoinfo.youxiao.globalTools.utils.Entity;
 import com.runtoinfo.youxiao.globalTools.utils.IntentDataType;
+import com.runtoinfo.youxiao.ui.ImageViewLoadModel;
+import com.youth.banner.BannerConfig;
+import com.youth.banner.Transformer;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -41,12 +44,12 @@ import java.util.concurrent.TimeUnit;
  * Created by Qjc on 2018/5/24 0024.
  */
 
+@SuppressWarnings("all")
 public class TopicsFragment extends BaseFragment {
 
     public List<View> listView = new ArrayList<>();
     public List<TopiceHttpResultEntity> resultList = new ArrayList<>();
     public ScheduledExecutorService scheduledExecutorService = Executors.newSingleThreadScheduledExecutor();
-    public int currentItem;
     public FragmentTopicsBinding binding;
     public ViewPageAdapter adapter;
     public TopicsArticleAdapter articleAdapter;
@@ -54,38 +57,49 @@ public class TopicsFragment extends BaseFragment {
     private boolean mHasLoadedOnce = false;
     private boolean isPrepared = false;
     private HttpUtils httpUtils;
+
+    public List<Integer> images = new ArrayList<>();
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_topics, container, false);
         DensityUtil.setViewHeight(getActivity(), binding.topicsStatuesView);
-        //getActivity().getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
         httpUtils = new HttpUtils(getContext());
-        viewPages();
-        startImageViewScroll();
         getAllArticle();
         lazyLoad();
+
+        addImageList();
+        initBanner();
         return binding.getRoot();
     }
 
-    public void startImageViewScroll(){
-        scheduledExecutorService.scheduleWithFixedDelay(new Runnable() {
-            @Override
-            public void run() {
-                currentItem = (currentItem + 1) % listView.size();
-                mHandler.sendEmptyMessage(0);
-            }
-        }, 2, 2, TimeUnit.MINUTES);
+
+
+    public void addImageList(){
+        images.add(R.drawable.topics_img_banner);
+        images.add(R.drawable.topics_img_banner);
+        images.add(R.drawable.topics_img_banner);
     }
+
+    public void initBanner(){
+        binding.topicsBanner.setBannerStyle(BannerConfig.CIRCLE_INDICATOR);
+        binding.topicsBanner.setBannerAnimation(Transformer.FlipHorizontal);
+        binding.topicsBanner.setImageLoader(new ImageViewLoadModel());
+        binding.topicsBanner.isAutoPlay(true);
+        binding.topicsBanner.setDelayTime(3000);
+        binding.topicsBanner.setImages(images);
+        binding.topicsBanner.setIndicatorGravity(BannerConfig.CENTER);
+        binding.topicsBanner.start();
+    }
+
+
 
     @SuppressLint("HandlerLeak")
     public Handler mHandler = new Handler(){
         @Override
         public void handleMessage(Message msg) {
             switch (msg.what){
-                case 0:
-                    binding.topicsViewpage.setCurrentItem(currentItem);
-                    break;
+
                 case 200:
                     initItemsData();
                     initEvent();
@@ -158,26 +172,6 @@ public class TopicsFragment extends BaseFragment {
         });
     }
 
-    /**
-     * 图片左右滑动引导页
-     */
-    public void viewPages(){
-        initData();
-        adapter = new ViewPageAdapter(listView);
-        binding.topicsViewpage.setAdapter(adapter);
-        binding.topicsIndicator.setViewPager(binding.topicsViewpage);
-    }
-
-    public void initData(){
-        listView.clear();
-        for (int i = 0; i < 3; i++)
-        {
-            ImageView imageView = new ImageView(getActivity());
-            imageView.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT));
-            imageView.setBackgroundResource(R.drawable.topics_img_banner);
-            listView.add(imageView);
-        }
-    }
 
     public void getAllArticle(){
         if (resultList.size() > 0) resultList.clear();
@@ -202,9 +196,17 @@ public class TopicsFragment extends BaseFragment {
         return super.onCreateAnimation(transit, enter, nextAnim);
     }
 
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        binding.topicsBanner.startAutoPlay();
+    }
+
     @Override
     public void onPause() {
         super.onPause();
         isGetData = false;
+        binding.topicsBanner.stopAutoPlay();
     }
 }

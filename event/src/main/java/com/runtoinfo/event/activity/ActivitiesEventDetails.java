@@ -34,6 +34,7 @@ public class ActivitiesEventDetails extends EventBaseActivity {
     public MyEventEntity eventEntity;
     public HttpUtils httpUtils;
     public int position;
+    public boolean isSignIn;
 
     @Override
     protected void initView() {
@@ -53,15 +54,20 @@ public class ActivitiesEventDetails extends EventBaseActivity {
         httpUtils.postPhoto(this, eventEntity.getCover(), binding.activityEventImg);
         binding.activityEventTime.setText("时间: " + eventEntity.getStartDate());
         binding.activityEventName.setText(eventEntity.getName());
-        if (type == 1){
-            binding.eventParticipant.setVisibility(View.VISIBLE);
-            binding.eventParticipant.setText("随行人员(" + eventEntity.getParticipantNumber() + "):" + eventEntity.getPrincipal());
-            binding.activitySignUpNow.setText("取消报名");
-            binding.activitySignUpNow.setTextColor(Color.parseColor("#999999"));
-            binding.activitySignUpNow.setBackgroundResource(R.drawable.background_button_cancel);
-        }else{
-            binding.eventParticipant.setVisibility(View.GONE);
-        }
+        isSignIn = eventEntity.isSignIn();
+        //if (isSignIn){
+            if (type == 1) {
+                binding.eventParticipant.setVisibility(View.VISIBLE);
+                binding.eventParticipant.setText("随行人员(" + eventEntity.getParticipantNumber() + "):" + eventEntity.getPrincipal());
+                binding.activitySignUpNow.setText("取消报名");
+                binding.activitySignUpNow.setTextColor(Color.parseColor("#999999"));
+                binding.activitySignUpNow.setBackgroundResource(R.drawable.background_button_cancel);
+            }else {
+                binding.eventParticipant.setVisibility(View.GONE);
+            }
+//        }else{
+//            binding.activitySignUpNow.setText("立即报名");
+//        }
     }
 
     public void initEvent(){

@@ -90,3 +90,14 @@ native <methods>;
 # 如果不使用android.support.annotation.Keep则需加上此行
 # -keep class com.my.pkg.SophixStubApplication$RealApplicationStub
 
+# glide 的混淆代码
+-keep public class * implements com.bumptech.glide.module.GlideModule
+-keep public enum com.bumptech.glide.load.resource.bitmap.ImageHeaderParser$** {
+  **[] $VALUES;
+  public *;
+}
+# banner 的混淆代码
+-keep class com.youth.banner.** {
+    *;
+ }
+

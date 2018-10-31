@@ -5,8 +5,6 @@ import android.content.Context;
 
 import com.alibaba.android.arouter.launcher.ARouter;
 import com.lljjcoder.style.citylist.utils.CityListLoader;
-import com.squareup.leakcanary.LeakCanary;
-import com.squareup.leakcanary.RefWatcher;
 
 /**
  * Created by Administrator on 2018/6/20 0020.
@@ -15,7 +13,7 @@ import com.squareup.leakcanary.RefWatcher;
 public class PersonalApplication extends Application {
 
     //在自己的Application中添加如下代码
-    public RefWatcher refWatcher;
+    //public RefWatcher refWatcher;
     @Override
     public void onCreate() {
         super.onCreate();
@@ -38,12 +36,12 @@ public class PersonalApplication extends Application {
          * 预先加载三级列表显示省市区的数据
          */
         CityListLoader.getInstance().loadProData(this);
-        refWatcher = LeakCanary.install(this);
+        //refWatcher = LeakCanary.install(this);
     }
 
     //在自己的Application中添加如下代码
-    public static RefWatcher getRefWatcher(Context context) {
-        PersonalApplication application = (PersonalApplication) context.getApplicationContext();
-        return application.refWatcher;
-    }
+//    public static RefWatcher getRefWatcher(Context context) {
+//        PersonalApplication application = (PersonalApplication) context.getApplicationContext();
+//        return application.refWatcher;
+//    }
 }

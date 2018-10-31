@@ -33,6 +33,7 @@ import com.runtoinfo.youxiao.R;
 import com.runtoinfo.youxiao.globalTools.utils.DialogMessage;
 import com.runtoinfo.youxiao.globalTools.utils.Entity;
 import com.runtoinfo.youxiao.globalTools.utils.SPUtils;
+import com.squareup.leakcanary.LeakCanary;
 import com.taobao.sophix.PatchStatus;
 import com.taobao.sophix.SophixManager;
 import com.taobao.sophix.listener.PatchLoadStatusListener;
@@ -86,6 +87,13 @@ public class MyApplication extends Application {
 
     public static MyApplication getInstance() {
         return singleton;
+    }
+
+    public void initLeakCanary(){
+        if (LeakCanary.isInAnalyzerProcess(this)){
+            return;
+        }
+        LeakCanary.install(this);
     }
 
     /**
