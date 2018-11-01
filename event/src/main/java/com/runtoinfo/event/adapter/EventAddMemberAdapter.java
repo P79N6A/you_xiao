@@ -12,14 +12,13 @@ import com.runtoinfo.httpUtils.bean.AddMemberBean;
 import com.runtoinfo.youxiao.globalTools.adapter.BaseViewHolder;
 import com.runtoinfo.youxiao.globalTools.adapter.UniversalRecyclerAdapter;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 /**
  * Created by QiaoJunChao on 2018/8/21.
  */
 
+@SuppressWarnings("all")
 public class EventAddMemberAdapter extends UniversalRecyclerAdapter<AddMemberBean> {
 
     public List<AddMemberBean> dataList;

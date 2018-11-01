@@ -9,7 +9,6 @@ import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.ListPopupWindow;
 import android.support.v7.widget.RecyclerView;
@@ -41,6 +40,7 @@ import pub.devrel.easypermissions.EasyPermissions;
  * Created by dmcBig on 2017/6/9.
  */
 
+@SuppressWarnings("all")
 public class PickerActivity extends Activity implements DataCallback, View.OnClickListener {
 
     Intent argsIntent;

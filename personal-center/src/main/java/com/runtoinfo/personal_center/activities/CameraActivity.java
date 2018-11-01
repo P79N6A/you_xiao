@@ -1,7 +1,6 @@
 package com.runtoinfo.personal_center.activities;
 
 import android.Manifest;
-import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
@@ -26,8 +25,8 @@ import com.runtoinfo.personal_center.R;
 import com.runtoinfo.personal_center.databinding.ActivityCameraBinding;
 
 import java.io.File;
-import java.io.IOException;
 
+@SuppressWarnings("all")
 @Route(path = "/camera/activity")
 public class CameraActivity extends BaseActivity {
 

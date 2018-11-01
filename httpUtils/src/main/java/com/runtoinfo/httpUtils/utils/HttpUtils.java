@@ -1,9 +1,7 @@
 package com.runtoinfo.httpUtils.utils;
 
-import android.Manifest;
 import android.app.Activity;
 import android.content.Context;
-import android.content.IntentFilter;
 import android.graphics.drawable.Drawable;
 import android.os.Handler;
 import android.os.Message;
@@ -16,7 +14,6 @@ import com.dmcbig.mediapicker.entity.Media;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.runtoinfo.httpUtils.CPRCBean.CommentRequestResultEntity;
-import com.runtoinfo.httpUtils.CPRCBean.GetAllCPC;
 import com.runtoinfo.httpUtils.CenterEntity.LearnTrackEntity;
 import com.runtoinfo.httpUtils.CenterEntity.LeaveRecordEntity;
 import com.runtoinfo.httpUtils.CenterEntity.PersonalInformationEntity;

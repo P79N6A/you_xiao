@@ -6,7 +6,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.provider.MediaStore;
-import android.support.annotation.NonNull;
 import android.util.DisplayMetrics;
 import android.view.Gravity;
 import android.view.View;
@@ -21,6 +20,7 @@ import com.runtoinfo.personal_center.R;
  * Created by Administrator on 2018/6/29 0029.
  */
 
+@SuppressWarnings("all")
 public class SelectPictureDialog extends Dialog {
     private Activity activity;
     private int layoutId;

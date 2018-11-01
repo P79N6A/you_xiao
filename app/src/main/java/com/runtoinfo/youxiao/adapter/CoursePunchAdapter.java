@@ -12,13 +12,11 @@ import android.widget.TextView;
 import com.alibaba.android.arouter.launcher.ARouter;
 import com.runtoinfo.httpUtils.HttpEntity;
 import com.runtoinfo.httpUtils.bean.HomeCourseEntity;
-import com.runtoinfo.httpUtils.bean.RequestDataEntity;
 import com.runtoinfo.httpUtils.utils.HttpUtils;
 import com.runtoinfo.youxiao.R;
 import com.runtoinfo.youxiao.globalTools.adapter.BaseViewHolder;
 import com.runtoinfo.youxiao.globalTools.adapter.UniversalRecyclerAdapter;
 import com.runtoinfo.youxiao.globalTools.utils.DialogMessage;
-import com.runtoinfo.youxiao.globalTools.utils.TimeUtil;
 
 import java.util.HashMap;
 import java.util.List;

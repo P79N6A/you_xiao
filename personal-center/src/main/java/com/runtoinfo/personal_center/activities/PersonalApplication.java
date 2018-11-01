@@ -1,7 +1,6 @@
 package com.runtoinfo.personal_center.activities;
 
 import android.app.Application;
-import android.content.Context;
 
 import com.alibaba.android.arouter.launcher.ARouter;
 import com.lljjcoder.style.citylist.utils.CityListLoader;
@@ -10,6 +9,7 @@ import com.lljjcoder.style.citylist.utils.CityListLoader;
  * Created by Administrator on 2018/6/20 0020.
  */
 
+@SuppressWarnings("all")
 public class PersonalApplication extends Application {
 
     //在自己的Application中添加如下代码

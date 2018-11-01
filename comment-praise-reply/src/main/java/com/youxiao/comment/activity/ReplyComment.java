@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
-import android.support.v7.widget.LinearLayoutManager;
 import android.text.TextUtils;
 import android.view.View;
 
@@ -17,7 +16,6 @@ import com.jaeger.library.StatusBarUtil;
 import com.runtoinfo.httpUtils.CPRCBean.CPRCDataEntity;
 import com.runtoinfo.httpUtils.CPRCBean.CPRCTypeEntity;
 import com.runtoinfo.httpUtils.CPRCBean.CommentRequestResultEntity;
-import com.runtoinfo.httpUtils.CPRCBean.GetAllCPC;
 import com.runtoinfo.httpUtils.HttpEntity;
 import com.runtoinfo.httpUtils.utils.HttpUtils;
 import com.runtoinfo.youxiao.globalTools.utils.DensityUtil;
@@ -29,10 +27,6 @@ import com.wuxiaolong.pullloadmorerecyclerview.PullLoadMoreRecyclerView;
 import com.youxiao.comment.R;
 import com.youxiao.comment.adapter.CommentPublishAdapter;
 import com.youxiao.comment.databinding.ActivityReplyCommentBinding;
-
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.HashMap;

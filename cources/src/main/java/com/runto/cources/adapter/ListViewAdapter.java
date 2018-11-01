@@ -1,7 +1,6 @@
 package com.runto.cources.adapter;
 
 import android.content.Context;
-import android.support.v4.view.animation.FastOutLinearInInterpolator;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,6 +16,7 @@ import java.util.List;
  * Created by Administrator on 2018/7/30 0030.
  */
 
+@SuppressWarnings("all")
 public class ListViewAdapter extends BaseAdapter {
 
     public List<String> dataList = new ArrayList<>();

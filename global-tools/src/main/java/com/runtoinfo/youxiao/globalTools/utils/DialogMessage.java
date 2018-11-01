@@ -15,7 +15,6 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.runtoinfo.youxiao.globalTools.R;
-import com.runtoinfo.youxiao.globalTools.adapter.BaseViewHolder;
 import com.victor.loading.rotate.RotateLoading;
 
 

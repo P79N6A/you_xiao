@@ -1,17 +1,12 @@
 package com.runtoinfo.youxiao.ui;
 
-import android.annotation.SuppressLint;
 import android.content.Context;
-import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
-import android.view.LayoutInflater;
 import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.PopupMenu;
 
-import com.runtoinfo.youxiao.R;
 
 import java.lang.reflect.Method;
 import java.util.List;
@@ -20,6 +15,7 @@ import java.util.List;
  * Created by Administrator on 2018/5/28 0028.
  */
 
+@SuppressWarnings("all")
 public class PopuMenu extends PopupMenu implements PopupMenu.OnMenuItemClickListener {
 
     private Context context;

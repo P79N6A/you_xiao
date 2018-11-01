@@ -1,22 +1,17 @@
 package com.runtoinfo.personal_center.activities;
 
-import android.app.Activity;
 import android.app.Dialog;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
-import android.text.TextUtils;
 import android.view.View;
 
 import com.alibaba.android.arouter.facade.annotation.Route;
 import com.alibaba.android.arouter.launcher.ARouter;
 import com.bumptech.glide.Glide;
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
 import com.runtoinfo.httpUtils.HttpEntity;
-import com.runtoinfo.httpUtils.bean.PersonalCenterEntity;
 import com.runtoinfo.httpUtils.bean.RequestDataEntity;
 import com.runtoinfo.httpUtils.bean.VersionEntity;
 import com.runtoinfo.httpUtils.utils.HttpUtils;
@@ -26,11 +21,7 @@ import com.runtoinfo.personal_center.databinding.ActivityPersonalSettingsBinding
 import com.runtoinfo.youxiao.globalTools.utils.DialogMessage;
 import com.runtoinfo.youxiao.globalTools.utils.Entity;
 import com.runtoinfo.youxiao.globalTools.utils.IntentDataType;
-import com.runtoinfo.youxiao.globalTools.utils.SPUtils;
-
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 @Route(path = "/personal/personalSettings")

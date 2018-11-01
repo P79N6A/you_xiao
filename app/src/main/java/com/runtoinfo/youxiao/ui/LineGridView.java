@@ -8,12 +8,12 @@ import android.util.AttributeSet;
 import android.view.View;
 import android.widget.GridView;
 
-import com.runtoinfo.youxiao.R;
 
 /**
  * Created by Administrator on 2018/7/24 0024.
  */
 
+@SuppressWarnings("all")
 public class LineGridView extends GridView {
 
     public LineGridView(Context context) {

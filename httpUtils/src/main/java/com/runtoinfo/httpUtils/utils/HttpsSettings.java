@@ -4,17 +4,13 @@ import android.content.Context;
 
 import java.io.InputStream;
 import java.security.KeyStore;
-import java.security.SecureRandom;
-import java.security.cert.CertificateFactory;
 import java.util.Collections;
-import java.util.concurrent.TimeUnit;
 
 import javax.net.ssl.HostnameVerifier;
 import javax.net.ssl.KeyManagerFactory;
 import javax.net.ssl.SSLContext;
 import javax.net.ssl.SSLSession;
 import javax.net.ssl.SSLSocketFactory;
-import javax.net.ssl.TrustManagerFactory;
 
 import okhttp3.OkHttpClient;
 import okhttp3.Protocol;

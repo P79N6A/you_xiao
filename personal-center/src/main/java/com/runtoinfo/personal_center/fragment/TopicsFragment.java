@@ -22,7 +22,6 @@ import com.runtoinfo.personal_center.R;
 import com.runtoinfo.personal_center.adapter.CollectionAdapter;
 import com.runtoinfo.personal_center.databinding.CollectionDataLayoutBinding;
 import com.runtoinfo.youxiao.globalTools.adapter.CommonViewPagerAdapter;
-import com.runtoinfo.youxiao.globalTools.adapter.UniversalRecyclerAdapter;
 import com.runtoinfo.youxiao.globalTools.utils.Entity;
 
 import org.json.JSONArray;
@@ -37,6 +36,7 @@ import java.util.Locale;
  * Created by QiaoJunChao on 2018/9/25.
  */
 
+@SuppressWarnings("all")
 @SuppressLint("ValidFragment")
 public class TopicsFragment extends BasePersonalFragment {
 

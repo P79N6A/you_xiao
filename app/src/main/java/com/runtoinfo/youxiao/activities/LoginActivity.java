@@ -15,10 +15,7 @@ import android.text.method.HideReturnsTransformationMethod;
 import android.text.method.PasswordTransformationMethod;
 import android.util.Log;
 import android.view.View;
-import android.view.WindowManager;
 import android.widget.AdapterView;
-import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import com.alibaba.android.arouter.facade.annotation.Route;
@@ -39,7 +36,6 @@ import com.runtoinfo.youxiao.globalTools.utils.IntentDataType;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -47,7 +43,6 @@ import java.util.Map;
 import java.util.Timer;
 import java.util.TimerTask;
 
-import okhttp3.Response;
 
 @SuppressWarnings("all")
 @Route(path = "/main/LoginActivity")

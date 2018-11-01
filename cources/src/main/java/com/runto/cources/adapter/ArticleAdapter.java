@@ -3,51 +3,29 @@ package com.runto.cources.adapter;
 import android.content.Context;
 import android.graphics.Color;
 import android.os.Handler;
-import android.os.Looper;
-import android.os.Message;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-
-import com.alibaba.android.arouter.launcher.ARouter;
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.RequestManager;
 import com.runto.cources.R;
-import com.runto.cources.bean.Article;
 import com.runto.cources.group.GroupRecyclerAdapter;
-import com.runto.cources.ui.BaseView;
-import com.runtoinfo.httpUtils.HttpEntity;
 import com.runtoinfo.httpUtils.bean.CourseEntity;
-import com.runtoinfo.httpUtils.bean.RequestDataEntity;
 import com.runtoinfo.httpUtils.utils.HttpUtils;
 import com.runtoinfo.youxiao.globalTools.adapter.BaseViewHolder;
-import com.runtoinfo.youxiao.globalTools.utils.DialogMessage;
-import com.runtoinfo.youxiao.globalTools.utils.Entity;
-import com.runtoinfo.youxiao.globalTools.utils.IntentDataType;
 import com.runtoinfo.youxiao.globalTools.utils.SPUtils;
 import com.runtoinfo.youxiao.globalTools.utils.TimeUtil;
-import com.runtoinfo.youxiao.globalTools.views.RoundCornerProgressBar;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Map;
-
-import uk.co.dolphin_com.sscore.LoadWarning;
 
 /**
  * 适配器
  * Created by huanghaibin on 2017/12/4.
  */
-
+@SuppressWarnings("all")
 public class ArticleAdapter extends GroupRecyclerAdapter<String, CourseEntity> {
 
     setOnClickListeners signInListener;

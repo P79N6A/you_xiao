@@ -7,8 +7,6 @@ import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
 import android.support.annotation.Nullable;
-import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.LinearLayoutManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -24,7 +22,6 @@ import com.runtoinfo.youxiao.adapter.BoutiqueInChildRecyclerAdapter;
 import com.runtoinfo.youxiao.globalTools.utils.DialogMessage;
 import com.runtoinfo.youxiao.globalTools.utils.Entity;
 import com.runtoinfo.youxiao.databinding.FragmentBoutiqueCourseInChildBinding;
-import com.runtoinfo.youxiao.entity.BoutiqueRecycler;
 import com.runtoinfo.youxiao.ui.GridSpacesItemDecoration;
 import com.wuxiaolong.pullloadmorerecyclerview.PullLoadMoreRecyclerView;
 

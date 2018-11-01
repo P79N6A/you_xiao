@@ -10,10 +10,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
-import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
-import android.view.GestureDetector;
-import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -24,13 +21,13 @@ import com.dmcbig.mediapicker.entity.Media;
 import com.dmcbig.mediapicker.view.PreviewFragment;
 
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.List;
 
 /**
  * Created by dmcBig on 2017/8/9.
  */
 
+@SuppressWarnings("all")
 public class PreviewActivity extends FragmentActivity implements View.OnClickListener, ViewPager.OnPageChangeListener{
 
     Button done;

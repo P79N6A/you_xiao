@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:tools="http://schemas.android.com/tools">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
 
-    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    <LinearLayout
         xmlns:app="http://schemas.android.com/apk/res-auto"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -22,14 +23,15 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
-                android:src="@drawable/activity_black_back" />
+                android:src="@drawable/activity_black_back"
+                android:contentDescription="@string/app_name" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerHorizontal="true"
                 android:layout_centerVertical="true"
-                android:text="课程详情"
+                android:text="@string/app_course_details"
                 android:textColor="#333333"
                 android:textSize="20sp" />
         </RelativeLayout>
@@ -46,14 +48,16 @@
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:layout_weight="3"
-                android:visibility="gone" />
+                android:visibility="gone"
+                tools:ignore="NestedWeights" />
 
             <ImageView
                 android:id="@+id/boutique_course_details_imageView"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:layout_weight="3"
-                android:background="@drawable/boutique_course_details" />
+                android:background="@drawable/boutique_course_details"
+                android:contentDescription="@string/app_name"/>
 
             <com.runtoinfo.youxiao.globalTools.views.MyScrollView
                 android:layout_width="match_parent"
@@ -78,7 +82,6 @@
                             android:id="@+id/boutique_course_name"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="钢琴在线教学视频零基础初级入门五线谱乐理教学"
                             android:textColor="#333740"
                             android:textSize="20sp" />
 
@@ -92,7 +95,6 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_centerVertical="true"
-                                android:text="7月20日 10:00开课"
                                 android:textColor="#999999"
                                 android:textSize="15sp" />
 
@@ -102,7 +104,6 @@
                                 android:layout_height="wrap_content"
                                 android:layout_alignParentEnd="true"
                                 android:layout_centerVertical="true"
-                                android:text="525人购买"
                                 android:textColor="#999999"
                                 android:textSize="15sp" />
                         </RelativeLayout>
@@ -174,13 +175,14 @@
                     android:id="@+id/boutique_course_collection_image"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:src="@drawable/boutique_course_collection" />
+                    android:src="@drawable/boutique_course_collection"
+                    android:contentDescription="@string/app_name"/>
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="10dp"
-                    android:text="收藏"
+                    android:text="@string/app_collection"
                     android:textColor="#333333"
                     android:textSize="18sp" />
             </LinearLayout>
@@ -198,13 +200,14 @@
                     android:id="@+id/boutique_course_buy_now"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:src="@drawable/boutique_course_buy" />
+                    android:src="@drawable/boutique_course_buy"
+                    android:contentDescription="@string/app_name"/>
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="10dp"
-                    android:text="立即购买"
+                    android:text="@string/app_buy_now"
                     android:textColor="#fff"
                     android:textSize="18sp" />
             </LinearLayout>

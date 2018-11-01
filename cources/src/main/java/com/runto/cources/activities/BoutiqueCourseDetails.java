@@ -6,13 +6,11 @@ import android.hardware.Sensor;
 import android.hardware.SensorManager;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentActivity;
 import android.view.View;
 
 import com.alibaba.android.arouter.facade.annotation.Route;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
-import com.qjc.library.StatusBarUtil;
 import com.runto.cources.R;
 import com.runto.cources.databinding.ActivityBoutiqueCourseDetailsBinding;
 import com.runto.cources.fragment.CourseIntroductionFragment;
@@ -29,6 +27,7 @@ import cn.jzvd.JZVideoPlayer;
 
 import static cn.jzvd.JZVideoPlayerStandard.*;
 
+@SuppressWarnings("all")
 @Route(path = "/course/boutiqueCourseDetails")
 public class BoutiqueCourseDetails extends BaseActivity {
 

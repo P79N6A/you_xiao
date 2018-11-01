@@ -2,8 +2,6 @@ package com.runtoinfo.information.adapter;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
-import android.content.Context;
-import android.provider.Settings;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,8 +13,6 @@ import com.runtoinfo.httpUtils.HttpEntity;
 import com.runtoinfo.httpUtils.bean.SystemMessageEntity;
 import com.runtoinfo.httpUtils.utils.HttpUtils;
 import com.runtoinfo.information.R;
-import com.runtoinfo.youxiao.globalTools.adapter.BaseViewHolder;
-import com.runtoinfo.youxiao.globalTools.adapter.UniversalRecyclerAdapter;
 import com.runtoinfo.youxiao.globalTools.utils.TimeUtil;
 
 import java.util.ArrayList;
@@ -26,6 +22,7 @@ import java.util.List;
  * Created by QiaoJunChao on 2018/9/10.
  */
 
+@SuppressWarnings("all")
 public class SystemMessageAdapter extends RecyclerView.Adapter {
 
     public final static int TYPE_SYSTEM = 0;

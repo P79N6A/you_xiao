@@ -1,22 +1,19 @@
 package com.runtoinfo.personal_center.activities;
 
-import android.app.Activity;
 import android.content.pm.ActivityInfo;
 import android.os.Bundle;
-import android.os.PersistableBundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.FragmentActivity;
 import android.view.View;
 
 import com.qjc.library.StatusBarUtil;
 import com.runtoinfo.personal_center.R;
-import com.runtoinfo.youxiao.globalTools.utils.DensityUtil;
 import com.runtoinfo.youxiao.globalTools.utils.SPUtils;
 
 /**
  * Created by QiaoJunChao on 2018/8/30.
  */
-
+@SuppressWarnings("all")
 public abstract class BaseActivity extends FragmentActivity {
 
     public SPUtils spUtils;

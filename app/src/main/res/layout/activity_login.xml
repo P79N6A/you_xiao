@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout>
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    <LinearLayout
         xmlns:app="http://schemas.android.com/apk/res-auto"
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
@@ -98,7 +98,8 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_alignParentEnd="true"
-                            android:layout_centerVertical="true" />
+                            android:layout_centerVertical="true"
+                            android:contentDescription="@string/app_name" />
                     </RelativeLayout>
 
 
@@ -149,7 +150,8 @@
                             android:layout_centerVertical="true"
                             android:layout_marginEnd="10dp"
                             android:layout_toStartOf="@+id/login_password"
-                            android:src="@drawable/login_password_on" />
+                            android:src="@drawable/login_password_on"
+                            android:contentDescription="@string/app_name" />
                     </RelativeLayout>
 
                     <LinearLayout

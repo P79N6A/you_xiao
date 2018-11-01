@@ -14,7 +14,6 @@ import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
 
-import com.runtoinfo.youxiao.activities.LoginActivity;
 
 import java.lang.reflect.Field;
 
@@ -22,6 +21,7 @@ import java.lang.reflect.Field;
  * Created by Administrator on 2018/8/1 0001.
  */
 
+@SuppressWarnings("all")
 public class Utils {
 
     // 状态栏高度

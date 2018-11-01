@@ -1,7 +1,6 @@
 package com.runtoinfo.event.activity;
 
 import android.annotation.SuppressLint;
-import android.app.ProgressDialog;
 import android.databinding.DataBindingUtil;
 import android.os.Handler;
 import android.os.Message;
@@ -13,7 +12,6 @@ import android.widget.Toast;
 
 import com.alibaba.android.arouter.facade.annotation.Route;
 import com.alibaba.android.arouter.launcher.ARouter;
-import com.google.gson.Gson;
 import com.runtoinfo.event.R;
 import com.runtoinfo.event.databinding.ActivitySiginUpBinding;
 import com.runtoinfo.event.dialog.SignUpSuccess;
@@ -61,11 +59,7 @@ public class ActivitiesSignUp extends EventBaseActivity {
             @Override
             public void afterTextChanged(Editable s) {
                 String number = binding.memberPhoneNumber.getText().toString();
-                if (number.length() == 11){
-                    isPhone = DensityUtil.isMobileNO(number);
-                }else{
-                    isPhone = false;
-                }
+                isPhone = number.length() == 11 && DensityUtil.isMobileNO(number);
             }
         });
     }

@@ -7,7 +7,6 @@ package uk.co.dolphin_com.seescoreandroid;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Queue;
 import java.util.Stack;
 
 import uk.co.dolphin_com.sscore.Component;
@@ -24,15 +23,11 @@ import uk.co.dolphin_com.sscore.ex.ScoreException;
 import uk.co.dolphin_com.sscore.playdata.Note;
 
 import android.animation.ObjectAnimator;
-import android.animation.ValueAnimator;
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.res.AssetManager;
 import android.graphics.Canvas;
 import android.graphics.Rect;
-import android.graphics.Paint;
-import android.graphics.Path;
-import android.graphics.RectF;
-import android.os.Build;
 import android.os.Handler;
 import android.os.Looper;
 import android.support.v4.view.MotionEventCompat;
@@ -45,12 +40,13 @@ import android.view.ViewParent;
 import android.view.ViewTreeObserver;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
-import uk.co.dolphin_com.sscore.StaffLayout;
-import uk.co.dolphin_com.sscore.BarLayout;
 
 /**
  * SeeScoreView manages layout of a {@link SScore} and placement of {@link SystemView}s into a scrolling View.
  */
+
+@SuppressWarnings("all")
+@SuppressLint("ViewConstructor")
 public class SeeScoreView extends LinearLayout  {
 
     /**

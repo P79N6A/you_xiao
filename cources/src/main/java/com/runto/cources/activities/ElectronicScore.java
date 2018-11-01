@@ -6,7 +6,6 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.pm.PackageManager;
 import android.databinding.DataBindingUtil;
-import android.media.DrmInitData;
 import android.os.Bundle;
 import android.os.Environment;
 import android.support.v4.app.ActivityCompat;
@@ -14,7 +13,6 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.alibaba.android.arouter.facade.annotation.Route;
-import com.alibaba.android.arouter.launcher.ARouter;
 import com.runto.cources.R;
 import com.runto.cources.databinding.ActivityElectronicScoreBinding;
 import com.runto.cources.utils.FileDownloadUtils;
@@ -24,6 +22,7 @@ import org.wlf.filedownloader.FileDownloader;
 
 import java.io.File;
 
+@SuppressWarnings("all")
 @Route(path = "/electronic/electronicScore")
 public class ElectronicScore extends BaseActivity {
 

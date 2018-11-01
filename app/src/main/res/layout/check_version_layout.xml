@@ -35,7 +35,8 @@
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
             android:layout_alignParentEnd="true"
-            android:background="@drawable/bg_check_version_delete" />
+            android:background="@drawable/bg_check_version_delete"
+            android:contentDescription="@string/app_name" />
     </RelativeLayout>
 
     <ScrollView

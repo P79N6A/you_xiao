@@ -1,15 +1,14 @@
 package com.runtoinfo.youxiao.ui;
 
 import android.content.Context;
-import android.os.Handler;
 import android.util.AttributeSet;
-import android.view.MotionEvent;
 import android.widget.ScrollView;
 
 /**
  * Created by Administrator on 2018/7/24 0024.
  */
 
+@SuppressWarnings("all")
 public class MyScrollView extends ScrollView {
     public interface ScrollViewListener {
 

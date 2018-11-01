@@ -10,7 +10,6 @@ import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
 import android.support.v7.widget.LinearLayoutManager;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
@@ -45,7 +44,6 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
 
 @Route(path = "/cources/colorfulActivity")
@@ -225,11 +223,13 @@ public class ColorfulActivity extends BaseActivity implements
                 case 1:
                     int monthSize = monthDataList.size();
                     List<Calendar> schemes = new ArrayList<>();
+                    String now = binding.calendarView.getCurYear() + N
+                            + binding.calendarView.getCurMonth() + N
+                            + (binding.calendarView.getCurDay() < 10 ? "0" + binding.calendarView.getCurDay() : binding.calendarView.getCurDay());
                     if (monthSize > 0) {
                         for (int i = 0; i < monthSize; i++) {
                             CourseEntity entity = monthDataList.get(i);
                             String[] splitDate = entity.getDate().split(N);
-                            String now = binding.calendarView.getCurYear() + N + binding.calendarView.getCurMonth() + N + binding.calendarView.getCurDay();
                             int result = now.compareTo(entity.getDate());
                             if (result <= 0) {
                                 schemes.add(getSchemeCalendar(Integer.parseInt(splitDate[0]),

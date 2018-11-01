@@ -8,13 +8,13 @@ import android.view.View;
 
 import com.qjc.library.StatusBarUtil;
 import com.runtoinfo.event.R;
-import com.runtoinfo.youxiao.globalTools.utils.DensityUtil;
 import com.runtoinfo.youxiao.globalTools.utils.SPUtils;
 
 /**
  * Created by QiaoJunChao on 2018/8/21.
  */
 
+@SuppressWarnings("all")
 public abstract class EventBaseActivity extends Activity {
 
     public SPUtils spUtils;

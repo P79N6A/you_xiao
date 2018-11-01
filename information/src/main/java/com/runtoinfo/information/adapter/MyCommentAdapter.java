@@ -2,13 +2,9 @@ package com.runtoinfo.information.adapter;
 
 import android.app.Activity;
 import android.content.Context;
-import android.graphics.Color;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
-import android.text.Spannable;
-import android.text.SpannableStringBuilder;
-import android.text.style.ForegroundColorSpan;
 import android.view.View;
 import android.widget.ImageView;
 
@@ -33,6 +29,7 @@ import java.util.List;
  * Created by QiaoJunChao on 2018/9/4.
  */
 
+@SuppressWarnings("all")
 public class MyCommentAdapter extends UniversalRecyclerAdapter<MyCommentEntity> {
 
     public Activity activity;

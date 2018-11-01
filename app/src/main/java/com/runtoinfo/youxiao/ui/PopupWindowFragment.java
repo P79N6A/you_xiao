@@ -2,13 +2,10 @@ package com.runtoinfo.youxiao.ui;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
-import android.content.ComponentName;
 import android.content.Context;
-import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.support.annotation.RequiresApi;
 import android.util.DisplayMetrics;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,18 +16,16 @@ import android.widget.PopupWindow;
 
 import com.runtoinfo.youxiao.R;
 import com.runtoinfo.youxiao.adapter.ListViewAdapter;
-import com.runtoinfo.youxiao.adapter.SchoolDynamicsRecyclerAdapter;
 import com.runtoinfo.youxiao.entity.SelectSchoolEntity;
 import com.runtoinfo.youxiao.utils.Utils;
 
-import java.sql.Wrapper;
 import java.util.List;
-import java.util.Map;
 
 /**
  * Created by Administrator on 2018/5/28 0028.
  */
 
+@SuppressWarnings("all")
 public class PopupWindowFragment {
 
     public Context context;

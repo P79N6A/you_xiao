@@ -143,4 +143,17 @@
         <item>11月</item>
         <item>12月</item>
     </string-array>
+
+    <string name="app_name">有校</string>
+    <string name="app_course_details">课程详情</string>
+    <string name="app_pay">人购买</string>
+    <string name="app_unit">¥</string>
+    <string name="app_collection">收藏</string>
+    <string name="app_buy_now">立即购买</string>
+    <string name="course_mine">我的课程</string>
+    <string name="course_year">年</string>
+    <string name="course_month">月</string>
+    <string name="course_day">日</string>
+    <string name="course_today">今天</string>
+    <string name="course_score">电子曲谱</string>
 </resources>

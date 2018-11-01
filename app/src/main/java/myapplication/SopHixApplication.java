@@ -11,13 +11,13 @@ import com.taobao.sophix.SophixEntry;
 import com.taobao.sophix.SophixManager;
 import com.taobao.sophix.listener.PatchLoadStatusListener;
 
-import static myapplication.MyApplication.msgDisplayListener;
 import static myapplication.MyApplication.spUtils;
 
 /**
  * Created by QiaoJunChao on 2018/9/28.
  */
 
+@SuppressWarnings("all")
 public class SopHixApplication extends SophixApplication {
     private final String TAG = "SophixStubApplication";
     // 此处SophixEntry应指定真正的Application，并且保证RealApplicationStub类名不被混淆。

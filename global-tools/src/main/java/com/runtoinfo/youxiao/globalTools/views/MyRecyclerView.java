@@ -11,7 +11,6 @@ import android.view.animation.LinearInterpolator;
 import android.widget.Scroller;
 import android.widget.TextView;
 
-import com.runtoinfo.youxiao.globalTools.R;
 import com.runtoinfo.youxiao.globalTools.adapter.BaseViewHolder;
 import com.runtoinfo.youxiao.globalTools.adapter.UniversalRecyclerAdapter;
 
@@ -19,6 +18,7 @@ import com.runtoinfo.youxiao.globalTools.adapter.UniversalRecyclerAdapter;
  * Created by QiaoJunChao on 2018/9/5.
  */
 
+@SuppressWarnings("all")
 public class MyRecyclerView extends RecyclerView {
 
     private Context mContext;

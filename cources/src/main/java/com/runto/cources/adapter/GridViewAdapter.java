@@ -10,19 +10,16 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.bumptech.glide.Glide;
-import com.donkingliang.imageselector.entry.Image;
 import com.runto.cources.R;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 /**
  * Created by Administrator on 2018/7/23 0023.
  */
 
+@SuppressWarnings("all")
 public class GridViewAdapter extends BaseAdapter {
 
     public List<String> dataList = new ArrayList<>();

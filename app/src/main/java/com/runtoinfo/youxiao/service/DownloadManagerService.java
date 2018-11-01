@@ -26,6 +26,7 @@ import java.io.File;
  * Created by QiaoJunchao on 2018/6/26 0026.
  */
 
+@SuppressWarnings("all")
 public class DownloadManagerService extends Service {
     private DownloadManager mDownloadManager;
     private DownloadBinder mBinder = new DownloadBinder();

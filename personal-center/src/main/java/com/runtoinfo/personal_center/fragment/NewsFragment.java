@@ -23,7 +23,6 @@ import com.runtoinfo.personal_center.R;
 import com.runtoinfo.personal_center.adapter.CollectionAdapter;
 import com.runtoinfo.personal_center.databinding.CollectionDataLayoutBinding;
 import com.runtoinfo.youxiao.globalTools.adapter.CommonViewPagerAdapter;
-import com.runtoinfo.youxiao.globalTools.adapter.UniversalRecyclerAdapter;
 import com.runtoinfo.youxiao.globalTools.utils.DialogMessage;
 import com.runtoinfo.youxiao.globalTools.utils.Entity;
 
@@ -39,6 +38,7 @@ import java.util.Locale;
  * Created by QiaoJunChao on 2018/9/5.
  */
 
+@SuppressWarnings("all")
 @SuppressLint("ValidFragment")
 public class NewsFragment extends BasePersonalFragment {
 

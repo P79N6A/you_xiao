@@ -6,7 +6,6 @@ package uk.co.dolphin_com.seescoreandroid;
 
 import uk.co.dolphin_com.sscore.BarLayout;
 import uk.co.dolphin_com.sscore.Component;
-import uk.co.dolphin_com.sscore.CursorRect;
 import uk.co.dolphin_com.sscore.Point;
 import uk.co.dolphin_com.sscore.RenderItem;
 import uk.co.dolphin_com.sscore.RenderItem.Colour;
@@ -14,6 +13,8 @@ import uk.co.dolphin_com.sscore.SScore;
 import uk.co.dolphin_com.sscore.SSystem;
 import uk.co.dolphin_com.sscore.StaffLayout;
 import uk.co.dolphin_com.sscore.ex.ScoreException;
+
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.res.AssetManager;
 import android.graphics.Canvas;
@@ -27,7 +28,6 @@ import android.view.MotionEvent;
 import android.view.View;
 
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 
@@ -35,6 +35,9 @@ import java.util.TreeMap;
  * The SystemView is a {@link View} which displays a single {@link SSystem}.
  * <p>{@link SeeScoreView} manages layout and placement of these into a scrolling View to display the complete {@link SScore}
  */
+
+@SuppressWarnings("all")
+@SuppressLint("ViewConstructor")
 public class SystemView extends View {
 
 	/**

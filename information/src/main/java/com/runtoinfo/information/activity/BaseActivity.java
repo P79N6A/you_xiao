@@ -8,7 +8,6 @@ import android.view.View;
 
 import com.qjc.library.StatusBarUtil;
 import com.runtoinfo.information.R;
-import com.runtoinfo.youxiao.globalTools.utils.DensityUtil;
 import com.runtoinfo.youxiao.globalTools.utils.SPUtils;
 
 /**

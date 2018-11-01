@@ -8,7 +8,6 @@ import com.runtoinfo.httpUtils.CenterEntity.LeaveRecordEntity;
 import com.runtoinfo.personal_center.R;
 import com.runtoinfo.youxiao.globalTools.adapter.BaseViewHolder;
 import com.runtoinfo.youxiao.globalTools.adapter.UniversalRecyclerAdapter;
-import com.runtoinfo.youxiao.globalTools.utils.TimeUtil;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -18,6 +17,7 @@ import java.util.List;
  * Created by QiaoJunChao on 2018/9/5.
  */
 
+@SuppressWarnings("all")
 public class LeaveAdapter extends UniversalRecyclerAdapter<LeaveRecordEntity>{
 
     public LeaveAdapter(Context mContext, List<LeaveRecordEntity> mDatas, int mLayoutId) {

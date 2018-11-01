@@ -30,6 +30,7 @@ import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
+@SuppressWarnings("all")
 @Route(path = "/main/resetPassword")
 public class ForgetPassWordActivity extends BaseActivity {
 

@@ -10,7 +10,6 @@ import com.runtoinfo.httpUtils.bean.MyEventEntity;
 import com.runtoinfo.httpUtils.utils.HttpUtils;
 import com.runtoinfo.youxiao.globalTools.adapter.BaseViewHolder;
 import com.runtoinfo.youxiao.globalTools.adapter.UniversalRecyclerAdapter;
-import com.runtoinfo.youxiao.globalTools.utils.TimeUtil;
 
 import java.util.List;
 

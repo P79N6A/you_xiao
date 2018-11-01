@@ -2,19 +2,15 @@ package com.runtoinfo.personal_center.adapter;
 
 import android.app.Activity;
 import android.content.Context;
-import android.text.TextUtils;
 import android.view.View;
 import android.widget.ImageView;
-import android.widget.TextView;
 
-import com.bumptech.glide.Glide;
 import com.runtoinfo.httpUtils.CenterEntity.CollectionEntity;
 import com.runtoinfo.httpUtils.HttpEntity;
 import com.runtoinfo.httpUtils.utils.HttpUtils;
 import com.runtoinfo.personal_center.R;
 import com.runtoinfo.youxiao.globalTools.adapter.BaseViewHolder;
 import com.runtoinfo.youxiao.globalTools.adapter.UniversalRecyclerAdapter;
-import com.runtoinfo.youxiao.globalTools.views.RoundImagView;
 
 import java.util.List;
 

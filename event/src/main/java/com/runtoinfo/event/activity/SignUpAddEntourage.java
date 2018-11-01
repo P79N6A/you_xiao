@@ -12,8 +12,6 @@ import android.view.View;
 import android.widget.Toast;
 
 import com.alibaba.android.arouter.facade.annotation.Route;
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
 import com.runtoinfo.event.R;
 import com.runtoinfo.event.adapter.EventAddMemberAdapter;
 import com.runtoinfo.event.databinding.ActivityAddEntourageBinding;

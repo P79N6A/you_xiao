@@ -23,7 +23,6 @@ import com.runtoinfo.httpUtils.utils.HttpUtils;
 import com.runtoinfo.youxiao.globalTools.utils.DialogMessage;
 import com.runtoinfo.youxiao.globalTools.utils.Entity;
 import com.runtoinfo.youxiao.globalTools.utils.IntentDataType;
-import com.runtoinfo.youxiao.globalTools.utils.TimeUtil;
 
 @Route(path = "/event/eventDetails")
 public class ActivitiesEventDetails extends EventBaseActivity {

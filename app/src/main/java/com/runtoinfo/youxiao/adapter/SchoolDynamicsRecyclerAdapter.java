@@ -13,7 +13,6 @@ import android.widget.TextView;
 import com.runtoinfo.httpUtils.bean.SchoolDynamicsNewEntity;
 import com.runtoinfo.httpUtils.utils.HttpUtils;
 import com.runtoinfo.youxiao.R;
-import com.runtoinfo.youxiao.entity.SchoolDynamicsEntity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,6 +24,7 @@ import cn.jzvd.JZVideoPlayerStandard;
  * Created by QiaoJunChao on 2018/8/15.
  */
 
+@SuppressWarnings("all")
 public class SchoolDynamicsRecyclerAdapter extends RecyclerView.Adapter {
 
     public final static int ONE_PIC_TYPE = 0;

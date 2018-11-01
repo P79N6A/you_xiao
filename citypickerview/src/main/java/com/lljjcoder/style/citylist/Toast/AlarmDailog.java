@@ -26,7 +26,7 @@ public class AlarmDailog extends Toast
         this.context = context;
         LayoutInflater inflater = LayoutInflater.from(context);
         View layout = inflater.inflate( R.layout.dialog_alarm_ui, null);
-        noticeText = (TextView) layout.findViewById( R.id.noticeText);
+        noticeText =  layout.findViewById( R.id.noticeText);
         toast = new Toast(context);
         toast.setGravity(Gravity.CENTER_HORIZONTAL | Gravity.CENTER_VERTICAL, 0, 0);
         toast.setDuration(Toast.LENGTH_SHORT);

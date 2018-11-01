@@ -10,24 +10,20 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentActivity;
 import android.util.Log;
 import android.view.View;
-import android.view.WindowManager;
-import android.widget.LinearLayout;
 
 import com.alibaba.sdk.android.man.MANService;
 import com.alibaba.sdk.android.man.MANServiceProvider;
 import com.gyf.barlibrary.ImmersionBar;
 import com.jaeger.library.StatusBarUtil;
-import com.runtoinfo.youxiao.R;
 import com.runtoinfo.youxiao.globalTools.utils.SPUtils;
 
-import java.lang.reflect.Field;
 
 import myapplication.MyApplication;
 
 /**
  * Created by Administrator on 2018/5/8 0008.
  */
-
+@SuppressWarnings("all")
 public abstract class BaseActivity extends FragmentActivity {
 
     public SPUtils spUtils;

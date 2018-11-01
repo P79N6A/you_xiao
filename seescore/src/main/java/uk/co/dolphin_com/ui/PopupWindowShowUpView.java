@@ -2,10 +2,7 @@ package uk.co.dolphin_com.ui;
 
 import android.app.Activity;
 import android.view.Gravity;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
-import android.view.WindowManager;
 import android.widget.PopupWindow;
 
 import uk.co.dolphin_com.seescoreandroid.R;
@@ -15,6 +12,7 @@ import uk.co.dolphin_com.seescoreandroid.R;
  * Created by Administrator on 2018/7/27 0027.
  */
 
+@SuppressWarnings("all")
 public class PopupWindowShowUpView extends PopupWindow{
     private int popupWidth;
     private int popupHeight;

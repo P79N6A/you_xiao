@@ -8,7 +8,6 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.FileProvider;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -30,6 +29,7 @@ import uk.co.senab.photoview.PhotoViewAttacher;
  * Created by dmcBig on 2017/8/16.
  */
 
+@SuppressWarnings("all")
 public class PreviewFragment extends Fragment {
     private PhotoView mPhotoView;
     ImageView play_view;

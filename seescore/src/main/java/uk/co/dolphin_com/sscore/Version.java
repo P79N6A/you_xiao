@@ -1,10 +1,11 @@
 package uk.co.dolphin_com.sscore;
 
-import java.text.NumberFormat;
 
 /**
  * The library version information from SScore.getVersion()
  */
+
+@SuppressWarnings("all")
 public class Version
 {
 	/**

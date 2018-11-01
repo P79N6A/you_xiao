@@ -32,6 +32,8 @@ import java.util.List;
  * 作者：liji on 2015/12/17 10:40
  * 邮箱：lijiwork@sina.com
  */
+
+@SuppressWarnings("all")
 public class CityPickerView implements CanShow, OnWheelChangedListener {
     
     private String TAG = "citypicker_log";

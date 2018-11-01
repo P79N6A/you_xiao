@@ -1,6 +1,5 @@
 package com.runtoinfo.youxiao.globalTools.utils;
 
-import android.content.IntentFilter;
 
 import com.google.gson.internal.bind.util.ISO8601Utils;
 

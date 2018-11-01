@@ -20,15 +20,13 @@ import com.runtoinfo.httpUtils.bean.LeaveEntity;
 import com.runtoinfo.httpUtils.bean.RequestDataEntity;
 import com.runtoinfo.httpUtils.utils.HttpUtils;
 import com.runtoinfo.youxiao.globalTools.timepicker.DatePickerView;
-import com.runtoinfo.youxiao.globalTools.utils.DensityUtil;
 import com.runtoinfo.youxiao.globalTools.utils.DialogMessage;
 import com.runtoinfo.youxiao.globalTools.utils.Entity;
 import com.runtoinfo.youxiao.globalTools.utils.IntentDataType;
 
 import java.util.ArrayList;
 
-import uk.co.dolphin_com.sscore.LoadWarning;
-
+@SuppressWarnings("all")
 @Route(path = "/course/leaveActivity")
 public class CourseLeaveActivity extends BaseActivity {
 

@@ -1,13 +1,12 @@
 package com.runtoinfo.youxiao.entity;
 
-import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
-import android.widget.ImageView;
 
 /**
  * Created by Administrator on 2018/7/5 0005.
  */
 
+@SuppressWarnings("all")
 public class CourseEntity {
 
     public String courseName;

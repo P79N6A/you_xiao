@@ -1,6 +1,5 @@
 package com.runtoinfo.youxiao.entity;
 
-import android.graphics.Bitmap;
 
 import java.util.List;
 
@@ -8,6 +7,7 @@ import java.util.List;
  * Created by QiaoJunChao on 2018/8/15.
  */
 
+@SuppressWarnings("all")
 public class SchoolDynamicsEntity {
     public int type;
     public String tile;

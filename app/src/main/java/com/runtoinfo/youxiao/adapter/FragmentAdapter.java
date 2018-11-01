@@ -6,12 +6,12 @@ import android.support.v4.app.FragmentPagerAdapter;
 import android.view.ViewGroup;
 
 import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Created by Administrator on 2018/5/24 0024.
  */
 
+@SuppressWarnings("all")
 public class FragmentAdapter extends FragmentPagerAdapter {
 
     public ArrayList<Fragment> list = new ArrayList<>();

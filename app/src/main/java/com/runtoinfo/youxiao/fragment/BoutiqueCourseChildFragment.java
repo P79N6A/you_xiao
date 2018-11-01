@@ -1,11 +1,9 @@
 package com.runtoinfo.youxiao.fragment;
 
 import android.annotation.SuppressLint;
-import android.content.Context;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.annotation.StringRes;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -24,7 +22,7 @@ import java.util.List;
 /**
  * Created by Administrator on 2018/7/26 0026.
  */
-
+@SuppressWarnings("all")
 @SuppressLint("ValidFragment")
 public class BoutiqueCourseChildFragment extends BaseFragment {
 

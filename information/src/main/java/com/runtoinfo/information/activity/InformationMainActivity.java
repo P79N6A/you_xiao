@@ -2,7 +2,6 @@ package com.runtoinfo.information.activity;
 
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
-import android.opengl.Visibility;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;

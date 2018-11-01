@@ -26,12 +26,12 @@ import com.runtoinfo.youxiao.ui.SetTabLayoutWidth;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 /**
  * Created by Administrator on 2018/5/24 0024.
  */
 
+@SuppressWarnings("all")
 public class FineClassFragment extends BaseFragment {
 
     FragmentFineClassBinding binding;

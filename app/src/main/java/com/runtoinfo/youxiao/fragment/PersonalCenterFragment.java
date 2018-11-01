@@ -1,13 +1,11 @@
 package com.runtoinfo.youxiao.fragment;
 
-import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
 import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -25,13 +23,10 @@ import com.runtoinfo.httpUtils.bean.PersonalCenterEntity;
 import com.runtoinfo.httpUtils.bean.RequestDataEntity;
 import com.runtoinfo.httpUtils.utils.HttpUtils;
 import com.runtoinfo.youxiao.R;
-import com.runtoinfo.youxiao.activities.LoginActivity;
-import com.runtoinfo.youxiao.activities.MainActivity;
 import com.runtoinfo.youxiao.databinding.FragmentPersonalCenterBinding;
 import com.runtoinfo.youxiao.globalTools.utils.DensityUtil;
 import com.runtoinfo.youxiao.globalTools.utils.Entity;
 import com.runtoinfo.youxiao.globalTools.utils.IntentDataType;
-import com.runtoinfo.youxiao.ui.MyGridView;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -45,6 +40,7 @@ import java.util.Map;
  * Created by Administrator on 2018/5/24 0024.
  */
 
+@SuppressWarnings("all")
 public class PersonalCenterFragment extends BaseFragment {
 
     public FragmentPersonalCenterBinding binding;

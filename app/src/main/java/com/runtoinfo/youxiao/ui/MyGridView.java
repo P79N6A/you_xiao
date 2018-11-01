@@ -1,16 +1,14 @@
 package com.runtoinfo.youxiao.ui;
 
 import android.content.Context;
-import android.os.Build;
-import android.support.annotation.RequiresApi;
 import android.util.AttributeSet;
-import android.view.Gravity;
 import android.widget.GridView;
 
 /**
  * Created by Administrator on 2018/6/13 0013.
  */
 
+@SuppressWarnings("all")
 public class MyGridView extends GridView {
     public MyGridView(Context context) {
         super(context);

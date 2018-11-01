@@ -4,13 +4,13 @@ import android.content.Context;
 import android.media.MediaPlayer;
 import android.util.AttributeSet;
 import android.view.KeyEvent;
-import android.view.ViewTreeObserver;
 import android.widget.VideoView;
 
 /**
  * Created by Administrator on 2018/5/14 0014.
  */
 
+@SuppressWarnings("all")
 public class MyVideoView extends VideoView {
 
     public MyVideoView(Context context) {

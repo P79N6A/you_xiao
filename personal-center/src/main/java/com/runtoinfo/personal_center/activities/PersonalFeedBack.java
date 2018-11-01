@@ -1,15 +1,12 @@
 package com.runtoinfo.personal_center.activities;
 
-import android.app.Activity;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.view.View;
 
 import com.alibaba.android.arouter.facade.annotation.Route;
-import com.alibaba.sdk.android.feedback.impl.FeedbackAPI;
 import com.runtoinfo.personal_center.R;
 import com.runtoinfo.personal_center.databinding.ActivityPersonalFeedBackBinding;
-import com.runtoinfo.personal_center.databinding.ActivityPersonalSettingsBinding;
 
 @Route(path = "/personal/feedback")
 public class PersonalFeedBack extends BaseActivity {

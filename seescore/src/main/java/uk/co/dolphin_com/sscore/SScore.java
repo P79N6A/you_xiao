@@ -6,7 +6,6 @@
 package uk.co.dolphin_com.sscore;
 
 import java.io.File;
-import java.text.NumberFormat;
 
 import uk.co.dolphin_com.sscore.ex.ScoreException;
 import android.content.res.AssetManager;
@@ -26,6 +25,8 @@ import android.graphics.Canvas;
  * <p>
  * Other methods return detailed information about items in the score and require a contents or contents-detail licence.
  */
+
+@SuppressWarnings("all")
 public class SScore
 {
 	/**

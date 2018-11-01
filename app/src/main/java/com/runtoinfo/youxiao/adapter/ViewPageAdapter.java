@@ -3,7 +3,6 @@ package com.runtoinfo.youxiao.adapter;
 import android.support.v4.view.PagerAdapter;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -12,6 +11,7 @@ import java.util.List;
  * Created by Administrator on 2018/5/24 0024.
  */
 
+@SuppressWarnings("all")
 public class ViewPageAdapter extends PagerAdapter {
 
     public List<View> list = new ArrayList<>();

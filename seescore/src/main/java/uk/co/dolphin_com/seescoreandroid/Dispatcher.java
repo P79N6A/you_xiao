@@ -10,7 +10,6 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 import uk.co.dolphin_com.sscore.playdata.Bar;
-import uk.co.dolphin_com.sscore.playdata.BarIterator;
 import uk.co.dolphin_com.sscore.playdata.Note;
 import uk.co.dolphin_com.sscore.playdata.Part;
 import uk.co.dolphin_com.sscore.playdata.PlayData;

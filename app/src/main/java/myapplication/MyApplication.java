@@ -1,6 +1,5 @@
 package myapplication;
 
-import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.Application;
 import android.app.NotificationChannel;
@@ -10,11 +9,7 @@ import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Process;
-import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
-import android.view.Window;
-import android.view.WindowManager;
 import android.widget.Toast;
 
 import com.alibaba.android.arouter.launcher.ARouter;
@@ -28,22 +23,16 @@ import com.alibaba.sdk.android.man.MANServiceProvider;
 import com.alibaba.sdk.android.push.CloudPushService;
 import com.alibaba.sdk.android.push.CommonCallback;
 import com.alibaba.sdk.android.push.noonesdk.PushServiceFactory;
-import com.gyf.barlibrary.ImmersionBar;
-import com.runtoinfo.youxiao.R;
-import com.runtoinfo.youxiao.globalTools.utils.DialogMessage;
 import com.runtoinfo.youxiao.globalTools.utils.Entity;
 import com.runtoinfo.youxiao.globalTools.utils.SPUtils;
 import com.squareup.leakcanary.LeakCanary;
-import com.taobao.sophix.PatchStatus;
 import com.taobao.sophix.SophixManager;
-import com.taobao.sophix.listener.PatchLoadStatusListener;
 import com.tencent.bugly.crashreport.CrashReport;
 import com.ut.mini.internal.UTTeamWork;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.File;
 import java.util.HashMap;
 import java.util.Stack;
 import java.util.concurrent.Callable;

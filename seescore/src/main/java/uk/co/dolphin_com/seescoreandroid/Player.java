@@ -15,7 +15,6 @@ import java.util.TimerTask;
 import uk.co.dolphin_com.sscore.SScore;
 import uk.co.dolphin_com.sscore.ex.ScoreException;
 import uk.co.dolphin_com.sscore.playdata.Bar;
-import uk.co.dolphin_com.sscore.playdata.BarIterator;
 import uk.co.dolphin_com.sscore.playdata.PlayData;
 import uk.co.dolphin_com.sscore.playdata.PlayData.PlayControls;
 import uk.co.dolphin_com.sscore.playdata.UserTempo;
@@ -26,6 +25,8 @@ import uk.co.dolphin_com.sscore.playdata.UserTempo;
  * The aim is for the dispatched handlers to move a cursor in time with the playing of the MediaPlayer
  * With careful timing this usually succeeds!
  */
+
+@SuppressWarnings("all")
 public class Player {
 
     private static boolean kPrintPlayData = false;

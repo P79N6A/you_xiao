@@ -21,7 +21,6 @@ import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
 import uk.co.dolphin_com.seescoreandroid.SeeScoreView.ZoomNotification;
-import uk.co.dolphin_com.seescoreandroid.databinding.ActivitySeescoreMainBinding;
 import uk.co.dolphin_com.sscore.Component;
 import uk.co.dolphin_com.sscore.Header;
 import uk.co.dolphin_com.sscore.LoadOptions;
@@ -37,8 +36,6 @@ import uk.co.dolphin_com.ui.PopupWindowShowUpView;
 
 import android.app.Activity;
 import android.content.res.AssetManager;
-import android.databinding.DataBindingComponent;
-import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
@@ -50,7 +47,6 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnTouchListener;
 import android.view.ViewTreeObserver;
-import android.widget.CheckBox;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ScrollView;
@@ -60,6 +56,7 @@ import android.widget.Toast;
 
 import com.alibaba.android.arouter.facade.annotation.Route;
 
+@SuppressWarnings("all")
 @Route(path = "/seescore/seescoreMain")
 public class SeeScoreMainActivity extends Activity {
 
@@ -1133,10 +1130,7 @@ public class SeeScoreMainActivity extends Activity {
         try {
             final Player pl = new Player(currentScore, new UserTempoImpl(), this, PlayUsingMediaPlayer, new PlayData.PlayControls() {
                 public boolean getPartEnabled(int partIndex) {
-                    if (isShowingSinglePart)
-                        return partIndex == singlePart; // play single part if showing single part
-                    else
-                        return true;
+                    return !isShowingSinglePart || partIndex == singlePart;
                 }
 
                 public boolean getPartStaffEnabled(int partIndex, int staffIndex) {

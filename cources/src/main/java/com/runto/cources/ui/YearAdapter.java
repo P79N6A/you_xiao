@@ -23,8 +23,8 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.runto.cources.R;
-import com.runtoinfo.youxiao.globalTools.adapter.BaseViewHolder;
 
+@SuppressWarnings("all")
 final class YearAdapter extends BaseRecyclerAdapter<Month> {
     private CalendarViewDelegate mDelegate;
     private int mItemHeight;
