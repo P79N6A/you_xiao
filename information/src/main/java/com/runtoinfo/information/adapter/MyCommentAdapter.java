@@ -36,6 +36,7 @@ public class MyCommentAdapter extends UniversalRecyclerAdapter<MyCommentEntity> 
     public Handler handler;
     public BaseViewHolder handlerHolder;
     public HttpUtils httpUtils;
+    public CommentListener  listener;
     public MyCommentAdapter(Handler handler, Activity context, List<MyCommentEntity> mDatas, int mLayoutId) {
         super(handler, context, mDatas, mLayoutId);
         this.activity = context;
@@ -43,7 +44,7 @@ public class MyCommentAdapter extends UniversalRecyclerAdapter<MyCommentEntity> 
     }
 
     @Override
-    protected void convert(Context mContext, BaseViewHolder holder, final MyCommentEntity myCommentEntity, int position) {
+    protected void convert(Context mContext, BaseViewHolder holder, final MyCommentEntity myCommentEntity, final int position) {
         handlerHolder = holder;
         holder.setText(R.id.reply_user_name, myCommentEntity.getReplyer());
         holder.setText(R.id.reply_time, myCommentEntity.getReplyTime());
@@ -57,39 +58,17 @@ public class MyCommentAdapter extends UniversalRecyclerAdapter<MyCommentEntity> 
         holder.getView(R.id.reply_reply).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                DialogMessage.showBottomDialog(handler, -1, activity, true);
+                //DialogMessage.showBottomDialog(handler, -1, activity, true);
+                listener.commentListenner(v, position, myCommentEntity);
             }
         });
+    }
 
-        handler = new Handler(Looper.getMainLooper()){
-            @Override
-            public void handleMessage(Message msg) {
-                switch (msg.what){
-                    case 20:
-                        String content = msg.obj.toString();
-                        CPRCDataEntity entity = new CPRCDataEntity();
-                        entity.setType(CPRCTypeEntity.REPLY);
-                        entity.setParentId(myCommentEntity.getReplyId());
-                        entity.setParentType(CPRCTypeEntity.TARGET_REPLY);
-                        entity.setTarget(myCommentEntity.getTargetId());
-                        entity.setTargetType(myCommentEntity.getTargetType());
-                        entity.setContent(content);
-                        httpUtils.postComment(handler, entity);
-                        break;
-                    case 3:
-                        CommentRequestResultEntity resultEntity = new Gson().fromJson(msg.obj.toString(), new TypeToken<CommentRequestResultEntity>(){}.getType());
-                        MyCommentEntity commentEntity = new MyCommentEntity();
-                        String rContent = resultEntity.getContent() + "//@" + resultEntity.getNickName() + ":";
-                        commentEntity.setReplyContent(rContent + myCommentEntity.getReplyContent());
-                        commentEntity.setReplyTime(TimeUtil.iso8601ToDate(resultEntity.getApprovedTime(), 1));
-                        commentEntity.setReplyer(resultEntity.getNickName());
-                        commentEntity.setTargetCover(myCommentEntity.getTargetCover());
-                        commentEntity.setTargetTitle(myCommentEntity.getTargetTitle());
-                        commentEntity.setTargetPublisher(myCommentEntity.getTargetPublisher());
-                        addItem(commentEntity, 0);
-                        break;
-                }
-            }
-        };
+    public interface CommentListener{
+       public void commentListenner(View v, int positon, MyCommentEntity commentEntity);
+    }
+
+    public void setCommentListener(CommentListener listener){
+        this.listener = listener;
     }
 }

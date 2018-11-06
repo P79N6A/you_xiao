@@ -8,6 +8,7 @@ import android.content.SharedPreferences;
  * Created by QiaoJunChao on 2018/8/23.
  */
 
+@SuppressWarnings("all")
 public class SPUtils {
     public SharedPreferences preferences;
     public Context context;
@@ -22,7 +23,14 @@ public class SPUtils {
     }
 
     public boolean getBoolean(String key){
-        return preferences.getBoolean(key, false);
+        boolean result;
+        try{
+            result = preferences.getBoolean(key, false);
+        }catch (Exception e){
+            preferences.edit().remove(key);
+            result = false;
+        }
+        return result;
     }
 
     public void setString(String key, String value){
@@ -30,7 +38,13 @@ public class SPUtils {
     }
 
     public String getString(String key){
-        return preferences.getString(key,"");
+        String result = "";
+        try {
+            result = preferences.getString(key,"");
+        }catch (Exception e){
+            preferences.edit().remove(key);
+        }
+        return result;
     }
 
     public void setInt(String key, int value){
@@ -38,6 +52,13 @@ public class SPUtils {
     }
 
     public int getInt(String key){
-        return preferences.getInt(key, 0xff);
+        int result;
+        try {
+            result = preferences.getInt(key, 0xff);
+        }catch (Exception e){
+            preferences.edit().remove(key);
+            result = 0xff;
+        }
+        return result;
     }
 }

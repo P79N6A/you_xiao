@@ -619,6 +619,8 @@ public class HttpUtils<T> {
                             } catch (JSONException e) {
                                 e.printStackTrace();
                                 handler.sendEmptyMessage(404);
+                            } catch (IllegalStateException e){
+                                e.printStackTrace();
                             }
 
                         }
@@ -736,7 +738,7 @@ public class HttpUtils<T> {
                 getClient().newCall(request).enqueue(new Callback() {
                     @Override
                     public void onFailure(Call call, IOException e) {
-
+                        handler.sendEmptyMessage(500);
                     }
 
                     @Override
@@ -756,6 +758,8 @@ public class HttpUtils<T> {
                                     handler.sendEmptyMessage(0);
                                 }
                             } catch (JSONException e) {
+                                e.printStackTrace();
+                            }catch (IllegalStateException e){
                                 e.printStackTrace();
                             }
                         }
@@ -807,6 +811,8 @@ public class HttpUtils<T> {
                                 }
                             } catch (JSONException e) {
                                 handler.sendEmptyMessage(500);
+                            } catch (IllegalStateException e){
+                                handler.sendEmptyMessage(500);
                             }
                         }
                     }
@@ -825,50 +831,57 @@ public class HttpUtils<T> {
         executorService.execute(new Runnable() {
             @Override
             public void run() {
-                String json = new Gson().toJson(addMemberBean);
-                RequestBody body = RequestBody.create(JSON, json);
-                Request request = new Request.Builder()
-                        .header(Authorization, Bearer + entity.getToken())
-                        .url(entity.getUrl())
-                        .post(body)
-                        .build();
-                getClient().newCall(request).enqueue(new Callback() {
-                    @Override
-                    public void onFailure(Call call, IOException e) {
-                        handler.sendEmptyMessage(404);
-                    }
-
-                    @Override
-                    public void onResponse(Call call, Response response) throws IOException {
-                        if (response.isSuccessful()) {
-                            switch (type) {
-                                case 0://单独报名
-                                    handler.sendEmptyMessage(0);
-                                    break;
-                                case 1://添加随行人员报名
-                                    try {
-                                        JSONObject json = new JSONObject(response.body().string());
-                                        JSONObject result = json.getJSONObject("result");
-                                        int id = result.getInt("id");
-                                        Message msg = new Message();
-                                        msg.what = 0;
-                                        msg.obj = id;
-                                        handler.sendMessage(msg);
-                                    } catch (JSONException e) {
-                                        e.printStackTrace();
-                                    }
-                                    break;
-                                case 2://继续添加随行人员
-                                    handler.sendEmptyMessage(0);
-                                    break;
-                                case 3://完成提交
-                                    handler.sendEmptyMessage(3);
-                                    break;
-                            }
-
+                try {
+                    String json = new Gson().toJson(addMemberBean);
+                    RequestBody body = RequestBody.create(JSON, json);
+                    Request request = new Request.Builder()
+                            .header(Authorization, Bearer + entity.getToken())
+                            .url(entity.getUrl())
+                            .post(body)
+                            .build();
+                    getClient().newCall(request).enqueue(new Callback() {
+                        @Override
+                        public void onFailure(Call call, IOException e) {
+                            handler.sendEmptyMessage(500);
                         }
-                    }
-                });
+
+                        @Override
+                        public void onResponse(Call call, Response response) throws IOException {
+                            if (response.isSuccessful()) {
+                                switch (type) {
+                                    case 0://单独报名
+                                        handler.sendEmptyMessage(0);
+                                        break;
+                                    case 1://添加随行人员报名
+                                        try {
+                                            JSONObject json = new JSONObject(response.body().string());
+                                            JSONObject result = json.getJSONObject("result");
+                                            int id = result.getInt("id");
+                                            Message msg = new Message();
+                                            msg.what = 0;
+                                            msg.obj = id;
+                                            handler.sendMessage(msg);
+                                        } catch (JSONException e) {
+                                            e.printStackTrace();
+                                        }
+                                        break;
+                                    case 2://继续添加随行人员
+                                        handler.sendEmptyMessage(0);
+                                        break;
+                                    case 3://完成提交
+                                        handler.sendEmptyMessage(3);
+                                        break;
+                                }
+
+                            }else{
+                                handler.sendEmptyMessage(404);
+                            }
+                        }
+                    });
+                }catch (IllegalStateException e){
+                    e.printStackTrace();
+                    handler.sendEmptyMessage(500);
+                }
             }
         });
     }
@@ -907,7 +920,11 @@ public class HttpUtils<T> {
                                 handler.sendEmptyMessage(0);
                             } catch (JSONException e) {
                                 e.printStackTrace();
+                            } catch (IllegalStateException e){
+                                handler.sendEmptyMessage(500);
                             }
+                        }else{
+                            handler.sendEmptyMessage(404);
                         }
                     }
                 });
@@ -954,7 +971,11 @@ public class HttpUtils<T> {
                                 }
                             } catch (JSONException e) {
                                 handler.sendEmptyMessage(404);
+                            } catch (IllegalStateException e){
+                                handler.sendEmptyMessage(500);
                             }
+                        }else{
+                            handler.sendEmptyMessage(404);
                         }
                     }
                 });
@@ -1358,6 +1379,8 @@ public class HttpUtils<T> {
                             } catch (JSONException e) {
                                 handler.sendEmptyMessage(400);
                                 e.printStackTrace();
+                            } catch (IllegalStateException e){
+                                handler.sendEmptyMessage(500);
                             }
                         }
                     }
@@ -1475,6 +1498,8 @@ public class HttpUtils<T> {
                                     handler.sendEmptyMessage(30);
                             } catch (JSONException e) {
                                 e.printStackTrace();
+                            } catch (IllegalStateException e){
+                                handler.sendEmptyMessage(500);
                             }
                         }
                     }
@@ -1524,6 +1549,8 @@ public class HttpUtils<T> {
                             } catch (JSONException e) {
                                 e.printStackTrace();
                                 handler.sendEmptyMessage(404);
+                            } catch (IllegalStateException e){
+                                handler.sendEmptyMessage(500);
                             }
                         }
                     }
@@ -1694,6 +1721,8 @@ public class HttpUtils<T> {
                             } catch (JSONException e) {
                                 e.printStackTrace();
                                 handler.sendEmptyMessage(404);
+                            }catch (IllegalStateException e){
+                                handler.sendEmptyMessage(500);
                             }
                         } else {
                             handler.sendEmptyMessage(500);
@@ -1801,6 +1830,8 @@ public class HttpUtils<T> {
                             } catch (JSONException e) {
                                 e.printStackTrace();
                                 handler.sendEmptyMessage(404);
+                            } catch (IllegalStateException e){
+                                handler.sendEmptyMessage(500);
                             }
                         }
                     }
@@ -1852,6 +1883,8 @@ public class HttpUtils<T> {
                                 }
                             } catch (JSONException e) {
                                 e.printStackTrace();
+                            } catch (IllegalStateException e){
+                                handler.sendEmptyMessage(500);
                             }
                         }
                     }
@@ -1903,6 +1936,8 @@ public class HttpUtils<T> {
                             } catch (JSONException e) {
                                 e.printStackTrace();
                                 handler.sendEmptyMessage(404);
+                            } catch (IllegalStateException e){
+                                handler.sendEmptyMessage(500);
                             }
                         }
                     }
@@ -1956,6 +1991,8 @@ public class HttpUtils<T> {
                             } catch (JSONException e) {
                                 e.printStackTrace();
                                 handler.sendEmptyMessage(404);
+                            } catch (IllegalStateException e){
+                                handler.sendEmptyMessage(500);
                             }
                         }
                     }
@@ -2010,6 +2047,8 @@ public class HttpUtils<T> {
                             } catch (JSONException e) {
                                 e.printStackTrace();
                                 handler.sendEmptyMessage(404);
+                            } catch (IllegalStateException e){
+                                handler.sendEmptyMessage(500);
                             }
                         }
                     }
@@ -2060,6 +2099,8 @@ public class HttpUtils<T> {
                             } catch (JSONException e) {
                                 e.printStackTrace();
                                 handler.sendEmptyMessage(404);
+                            } catch (IllegalStateException e){
+                                handler.sendEmptyMessage(500);
                             }
 
                         }
@@ -2166,6 +2207,8 @@ public class HttpUtils<T> {
                             } catch (JSONException e) {
                                 e.printStackTrace();
                                 handler.sendEmptyMessage(404);
+                            } catch (IllegalStateException e){
+                                handler.sendEmptyMessage(500);
                             }
                         } else {
                             handler.sendEmptyMessage(500);
@@ -2369,6 +2412,8 @@ public class HttpUtils<T> {
                             } catch (JSONException e) {
                                 e.printStackTrace();
                                 handler.sendEmptyMessage(404);
+                            } catch (IllegalStateException e){
+                                handler.sendEmptyMessage(500);
                             }
                         }
                     }

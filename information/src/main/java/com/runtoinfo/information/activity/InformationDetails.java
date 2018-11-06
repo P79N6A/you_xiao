@@ -1,5 +1,6 @@
 package com.runtoinfo.information.activity;
 
+import android.app.Dialog;
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
@@ -14,6 +15,9 @@ import android.view.View;
 import com.alibaba.android.arouter.facade.annotation.Route;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+import com.runtoinfo.httpUtils.CPRCBean.CPRCDataEntity;
+import com.runtoinfo.httpUtils.CPRCBean.CPRCTypeEntity;
+import com.runtoinfo.httpUtils.CPRCBean.CommentRequestResultEntity;
 import com.runtoinfo.httpUtils.CPRCBean.PraiseEntity;
 import com.runtoinfo.httpUtils.bean.SystemMessageEntity;
 import com.runtoinfo.information.R;
@@ -30,9 +34,11 @@ import com.runtoinfo.httpUtils.HttpEntity;
 import com.runtoinfo.httpUtils.bean.RequestDataEntity;
 import com.runtoinfo.httpUtils.utils.HttpUtils;
 import com.runtoinfo.youxiao.globalTools.utils.DensityUtil;
+import com.runtoinfo.youxiao.globalTools.utils.DialogMessage;
 import com.runtoinfo.youxiao.globalTools.utils.Entity;
 import com.runtoinfo.youxiao.globalTools.utils.IntentDataType;
 import com.runtoinfo.youxiao.globalTools.utils.RecyclerViewDecoration;
+import com.runtoinfo.youxiao.globalTools.utils.TimeUtil;
 import com.wuxiaolong.pullloadmorerecyclerview.PullLoadMoreRecyclerView;
 
 import org.json.JSONArray;
@@ -66,6 +72,8 @@ public class InformationDetails extends BaseActivity {
     public int page = 1;
 
     public String layoutType;
+
+    public MyCommentEntity myCommentEntity;//我的评论（传递过来的参数）
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -177,7 +185,7 @@ public class InformationDetails extends BaseActivity {
 
         Map<String, Object> map = new HashMap<>();
         map.put("skipCount", DensityUtil.getOffSet(page));
-        map.put("maxResultCount", 10);
+        map.put("maxResultCount", DensityUtil.getOffSet(page));
         map.put("userId", spUtils.getInt(Entity.USER_ID));
 
         httpUtils.getMyCommentOrPraise(handler, entity, map);
@@ -227,10 +235,11 @@ public class InformationDetails extends BaseActivity {
         RequestDataEntity entity = new RequestDataEntity();
         entity.setUrl(HttpEntity.MAIN_URL + HttpEntity.GET_REPLY_ME);
         entity.setToken(spUtils.getString(Entity.TOKEN));
+        entity.setUserId(spUtils.getInt(Entity.USER_ID));
 
         Map<String, Object> map = new HashMap<>();
         map.put("skipCount", DensityUtil.getOffSet(page));
-        map.put("maxResultCount", 10);
+        map.put("maxResultCount", DensityUtil.getOffSet(page));
         map.put("userId", spUtils.getInt(Entity.USER_ID));
 
         httpUtils.getMyCommentOrPraise(handler, entity, map);
@@ -274,11 +283,22 @@ public class InformationDetails extends BaseActivity {
             commentBinding.infoCommentRecycler.setAdapter(commentAdapter);
             commentBinding.infoCommentRecycler.addItemDecoration(new RecyclerViewDecoration(this, RecyclerViewDecoration.HORIZONTAL_LIST));
             commentBinding.infoCommentRecycler.setOnPullLoadMoreListener(pullLoadMoreListener);
+            commentAdapter.setCommentListener(commentListener);
         }else{
             commentAdapter.notifyDataSetChanged();
         }
-
     }
+
+    /**
+     * 我的评论：回复监听事件
+     */
+    public MyCommentAdapter.CommentListener commentListener = new MyCommentAdapter.CommentListener() {
+        @Override
+        public void commentListenner(View v, int positon, MyCommentEntity entity) {
+            DialogMessage.showBottomDialog(handler, -1, InformationDetails.this, true);
+            myCommentEntity = entity;
+        }
+    };
 
     public void initCommentEvent() {
         commentBinding.systemInformationBack.setOnClickListener(new View.OnClickListener() {
@@ -350,6 +370,33 @@ public class InformationDetails extends BaseActivity {
                             break;
                     }
                     break;
+                case 20:
+                    String content = msg.obj.toString();
+                    if (myCommentEntity != null){
+                        CPRCDataEntity entity = new CPRCDataEntity();
+                        entity.setType(CPRCTypeEntity.REPLY);
+                        entity.setParentId(myCommentEntity.getReplyId());
+                        entity.setParentType(CPRCTypeEntity.PARENT_REPLY);
+                        entity.setTarget(myCommentEntity.getTargetId());
+                        entity.setTargetType(CPRCTypeEntity.TARGET_REPLY);
+                        entity.setUserId(spUtils.getInt(Entity.USER_ID));
+                        entity.setContent(content.concat("//@").concat(myCommentEntity.getReplyer()).concat(":").concat(myCommentEntity.getReplyContent()));
+                        httpUtils.postComment(handler, entity);
+                    }
+                    break;
+                case 2:
+                    DialogMessage.showBottomDialog(handler, -1, InformationDetails.this, false);
+                    CommentRequestResultEntity resultEntity = new Gson().fromJson(msg.obj.toString(), new TypeToken<CommentRequestResultEntity>(){}.getType());
+                    MyCommentEntity commentEntity = new MyCommentEntity();
+                    String rContent = resultEntity.getContent() + "//@" + resultEntity.getNickName() + ":";
+                    commentEntity.setReplyContent(rContent + myCommentEntity.getReplyContent());
+                    commentEntity.setReplyTime(TimeUtil.iso8601ToDate(resultEntity.getApprovedTime(), 1));
+                    commentEntity.setReplyer(resultEntity.getNickName());
+                    commentEntity.setTargetCover(myCommentEntity.getTargetCover());
+                    commentEntity.setTargetTitle(myCommentEntity.getTargetTitle());
+                    commentEntity.setTargetPublisher(myCommentEntity.getTargetPublisher());
+                    commentAdapter.addItem(commentEntity, 0);
+                    break;
                 case 30:
                     switch (layoutType) {
                         case "comment":
@@ -366,6 +413,7 @@ public class InformationDetails extends BaseActivity {
                             break;
                     }
                     break;
+
                 case 200:
                     isReadInformation = true;
                     Log.e("result", "状态更改成功");

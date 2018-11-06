@@ -367,5 +367,8 @@ public class ColorfulActivity extends BaseActivity implements
         }
     }
 
+    public void initX5WebView(){
+
+    }
 
 }

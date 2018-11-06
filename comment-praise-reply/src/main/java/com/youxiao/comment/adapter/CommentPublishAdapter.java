@@ -23,6 +23,7 @@ import com.runtoinfo.youxiao.globalTools.utils.DialogMessage;
 import com.runtoinfo.youxiao.globalTools.utils.Entity;
 import com.runtoinfo.youxiao.globalTools.utils.IntentDataType;
 import com.runtoinfo.youxiao.globalTools.utils.SPUtils;
+import com.runtoinfo.youxiao.globalTools.utils.TimeUtil;
 import com.youxiao.comment.R;
 
 import java.util.ArrayList;
@@ -66,12 +67,15 @@ public class CommentPublishAdapter extends UniversalRecyclerAdapter<CommentReque
         //}
         Glide.with(mContext).load(HttpEntity.IMAGE_HEAD + commentPublishItemEntity.getUserAvatar())
                 .into((ImageView) holder.getView(R.id.comment_publish_item_img));
-        String[] time = new String[2];
+        //String[] time = new String[2];
+
         if (commentPublishItemEntity.getApprovedTime() != null) {
-             time = commentPublishItemEntity.getApprovedTime().split("T");
+             //time = commentPublishItemEntity.getApprovedTime().split("T");
+            //时间格式要进行更改，改为“1分钟之前”，目前是显示的日期
+            String time = TimeUtil.getTimeDif(commentPublishItemEntity.getApprovedTime());
+            holder.setText(R.id.comment_publish_time, time /*+ "  " + time[1]*/);
         }
-        //时间格式要进行更改，改为“1分钟之前”，目前是显示的日期
-        holder.setText(R.id.comment_publish_time, time[0] /*+ "  " + time[1]*/);
+
         //因数据不完善，本是int类型数据，得到的是null
         holder.setText(R.id.comment_publish_reply, String.valueOf(commentPublishItemEntity.getReplyNumber() + "回复"));
         if (commentPublishItemEntity.hasPraise) {

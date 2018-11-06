@@ -259,7 +259,7 @@ public class ReplyComment extends BaseActivity {
                     replyReply.setTargetType(CPRCTypeEntity.TARGET_REPLY);
                     replyReply.setParentType(CPRCTypeEntity.PARENT_REPLY);
                     replyReply.setTarget(dialogEntity.getTarget());
-                    replyReply.setParentId(dialogEntity.parentId);
+                    replyReply.setParentId(dialogEntity.getParentId());
                     replyReply.setContent(content.concat("//@").concat(dialogEntity.getNickName()).concat(":").concat(dialogEntity.getContent()));
                     replyReply.setUserId(spUtils.getInt(Entity.USER_ID));
                     replyReply.setToken(spUtils.getString(Entity.TOKEN));

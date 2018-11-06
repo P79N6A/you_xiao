@@ -93,7 +93,7 @@ dependencies {
     implementation 'com.gyf.barlibrary:barlibrary:2.3.0'
     implementation 'me.relex:circleindicator:1.2.2@aar'
     implementation files('libs/volley.jar')
-    implementation 'org.xwalk:xwalk_core_library:23.53.589.4'
+    //implementation 'org.xwalk:xwalk_core_library:23.53.589.4'
     implementation project(':comment-praise-reply')
     implementation 'com.wuxiaolong.pullloadmorerecyclerview:library:1.1.2'
     implementation 'com.aliyun.ams:alicloud-android-hotfix:3.2.6'
@@ -102,11 +102,11 @@ dependencies {
     annotationProcessor 'com.github.bumptech.glide:compiler:4.8.0'
     //noinspection GradleCompatible
     implementation 'com.google.firebase:firebase-core:16.0.4'
-    compile 'com.youth.banner:banner:1.4.10'
-
+    implementation 'com.youth.banner:banner:1.4.10'
     debugImplementation 'com.squareup.leakcanary:leakcanary-android:1.6.2'
     releaseImplementation 'com.squareup.leakcanary:leakcanary-android-no-op:1.6.2'
     // Optional, if you use support library fragments:
     debugImplementation 'com.squareup.leakcanary:leakcanary-support-fragment:1.6.2'
+    implementation files('src/main/jniLibs/tbs_sdk_thirdapp_v3.6.0.1352_43618_sharewithdownload_withoutGame_obfs_20180918_120327.jar')
 }
 apply plugin: 'com.google.gms.google-services'

@@ -158,5 +158,6 @@
                 app:group_text_color="#555555"
                 app:group_text_size="15sp"/>
         </com.runto.cources.ui.CalendarLayout>
+
     </LinearLayout>
 </layout>

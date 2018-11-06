@@ -98,7 +98,7 @@
                         android:textSize="16sp" />
                 </LinearLayout>
 
-                <org.xwalk.core.XWalkView
+                <com.runtoinfo.youxiao.ui.X5WebView
                     android:id="@+id/dynamics_webview"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"

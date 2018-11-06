@@ -2,6 +2,7 @@ package com.runtoinfo.youxiao.activities;
 
 import android.annotation.SuppressLint;
 import android.databinding.DataBindingUtil;
+import android.graphics.PixelFormat;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v7.widget.LinearLayoutManager;
@@ -50,6 +51,7 @@ public class SchoolDynamics extends BaseActivity {
     public boolean isClickPraise = false;
     @Override
     protected void initView() {
+        getWindow().setFormat(PixelFormat.TRANSLUCENT);
         binding = DataBindingUtil.setContentView(SchoolDynamics.this, R.layout.school_movment);
         httpUtils = new HttpUtils(this);
         changeView();

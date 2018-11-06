@@ -60,7 +60,8 @@
         <activity android:name=".activities.BaseActivity" />
         <activity android:name=".activities.WelcomeActivity" />
         <activity android:name=".activities.MainActivity" />
-        <activity android:name=".activities.SchoolDynamics" />
+        <activity android:name=".activities.SchoolDynamics"
+            android:configChanges="orientation|screenSize|keyboardHidden"/>
 
         <provider
             android:name="android.support.v4.content.FileProvider"

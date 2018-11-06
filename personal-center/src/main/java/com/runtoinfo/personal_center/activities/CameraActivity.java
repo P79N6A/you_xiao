@@ -26,8 +26,9 @@ import com.runtoinfo.personal_center.databinding.ActivityCameraBinding;
 
 import java.io.File;
 
-@SuppressWarnings("all")
+
 @Route(path = "/camera/activity")
+@SuppressWarnings("all")
 public class CameraActivity extends BaseActivity {
 
 
