@@ -13,10 +13,15 @@ public class SimpleWeekView extends WeekView {
     private int mRadius;
     public int mH;
     public int mW;
+    private Paint mSchemeBasicPaint = new Paint();
 
     public SimpleWeekView(Context context) {
         super(context);
-
+        mSchemeBasicPaint.setAntiAlias(true);
+        mSchemeBasicPaint.setStyle(Paint.Style.FILL);
+        mSchemeBasicPaint.setTextAlign(Paint.Align.CENTER);
+        mSchemeBasicPaint.setColor(0xff333333);
+        mSchemeBasicPaint.setFakeBoldText(true);
         mH = dipToPx(getContext(), 2);
         mW = dipToPx(getContext(), 2);
     }
@@ -31,7 +36,12 @@ public class SimpleWeekView extends WeekView {
     protected boolean onDrawSelected(Canvas canvas, Calendar calendar, int x, boolean hasScheme) {
         int cx = x + mItemWidth / 2 + mW / 2;
         int cy = mItemHeight / 2 + mH / 2;
-        canvas.drawCircle(cx, cy, mRadius, mSelectedPaint);
+        canvas.drawCircle(cx, cy, mRadius, calendar.isCurrentDay()? mCurDayBackPaint : mSelectedPaint);
+        if (calendar.isCurrentDay()) {
+            mSelectTextPaint.setColor(0xffffffff);
+        }else{
+            mSelectTextPaint.setColor(0xff333333);
+        }
         return false;
     }
 
@@ -39,19 +49,24 @@ public class SimpleWeekView extends WeekView {
     protected void onDrawScheme(Canvas canvas, Calendar calendar, int x) {
         int cx = x + mItemWidth / 2;
         int cy = mItemHeight / 2;
-        canvas.drawCircle(cx, cy, mRadius, mSchemePaint);
+        mSchemeBasicPaint.setColor(calendar.getSchemeColor());
+        canvas.drawCircle(x + mItemWidth / 2, mItemHeight - mH, mH, mSchemeBasicPaint );
     }
 
     @Override
     protected void onDrawText(Canvas canvas, Calendar calendar, int x, boolean hasScheme, boolean isSelected) {
         float baselineY = mTextBaseLine;
         int cx = x + mItemWidth / 2;
+        int cy = mItemHeight / 2;
         if (isSelected) {
             canvas.drawText(String.valueOf(calendar.getDay()),
                     cx,
                     baselineY,
                     mSelectTextPaint);
         } else if (hasScheme) {
+            if (calendar.isCurrentDay()){
+                canvas.drawCircle(cx, cy, mRadius, mCurDayBackPaint);
+            }
             canvas.drawText(String.valueOf(calendar.getDay()),
                     cx,
                     baselineY,
@@ -59,6 +74,9 @@ public class SimpleWeekView extends WeekView {
                             calendar.isCurrentMonth() ? mSchemeTextPaint : mSchemeTextPaint);
 
         } else {
+            if (calendar.isCurrentDay()){
+                canvas.drawCircle(cx, cy, mRadius, mCurDayBackPaint);
+            }
             canvas.drawText(String.valueOf(calendar.getDay()), cx, baselineY,
                     calendar.isCurrentDay() ? mCurDayTextPaint :
                             calendar.isCurrentMonth() ? mCurMonthTextPaint : mCurMonthTextPaint);

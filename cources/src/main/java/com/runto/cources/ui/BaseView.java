@@ -93,6 +93,10 @@ public abstract class BaseView extends View implements View.OnClickListener, Vie
     protected Paint mCurDayTextPaint = new Paint();
 
     /**
+     * 当前日期背景画笔
+     */
+    protected Paint mCurDayBackPaint = new Paint();
+    /**
      * 当前日期文本颜色画笔
      */
     protected Paint mCurDayLunarTextPaint = new Paint();
@@ -208,6 +212,10 @@ public abstract class BaseView extends View implements View.OnClickListener, Vie
         mCurDayTextPaint.setFakeBoldText(false);
         mCurDayTextPaint.setTextSize(CalendarUtil.dipToPx(context, TEXT_SIZE));
 
+        mCurDayBackPaint.setAntiAlias(true);
+        mCurDayBackPaint.setStyle(Paint.Style.FILL);
+        mCurDayBackPaint.setStrokeWidth(2);
+
         mCurDayLunarTextPaint.setAntiAlias(true);
         mCurDayLunarTextPaint.setTextAlign(Paint.Align.CENTER);
         mCurDayLunarTextPaint.setColor(Color.RED);
@@ -215,7 +223,7 @@ public abstract class BaseView extends View implements View.OnClickListener, Vie
         mCurDayLunarTextPaint.setTextSize(CalendarUtil.dipToPx(context, TEXT_SIZE));
 
         mSelectedPaint.setAntiAlias(true);
-        mSelectedPaint.setStyle(Paint.Style.FILL);
+        mSelectedPaint.setStyle(Paint.Style.STROKE);
         mSelectedPaint.setStrokeWidth(2);
 
         setOnClickListener(this);
@@ -243,6 +251,7 @@ public abstract class BaseView extends View implements View.OnClickListener, Vie
         this.mSchemePaint.setColor(delegate.getSchemeThemeColor());
         this.mSchemeTextPaint.setColor(delegate.getSchemeTextColor());
 
+        this.mCurDayBackPaint.setColor(delegate.getSelectedThemeColor());
 
         this.mCurMonthTextPaint.setTextSize(delegate.getDayTextSize());
         this.mOtherMonthTextPaint.setTextSize(delegate.getDayTextSize());
@@ -256,7 +265,7 @@ public abstract class BaseView extends View implements View.OnClickListener, Vie
         this.mOtherMonthLunarTextPaint.setTextSize(delegate.getLunarTextSize());
         this.mSchemeLunarTextPaint.setTextSize(delegate.getLunarTextSize());
 
-        this.mSelectedPaint.setStyle(Paint.Style.FILL);
+        this.mSelectedPaint.setStyle(Paint.Style.STROKE);
         this.mSelectedPaint.setColor(delegate.getSelectedThemeColor());
         setItemHeight(delegate.getCalendarItemHeight());
     }

@@ -33,8 +33,8 @@ public class PraiseAdapter extends UniversalRecyclerAdapter<PraiseEntity> {
     protected void convert(Context mContext, BaseViewHolder holder, PraiseEntity praiseEntity, int position) {
         httpUtils.postSrcPhoto(activity, HttpEntity.IMAGE_HEAD + praiseEntity.getPraiseAvatar(), (ImageView) holder.getView(R.id.infor_praise_user_image));
         holder.setText(R.id.praise_name, praiseEntity.getPraiser());
-        holder.setText(R.id.praise_time, TimeUtil.iso8601ToDate(praiseEntity.getPraiseTime(), 1));
-        holder.setText(R.id.praise_default_name, praiseEntity.getPraiser());
+        holder.setText(R.id.praise_time, praiseEntity.getPraiseTime());
+        holder.setText(R.id.praise_default_name, praiseEntity.getTargetPublisher());
         holder.setText(R.id.praise_default_comment, praiseEntity.getPraisedContent());
         httpUtils.postPhoto(activity, HttpEntity.IMAGE_HEAD + praiseEntity.getTargetCover(), (ImageView) holder.getView(R.id.praise_ava_img));
         holder.setText(R.id.praise_ava_title, praiseEntity.getTargetTitle());

@@ -51,7 +51,12 @@ public class SimpleMonthView extends MonthView {
     protected boolean onDrawSelected(Canvas canvas, Calendar calendar, int x, int y, boolean hasScheme) {
         int cx = x + mItemWidth / 2 + mW / 2;
         int cy = y + mItemHeight / 2 + mH / 2;
-        canvas.drawCircle(cx, cy, mRadius, mSelectedPaint);
+        canvas.drawCircle(cx, cy, mRadius, calendar.isCurrentDay() ? mCurDayBackPaint : mSelectedPaint);
+        if (calendar.isCurrentDay()) {
+            mSelectTextPaint.setColor(0xffffffff);
+        }else{
+            mSelectTextPaint.setColor(0xff333333);
+        }
         return false;
     }
 
@@ -72,6 +77,7 @@ public class SimpleMonthView extends MonthView {
     protected void onDrawText(Canvas canvas, Calendar calendar, int x, int y, boolean hasScheme, boolean isSelected) {
         float baselineY = mTextBaseLine + y;
         int cx = x + mItemWidth / 2;
+        int cy = y + mItemHeight / 2;
 
         if (isSelected) {
             canvas.drawText(String.valueOf(calendar.getDay()),
@@ -79,6 +85,9 @@ public class SimpleMonthView extends MonthView {
                     baselineY,
                     mSelectTextPaint);
         }else if (hasScheme) {
+            if (calendar.isCurrentDay()){
+                canvas.drawCircle(cx, cy, mRadius, mCurDayBackPaint);
+            }
             canvas.drawText(String.valueOf(calendar.getDay()),
                     cx,
                     baselineY,
@@ -86,6 +95,9 @@ public class SimpleMonthView extends MonthView {
                             calendar.isCurrentMonth() ? mSchemeTextPaint : mOtherMonthTextPaint);
 
         } else {
+            if (calendar.isCurrentDay()){
+                canvas.drawCircle(cx, cy, mRadius, mCurDayBackPaint);
+            }
             canvas.drawText(String.valueOf(calendar.getDay()), cx, baselineY,
                     calendar.isCurrentDay() ? mCurDayTextPaint :
                             calendar.isCurrentMonth() ? mCurMonthTextPaint : mOtherMonthTextPaint);

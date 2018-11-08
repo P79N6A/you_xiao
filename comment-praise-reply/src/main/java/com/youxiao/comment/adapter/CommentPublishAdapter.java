@@ -5,6 +5,7 @@ import android.content.Context;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 
@@ -15,6 +16,7 @@ import com.runtoinfo.httpUtils.CPRCBean.CPRCDataEntity;
 import com.runtoinfo.httpUtils.CPRCBean.CPRCTypeEntity;
 import com.runtoinfo.httpUtils.CPRCBean.CommentRequestResultEntity;
 import com.runtoinfo.httpUtils.HttpEntity;
+import com.runtoinfo.httpUtils.bean.RequestDataEntity;
 import com.runtoinfo.httpUtils.utils.HttpUtils;
 import com.runtoinfo.youxiao.globalTools.adapter.BaseViewHolder;
 import com.runtoinfo.youxiao.globalTools.adapter.UniversalRecyclerAdapter;
@@ -44,6 +46,8 @@ public class CommentPublishAdapter extends UniversalRecyclerAdapter<CommentReque
     public Handler dataHandler;
     public Handler handler;
     public HttpUtils httpUtils;
+    public onPraiseListener onPraiseListener;
+    public onReplayListener onReplayListener;
     public CommentPublishAdapter(Handler handler, Activity mContext, List<CommentRequestResultEntity> mDatas, int mLayoutId) {
         super(handler, mContext, mDatas, mLayoutId);
         this.dataList = mDatas;
@@ -54,7 +58,7 @@ public class CommentPublishAdapter extends UniversalRecyclerAdapter<CommentReque
     }
 
     @Override
-    protected void convert(final Context mContext, final BaseViewHolder holder, final CommentRequestResultEntity commentPublishItemEntity, int position) {
+    protected void convert(final Context mContext, final BaseViewHolder holder, final CommentRequestResultEntity commentPublishItemEntity, final int position) {
         this.baseViewHolder = holder;
         holder.setText(R.id.comment_publish_name, commentPublishItemEntity.getNickName());
         //int targetType = commentPublishItemEntity.getTargetType();
@@ -75,14 +79,12 @@ public class CommentPublishAdapter extends UniversalRecyclerAdapter<CommentReque
             String time = TimeUtil.getTimeDif(commentPublishItemEntity.getApprovedTime());
             holder.setText(R.id.comment_publish_time, time /*+ "  " + time[1]*/);
         }
-
+        isPraise = commentPublishItemEntity.isHasPraise();
         //因数据不完善，本是int类型数据，得到的是null
         holder.setText(R.id.comment_publish_reply, String.valueOf(commentPublishItemEntity.getReplyNumber() + "回复"));
-        if (commentPublishItemEntity.hasPraise) {
-            isPraise = true;
+        if (commentPublishItemEntity.isHasPraise()) {
             holder.setBackgroundResource(R.id.comment_publish_praise, R.drawable.comment_praised);
         }else {
-            isPraise = false;
             holder.setBackgroundResource(R.id.comment_publish_praise, R.drawable.comment_praise);
         }
         //赞的点击事件
@@ -90,64 +92,33 @@ public class CommentPublishAdapter extends UniversalRecyclerAdapter<CommentReque
         imageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (!isPraise) {
-                    CPRCDataEntity entity = new CPRCDataEntity();
-                    entity.setToken(spUtils.getString(Entity.TOKEN));
-                    entity.setUserId(spUtils.getInt(Entity.USER_ID));
-                    entity.setType(CPRCTypeEntity.PRAISE);
-                    entity.setTarget(commentPublishItemEntity.getId());
-                    entity.setTargetType(CPRCTypeEntity.TARGET_COMMENT);
-                    httpUtils.postComment(handler, entity);
-                    isPraise = true;
-                    imageView.setBackgroundResource(R.drawable.comment_praised);
-                }else{
-                    isPraise = false;
-                    httpUtils.putAllStatue(handler, commentPublishItemEntity.getId(), spUtils.getString(Entity.TOKEN));
-                    imageView.setBackgroundResource(R.drawable.comment_praise);
-                }
+                if (onPraiseListener != null)
+                onPraiseListener.onPraiseClick(v, position, commentPublishItemEntity);
             }
         });
 
         holder.getView(R.id.comment_publish_reply).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String json = new Gson().toJson(commentPublishItemEntity);
-                //temResultEntity = commentPublishItemEntity;
-                switch (commentPublishItemEntity.getType()){
-                    case 0://回复的评论
-                        ARouter.getInstance().build("/comment/replyComment").withString(IntentDataType.DATA, json)
-                                .navigation();
-                        break;
-                    case 1://回复的回复
-                        Message msg = new Message();
-                        msg.what = 13;
-                        msg.obj = json;
-                        dataHandler.sendMessage(msg);
-                        break;
-                    case 2:
-                        break;
-                }
+                if (onReplayListener != null)
+                onReplayListener.onReplyClick(v, position, commentPublishItemEntity);
             }
         });
-
-        handler = new Handler(Looper.getMainLooper()){
-            @Override
-            public void handleMessage(Message msg) {
-
-                switch (msg.what){
-                    case 2:
-                        DialogMessage.showToast(activity, "点赞成功");
-                        break;
-                    case 40:
-                        holder.setBackgroundResource(R.id.comment_publish_praise, R.drawable.comment_praise);
-                        break;
-                    case 50:
-                        break;
-                }
-            }
-        };
-
     }
 
+    public interface onPraiseListener{
+        void onPraiseClick(View v, int position, CommentRequestResultEntity entity);
+    }
 
+    public void setOnPraiseListener(onPraiseListener onPraiseListener){
+        this.onPraiseListener = onPraiseListener;
+    }
+
+    public interface onReplayListener{
+        void onReplyClick(View v, int position, CommentRequestResultEntity commentRequestResultEntity);
+    }
+
+    public void setOnReplayListener(onReplayListener onReplayListener){
+        this.onReplayListener = onReplayListener;
+    }
 }

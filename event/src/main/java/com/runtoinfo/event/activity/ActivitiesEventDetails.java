@@ -51,7 +51,7 @@ public class ActivitiesEventDetails extends EventBaseActivity {
         binding.activityEventAddress.setText("地点: " + eventEntity.getLocation());
         binding.activityEventDescription.setText(eventEntity.getIntroduction());
         httpUtils.postPhoto(this, eventEntity.getCover(), binding.activityEventImg);
-        binding.activityEventTime.setText("时间: " + eventEntity.getStartDate());
+        binding.activityEventTime.setText("时间: " + eventEntity.getStartDate().concat("至").concat(eventEntity.getEndTime()));
         binding.activityEventName.setText(eventEntity.getName());
         isSignIn = eventEntity.isSignIn();
         //if (isSignIn){

@@ -76,7 +76,7 @@ public class ArticleAdapter extends GroupRecyclerAdapter<String, CourseEntity> {
                 holder.setText(R.id.course_no_message, courseEntity.getCourseMessage());
                 break;
             case 0:
-                holder.setText(R.id.course_name, courseEntity.getCourseName())
+                holder.setText(R.id.course_name, courseEntity.getClassName())
                         .setText(R.id.course_teacher_name, courseEntity.getTeacherName())
                         .setText(R.id.course_address, courseEntity.getClassroomName())
                         .setText(R.id.course_time, courseEntity.getStartTime().split(" ")[1].substring(0, 5) + "-" + courseEntity.getEndTime().split(" ")[1].substring(0, 5))
@@ -104,23 +104,31 @@ public class ArticleAdapter extends GroupRecyclerAdapter<String, CourseEntity> {
                 switch (result){
                     case -1:
                         holder.getView(R.id.course_leave_layout).setEnabled(true);
+                        ((TextView) holder.getView(R.id.course_leave)).setTextColor(Color.parseColor("#666666"));
                         holder.getView(R.id.course_sign_in_layout).setEnabled(false);
+                        ((TextView) holder.getView(R.id.course_sign_in_tv)).setTextColor(Color.parseColor("#999999"));
                         break;
                     case 0:
                         holder.getView(R.id.course_sign_in_layout).setEnabled(true);
                         holder.getView(R.id.course_leave_layout).setEnabled(true);
+                        ((TextView) holder.getView(R.id.course_leave)).setTextColor(Color.parseColor("#666666"));
+                        ((TextView) holder.getView(R.id.course_sign_in_tv)).setTextColor(Color.parseColor("#666666"));
                         break;
                     case 1:
                         holder.getView(R.id.course_leave_layout).setEnabled(false);
                         holder.getView(R.id.course_sign_in_layout).setEnabled(false);
+                        ((TextView) holder.getView(R.id.course_leave)).setTextColor(Color.parseColor("#999999"));
+                        ((TextView) holder.getView(R.id.course_sign_in_tv)).setTextColor(Color.parseColor("#999999"));
                         break;
                 }
 
                 String homeWork = courseEntity.getHomeworkRequirement();
                 if (!TextUtils.isEmpty(homeWork)){
                     holder.getView(R.id.course_hand_homework_layout).setEnabled(true);
+                    ((TextView) holder.getView(R.id.course_hand_homework)).setTextColor(Color.parseColor("#666666"));
                 }else{
                     holder.getView(R.id.course_hand_homework_layout).setEnabled(false);
+                    ((TextView) holder.getView(R.id.course_hand_homework)).setTextColor(Color.parseColor("#999999"));
                 }
 
                 if (handHomeWorkListener != null) {

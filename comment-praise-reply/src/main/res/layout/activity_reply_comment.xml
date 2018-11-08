@@ -73,7 +73,7 @@
                         android:layout_height="wrap_content"
                         android:layout_alignParentEnd="true"
                         android:layout_centerVertical="true"
-                        android:src="@drawable/comment_praise" />
+                        android:background="@drawable/comment_praise" />
 
                 </RelativeLayout>
 

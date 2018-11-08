@@ -38,7 +38,7 @@ public class EventRecyclerAdapter extends UniversalRecyclerAdapter<MyEventEntity
         Glide.with(mContext).load(eventEntity.getCover()).into((ImageView) holder.getView(R.id.activity_comment_imageView));
         holder.setText(R.id.activity_name, eventEntity.getName());
         if (type == 1) {
-            holder.setText(R.id.activity_time, eventEntity.getStartDate().split(" ")[0] + "至" + eventEntity.getEndTime().split(" ")[0]);
+            holder.setText(R.id.activity_time, eventEntity.getStartDate());
         }else{
             holder.setText(R.id.activity_time, eventEntity.getStartDate());
         }

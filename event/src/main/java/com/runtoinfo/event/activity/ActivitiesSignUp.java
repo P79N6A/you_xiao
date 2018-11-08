@@ -12,11 +12,13 @@ import android.widget.Toast;
 
 import com.alibaba.android.arouter.facade.annotation.Route;
 import com.alibaba.android.arouter.launcher.ARouter;
+import com.google.gson.Gson;
 import com.runtoinfo.event.R;
 import com.runtoinfo.event.databinding.ActivitySiginUpBinding;
 import com.runtoinfo.event.dialog.SignUpSuccess;
 import com.runtoinfo.httpUtils.HttpEntity;
 import com.runtoinfo.httpUtils.bean.AddMemberBean;
+import com.runtoinfo.httpUtils.bean.EventAddResultBean;
 import com.runtoinfo.httpUtils.bean.RequestDataEntity;
 import com.runtoinfo.httpUtils.utils.HttpUtils;
 import com.runtoinfo.youxiao.globalTools.utils.DensityUtil;
@@ -120,7 +122,9 @@ public class ActivitiesSignUp extends EventBaseActivity {
                         SignUpSuccess signUpSuccess = new SignUpSuccess(ActivitiesSignUp.this);
                         signUpSuccess.show();
                     }else{
-                        ARouter.getInstance().build("/event/signUpAddMember").withInt(IntentDataType.DATA, (int) msg.obj).navigation();
+                        EventAddResultBean resultBean = (EventAddResultBean) msg.obj;
+                        String data = new Gson().toJson(resultBean);
+                        ARouter.getInstance().build("/event/signUpAddMember").withString(IntentDataType.DATA, data).navigation();
                     }
                     break;
                 case 404:

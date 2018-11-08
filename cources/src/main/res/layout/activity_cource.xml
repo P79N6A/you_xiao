@@ -123,6 +123,7 @@
                 android:background="#fff"
                 app:current_month_lunar_text_color="#ffffff"
                 app:current_month_text_color="#333333"
+                app:current_day_text_color="#fff"
                 app:min_year="2004"
                 app:month_view="com.runto.cources.ui.SimpleMonthView"
                 app:other_month_text_color="#cccccc"

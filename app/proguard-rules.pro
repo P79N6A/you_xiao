@@ -101,3 +101,12 @@ native <methods>;
     *;
  }
 
+# 小米通道
+-keep class com.xiaomi.** {*;}
+-dontwarn com.xiaomi.**
+# 华为通道
+-keep class com.huawei.** {*;}
+-dontwarn com.huawei.**
+# GCM/FCM通道
+-keep class com.google.firebase.**{*;}
+-dontwarn com.google.firebase.**

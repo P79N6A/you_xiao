@@ -185,7 +185,7 @@ public class InformationDetails extends BaseActivity {
 
         Map<String, Object> map = new HashMap<>();
         map.put("skipCount", DensityUtil.getOffSet(page));
-        map.put("maxResultCount", DensityUtil.getOffSet(page));
+        map.put("maxResultCount", 10);
         map.put("userId", spUtils.getInt(Entity.USER_ID));
 
         httpUtils.getMyCommentOrPraise(handler, entity, map);
@@ -239,7 +239,7 @@ public class InformationDetails extends BaseActivity {
 
         Map<String, Object> map = new HashMap<>();
         map.put("skipCount", DensityUtil.getOffSet(page));
-        map.put("maxResultCount", DensityUtil.getOffSet(page));
+        map.put("maxResultCount", 10);
         map.put("userId", spUtils.getInt(Entity.USER_ID));
 
         httpUtils.getMyCommentOrPraise(handler, entity, map);
@@ -380,7 +380,9 @@ public class InformationDetails extends BaseActivity {
                         entity.setTarget(myCommentEntity.getTargetId());
                         entity.setTargetType(CPRCTypeEntity.TARGET_REPLY);
                         entity.setUserId(spUtils.getInt(Entity.USER_ID));
-                        entity.setContent(content.concat("//@").concat(myCommentEntity.getReplyer()).concat(":").concat(myCommentEntity.getReplyContent()));
+                        entity.setContent(content.concat("//@")
+                                .concat(myCommentEntity.getReplyer() == null ? "" :myCommentEntity.getReplyer())
+                                .concat(":").concat(myCommentEntity.getReplyContent() == null ? "" : myCommentEntity.getReplyContent()));
                         httpUtils.postComment(handler, entity);
                     }
                     break;
@@ -388,8 +390,8 @@ public class InformationDetails extends BaseActivity {
                     DialogMessage.showBottomDialog(handler, -1, InformationDetails.this, false);
                     CommentRequestResultEntity resultEntity = new Gson().fromJson(msg.obj.toString(), new TypeToken<CommentRequestResultEntity>(){}.getType());
                     MyCommentEntity commentEntity = new MyCommentEntity();
-                    String rContent = resultEntity.getContent() + "//@" + resultEntity.getNickName() + ":";
-                    commentEntity.setReplyContent(rContent + myCommentEntity.getReplyContent());
+                    //String rContent = resultEntity.getContent() + "//@" + resultEntity.getNickName() + ":";
+                    commentEntity.setReplyContent(myCommentEntity.getReplyContent());
                     commentEntity.setReplyTime(TimeUtil.iso8601ToDate(resultEntity.getApprovedTime(), 1));
                     commentEntity.setReplyer(resultEntity.getNickName());
                     commentEntity.setTargetCover(myCommentEntity.getTargetCover());

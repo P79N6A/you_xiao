@@ -12,12 +12,15 @@ import android.view.View;
 import android.widget.Toast;
 
 import com.alibaba.android.arouter.facade.annotation.Route;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.runtoinfo.event.R;
 import com.runtoinfo.event.adapter.EventAddMemberAdapter;
 import com.runtoinfo.event.databinding.ActivityAddEntourageBinding;
 import com.runtoinfo.event.dialog.SignUpSuccess;
 import com.runtoinfo.httpUtils.HttpEntity;
 import com.runtoinfo.httpUtils.bean.AddMemberBean;
+import com.runtoinfo.httpUtils.bean.EventAddResultBean;
 import com.runtoinfo.httpUtils.bean.RequestDataEntity;
 import com.runtoinfo.httpUtils.utils.HttpUtils;
 import com.runtoinfo.youxiao.globalTools.utils.DialogMessage;
@@ -37,9 +40,10 @@ public class SignUpAddEntourage extends EventBaseActivity {
     public ProgressDialog progressDialog;
     public SignUpSuccess signUpSuccess;
     public EventAddMemberAdapter adapter;
-    public int campaignId;
+    //public int campaignId;
     public RequestDataEntity requestDataEntity;
     public HttpUtils httpUtils;
+    public EventAddResultBean resultBean;
 
     public void initView(){
         binding = DataBindingUtil.setContentView( SignUpAddEntourage.this, R.layout.activity_add_entourage);
@@ -52,7 +56,9 @@ public class SignUpAddEntourage extends EventBaseActivity {
 
     @Override
     protected void initData() {
-        campaignId = getIntent().getExtras().getInt(IntentDataType.DATA);
+        //campaignId = getIntent().getExtras().getInt(IntentDataType.DATA);
+        String data = getIntent().getExtras().getString(IntentDataType.DATA);
+        resultBean = new Gson().fromJson(data, new TypeToken<EventAddResultBean>(){}.getType());
         //添加一个
         dataList = new ArrayList<>();
         dataList.add(new AddMemberBean());
@@ -92,7 +98,7 @@ public class SignUpAddEntourage extends EventBaseActivity {
 
     public void upLoadMember(int requestType){
         AddMemberBean bean = adapter.getList().get(adapter.getItemCount() - 1);
-        bean.setCampaignId(campaignId);
+        bean.setCampaignId(resultBean.getCampusId());
         if (TextUtils.isEmpty(bean.getMemberType()) || TextUtils.isEmpty(bean.getPhoneNumber()) || TextUtils.isEmpty(bean.getName())) {
             Toast.makeText(SignUpAddEntourage.this, "请完善随行人员信息", Toast.LENGTH_SHORT).show();
             return;

@@ -155,25 +155,7 @@
             android:gravity="center"
             android:orientation="horizontal">
 
-            <LinearLayout
-                android:id="@+id/course_hand_homework_layout"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:gravity="center"
-                android:orientation="horizontal">
 
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:src="@drawable/course_hand_home_work" />
-
-                <TextView
-                    android:id="@+id/course_hand_homework"
-                    style="@style/TextView_Course_18sp"
-                    android:text="交作业" />
-
-            </LinearLayout>
 
             <LinearLayout
                 android:id="@+id/course_leave_layout"
@@ -186,12 +168,34 @@
                 <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:src="@drawable/course_leave" />
+                    android:src="@drawable/course_leave"
+                    android:contentDescription="@string/app_name" />
 
                 <TextView
                     android:id="@+id/course_leave"
                     style="@style/TextView_Course_18sp"
                     android:text="请假" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/course_hand_homework_layout"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/course_hand_home_work"
+                    android:contentDescription="@string/app_name" />
+
+                <TextView
+                    android:id="@+id/course_hand_homework"
+                    style="@style/TextView_Course_18sp"
+                    android:text="交作业" />
 
             </LinearLayout>
 

@@ -23,6 +23,9 @@ import com.alibaba.sdk.android.man.MANServiceProvider;
 import com.alibaba.sdk.android.push.CloudPushService;
 import com.alibaba.sdk.android.push.CommonCallback;
 import com.alibaba.sdk.android.push.noonesdk.PushServiceFactory;
+import com.alibaba.sdk.android.push.register.GcmRegister;
+import com.alibaba.sdk.android.push.register.HuaWeiRegister;
+import com.alibaba.sdk.android.push.register.MiPushRegister;
 import com.runtoinfo.youxiao.globalTools.utils.Entity;
 import com.runtoinfo.youxiao.globalTools.utils.SPUtils;
 import com.squareup.leakcanary.LeakCanary;
@@ -37,6 +40,8 @@ import org.json.JSONObject;
 import java.util.HashMap;
 import java.util.Stack;
 import java.util.concurrent.Callable;
+
+import static com.tencent.bugly.Bugly.applicationContext;
 
 /**
  * Created by Administrator on 2018/5/8 0008.
@@ -73,6 +78,7 @@ public class MyApplication extends Application {
         //initPushService(this);
         initBackgoundCallBack();
         initQbSdk();
+        //initPushAuxiliaryChannel();
         CrashReport.initCrashReport(getApplicationContext(), "446920bced", true);
     }
 
@@ -99,6 +105,9 @@ public class MyApplication extends Application {
         ARouter.init(this);
     }
 
+    /**
+     * 初始化X5WebView控件
+     */
     public void initQbSdk(){
         QbSdk.PreInitCallback cb = new QbSdk.PreInitCallback() {
 
@@ -261,6 +270,7 @@ public class MyApplication extends Application {
         pushService.register(applicationContext, new CommonCallback() {
             @Override
             public void onSuccess(String response) {
+                Log.e("bindAccount", "消息推送初始化成功");
             }
 
             @Override
@@ -280,6 +290,9 @@ public class MyApplication extends Application {
         });
     }
 
+    /**
+     * 解绑设备号
+     */
     public void unbindAccount() {
         pushService.unbindAccount(new CommonCallback() {
             @Override
@@ -292,6 +305,18 @@ public class MyApplication extends Application {
 
             }
         });
+    }
+
+    /**
+     * 初始化推送辅助通道
+     */
+    public void initPushAuxiliaryChannel(){
+        // 注册方法会自动判断是否支持小米系统推送，如不支持会跳过注册。
+        MiPushRegister.register(getApplicationContext(), "2882303761517883630", "5181788332630");
+        // 注册方法会自动判断是否支持华为系统推送，如不支持会跳过注册。
+        HuaWeiRegister.register(getApplicationContext());
+        //GCM/FCM辅助通道注册
+        //GcmRegister.register(this, sendId, applicationId); //sendId/applicationId为步骤获得的参数
     }
 
     public void checkPermission() {

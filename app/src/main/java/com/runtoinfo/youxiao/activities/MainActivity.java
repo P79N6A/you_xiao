@@ -19,6 +19,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.alibaba.android.arouter.facade.annotation.Route;
+import com.alibaba.sdk.android.push.AndroidPopupActivity;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.jaeger.library.StatusBarUtil;
@@ -49,7 +50,7 @@ import myapplication.MyApplication;
 
 @SuppressWarnings("all")
 @Route( path = "/main/mainActivity")
-public class MainActivity extends BaseActivity implements ViewPager.OnPageChangeListener/*, View.OnClickListener*/{
+public class MainActivity extends BaseActivity implements ViewPager.OnPageChangeListener /*, View.OnClickListener*/{
 
     public ActivityMainBinding binding;
 
@@ -70,10 +71,11 @@ public class MainActivity extends BaseActivity implements ViewPager.OnPageChange
     @Override
     protected void initView() {
         binding = DataBindingUtil.setContentView(MainActivity.this, R.layout.activity_main);
+        ((MyApplication) getApplication()).initPushService(MyApplication.getInstance());
+        ((MyApplication) getApplication()).initPushAuxiliaryChannel();
         httpUtils = new HttpUtils(this);
         initBottomMenu();
         checkVersionFromServer();
-        ((MyApplication) getApplication()).initPushService(MyApplication.getInstance());
         schoolSelectList = new Gson().fromJson(spUtils.getString(Entity.SCHOOL_DATA), new TypeToken<List<SelectSchoolEntity>>(){}.getType());
     }
 
@@ -102,6 +104,7 @@ public class MainActivity extends BaseActivity implements ViewPager.OnPageChange
         mMainMenuAdapter = new FragmentAdapter(getSupportFragmentManager(), mFragments);
         setMenuSelector(0); // 默认选中第一个菜单项“微信”
         initEvent();
+
     }
 
     // 初始化事件
@@ -292,4 +295,5 @@ public class MainActivity extends BaseActivity implements ViewPager.OnPageChange
        //finish();
        onRestart();
     }
+
 }

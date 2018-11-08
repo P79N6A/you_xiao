@@ -22,6 +22,7 @@ import com.runtoinfo.httpUtils.bean.AddMemberBean;
 import com.runtoinfo.httpUtils.CPRCBean.CPRCDataEntity;
 import com.runtoinfo.httpUtils.bean.CourseDataEntity;
 import com.runtoinfo.httpUtils.bean.CourseEntity;
+import com.runtoinfo.httpUtils.bean.EventAddResultBean;
 import com.runtoinfo.httpUtils.bean.FineClassCourseEntity;
 import com.runtoinfo.httpUtils.bean.GeoAreaEntity;
 import com.runtoinfo.httpUtils.bean.GetSchoolSettingEntity;
@@ -856,12 +857,13 @@ public class HttpUtils<T> {
                                         try {
                                             JSONObject json = new JSONObject(response.body().string());
                                             JSONObject result = json.getJSONObject("result");
-                                            int id = result.getInt("id");
+                                            EventAddResultBean resultBean = new Gson().fromJson(result.toString(),
+                                                    new TypeToken<EventAddResultBean>(){}.getType());
                                             Message msg = new Message();
                                             msg.what = 0;
-                                            msg.obj = id;
+                                            msg.obj = resultBean;
                                             handler.sendMessage(msg);
-                                        } catch (JSONException e) {
+                                        } catch (Exception e) {
                                             e.printStackTrace();
                                         }
                                         break;

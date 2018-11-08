@@ -1,6 +1,8 @@
 package com.runtoinfo.youxiao.globalTools.utils;
 
 
+import android.util.Log;
+
 import com.google.gson.internal.bind.util.ISO8601Utils;
 
 import java.text.ParseException;
@@ -28,10 +30,12 @@ public class TimeUtil {
             Date date = ISO8601Utils.parse(iso8601, new ParsePosition(0));
             Calendar calendar = Calendar.getInstance();
             calendar.setTime(date);
+            //Log.e("Time", calendar.get(Calendar.MONTH) + "-" + calendar.get(Calendar.DAY_OF_MONTH));
+            int month = calendar.get(Calendar.MONTH) + 1;
             StringBuilder buffer = new StringBuilder("");
             buffer.append(calendar.get(Calendar.YEAR))
                     .append("-")
-                    .append(calendar.get(Calendar.MONTH) < 10 ? "0" + calendar.get(Calendar.MONTH) : calendar.get(Calendar.MONTH))
+                    .append(month < 10 ? "0" + month : month)
                     .append("-")
                     .append(calendar.get(Calendar.DAY_OF_MONTH) < 10 ? "0" + calendar.get(Calendar.DAY_OF_MONTH) : calendar.get(Calendar.DAY_OF_MONTH));
             if (type == 0) {
