@@ -22,6 +22,8 @@ import android.widget.LinearLayout;
 
 import com.runtoinfo.youxiao.globalTools.R;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -39,6 +41,7 @@ public class DensityUtil {
     private static final int COMPLEX_UNIT_MM = 5;
     private static final String TAG_FAKE_STATUS_BAR_VIEW = "statusBarView";
     private static final String TAG_MARGIN_ADDED = "marginAdded";
+
 
     /**
      * 根据手机的分辨率从 dp 的单位 转成为 px(像素)
@@ -107,13 +110,54 @@ public class DensityUtil {
     public static SpannableStringBuilder setStringColor(String stringColor) {
         if (!TextUtils.isEmpty(stringColor)) {
             SpannableStringBuilder spanString = new SpannableStringBuilder(stringColor);
+            List<int[]> indexList = getIndex(stringColor);
             if (stringColor.contains("//@")) {
-                ForegroundColorSpan span1 = new ForegroundColorSpan(Color.parseColor("#27acf7"));
-                spanString.setSpan(span1, stringColor.indexOf("@"), stringColor.indexOf(":"), Spannable.SPAN_INCLUSIVE_INCLUSIVE);
+                for (int i = 0; i < indexList.size(); i++) {
+                    int[] index = indexList.get(i);
+                    int start = index[0];
+                    int end = index[1];
+                    ForegroundColorSpan span1 = new ForegroundColorSpan(Color.parseColor("#27acf7"));
+                    spanString.setSpan(span1, start, end, Spannable.SPAN_INCLUSIVE_INCLUSIVE);
+                }
             }
             return spanString;
         }
         return null;
+    }
+
+    public static List<int[]> getIndex(String text){
+        List<int[]> indexList = new ArrayList<>();
+        int b = text.indexOf("@");
+        int c = text.indexOf(":");
+        while (b != -1 && c != -1){
+            int[] index = new int[2];
+            index[0] = b;
+            index[1] = c;
+            indexList.add(index);
+
+            b = text.indexOf("@", c);
+            if (c + 1 < text.length())
+                c = text.indexOf(":", c + 1);
+        }
+        return indexList;
+    }
+
+    /**
+     * 通过正则表达式的方式获取字符串中指定字符的个数
+     * @param text 指定的字符串
+     * @return 指定字符的个数
+     */
+    public static int pattern(String text) {
+        // 根据指定的字符构建正则
+        Pattern pattern = Pattern.compile("cs");
+        // 构建字符串和正则的匹配
+        Matcher matcher = pattern.matcher(text);
+        int count = 0;
+        // 循环依次往下匹配
+        while (matcher.find()){ // 如果匹配,则数量+1
+            count++;
+        }
+        return  count;
     }
 
     /**

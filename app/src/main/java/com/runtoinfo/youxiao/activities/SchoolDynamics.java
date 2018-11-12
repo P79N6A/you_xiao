@@ -13,6 +13,7 @@ import android.view.View;
 import com.alibaba.android.arouter.facade.annotation.Route;
 import com.alibaba.android.arouter.launcher.ARouter;
 import com.google.gson.Gson;
+import com.google.gson.JsonSyntaxException;
 import com.google.gson.reflect.TypeToken;
 import com.runtoinfo.httpUtils.CPRCBean.CPRCDataEntity;
 import com.runtoinfo.httpUtils.CPRCBean.CPRCTypeEntity;
@@ -49,6 +50,7 @@ public class SchoolDynamics extends BaseActivity {
 
     public boolean isClickColl = false;
     public boolean isClickPraise = false;
+
     @Override
     protected void initView() {
         getWindow().setFormat(PixelFormat.TRANSLUCENT);
@@ -63,7 +65,7 @@ public class SchoolDynamics extends BaseActivity {
         super.setStatusBar();
     }
 
-    public void initEvent(){
+    public void initEvent() {
         binding.activityImgBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -84,7 +86,7 @@ public class SchoolDynamics extends BaseActivity {
                         .withInt(IntentDataType.TARGET_TYPE, targetType).navigation();
             }
         });
-        binding.detailsCollection.setOnClickListener(new View.OnClickListener(){
+        binding.detailsCollection.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (!isClickColl) {
@@ -97,7 +99,7 @@ public class SchoolDynamics extends BaseActivity {
                     dataEntity.setTargetType(targetType);
                     dataEntity.setUserId(spUtils.getInt(Entity.USER_ID));
                     httpUtils.postComment(handler, dataEntity);
-                }else{
+                } else {
                     isClickColl = false;
                     RequestDataEntity requestDataEntity = new RequestDataEntity();
                     requestDataEntity.setToken(spUtils.getString(Entity.TOKEN));
@@ -109,18 +111,18 @@ public class SchoolDynamics extends BaseActivity {
             }
         });
 
-        binding.detailsPraise.setOnClickListener(new View.OnClickListener(){
+        binding.detailsPraise.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 returnType = 1;
-                if (isClickPraise){
+                if (isClickPraise) {
                     isClickPraise = false;
                     RequestDataEntity requestDataEntity = new RequestDataEntity();
                     requestDataEntity.setToken(spUtils.getString(Entity.TOKEN));
                     requestDataEntity.setUrl(HttpEntity.MAIN_URL + HttpEntity.DELETE_COMMENT_CREATE);
                     requestDataEntity.setId(schoolDynamicsEntity.getUserPraiseId());
                     httpUtils.delectColleciton(handler, requestDataEntity);
-                }else {
+                } else {
                     isClickPraise = true;
                     CPRCDataEntity dataEntity = new CPRCDataEntity();
                     dataEntity.setToken(spUtils.getString(Entity.TOKEN));
@@ -134,10 +136,10 @@ public class SchoolDynamics extends BaseActivity {
         });
     }
 
-    public void changeView(){
+    public void changeView() {
         dataType = getIntent().getExtras().getString(IntentDataType.INTENT_KEY);
-        if (!TextUtils.isEmpty(dataType)){
-            switch (dataType){
+        if (!TextUtils.isEmpty(dataType)) {
+            switch (dataType) {
                 case IntentDataType.SCHOOL_DYNAMICS:
                     binding.schoolDynamicsActivityTitle.setText("学校动态");
                     targetType = 0;
@@ -152,23 +154,29 @@ public class SchoolDynamics extends BaseActivity {
                     binding.schoolDynamicsActivityTitle.setText("专题详情");
                     targetType = 1;
                     String result = getIntent().getStringExtra(IntentDataType.DATA);
-                    schoolDynamicsEntity = new Gson().fromJson(result, new TypeToken<SchoolDynamicsEntity>(){}.getType());
+                    try {
+                        schoolDynamicsEntity = new Gson().fromJson(result, new TypeToken<SchoolDynamicsEntity>() {
+                        }.getType());
+                    } catch (JsonSyntaxException e) {
+                        Log.e("SchoolDynamic", e.toString());
+                    }
                     hideView(true);
                     break;
             }
         }
     }
 
-    public void initData(){
+    public void initData() {
 
     }
-    public void initRecyclerData(){
+
+    public void initRecyclerData() {
         adapter = new SchoolDynamicsRecyclerAdapter(SchoolDynamics.this, newDataList, handler);
         binding.schoolRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         binding.schoolRecyclerView.setAdapter(adapter);
     }
 
-    public void requestData(int type){
+    public void requestData(int type) {
         RequestDataEntity dataEntity = new RequestDataEntity();
         dataEntity.setUrl(HttpEntity.MAIN_URL + HttpEntity.SCHOOL_NEWS_ALL);
         dataEntity.setType(type);
@@ -186,29 +194,35 @@ public class SchoolDynamics extends BaseActivity {
     public void onStart() {
         super.onStart();
         if (dataType != null && dataType.equals(IntentDataType.TOPICS)) {
-            SchoolDynamicsEntity schoolEntity =
-                    new Gson().fromJson(getIntent().getExtras().getString(IntentDataType.DATA),
-                            new TypeToken<SchoolDynamicsEntity>(){}.getType());
-            binding.dynamicsTitle.setText(schoolEntity.getTile());
-            binding.dynamicsTime.setText(schoolEntity.getPublishTime());
-            binding.dynamicsReadNumber.setText(schoolEntity.getReadNumber());
+            try {
+                SchoolDynamicsEntity schoolEntity =
+                        new Gson().fromJson(getIntent().getExtras().getString(IntentDataType.DATA),
+                                new TypeToken<SchoolDynamicsEntity>() {
+                                }.getType());
 
-            binding.dynamicsWebview.loadData(schoolEntity.getContent(), "text/html; charset=UTF-8",null);
+                binding.dynamicsTitle.setText(schoolEntity.getTile());
+                binding.dynamicsTime.setText(schoolEntity.getPublishTime());
+                binding.dynamicsReadNumber.setText(schoolEntity.getReadNumber());
+                binding.dynamicsWebview.loadData(schoolEntity.getContent(), "text/html; charset=UTF-8", null);
+                //binding.dynamicsWebview.loadUrl("http://soft.imtt.qq.com/browser/tes/feedback.html");
+            } catch (JsonSyntaxException e) {
+                Log.e("SchoolDynamics", e.toString());
+            }
         }
     }
 
     @SuppressLint("HandlerLeak")
-    public Handler handler = new Handler(){
+    public Handler handler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
-            switch (msg.what){
+            switch (msg.what) {
                 case 0:
                 case 1:
                 case 2:
-                    if (returnType == 1){
+                    if (returnType == 1) {
                         binding.detailsPraiseImagView.setBackgroundResource(R.drawable.comment_praised);
                         returnType = 0;
-                    }else {
+                    } else {
                         schoolDynamicsEntity = (SchoolDynamicsNewEntity) msg.obj;
                         times++;
                         hideView(true);
@@ -219,24 +233,32 @@ public class SchoolDynamics extends BaseActivity {
                                 spUtils.getString(Entity.TOKEN),
                                 schoolDynamicsEntity.getId());
                         binding.dynamicsWebview.loadData(schoolDynamicsEntity.getContent(), "text/html; charset=UTF-8", null);
-                        if (schoolDynamicsEntity.isHasFavorited()){
+                        //binding.dynamicsWebview.loadUrl("http://soft.imtt.qq.com/browser/tes/feedback.html");
+                        if (schoolDynamicsEntity.isHasFavorited()) {
                             isClickColl = true;
                             binding.detailsCollectionImagView.setBackgroundResource(R.drawable.boutique_course_collectioned);
                             binding.detailsCollectionText.setText("已收藏");
                         }
-                        if (schoolDynamicsEntity.isHasPraised()){
+                        if (schoolDynamicsEntity.isHasPraised()) {
                             isClickPraise = true;
                             binding.detailsPraiseImagView.setBackgroundResource(R.drawable.comment_praised);
                         }
                     }
                     break;
                 case 3:
-                    SchoolDynamicsNewEntity dynamicsNewEntity = new Gson().fromJson(msg.obj.toString(), new TypeToken<SchoolDynamicsNewEntity>(){}.getType());
-                    if (schoolDynamicsEntity != null){
-                        schoolDynamicsEntity.setUserFavoriteId(dynamicsNewEntity.getId());
+                    try {
+                        SchoolDynamicsNewEntity dynamicsNewEntity =
+                                new Gson().fromJson(msg.obj.toString(),
+                                        new TypeToken<SchoolDynamicsNewEntity>() {
+                                        }.getType());
+                        if (schoolDynamicsEntity != null) {
+                            schoolDynamicsEntity.setUserFavoriteId(dynamicsNewEntity.getId());
+                        }
+                        binding.detailsCollectionImagView.setBackgroundResource(R.drawable.boutique_course_collectioned);
+                        binding.detailsCollectionText.setText("已收藏");
+                    }catch (JsonSyntaxException e){
+                        Log.e("SchoolDynamics", e.toString());
                     }
-                    binding.detailsCollectionImagView.setBackgroundResource(R.drawable.boutique_course_collectioned);
-                    binding.detailsCollectionText.setText("已收藏");
                     DialogMessage.showToast(SchoolDynamics.this, "收藏成功");
                     break;
 
@@ -248,9 +270,9 @@ public class SchoolDynamics extends BaseActivity {
                     binding.dynamicsReadNumber.setText(msg.obj.toString());
                     break;
                 case 200:
-                    if (returnType == 1){
+                    if (returnType == 1) {
                         binding.detailsPraiseImagView.setBackgroundResource(R.drawable.dynamics_z);
-                    }else{
+                    } else {
                         binding.detailsCollectionImagView.setBackgroundResource(R.drawable.dynamics_collection);
                         binding.detailsCollectionText.setText("收藏");
                     }
@@ -262,22 +284,22 @@ public class SchoolDynamics extends BaseActivity {
         }
     };
 
-    public void fromJson(){
+    public void fromJson() {
         int size = newDataList.size();
-        if (size > 0){
+        if (size > 0) {
             for (int i = 0; i < size; i++) {
                 setDataList(newDataList.get(i));
             }
         }
     }
 
-    public void setDataList(SchoolDynamicsNewEntity newEntity){
+    public void setDataList(SchoolDynamicsNewEntity newEntity) {
         int coverType = newEntity.getCoverType();//childItem.getInt("coverType");
         List<String> imageList = newEntity.getCoverImgs();
         int imageListSize = imageList.size();
-        switch (coverType){
+        switch (coverType) {
             case 0://图片
-                switch (imageListSize){
+                switch (imageListSize) {
                     case 1:
                     case 2:
                         newEntity.setDataType(1);
@@ -295,19 +317,19 @@ public class SchoolDynamics extends BaseActivity {
 
     }
 
-    public void hideView(boolean flag){
+    public void hideView(boolean flag) {
         if (flag) {
             binding.schoolRecyclerView.setVisibility(View.GONE);
             binding.dynamicsWebViewLayout.setVisibility(View.VISIBLE);
-        }else{
+        } else {
             binding.schoolRecyclerView.setVisibility(View.VISIBLE);
             binding.dynamicsWebViewLayout.setVisibility(View.GONE);
         }
 
-        if (dataType.equals(IntentDataType.SCHOOL_DYNAMICS)){
-            binding.schoolDynamicsActivityTitle.setText(flag?"动态详情":"学校动态");
-        }else if(dataType.equals(IntentDataType.HEAD_NEWS)){
-            binding.schoolDynamicsActivityTitle.setText(flag?"头条详情":"新闻头条");
+        if (dataType.equals(IntentDataType.SCHOOL_DYNAMICS)) {
+            binding.schoolDynamicsActivityTitle.setText(flag ? "动态详情" : "学校动态");
+        } else if (dataType.equals(IntentDataType.HEAD_NEWS)) {
+            binding.schoolDynamicsActivityTitle.setText(flag ? "头条详情" : "新闻头条");
         }
     }
 
@@ -315,7 +337,7 @@ public class SchoolDynamics extends BaseActivity {
     public void onBackPressed() {
         if (times == 0)
             super.onBackPressed();
-        else{
+        else {
             hideView(false);
             times = 0;
         }

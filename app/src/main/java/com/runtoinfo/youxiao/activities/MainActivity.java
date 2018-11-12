@@ -13,6 +13,7 @@ import android.os.Looper;
 import android.os.Message;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -21,6 +22,7 @@ import android.widget.Toast;
 import com.alibaba.android.arouter.facade.annotation.Route;
 import com.alibaba.sdk.android.push.AndroidPopupActivity;
 import com.google.gson.Gson;
+import com.google.gson.JsonSyntaxException;
 import com.google.gson.reflect.TypeToken;
 import com.jaeger.library.StatusBarUtil;
 import com.runtoinfo.httpUtils.HttpEntity;
@@ -76,7 +78,13 @@ public class MainActivity extends BaseActivity implements ViewPager.OnPageChange
         httpUtils = new HttpUtils(this);
         initBottomMenu();
         checkVersionFromServer();
-        schoolSelectList = new Gson().fromJson(spUtils.getString(Entity.SCHOOL_DATA), new TypeToken<List<SelectSchoolEntity>>(){}.getType());
+        try {
+            schoolSelectList = new Gson().fromJson(spUtils.getString(Entity.SCHOOL_DATA),
+                    new TypeToken<List<SelectSchoolEntity>>() {
+                    }.getType());
+        }catch (JsonSyntaxException e){
+            Log.e("MainActivity", e.toString());
+        }
     }
 
     public void initBottomMenu(){

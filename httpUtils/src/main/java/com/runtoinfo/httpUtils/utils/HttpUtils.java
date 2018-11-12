@@ -12,6 +12,7 @@ import android.widget.ImageView;
 
 import com.dmcbig.mediapicker.entity.Media;
 import com.google.gson.Gson;
+import com.google.gson.JsonSyntaxException;
 import com.google.gson.reflect.TypeToken;
 import com.runtoinfo.httpUtils.CPRCBean.CommentRequestResultEntity;
 import com.runtoinfo.httpUtils.CenterEntity.LearnTrackEntity;
@@ -622,6 +623,8 @@ public class HttpUtils<T> {
                                 handler.sendEmptyMessage(404);
                             } catch (IllegalStateException e){
                                 e.printStackTrace();
+                            } catch (JsonSyntaxException e){
+                                handler.sendEmptyMessage(303);
                             }
 
                         }
@@ -760,8 +763,10 @@ public class HttpUtils<T> {
                                 }
                             } catch (JSONException e) {
                                 e.printStackTrace();
-                            }catch (IllegalStateException e){
+                            } catch (IllegalStateException e){
                                 e.printStackTrace();
+                            } catch (JsonSyntaxException e){
+                                handler.sendEmptyMessage(303);
                             }
                         }
                     }
@@ -814,6 +819,8 @@ public class HttpUtils<T> {
                                 handler.sendEmptyMessage(500);
                             } catch (IllegalStateException e){
                                 handler.sendEmptyMessage(500);
+                            } catch (JsonSyntaxException e){
+                                handler.sendEmptyMessage(303);
                             }
                         }
                     }
@@ -924,6 +931,8 @@ public class HttpUtils<T> {
                                 e.printStackTrace();
                             } catch (IllegalStateException e){
                                 handler.sendEmptyMessage(500);
+                            } catch (JsonSyntaxException e){
+                                handler.sendEmptyMessage(303);
                             }
                         }else{
                             handler.sendEmptyMessage(404);
@@ -966,8 +975,7 @@ public class HttpUtils<T> {
                                 for (int i = 0; i < items.length(); i++) {
                                     JSONObject childItem = items.getJSONObject(i);
                                     CourseDataEntity courseDataEntity = new Gson().fromJson(childItem.toString(),
-                                            new TypeToken<CourseDataEntity>() {
-                                            }.getType());
+                                            new TypeToken<CourseDataEntity>() {}.getType());
                                     list.add(courseDataEntity);
                                     handler.sendEmptyMessage(0);
                                 }
@@ -975,6 +983,8 @@ public class HttpUtils<T> {
                                 handler.sendEmptyMessage(404);
                             } catch (IllegalStateException e){
                                 handler.sendEmptyMessage(500);
+                            } catch (JsonSyntaxException e){
+                                handler.sendEmptyMessage(303);
                             }
                         }else{
                             handler.sendEmptyMessage(404);
@@ -1383,6 +1393,8 @@ public class HttpUtils<T> {
                                 e.printStackTrace();
                             } catch (IllegalStateException e){
                                 handler.sendEmptyMessage(500);
+                            } catch (JsonSyntaxException e){
+                                handler.sendEmptyMessage(303);
                             }
                         }
                     }
@@ -1469,7 +1481,7 @@ public class HttpUtils<T> {
 //                map.put("Sorting", "approvedTime desc");
 
                 Request request = new Request.Builder()
-                        .header(Authorization, Bearer.concat(map.get("token").toString()))
+                        .header(Authorization, Bearer + map.get("token").toString())
                         .url(HttpEntity.MAIN_URL + HttpEntity.GET_COMMENT_ALL + setUrl(map))
                         .build();
                 getClient().newCall(request).enqueue(new Callback() {
@@ -1502,6 +1514,8 @@ public class HttpUtils<T> {
                                 e.printStackTrace();
                             } catch (IllegalStateException e){
                                 handler.sendEmptyMessage(500);
+                            }catch (JsonSyntaxException e){
+                                handler.sendEmptyMessage(303);
                             }
                         }
                     }
@@ -1553,6 +1567,8 @@ public class HttpUtils<T> {
                                 handler.sendEmptyMessage(404);
                             } catch (IllegalStateException e){
                                 handler.sendEmptyMessage(500);
+                            } catch (JsonSyntaxException e){
+                                handler.sendEmptyMessage(303);
                             }
                         }
                     }
@@ -1709,8 +1725,7 @@ public class HttpUtils<T> {
                                     for (int i = 0; i < items.length(); i++) {
                                         JSONObject item = items.getJSONObject(i);
                                         SystemMessageEntity messageEntity =
-                                                new Gson().fromJson(item.toString(), new TypeToken<SystemMessageEntity>() {
-                                                }.getType());
+                                                new Gson().fromJson(item.toString(), new TypeToken<SystemMessageEntity>() {}.getType());
                                         if (!isEmpty(item.getString("cover")))
                                             messageEntity.setItemType(2);
                                         else messageEntity.setItemType(3);
@@ -1723,8 +1738,10 @@ public class HttpUtils<T> {
                             } catch (JSONException e) {
                                 e.printStackTrace();
                                 handler.sendEmptyMessage(404);
-                            }catch (IllegalStateException e){
+                            } catch (IllegalStateException e){
                                 handler.sendEmptyMessage(500);
+                            } catch (JsonSyntaxException e){
+                                handler.sendEmptyMessage(303);
                             }
                         } else {
                             handler.sendEmptyMessage(500);
@@ -1815,8 +1832,7 @@ public class HttpUtils<T> {
                                     for (int i = 0; i < items.length(); i++) {
                                         JSONObject item = items.getJSONObject(i);
                                         VersionEntity versionEntity =
-                                                new Gson().fromJson(item.toString(), new TypeToken<VersionEntity>() {
-                                                }.getType());
+                                                new Gson().fromJson(item.toString(), new TypeToken<VersionEntity>() {}.getType());
                                         versionList.add(versionEntity);
                                     }
                                     if (versionList.size() <= 0) {
@@ -1834,6 +1850,8 @@ public class HttpUtils<T> {
                                 handler.sendEmptyMessage(404);
                             } catch (IllegalStateException e){
                                 handler.sendEmptyMessage(500);
+                            } catch (JsonSyntaxException e){
+                                handler.sendEmptyMessage(303);
                             }
                         }
                     }
@@ -1887,6 +1905,8 @@ public class HttpUtils<T> {
                                 e.printStackTrace();
                             } catch (IllegalStateException e){
                                 handler.sendEmptyMessage(500);
+                            } catch (JsonSyntaxException e){
+                                handler.sendEmptyMessage(303);
                             }
                         }
                     }
@@ -1940,6 +1960,8 @@ public class HttpUtils<T> {
                                 handler.sendEmptyMessage(404);
                             } catch (IllegalStateException e){
                                 handler.sendEmptyMessage(500);
+                            } catch (JsonSyntaxException e){
+                                handler.sendEmptyMessage(303);
                             }
                         }
                     }
@@ -1995,6 +2017,8 @@ public class HttpUtils<T> {
                                 handler.sendEmptyMessage(404);
                             } catch (IllegalStateException e){
                                 handler.sendEmptyMessage(500);
+                            } catch (JsonSyntaxException e){
+                                handler.sendEmptyMessage(303);
                             }
                         }
                     }
@@ -2051,6 +2075,8 @@ public class HttpUtils<T> {
                                 handler.sendEmptyMessage(404);
                             } catch (IllegalStateException e){
                                 handler.sendEmptyMessage(500);
+                            } catch (JsonSyntaxException e){
+                                handler.sendEmptyMessage(303);
                             }
                         }
                     }
@@ -2103,6 +2129,8 @@ public class HttpUtils<T> {
                                 handler.sendEmptyMessage(404);
                             } catch (IllegalStateException e){
                                 handler.sendEmptyMessage(500);
+                            } catch (JsonSyntaxException e){
+                                handler.sendEmptyMessage(303);
                             }
 
                         }
@@ -2211,6 +2239,8 @@ public class HttpUtils<T> {
                                 handler.sendEmptyMessage(404);
                             } catch (IllegalStateException e){
                                 handler.sendEmptyMessage(500);
+                            } catch (JsonSyntaxException e){
+                                handler.sendEmptyMessage(303);
                             }
                         } else {
                             handler.sendEmptyMessage(500);
@@ -2416,6 +2446,8 @@ public class HttpUtils<T> {
                                 handler.sendEmptyMessage(404);
                             } catch (IllegalStateException e){
                                 handler.sendEmptyMessage(500);
+                            } catch (JsonSyntaxException e){
+                                handler.sendEmptyMessage(303);
                             }
                         }
                     }

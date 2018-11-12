@@ -1,8 +1,8 @@
 <component name="libraryTable">
   <library name="com.victor:lib-1.0.4">
     <CLASSES>
-      <root url="jar://$USER_HOME$/.gradle/caches/transforms-1/files-1.1/lib-1.0.4.aar/7566ccbba99f1648e265c40f482f8c44/jars/classes.jar!/" />
-      <root url="file://$USER_HOME$/.gradle/caches/transforms-1/files-1.1/lib-1.0.4.aar/7566ccbba99f1648e265c40f482f8c44/res" />
+      <root url="file://$USER_HOME$/.gradle/caches/transforms-1/files-1.1/lib-1.0.4.aar/31b5f89723d78d9d7b6fc1df2f55c042/res" />
+      <root url="jar://$USER_HOME$/.gradle/caches/transforms-1/files-1.1/lib-1.0.4.aar/31b5f89723d78d9d7b6fc1df2f55c042/jars/classes.jar!/" />
     </CLASSES>
     <JAVADOC />
     <SOURCES>

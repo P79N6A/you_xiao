@@ -128,7 +128,7 @@ public class ActivitiesSignUp extends EventBaseActivity {
                     }
                     break;
                 case 404:
-                    Toast.makeText(ActivitiesSignUp.this, "请求错误", Toast.LENGTH_SHORT).show();
+                    //Toast.makeText(ActivitiesSignUp.this, "请求错误", Toast.LENGTH_SHORT).show();
                     break;
             }
         }

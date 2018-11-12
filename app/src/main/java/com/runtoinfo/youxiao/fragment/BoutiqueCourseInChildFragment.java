@@ -19,6 +19,7 @@ import com.runtoinfo.httpUtils.bean.RequestDataEntity;
 import com.runtoinfo.httpUtils.utils.HttpUtils;
 import com.runtoinfo.youxiao.R;
 import com.runtoinfo.youxiao.adapter.BoutiqueInChildRecyclerAdapter;
+import com.runtoinfo.youxiao.globalTools.utils.DensityUtil;
 import com.runtoinfo.youxiao.globalTools.utils.DialogMessage;
 import com.runtoinfo.youxiao.globalTools.utils.Entity;
 import com.runtoinfo.youxiao.databinding.FragmentBoutiqueCourseInChildBinding;
@@ -58,7 +59,7 @@ public class BoutiqueCourseInChildFragment extends BaseFragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_boutique_course_in_child, container, false);
         httpUtils = new HttpUtils(getContext());
-        initCourseData(offset);
+        initCourseData(page);
         return binding.getRoot();
     }
 
@@ -78,7 +79,7 @@ public class BoutiqueCourseInChildFragment extends BaseFragment {
             requestMap.put("CourseType", courseTypeEntity.getCourseType());
             requestMap.put("CourseSubject", courseTypeEntity.getCourseSubject());
             requestMap.put("MediaType", courseTypeEntity.getMediaType());
-            requestMap.put("SkipCount", offSet);
+            requestMap.put("SkipCount", DensityUtil.getOffSet(page));
         }
         tempList = new ArrayList<>();
         httpUtils.getInChildData(handler,requestDataEntity, requestMap, tempList);
@@ -105,12 +106,14 @@ public class BoutiqueCourseInChildFragment extends BaseFragment {
     public PullLoadMoreRecyclerView.PullLoadMoreListener pullLoadMoreListener = new PullLoadMoreRecyclerView.PullLoadMoreListener() {
         @Override
         public void onRefresh() {
-
+            page = 0;
+            initCourseData(page);
         }
 
         @Override
         public void onLoadMore() {
-            initCourseData(getMaxOrMin());
+            page++;
+            initCourseData(page);
         }
     };
 
@@ -139,10 +142,10 @@ public class BoutiqueCourseInChildFragment extends BaseFragment {
                     initView();
                     break;
                 case 500:
-                    DialogMessage.showToast(getContext(), "请求失败，检查网络连接");
+                    //DialogMessage.showToast(getContext(), "请求失败，检查网络连接");
                     break;
                 case 404:
-                    DialogMessage.showToast(getContext(), "获取数据失败");
+                    //DialogMessage.showToast(getContext(), "获取数据失败");
                     break;
             }
         }

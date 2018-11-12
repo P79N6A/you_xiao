@@ -8,6 +8,7 @@ import android.os.Message;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.EditText;
@@ -15,6 +16,7 @@ import android.widget.Toast;
 
 import com.alibaba.android.arouter.facade.annotation.Route;
 import com.google.gson.Gson;
+import com.google.gson.JsonSyntaxException;
 import com.google.gson.reflect.TypeToken;
 import com.jaeger.library.StatusBarUtil;
 import com.runtoinfo.httpUtils.HttpEntity;
@@ -34,6 +36,7 @@ import java.util.TimerTask;
 @Route(path = "/main/resetPassword")
 public class ForgetPassWordActivity extends BaseActivity {
 
+    public String TAG = "ForgetPasswordActivity";
     LoginResetPasswordBinding binding;
     HttpLoginHead head;
     ProgressDialog dialog;
@@ -46,7 +49,12 @@ public class ForgetPassWordActivity extends BaseActivity {
         StatusBarUtil.setTranslucent(this);
         httpUtils = new HttpUtils(this);
         String json = getIntent().getExtras().getString("LoginHttpHead");
-        head = new Gson().fromJson(json, new TypeToken<HttpLoginHead>(){}.getType());
+        try {
+            head = new Gson().fromJson(json, new TypeToken<HttpLoginHead>() {
+            }.getType());
+        }catch (JsonSyntaxException e){
+            Log.e(TAG, e.toString());
+        }
         dialog = new ProgressDialog(this);
         initEvent();
     }

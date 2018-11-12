@@ -34,8 +34,8 @@ public class SimpleWeekView extends WeekView {
 
     @Override
     protected boolean onDrawSelected(Canvas canvas, Calendar calendar, int x, boolean hasScheme) {
-        int cx = x + mItemWidth / 2 + mW / 2;
-        int cy = mItemHeight / 2 + mH / 2;
+        int cx = x + mItemWidth / 2;// + mW / 2;
+        int cy = mItemHeight / 2;// + mH / 2;
         canvas.drawCircle(cx, cy, mRadius, calendar.isCurrentDay()? mCurDayBackPaint : mSelectedPaint);
         if (calendar.isCurrentDay()) {
             mSelectTextPaint.setColor(0xffffffff);
@@ -50,7 +50,7 @@ public class SimpleWeekView extends WeekView {
         int cx = x + mItemWidth / 2;
         int cy = mItemHeight / 2;
         mSchemeBasicPaint.setColor(calendar.getSchemeColor());
-        canvas.drawCircle(x + mItemWidth / 2, mItemHeight - mH, mH, mSchemeBasicPaint );
+        canvas.drawCircle(cx, mItemHeight - mH * 2, mH, mSchemeBasicPaint );
     }
 
     @Override

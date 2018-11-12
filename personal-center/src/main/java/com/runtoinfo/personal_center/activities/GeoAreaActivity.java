@@ -143,13 +143,13 @@ public class GeoAreaActivity extends BaseActivity {
                     }
                     break;
                 case 400:
-                    DialogMessage.showToast(context, "数据获取失败");
+                    //DialogMessage.showToast(context, "数据获取失败");
                     break;
                 case 404:
-                    DialogMessage.showToast(context, "数据解析错误");
+                    //DialogMessage.showToast(context, "请重新登录");
                     break;
                 case 500:
-                    DialogMessage.showToast(context, "服务器错误");
+                    //DialogMessage.showToast(context, "服务器错误");
                     break;
             }
         }

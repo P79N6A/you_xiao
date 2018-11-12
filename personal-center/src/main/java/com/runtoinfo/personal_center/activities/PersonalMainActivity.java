@@ -81,7 +81,7 @@ public class PersonalMainActivity extends BaseActivity {
         Glide.with(this).load(HttpEntity.IMAGE_HEAD + spUtils.getString(Entity.AVATAR)).into(binding.personalEditTx);
         binding.personalUserName.setText(spUtils.getString(Entity.NAME));
         binding.personalEditSex.setText(spUtils.getInt(Entity.GENDER) == 0 ? "男" : "女");
-        binding.personalEditBirth.setText(TimeUtil.iso8601ToDate(spUtils.getString(Entity.BIRTHDAY), 1));
+        binding.personalEditBirth.setText(spUtils.getString(Entity.BIRTHDAY));
         binding.personalEditArea.setText(spUtils.getString(Entity.ADDRESS));
     }
 
@@ -237,6 +237,7 @@ public class PersonalMainActivity extends BaseActivity {
                         result.append(name.get(i));
                     }
                     binding.personalEditArea.setText(result.toString());
+                    spUtils.setString(Entity.ADDRESS, result.toString());
                     PersonalInformationEntity entity = new PersonalInformationEntity();
                     switch (areaCode.size()){
                         case 1:
@@ -312,7 +313,7 @@ public class PersonalMainActivity extends BaseActivity {
                     DialogMessage.showToast(PersonalMainActivity.this, "修改失败");
                     break;
                 case 500:
-                    DialogMessage.showToast(PersonalMainActivity.this, "请求失败");
+                    //DialogMessage.showToast(PersonalMainActivity.this, "请求失败");
                     break;
             }
         }
@@ -364,7 +365,12 @@ public class PersonalMainActivity extends BaseActivity {
             @Override
             public void onTimeSelect(Date date, View view) {
                 SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
-                binding.personalEditBirth.setText(format.format(date));
+                String birth = format.format(date);
+                binding.personalEditBirth.setText(birth);
+                spUtils.setString(Entity.BIRTHDAY, birth);
+                PersonalInformationEntity entity = new PersonalInformationEntity();
+                entity.setBirthDay(birth);
+                requestOwnServer(entity);
             }
         })
                 .isCyclic(true)

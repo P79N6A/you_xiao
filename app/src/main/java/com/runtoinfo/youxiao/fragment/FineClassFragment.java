@@ -91,10 +91,10 @@ public class FineClassFragment extends BaseFragment {
                     initTableData();
                     break;
                 case 404:
-                    DialogMessage.showToast(getContext(), "请求失败");
+                    //DialogMessage.showToast(getContext(), "请求失败");
                     break;
                 case 500:
-                    DialogMessage.showToast(getContext(), "请求失败，无法获取数据");
+                    //DialogMessage.showToast(getContext(), "请求失败，无法获取数据");
                     break;
             }
         }

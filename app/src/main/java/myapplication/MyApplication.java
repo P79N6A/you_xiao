@@ -282,12 +282,15 @@ public class MyApplication extends Application {
             @Override
             public void onSuccess(String s) {
                 Log.e("bindAccount", "绑定成功");
+                Log.e("bindAccount", pushService.getDeviceId());
             }
 
             @Override
             public void onFailed(String s, String s1) {
             }
         });
+
+
     }
 
     /**

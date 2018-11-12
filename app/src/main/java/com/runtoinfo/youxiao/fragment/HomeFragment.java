@@ -183,13 +183,13 @@ public class HomeFragment extends BaseFragment implements MyScrollView.ScrollVie
                     }
                     break;
                 case 400:
-                    DialogMessage.showToast(getContext(), "请求数据失败");
+                    //DialogMessage.showToast(getContext(), "请求数据失败");
                     break;
                 case 500:
-                    DialogMessage.showToast(getContext(), "服务器异常");
+                    //DialogMessage.showToast(getContext(), "");
                     break;
                 case 404:
-                    DialogMessage.showToast(getContext(), "数据解析异常");
+                    //DialogMessage.showToast(getContext(), "数据解析异常");
                     break;
             }
         }

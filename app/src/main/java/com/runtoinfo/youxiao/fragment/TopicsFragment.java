@@ -106,7 +106,7 @@ public class TopicsFragment extends BaseFragment {
                     initEvent();
                     break;
                 case 400:
-                    DialogMessage.showToast(getContext(), "数据处理错误");
+                    //DialogMessage.showToast(getContext(), "数据处理错误");
                     break;
             }
 

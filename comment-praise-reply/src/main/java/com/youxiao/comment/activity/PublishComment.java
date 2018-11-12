@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 
@@ -104,6 +105,7 @@ public class PublishComment extends BaseActivity {
     public void initData() {
         articleId = getIntent().getExtras().getInt(IntentDataType.ARTICLE);
         targetType = getIntent().getExtras().getInt(IntentDataType.TARGET_TYPE);
+        Log.e("token", articleId + " :::" + targetType);
     }
 
     public void initEvent() {
@@ -128,11 +130,11 @@ public class PublishComment extends BaseActivity {
             switch (msg.what) {
                 case 0:
                     String result = msg.obj.toString();
-                    DialogMessage.showToast(PublishComment.this, "评论成功");
+                    //DialogMessage.showToast(PublishComment.this, "评论成功");
 
                     CommentRequestResultEntity resultEntity =
-                            new Gson().fromJson(result, new TypeToken<CommentRequestResultEntity>() {
-                            }.getType());
+                            new Gson().fromJson(result,
+                                    new TypeToken<CommentRequestResultEntity>() {}.getType());
                     mAdapter.addItem(resultEntity, 0);
                     break;
                 case 10:
@@ -162,7 +164,7 @@ public class PublishComment extends BaseActivity {
                     setDataToAdapter();
                     break;
                 case 500:
-                    DialogMessage.showToast(PublishComment.this, "请求失败");
+                    //DialogMessage.showToast(PublishComment.this, "请求失败");
                     break;
                 case 2:
                     commentRequestResultEntity.setHasPraise(true);
