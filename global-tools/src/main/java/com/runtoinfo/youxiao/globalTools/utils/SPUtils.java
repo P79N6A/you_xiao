@@ -61,4 +61,16 @@ public class SPUtils {
         }
         return result;
     }
+
+    public void setLong(String key, long value){
+        preferences.edit().putLong(key, value).apply();
+    }
+
+    public long getLong(String key){
+        return preferences.getLong(key, -1);
+    }
+
+    public void removeKey(String key){
+        preferences.edit().remove(key);
+    }
 }

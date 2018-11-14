@@ -449,8 +449,16 @@ public class LoginActivity extends BaseActivity {
     @Override
     protected void onStart() {
         super.onStart();
-        if (!TextUtils.isEmpty(spUtils.getString(Entity.TOKEN)))
-            ARouter.getInstance().build(Entity.MAIN_ACTIVITY_PATH).navigation();
+        long nowTime = System.currentTimeMillis() / 1000;
+        long oldTime = spUtils.getLong(Entity.OLD_TIME);
+        long result = nowTime - oldTime;
+        if (result >= 7200){
+            spUtils.setLong(Entity.OLD_TIME, nowTime);
+            spUtils.removeKey(Entity.TOKEN);
+        } else {
+            if (!TextUtils.isEmpty(spUtils.getString(Entity.TOKEN)))
+                ARouter.getInstance().build(Entity.MAIN_ACTIVITY_PATH).navigation();
+        }
     }
 
     @Override
@@ -464,6 +472,11 @@ public class LoginActivity extends BaseActivity {
     public void onPause() {
         super.onPause();
         isLoadUserName = true;
+        if (timer != null)
+            timer.cancel();
+        if (task != null){
+            task.cancel();
+        }
     }
 
     @Override
