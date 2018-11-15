@@ -1,6 +1,8 @@
 package com.runtoinfo.personal_center.activities;
 
+import android.app.Activity;
 import android.app.Dialog;
+import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.os.Handler;
@@ -46,7 +48,9 @@ public class PersonalSettings extends BaseActivity {
         binding.personalSettingPersonLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ARouter.getInstance().build("/personal/personalMain").withString(IntentDataType.DATA, personalInfoData).navigation();
+                ARouter.getInstance().build("/personal/personalMain")
+                        .withString(IntentDataType.DATA, personalInfoData)
+                        .navigation(PersonalSettings.this, 1001);
             }
         });
         binding.personalSettingBack.setOnClickListener(new View.OnClickListener() {
@@ -136,4 +140,18 @@ public class PersonalSettings extends BaseActivity {
             }
         }
     };
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == 1001 && data != null && resultCode == 1003){
+            Glide.with(this).load(HttpEntity.IMAGE_HEAD + spUtils.getString(Entity.AVATAR))
+                    .into(binding.perSettingAvatar);
+        }
+    }
+
+    @Override
+    public void onBackPressed() {
+        setResult(1002);
+        super.onBackPressed();
+    }
 }

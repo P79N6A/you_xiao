@@ -47,6 +47,7 @@ import com.runtoinfo.youxiao.globalTools.utils.DialogMessage;
 import com.runtoinfo.youxiao.globalTools.utils.Entity;
 import com.runtoinfo.youxiao.globalTools.utils.TimeUtil;
 
+import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -266,7 +267,7 @@ public class PersonalMainActivity extends BaseActivity {
                     Log.e("PATH", path);
                     Bitmap bitmap = BitmapFactory.decodeFile(path);
                     binding.personalEditTx.setImageBitmap(bitmap);
-                    requestFile();
+                    requestFile(new File(path));
                     break;
                 case RESULT_OK:
                     selectPic(data);
@@ -278,10 +279,11 @@ public class PersonalMainActivity extends BaseActivity {
     /**
      * 给阿里服务传递文件 获取文件路径
      */
-    public void requestFile(){
+    public void requestFile(File file){
         RequestDataEntity entity = new RequestDataEntity();
         entity.setToken(spUtils.getString(Entity.TOKEN));
         entity.setUrl(HttpEntity.MAIN_URL + HttpEntity.POST_ALI_ONE_FILE);
+        entity.setFile(file);
         httpUtils.postOneFile(handler, entity);
     }
 
@@ -304,6 +306,7 @@ public class PersonalMainActivity extends BaseActivity {
                     String path = msg.obj.toString();
                     PersonalInformationEntity entity = new PersonalInformationEntity();
                     entity.setAvatar(path);
+                    spUtils.setString(Entity.AVATAR, path);
                     requestOwnServer(entity);
                     break;
                 case 1:
@@ -413,7 +416,10 @@ public class PersonalMainActivity extends BaseActivity {
     public void onBackPressed() {
         if (binding.updateUserNameLayout.getVisibility() == View.VISIBLE){
             hideView(false);
-        }else super.onBackPressed();
+        }else{
+            setResult(1003, new Intent(PersonalMainActivity.this, PersonalSettings.class));
+            super.onBackPressed();
+        }
     }
 
     private void selectPic(Intent intent) {
@@ -425,6 +431,7 @@ public class PersonalMainActivity extends BaseActivity {
         String picturePath = cursor.getString(columnIndex);
         cursor.close();
         binding.personalEditTx.setImageBitmap(BitmapFactory.decodeFile(picturePath));
+        requestFile(new File(picturePath));
     }
 
 

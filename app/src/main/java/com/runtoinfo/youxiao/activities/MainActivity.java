@@ -2,17 +2,20 @@ package com.runtoinfo.youxiao.activities;
 
 import android.Manifest;
 import android.app.Dialog;
+import android.app.FragmentTransaction;
 import android.content.ComponentName;
 import android.content.Intent;
 import android.content.ServiceConnection;
 import android.databinding.DataBindingUtil;
 import android.os.Build;
+import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
 import android.os.Looper;
 import android.os.Message;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
@@ -20,7 +23,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.alibaba.android.arouter.facade.annotation.Route;
-import com.alibaba.sdk.android.push.AndroidPopupActivity;
+import com.alibaba.android.arouter.launcher.ARouter;
 import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
 import com.google.gson.reflect.TypeToken;
@@ -66,6 +69,10 @@ public class MainActivity extends BaseActivity implements ViewPager.OnPageChange
     private long firstTime = 0;
     private HttpUtils httpUtils;
 
+    public FragmentManager fragmentManager;
+    public android.support.v4.app.FragmentTransaction fragmentTransaction;
+    public PersonalCenterFragment personalCenterFragment;
+
     public List<SelectSchoolEntity> schoolSelectList;
     public DownloadManagerService.DownloadBinder mDownloadBinder;
 
@@ -73,6 +80,7 @@ public class MainActivity extends BaseActivity implements ViewPager.OnPageChange
     @Override
     protected void initView() {
         binding = DataBindingUtil.setContentView(MainActivity.this, R.layout.activity_main);
+        fragmentManager = getSupportFragmentManager();
         ((MyApplication) getApplication()).initPushService(MyApplication.getInstance());
         ((MyApplication) getApplication()).initPushAuxiliaryChannel();
         httpUtils = new HttpUtils(this);
@@ -104,12 +112,13 @@ public class MainActivity extends BaseActivity implements ViewPager.OnPageChange
     // 初始化数据
     @Override
     protected void initData() {
+        personalCenterFragment = new PersonalCenterFragment();
         mFragments = new ArrayList<>();
         mFragments.add(HomeFragment.getInstance(schoolSelectList));
         mFragments.add(new FineClassFragment());
         mFragments.add(new TopicsFragment());
-        mFragments.add(new PersonalCenterFragment());
-        mMainMenuAdapter = new FragmentAdapter(getSupportFragmentManager(), mFragments);
+        mFragments.add(personalCenterFragment);
+        mMainMenuAdapter = new FragmentAdapter(fragmentManager, mFragments);
         setMenuSelector(0); // 默认选中第一个菜单项“微信”
         initEvent();
 
@@ -299,9 +308,11 @@ public class MainActivity extends BaseActivity implements ViewPager.OnPageChange
         }
     };
 
-    public void refresh(){
-       //finish();
-       onRestart();
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        Log.e("ResultCode", "RequesetCode:" + String.valueOf(requestCode) + "; ResultCode:" + String.valueOf(resultCode));
+        PersonalCenterFragment fragment = (PersonalCenterFragment) ARouter.getInstance().build("/fragment/personalFragment").navigation();
+        if (fragment == null) return;
+        fragment.onActivityResult(requestCode, resultCode, data);
     }
-
 }

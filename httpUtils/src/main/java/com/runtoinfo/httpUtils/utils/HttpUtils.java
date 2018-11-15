@@ -47,6 +47,7 @@ import org.json.JSONObject;
 
 import java.io.File;
 import java.io.IOException;
+import java.lang.reflect.Modifier;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -1164,8 +1165,14 @@ public class HttpUtils<T> {
         executorService.execute(new Runnable() {
             @Override
             public void run() {
+                MultipartBody.Builder body = new MultipartBody.Builder();
+                body.setType(MultipartBody.FORM);
+                File file  = entity.getFile();
+                body.addFormDataPart("file", file.getPath(),  RequestBody.create(MediaType.parse("application/octet-stream"), file));
+                MultipartBody multipartBody = body.build();
                 Request request = new Request.Builder()
                         .url(entity.getUrl())
+                        .post(multipartBody)
                         .header(Authorization, Bearer + entity.getToken())
                         .build();
 

@@ -267,7 +267,8 @@
                     android:ellipsize="marquee"
                     android:singleLine="true"
                     android:textColor="#999999"
-                    android:textSize="18sp" />
+                    android:textSize="18sp"
+                    android:gravity="end" />
 
                 <ImageView
                     android:id="@+id/personal_next_ares"

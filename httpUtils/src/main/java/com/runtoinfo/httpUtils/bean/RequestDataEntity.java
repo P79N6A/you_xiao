@@ -1,5 +1,7 @@
 package com.runtoinfo.httpUtils.bean;
 
+import java.io.File;
+
 /**
  * Created by QiaoJunChao on 2018/8/29.
  */
@@ -17,6 +19,15 @@ public class RequestDataEntity {
     public String code;
     public int signId;
     public int id;
+    public File file;
+
+    public File getFile() {
+        return file;
+    }
+
+    public void setFile(File file) {
+        this.file = file;
+    }
 
     public int getId() {
         return id;

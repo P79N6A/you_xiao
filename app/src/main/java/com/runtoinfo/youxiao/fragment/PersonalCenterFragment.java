@@ -1,11 +1,13 @@
 package com.runtoinfo.youxiao.fragment;
 
+import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
 import android.support.annotation.Nullable;
+import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,19 +16,23 @@ import android.view.animation.Animation;
 import android.widget.AdapterView;
 import android.widget.SimpleAdapter;
 
+import com.alibaba.android.arouter.facade.annotation.Route;
 import com.alibaba.android.arouter.launcher.ARouter;
 import com.alibaba.sdk.android.feedback.impl.FeedbackAPI;
 import com.bumptech.glide.Glide;
+import com.google.android.gms.dynamic.IFragmentWrapper;
 import com.google.gson.Gson;
 import com.runtoinfo.httpUtils.HttpEntity;
 import com.runtoinfo.httpUtils.bean.PersonalCenterEntity;
 import com.runtoinfo.httpUtils.bean.RequestDataEntity;
 import com.runtoinfo.httpUtils.utils.HttpUtils;
 import com.runtoinfo.youxiao.R;
+import com.runtoinfo.youxiao.activities.MainActivity;
 import com.runtoinfo.youxiao.databinding.FragmentPersonalCenterBinding;
 import com.runtoinfo.youxiao.globalTools.utils.DensityUtil;
 import com.runtoinfo.youxiao.globalTools.utils.Entity;
 import com.runtoinfo.youxiao.globalTools.utils.IntentDataType;
+import com.squareup.haha.perflib.Main;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -41,6 +47,7 @@ import java.util.Map;
  */
 
 @SuppressWarnings("all")
+@Route(path = "/fragment/personalFragment")
 public class PersonalCenterFragment extends BaseFragment {
 
     public FragmentPersonalCenterBinding binding;
@@ -156,7 +163,8 @@ public class PersonalCenterFragment extends BaseFragment {
         binding.personalSetting.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ARouter.getInstance().build("/personal/personalSettings").navigation();
+                ARouter.getInstance().build("/personal/personalSettings")
+                        .navigation(getActivity(), 1000);
             }
         });
 
@@ -224,12 +232,19 @@ public class PersonalCenterFragment extends BaseFragment {
         spUtils.setInt(Entity.GENDER, entity.getGender());
         spUtils.setString(Entity.BIRTHDAY, entity.getBirthDay());
         spUtils.setString(Entity.AVATAR, entity.getAvatar());
-        spUtils.setString(Entity.ADDRESS, entity.getProvince() + entity.getCity()+ entity.getDistrict() + entity.getStreet());
+        spUtils.setString(Entity.ADDRESS, entity.getProvinceName() + entity.getCityName()+ entity.getDistrictName() + entity.getStreetName());
     }
 
     @Override
     public void onPause() {
         super.onPause();
         isGetData = false;
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == 1000 && resultCode == 1002 && data != null){
+            Glide.with(getActivity()).load(HttpEntity.IMAGE_HEAD + spUtils.getString(Entity.AVATAR)).into(binding.personalAvatar);
+        }
     }
 }
