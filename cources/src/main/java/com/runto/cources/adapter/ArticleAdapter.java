@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+
 import com.runto.cources.R;
 import com.runto.cources.group.GroupRecyclerAdapter;
 import com.runtoinfo.httpUtils.bean.CourseEntity;
@@ -48,14 +49,14 @@ public class ArticleAdapter extends GroupRecyclerAdapter<String, CourseEntity> {
         spUtils = new SPUtils(context);
 
         map.put("今日课程", dataList);
-        if (dataList.size() == 1){
-            if (dataList.get(0).getType() != 1){
+        if (dataList.size() == 1) {
+            if (dataList.get(0).getType() != 1) {
                 titles.add("今日课程共" + dataList.size() + "节");
             }
-        }else{
+        } else {
             titles.add("今日课程共" + dataList.size() + "节");
         }
-        resetGroups(map,titles);
+        resetGroups(map, titles);
     }
 
 
@@ -65,11 +66,10 @@ public class ArticleAdapter extends GroupRecyclerAdapter<String, CourseEntity> {
     }
 
 
-
     @Override
     protected void onBindViewHolder(RecyclerView.ViewHolder holders, final CourseEntity courseEntity, final int position) {
         BaseViewHolder holder = (BaseViewHolder) holders;
-        switch (courseEntity.getType()){
+        switch (courseEntity.getType()) {
             case 1:
                 holder.getView(R.id.no_course_layout).setVisibility(View.VISIBLE);
                 holder.getView(R.id.course_details_layout).setVisibility(View.GONE);
@@ -82,7 +82,7 @@ public class ArticleAdapter extends GroupRecyclerAdapter<String, CourseEntity> {
                         .setText(R.id.course_time, courseEntity.getStartTime().split(" ")[1].substring(0, 5) + "-" + courseEntity.getEndTime().split(" ")[1].substring(0, 5))
                         .setText(R.id.course_homework, courseEntity.getHomeworkRequirement())
                         .setText(R.id.course_progress_num, String.valueOf(courseEntity.getProgress()) + "%");
-                ((ProgressBar)holder.getView(R.id.course_progress)).setProgress(courseEntity.getProgress());
+                ((ProgressBar) holder.getView(R.id.course_progress)).setProgress(courseEntity.getProgress());
 
                 holder.setText(R.id.course_tv_time, "时间:")
                         .setText(R.id.course_tv_address, "地点:")
@@ -90,43 +90,42 @@ public class ArticleAdapter extends GroupRecyclerAdapter<String, CourseEntity> {
                         .setText(R.id.course_tv_teacher, "老师:")
                         .setText(R.id.course_tv_progress, "进度:");
 
-                if (courseEntity.isSignIn()){
-                    holder.setText(R.id.course_sign_in_tv, "已签");
-                    ((TextView) holder.getView(R.id.course_sign_in_tv)).setTextColor(Color.parseColor("#999999"));
-                }else{
-                    holder.setText(R.id.course_sign_in_tv, "签到");
-                    ((TextView) holder.getView(R.id.course_sign_in_tv)).setTextColor(Color.parseColor("#666666"));
-                }
-
                 String now = TimeUtil.getNowDate();
                 String time = courseEntity.getDate();
                 int result = now.compareTo(time);
-                switch (result){
-                    case -1:
-                        holder.getView(R.id.course_leave_layout).setEnabled(true);
-                        ((TextView) holder.getView(R.id.course_leave)).setTextColor(Color.parseColor("#666666"));
+
+                if (courseEntity.isSignIn() || result > 0) {
+                    holder.setText(R.id.course_sign_in_tv, "已签");
+                    holder.getView(R.id.course_sign_in_layout).setEnabled(false);
+                    holder.setTextColor(R.id.course_sign_in_tv, Color.parseColor("#999999"));
+                } else {
+                    holder.setText(R.id.course_sign_in_tv, "签到");
+                    if (result < 0) {
                         holder.getView(R.id.course_sign_in_layout).setEnabled(false);
-                        ((TextView) holder.getView(R.id.course_sign_in_tv)).setTextColor(Color.parseColor("#999999"));
-                        break;
-                    case 0:
+                        holder.setTextColor(R.id.course_sign_in_tv, Color.parseColor("#999999"));
+                    } else {
                         holder.getView(R.id.course_sign_in_layout).setEnabled(true);
-                        holder.getView(R.id.course_leave_layout).setEnabled(true);
-                        ((TextView) holder.getView(R.id.course_leave)).setTextColor(Color.parseColor("#666666"));
-                        ((TextView) holder.getView(R.id.course_sign_in_tv)).setTextColor(Color.parseColor("#666666"));
-                        break;
-                    case 1:
-                        holder.getView(R.id.course_leave_layout).setEnabled(false);
-                        holder.getView(R.id.course_sign_in_layout).setEnabled(false);
-                        ((TextView) holder.getView(R.id.course_leave)).setTextColor(Color.parseColor("#999999"));
-                        ((TextView) holder.getView(R.id.course_sign_in_tv)).setTextColor(Color.parseColor("#999999"));
-                        break;
+                        holder.setTextColor(R.id.course_sign_in_tv, Color.parseColor("#666666"));
+                    }
+                }
+
+
+                if (result < 0) {
+                    holder.getView(R.id.course_leave_layout).setEnabled(false);
+                    holder.setTextColor(R.id.course_leave, Color.parseColor("#999999"));
+                } else if (result == 0) {
+                    holder.getView(R.id.course_leave_layout).setEnabled(true);
+                    holder.setTextColor(R.id.course_leave, Color.parseColor("#666666"));
+                } else {
+                    holder.getView(R.id.course_leave_layout).setEnabled(false);
+                    holder.setTextColor(R.id.course_leave, Color.parseColor("#999999"));
                 }
 
                 String homeWork = courseEntity.getHomeworkRequirement();
-                if (!TextUtils.isEmpty(homeWork)){
+                if (!TextUtils.isEmpty(homeWork)) {
                     holder.getView(R.id.course_hand_homework_layout).setEnabled(true);
                     ((TextView) holder.getView(R.id.course_hand_homework)).setTextColor(Color.parseColor("#666666"));
-                }else{
+                } else {
                     holder.getView(R.id.course_hand_homework_layout).setEnabled(false);
                     ((TextView) holder.getView(R.id.course_hand_homework)).setTextColor(Color.parseColor("#999999"));
                 }
@@ -162,19 +161,19 @@ public class ArticleAdapter extends GroupRecyclerAdapter<String, CourseEntity> {
 
     }
 
-    public interface setOnClickListeners{
+    public interface setOnClickListeners {
         void onLayoutClick(View view, int position, CourseEntity entity);
     }
 
-    public void setSignInListener(setOnClickListeners listener){
+    public void setSignInListener(setOnClickListeners listener) {
         this.signInListener = listener;
     }
 
-    public void setHandWorkListener(setOnClickListeners clickListener){
+    public void setHandWorkListener(setOnClickListeners clickListener) {
         this.handHomeWorkListener = clickListener;
     }
 
-    public void setLeaveListener(setOnClickListeners leaveListener){
+    public void setLeaveListener(setOnClickListeners leaveListener) {
         this.leaveListener = leaveListener;
     }
 

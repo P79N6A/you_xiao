@@ -3,6 +3,7 @@ package com.runtoinfo.personal_center.activities;
 import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.databinding.DataBindingUtil;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.os.Environment;
@@ -37,7 +38,7 @@ public class CameraActivity extends BaseActivity {
     private static final int RESULT_VIDEO_CODE = 122;
     private static final int RESULT_ERROR_CODE = 123;
     JCameraView cameraView;
-    private ActivityCameraBinding binding;
+    public ActivityCameraBinding binding;
     public void beforeSetContentView() {
         //无title
         requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -57,12 +58,6 @@ public class CameraActivity extends BaseActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        beforeSetContentView();
-        setContentView(getLayoutId());
-
-        checkPermission();
-
-        initView();
     }
 
     private void checkPermission() {
@@ -88,20 +83,28 @@ public class CameraActivity extends BaseActivity {
     }
 
     public void initView() {
+        beforeSetContentView();
+        binding = DataBindingUtil.setContentView(CameraActivity.this, R.layout.activity_camera);
+        checkPermission();
+        initViewData();
+    }
+
+    public void initViewData(){
         //设置视频保存路径
         try {
-            cameraView = findViewById(R.id.jcameraview);
+            //cameraView = findViewById(R.id.jcameraview);
+
             String path = Environment.getExternalStorageDirectory().getPath() + File.separator + "YouXiao";
             File filePath = new File(path);
             if (!filePath.exists()) {
                 filePath.mkdirs();
                 //filePath = new File(path);
             }
-            cameraView.setSaveVideoPath(path);
-            cameraView.setFeatures(JCameraView.BUTTON_STATE_ONLY_CAPTURE);
+            binding.jcameraview.setSaveVideoPath(path);
+            binding.jcameraview.setFeatures(JCameraView.BUTTON_STATE_ONLY_CAPTURE);
             //cameraView.setTip("轻触拍照,长按录制视频");
-            cameraView.setMediaQuality(JCameraView.MEDIA_QUALITY_MIDDLE);
-            cameraView.setErrorLisenter(new ErrorListener() {
+            binding.jcameraview.setMediaQuality(JCameraView.MEDIA_QUALITY_MIDDLE);
+            binding.jcameraview.setErrorLisenter(new ErrorListener() {
                 @Override
                 public void onError() {
                     //错误监听
@@ -120,7 +123,7 @@ public class CameraActivity extends BaseActivity {
             e.printStackTrace();
         }
         //JCameraView监听
-        cameraView.setJCameraLisenter(new JCameraListener() {
+        binding.jcameraview.setJCameraLisenter(new JCameraListener() {
             @Override
             public void captureSuccess(Bitmap bitmap) {
                 //获取图片bitmap
@@ -144,13 +147,13 @@ public class CameraActivity extends BaseActivity {
             }
         });
 
-        cameraView.setLeftClickListener(new ClickListener() {
+        binding.jcameraview.setLeftClickListener(new ClickListener() {
             @Override
             public void onClick() {
                 CameraActivity.this.finish();
             }
         });
-        cameraView.setRightClickListener(new ClickListener() {
+        binding.jcameraview.setRightClickListener(new ClickListener() {
             @Override
             public void onClick() {
                 Toast.makeText(CameraActivity.this,"Right", Toast.LENGTH_SHORT).show();
@@ -163,12 +166,12 @@ public class CameraActivity extends BaseActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        cameraView.onResume();
+        binding.jcameraview.onResume();
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-        cameraView.onPause();
+        binding.jcameraview.onPause();
     }
 }
