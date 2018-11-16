@@ -1,11 +1,11 @@
 <component name="libraryTable">
   <library name="com.aliyun.ams:alicloud-android-third-push-3.0.5">
     <CLASSES>
-      <root url="jar://$USER_HOME$/.gradle/caches/transforms-1/files-1.1/alicloud-android-third-push-3.0.5.aar/883a87161dfc8f5e19da77a8266035c4/jars/libs/mipush-2.2.22.jar!/" />
-      <root url="jar://$USER_HOME$/.gradle/caches/transforms-1/files-1.1/alicloud-android-third-push-3.0.5.aar/883a87161dfc8f5e19da77a8266035c4/jars/classes.jar!/" />
-      <root url="file://$USER_HOME$/.gradle/caches/transforms-1/files-1.1/alicloud-android-third-push-3.0.5.aar/883a87161dfc8f5e19da77a8266035c4/res" />
-      <root url="jar://$USER_HOME$/.gradle/caches/transforms-1/files-1.1/alicloud-android-third-push-3.0.5.aar/883a87161dfc8f5e19da77a8266035c4/jars/libs/third-push-support-release.jar!/" />
-      <root url="jar://$USER_HOME$/.gradle/caches/transforms-1/files-1.1/alicloud-android-third-push-3.0.5.aar/883a87161dfc8f5e19da77a8266035c4/jars/libs/huawei-push-1.1.1.jar!/" />
+      <root url="jar://$USER_HOME$/.gradle/caches/transforms-1/files-1.1/alicloud-android-third-push-3.0.5.aar/fea125e0e17920469b05704cabd24250/jars/libs/huawei-push-1.1.1.jar!/" />
+      <root url="jar://$USER_HOME$/.gradle/caches/transforms-1/files-1.1/alicloud-android-third-push-3.0.5.aar/fea125e0e17920469b05704cabd24250/jars/classes.jar!/" />
+      <root url="jar://$USER_HOME$/.gradle/caches/transforms-1/files-1.1/alicloud-android-third-push-3.0.5.aar/fea125e0e17920469b05704cabd24250/jars/libs/mipush-2.2.22.jar!/" />
+      <root url="file://$USER_HOME$/.gradle/caches/transforms-1/files-1.1/alicloud-android-third-push-3.0.5.aar/fea125e0e17920469b05704cabd24250/res" />
+      <root url="jar://$USER_HOME$/.gradle/caches/transforms-1/files-1.1/alicloud-android-third-push-3.0.5.aar/fea125e0e17920469b05704cabd24250/jars/libs/third-push-support-release.jar!/" />
     </CLASSES>
     <JAVADOC />
     <SOURCES />

@@ -33,9 +33,8 @@ public class CourseRecordAdapter extends UniversalRecyclerAdapter<CourseEntity> 
 
     @Override
     protected void convert(Context mContext, BaseViewHolder holder, CourseEntity courseRecordEntity, int position) {
-        Log.e("recordAdapter", courseRecordEntity.getCoverPhoto());
         Glide.with(mContext).load(courseRecordEntity.getCoverPhoto()).into((ImageView) holder.getView(R.id.record_course_img));
-        holder.setText(R.id.record_course_title, courseRecordEntity.getCourseName());
+        holder.setText(R.id.record_course_title, courseRecordEntity.getClassName());
         holder.setText(R.id.record_course_teacher, courseRecordEntity.getTeacherName());
         holder.setText(R.id.record_course_update_time, courseRecordEntity.getDate());
     }

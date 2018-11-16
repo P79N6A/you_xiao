@@ -96,7 +96,7 @@
 
         <service android:name=".service.DownloadManagerService"/>
         <!--辅助通道配置-->
-        <receiver
+        <!--<receiver
             android:name="com.google.firebase.iid.FirebaseInstanceIdReceiver"
             android:exported="true"
             android:permission="com.google.android.c2dm.permission.SEND" >
@@ -122,7 +122,7 @@
             <intent-filter android:priority="-500" >
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />
             </intent-filter>
-        </service>
+        </service>-->
     </application>
 
 </manifest>

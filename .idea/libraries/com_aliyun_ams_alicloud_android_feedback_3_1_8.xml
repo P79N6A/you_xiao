@@ -1,8 +1,8 @@
 <component name="libraryTable">
   <library name="com.aliyun.ams:alicloud-android-feedback-3.1.8">
     <CLASSES>
-      <root url="file://$USER_HOME$/.gradle/caches/transforms-1/files-1.1/alicloud-android-feedback-3.1.8.aar/f727a00aafba8874c09f595a8916335d/res" />
-      <root url="jar://$USER_HOME$/.gradle/caches/transforms-1/files-1.1/alicloud-android-feedback-3.1.8.aar/f727a00aafba8874c09f595a8916335d/jars/classes.jar!/" />
+      <root url="jar://$USER_HOME$/.gradle/caches/transforms-1/files-1.1/alicloud-android-feedback-3.1.8.aar/6e3b4a3952feb89863b30377a9fe5f6b/jars/classes.jar!/" />
+      <root url="file://$USER_HOME$/.gradle/caches/transforms-1/files-1.1/alicloud-android-feedback-3.1.8.aar/6e3b4a3952feb89863b30377a9fe5f6b/res" />
     </CLASSES>
     <JAVADOC />
     <SOURCES />

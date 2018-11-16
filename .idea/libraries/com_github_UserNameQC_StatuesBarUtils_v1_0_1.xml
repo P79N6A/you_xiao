@@ -1,8 +1,8 @@
 <component name="libraryTable">
   <library name="com.github.UserNameQC:StatuesBarUtils-v1.0.1">
     <CLASSES>
-      <root url="jar://$USER_HOME$/.gradle/caches/transforms-1/files-1.1/StatuesBarUtils-v1.0.1.aar/3b8100e2e3a1f5c56e4f454ad36b5237/jars/classes.jar!/" />
-      <root url="file://$USER_HOME$/.gradle/caches/transforms-1/files-1.1/StatuesBarUtils-v1.0.1.aar/3b8100e2e3a1f5c56e4f454ad36b5237/res" />
+      <root url="file://$USER_HOME$/.gradle/caches/transforms-1/files-1.1/StatuesBarUtils-v1.0.1.aar/d12be86b020b598642779f5139bf0654/res" />
+      <root url="jar://$USER_HOME$/.gradle/caches/transforms-1/files-1.1/StatuesBarUtils-v1.0.1.aar/d12be86b020b598642779f5139bf0654/jars/classes.jar!/" />
     </CLASSES>
     <JAVADOC />
     <SOURCES />
