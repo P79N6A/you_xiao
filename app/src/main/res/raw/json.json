@@ -1,0 +1,132 @@
+{
+  "result": {
+    "totalCount": 4,
+    "items": [
+      {
+        "tenantId": null,
+        "campusId": null,
+        "courseLevel": 2,
+        "courseType": 439,
+        "courseSubject": 446,
+        "courseCategory": null,
+        "mediaType": 0,
+        "name": "闻鸡起舞",
+        "description": null,
+        "price": 100,
+        "purchasedNumber": null,
+        "cover": "https://file.11youxiao.com/files/2018/09/276367363563439455856953079.PNG",
+        "startTime": null,
+        "videoPath": null,
+        "introduction": "闻鸡起舞小故事",
+        "courseContents": {
+          "items": [
+            {
+              "id": 1,
+              "mediaType": 0,
+              "name": "闻鸡起舞",
+              "isLeaf": true,
+              "target": "files/2018/09/276367365288244031918513076.qlv",
+              "children": null
+            }
+          ]
+        },
+        "id": 1
+      },
+      {
+        "tenantId": null,
+        "campusId": null,
+        "courseLevel": 2,
+        "courseType": 439,
+        "courseSubject": 446,
+        "courseCategory": null,
+        "mediaType": 0,
+        "name": "半途而废",
+        "description": null,
+        "price": 50,
+        "purchasedNumber": null,
+        "cover": "https://file.11youxiao.com/files/2018/09/276367364264645278254256186.PNG",
+        "startTime": null,
+        "videoPath": null,
+        "introduction": "半途而废小故事",
+        "courseContents": {
+          "items": [
+            {
+              "id": 1,
+              "mediaType": 0,
+              "name": "半途而废",
+              "isLeaf": true,
+              "target": "files/2018/09/276367365292168073671484938.qlv",
+              "children": null
+            }
+          ]
+        },
+        "id": 2
+      },
+      {
+        "tenantId": null,
+        "campusId": null,
+        "courseLevel": 2,
+        "courseType": 439,
+        "courseSubject": 446,
+        "courseCategory": null,
+        "mediaType": 0,
+        "name": "熟能生巧",
+        "description": null,
+        "price": 50,
+        "purchasedNumber": null,
+        "cover": "https://file.11youxiao.com/files/2018/09/276367365299970698673131568.PNG",
+        "startTime": null,
+        "videoPath": null,
+        "introduction": "熟能生巧小故事",
+        "courseContents": {
+          "items": [
+            {
+              "id": 1,
+              "mediaType": 0,
+              "name": "熟能生巧",
+              "isLeaf": true,
+              "target": "files/2018/09/276367365297569893889769641.qlv",
+              "children": null
+            }
+          ]
+        },
+        "id": 3
+      },
+      {
+        "tenantId": null,
+        "campusId": null,
+        "courseLevel": 2,
+        "courseType": 439,
+        "courseSubject": 445,
+        "courseCategory": null,
+        "mediaType": 0,
+        "name": "风铃",
+        "description": null,
+        "price": 50,
+        "purchasedNumber": null,
+        "cover": "https://file.11youxiao.com/files/2018/09/276367365534039492113540188.PNG",
+        "startTime": null,
+        "videoPath": null,
+        "introduction": "风铃朗读",
+        "courseContents": {
+          "items": [
+            {
+              "id": 1,
+              "mediaType": 0,
+              "name": "风铃",
+              "isLeaf": true,
+              "target": "files/2018/09/276367365492658366292241080.qlv",
+              "children": null
+            }
+          ]
+        },
+        "id": 4
+      }
+    ]
+  },
+  "targetUrl": null,
+  "success": true,
+  "error": null,
+  "unAuthorizedRequest": false,
+  "__abp": true
+}

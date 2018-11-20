@@ -15,6 +15,7 @@ import com.runto.cources.activities.BoutiqueCourseDetails;
 import com.runto.cources.adapter.ListViewAdapter;
 import com.runto.cources.databinding.FragmentCourseListBinding;
 import com.runtoinfo.httpUtils.bean.ChildContent;
+import com.runtoinfo.httpUtils.bean.CourseChildData;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -29,9 +30,9 @@ public class CourseListFragment extends Fragment {
     public FragmentCourseListBinding binding;
     public ListViewAdapter simpleAdapter;
     public List<String> dataList = new ArrayList<>();
-    public List<ChildContent> msg;
+    public CourseChildData msg;
 
-    public CourseListFragment(List<ChildContent> msg){
+    public CourseListFragment(CourseChildData msg){
         this.msg = msg;
     }
     @Nullable
@@ -43,8 +44,9 @@ public class CourseListFragment extends Fragment {
     }
 
     public void initData(){
-        for (int i = 0; i < msg.size(); i++){
-            ChildContent content = new ChildContent();
+        List<ChildContent> childContents = msg.getItems();
+        for (int i = 0; i < childContents.size(); i++){
+            ChildContent content = childContents.get(i);
             dataList.add(content.getName());
         }
         simpleAdapter = new ListViewAdapter(getContext(), dataList);

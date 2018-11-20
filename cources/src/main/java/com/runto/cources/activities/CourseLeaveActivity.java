@@ -39,11 +39,15 @@ public class CourseLeaveActivity extends BaseActivity {
     public void initView(){
         binding = DataBindingUtil.setContentView(this, R.layout.fragment_course_leave);
         teacherId = getIntent().getExtras().getInt(IntentDataType.DATA);
-        setStatusBar();
         //DensityUtil.setMargin(this, binding.leaveBarRelative);
         httpUtils = new HttpUtils(this);
         initDialog();
         initEvent();
+    }
+
+    @Override
+    public void setStatusBar() {
+        super.setStatusBar();
     }
 
     public void initEvent(){

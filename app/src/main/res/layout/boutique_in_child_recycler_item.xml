@@ -2,8 +2,6 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:layout_marginStart="20dp"
-    android:layout_marginTop="20dp"
     android:background="@drawable/boutique_inchild_layout_background"
     android:orientation="vertical">
 
@@ -25,6 +23,7 @@
             android:layout_marginStart="2dp"
             android:layout_marginTop="10dp"
             android:paddingEnd="10dp"
+            android:text="闻鸡起舞"
             android:paddingStart="10dp"
             android:textColor="#333333"
             android:textSize="17sp" />
@@ -38,6 +37,7 @@
             android:paddingEnd="10dp"
             android:paddingStart="10dp"
             android:textColor="#999999"
+            android:text="2010年11月20"
             android:textSize="15sp" />
 
         <RelativeLayout
@@ -54,7 +54,8 @@
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
                 android:textColor="#ff4400"
-                android:textSize="16sp" />
+                android:textSize="16sp"
+                android:text="100元"/>
 
             <TextView
                 android:id="@+id/boutique_recycler_number"
@@ -63,7 +64,8 @@
                 android:layout_alignParentEnd="true"
                 android:layout_centerVertical="true"
                 android:textColor="#999999"
-                android:textSize="15sp" />
+                android:textSize="15sp"
+                android:text="100人购买"/>
 
         </RelativeLayout>
     </LinearLayout>

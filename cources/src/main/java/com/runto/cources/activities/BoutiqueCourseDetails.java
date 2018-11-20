@@ -49,9 +49,13 @@ public class BoutiqueCourseDetails extends BaseActivity {
     @Override
     protected void initView() {
         binding = DataBindingUtil.setContentView(this, R.layout.activity_boutique_course_details);
-        setStatusBar();
         httpUtils = new HttpUtils(this);
         courseDataEntity = new Gson().fromJson(getIntent().getExtras().getString("json"), new TypeToken<CourseDataEntity>(){}.getType());
+    }
+
+    @Override
+    public void setStatusBar() {
+        super.setStatusBar();
     }
 
     @SuppressLint("SetTextI18n")
@@ -62,7 +66,7 @@ public class BoutiqueCourseDetails extends BaseActivity {
         if (courseDataEntity != null){
             binding.boutiqueCourseName.setText(courseDataEntity.getName());
             httpUtils.postPhoto(this, courseDataEntity.getCover(), binding.boutiqueCourseDetailsImageView);
-            binding.boutiqueCourseOpenTime.setText(courseDataEntity.getStartTime().split("T")[0] + "开课");
+            //binding.boutiqueCourseOpenTime.setText(courseDataEntity.getStartTime().split("T")[0] + "开课");
             binding.boutiqueCoursePurchaseNumber.setText(courseDataEntity.getPurchasedNumber() + "人购买");
             binding.boutiqueCoursePrice.setText("¥" + courseDataEntity.getPrice());
         }

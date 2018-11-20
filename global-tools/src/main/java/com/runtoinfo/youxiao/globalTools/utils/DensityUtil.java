@@ -22,6 +22,10 @@ import android.widget.LinearLayout;
 
 import com.runtoinfo.youxiao.globalTools.R;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Matcher;
@@ -338,6 +342,28 @@ public class DensityUtil {
         LinearLayout.LayoutParams params = (LinearLayout.LayoutParams) view.getLayoutParams();
         params.height += DensityUtil.getStatuesBarHeight(activity);
         view.setLayoutParams(params);
+    }
+
+    /**
+     * 读取raw目下文件
+     */
+    public static String getRawFiles(Context context, int id){
+        try {
+            InputStream  inputStream = context.getResources().openRawResource(id);
+            BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
+            StringBuffer buffer = new StringBuffer();
+            String line = bufferedReader.readLine();
+            while (!TextUtils.isEmpty(line)){
+                buffer.append(line);
+                line = bufferedReader.readLine();
+            }
+            bufferedReader.close();
+            inputStream.close();
+            return buffer.toString();
+        }catch (IOException e){
+            e.printStackTrace();
+        }
+        return null;
     }
 
 }

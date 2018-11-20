@@ -1,7 +1,5 @@
 package com.runtoinfo.httpUtils.bean;
 
-import java.util.List;
-
 /**
  * Created by QiaoJunChao on 2018/8/23.
  */
@@ -22,7 +20,7 @@ public class CourseDataEntity {
     public String startTime;
     public String videoPath;
     public String introduction;
-    public List<ChildContent> courseContents;
+    public CourseChildData courseContents;
     public int mediaType;
 
     public int getTenantId() {
@@ -81,11 +79,11 @@ public class CourseDataEntity {
         this.mediaType = mediaType;
     }
 
-    public List<ChildContent> getCourseContents() {
+    public CourseChildData getCourseContents() {
         return courseContents;
     }
 
-    public void setCourseContents(List<ChildContent> courseContents) {
+    public void setCourseContents(CourseChildData courseContents) {
         this.courseContents = courseContents;
     }
 

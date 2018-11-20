@@ -7,6 +7,7 @@ import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
 import android.support.annotation.Nullable;
+import android.support.v7.widget.GridLayoutManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,10 +20,10 @@ import com.runtoinfo.httpUtils.bean.RequestDataEntity;
 import com.runtoinfo.httpUtils.utils.HttpUtils;
 import com.runtoinfo.youxiao.R;
 import com.runtoinfo.youxiao.adapter.BoutiqueInChildRecyclerAdapter;
-import com.runtoinfo.youxiao.globalTools.utils.DensityUtil;
-import com.runtoinfo.youxiao.globalTools.utils.DialogMessage;
-import com.runtoinfo.youxiao.globalTools.utils.Entity;
 import com.runtoinfo.youxiao.databinding.FragmentBoutiqueCourseInChildBinding;
+import com.runtoinfo.youxiao.globalTools.adapter.UniversalRecyclerAdapter;
+import com.runtoinfo.youxiao.globalTools.utils.DensityUtil;
+import com.runtoinfo.youxiao.globalTools.utils.Entity;
 import com.runtoinfo.youxiao.ui.GridSpacesItemDecoration;
 import com.wuxiaolong.pullloadmorerecyclerview.PullLoadMoreRecyclerView;
 
@@ -59,8 +60,15 @@ public class BoutiqueCourseInChildFragment extends BaseFragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_boutique_course_in_child, container, false);
         httpUtils = new HttpUtils(getContext());
-        initCourseData(page);
+        /**注释原因，测试数据，使用假数据，等回复后恢复*/
+        //initCourseData(page);
+        initRecyclerData();//测试时，将初始化数据放在此处运行，后期将放在请求参数后。
         return binding.getRoot();
+    }
+
+    @Override
+    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
     }
 
     @Override
@@ -84,22 +92,28 @@ public class BoutiqueCourseInChildFragment extends BaseFragment {
         tempList = new ArrayList<>();
         httpUtils.getInChildData(handler,requestDataEntity, requestMap, tempList);
     }
-    public void initView(){
+    public void initRecyclerData(){
 
-        if (tempList != null && tempList.size() > 0 ){
-            dataList.addAll(tempList);
-            if (adapter != null) {
-                adapter.notifyDataSetChanged();
-                return;
-            }
-        }
-        binding.boutiqueInChildRecycler.setGridLayout(2);
+//        if (tempList != null && tempList.size() > 0 ){
+//            dataList.addAll(tempList);
+//            if (adapter != null) {
+//                adapter.notifyDataSetChanged();
+//                return;
+//            }
+//        }
+
+        binding.boutiqueInChildRecycler.setLayoutManager(new GridLayoutManager(getContext(), 2));
         binding.boutiqueInChildRecycler.addItemDecoration(new GridSpacesItemDecoration(30, true));
-        adapter = new BoutiqueInChildRecyclerAdapter(getActivity(), dataList);
+        adapter = new BoutiqueInChildRecyclerAdapter(getContext(), courseDataList, R.layout.boutique_in_child_recycler_item);
         binding.boutiqueInChildRecycler.setAdapter(adapter);
 
-        binding.boutiqueInChildRecycler.setNestedScrollingEnabled(false);
-        binding.boutiqueInChildRecycler.setOnPullLoadMoreListener(pullLoadMoreListener);
+        /**
+         * 因使用的PullLoadMoreRecyclerView不能正常加载数据，
+         * 具体原因需要考证，目前只为使用假数据进行测试使用
+         * 后期会恢复
+         */
+        //binding.boutiqueInChildRecycler.setNestedScrollingEnabled(false);
+        //binding.boutiqueInChildRecycler.setOnPullLoadMoreListener(pullLoadMoreListener);
         adapter.setOnItemClickListener(onItemClickListener);
     }
 
@@ -117,10 +131,10 @@ public class BoutiqueCourseInChildFragment extends BaseFragment {
         }
     };
 
-    public BoutiqueInChildRecyclerAdapter.OnItemClickListener onItemClickListener = new BoutiqueInChildRecyclerAdapter.OnItemClickListener() {
+    public UniversalRecyclerAdapter.OnItemClickListener onItemClickListener = new UniversalRecyclerAdapter.OnItemClickListener() {
         @Override
         public void onItemClick(View view, int position) {
-            CourseDataEntity entity = dataList.get(position);
+            CourseDataEntity entity = courseDataList.get(position);
             String json = new Gson().toJson(entity);
             switch (entity.getMediaType()){
                 case 0:
@@ -139,7 +153,7 @@ public class BoutiqueCourseInChildFragment extends BaseFragment {
         public void handleMessage(Message msg) {
             switch (msg.what){
                 case 0:
-                    initView();
+                    initRecyclerData();
                     break;
                 case 500:
                     //DialogMessage.showToast(getContext(), "请求失败，检查网络连接");
@@ -151,19 +165,12 @@ public class BoutiqueCourseInChildFragment extends BaseFragment {
         }
     };
 
-    /**
-     * 获取偏移量
-     * @return
-     */
-    public int getMaxOrMin(){
-        page += 1;
-        return (page - 1) * 10;
-    }
-
     @Override
     public void onPause() {
         super.onPause();
         page = 1;
         offset = 0;
     }
+
+
 }

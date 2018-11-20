@@ -7,10 +7,15 @@
         android:orientation="vertical"
         android:layout_margin="20dp">
 
-        <com.wuxiaolong.pullloadmorerecyclerview.PullLoadMoreRecyclerView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/boutique_in_child_recycler"/>
+        <!--<com.wuxiaolong.pullloadmorerecyclerview.PullLoadMoreRecyclerView
+            android:id="@+id/boutique_in_child_recycler"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />-->
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/boutique_in_child_recycler"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
 
     </LinearLayout>
 </layout>

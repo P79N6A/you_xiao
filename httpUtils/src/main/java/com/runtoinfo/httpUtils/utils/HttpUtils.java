@@ -14,13 +14,13 @@ import com.dmcbig.mediapicker.entity.Media;
 import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
 import com.google.gson.reflect.TypeToken;
+import com.runtoinfo.httpUtils.CPRCBean.CPRCDataEntity;
 import com.runtoinfo.httpUtils.CPRCBean.CommentRequestResultEntity;
 import com.runtoinfo.httpUtils.CenterEntity.LearnTrackEntity;
 import com.runtoinfo.httpUtils.CenterEntity.LeaveRecordEntity;
 import com.runtoinfo.httpUtils.CenterEntity.PersonalInformationEntity;
 import com.runtoinfo.httpUtils.HttpEntity;
 import com.runtoinfo.httpUtils.bean.AddMemberBean;
-import com.runtoinfo.httpUtils.CPRCBean.CPRCDataEntity;
 import com.runtoinfo.httpUtils.bean.CourseDataEntity;
 import com.runtoinfo.httpUtils.bean.CourseEntity;
 import com.runtoinfo.httpUtils.bean.EventAddResultBean;
@@ -47,7 +47,6 @@ import org.json.JSONObject;
 
 import java.io.File;
 import java.io.IOException;
-import java.lang.reflect.Modifier;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -978,8 +977,9 @@ public class HttpUtils<T> {
                                     CourseDataEntity courseDataEntity = new Gson().fromJson(childItem.toString(),
                                             new TypeToken<CourseDataEntity>() {}.getType());
                                     list.add(courseDataEntity);
-                                    handler.sendEmptyMessage(0);
+
                                 }
+                                handler.sendEmptyMessage(0);
                             } catch (JSONException e) {
                                 handler.sendEmptyMessage(404);
                             } catch (IllegalStateException e){
