@@ -46,7 +46,7 @@ public class CoursePunchAdapter extends UniversalRecyclerAdapter<HomeCourseEntit
 
     @Override
     protected void convert(Context mContext, final BaseViewHolder holder, final HomeCourseEntity homeCourseEntity, int position) {
-        holder.setText(R.id.home_course_name, homeCourseEntity.getCourseName());
+        holder.setText(R.id.home_course_name, homeCourseEntity.getClassName());
         holder.setText(R.id.home_course_time, /*TimeUtil.iso8601ToDate(*/homeCourseEntity.getBeginTime()/*, 1)*/);
         httpUtils.postSrcPhoto(context, homeCourseEntity.getCoverPhoto(),(ImageView) holder.getView(R.id.home_img_course));
         holder.getView(R.id.home_details).setOnClickListener(new View.OnClickListener() {
