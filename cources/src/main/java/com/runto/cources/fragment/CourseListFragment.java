@@ -44,7 +44,7 @@ public class CourseListFragment extends Fragment {
     }
 
     public void initData(){
-        List<ChildContent> childContents = msg.getItems();
+        final List<ChildContent> childContents = msg.getItems();
         for (int i = 0; i < childContents.size(); i++){
             ChildContent content = childContents.get(i);
             dataList.add(content.getName());
@@ -56,7 +56,7 @@ public class CourseListFragment extends Fragment {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 //ARouter.getInstance().build("/electronic/electronicScore").navigation();
                 BoutiqueCourseDetails details = (BoutiqueCourseDetails) getActivity();
-                details.videoView("http://pic.ibaotu.com/00/20/08/96e888piCHck.mp4");
+                details.initGSYVideoView("http://pic.ibaotu.com/00/20/08/96e888piCHck.mp4"/*HttpEntity.FILE_HEAD + childContents.get(position).getTarget()*/);
             }
         });
     }

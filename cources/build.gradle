@@ -71,16 +71,15 @@ dependencies {
     implementation 'com.android.support:design:26.1.0'
     implementation project(':global-tools')
     implementation project(':imageselector')
-    implementation 'cn.jzvd:jiaozivideoplayer:6.2.12'
     implementation project(':seescore')
     implementation 'org.wlf:FileDownloader:0.3.1'
     implementation project(':httpUtils')
     implementation 'com.google.code.gson:gson:2.8.2'
     //noinspection GradleDynamicVersion
-    //implementation 'com.dmcBig:mediapicker:+'
-    implementation project (':mediapicker')
+    implementation project(':mediapicker')
     implementation 'com.github.UserNameQC:StatuesBarUtils:v1.0.1'
     implementation 'com.github.UserNameQC.Time-PickerView:pickerview:1.0.0'
+    implementation 'com.shuyu:GSYVideoPlayer:6.0.1'
 }
 apply from: '../script/gradle-jcenter-push.gradle'
 

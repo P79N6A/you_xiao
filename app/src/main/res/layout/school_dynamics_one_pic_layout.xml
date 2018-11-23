@@ -1,35 +1,35 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical">
-
-
-    <TextView
-        android:id="@+id/school_one_title"
-        style="@style/TextView_18sp_title"
-        android:text="在给孩子报名前记住这些，少走弯路" />
-
-    <ImageView
-        android:id="@+id/school_one_image"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        android:src="@drawable/school_movment_head"
-        android:visibility="gone"/>
-
-    <cn.jzvd.JZVideoPlayerStandard
-        android:id="@+id/school_dynamics_video"
+<layout>
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
-        android:layout_marginTop="10dp"
-        android:layout_height="200dp"/>
+        android:layout_height="match_parent"
+        android:orientation="vertical">
 
-    <TextView
-        android:id="@+id/school_one_reader"
-        style="@style/TextView_15sp_Gray"
-        android:drawableLeft="@drawable/topics_img_reade"
-        android:drawablePadding="5dp"
-        android:layout_marginTop="6dp"
-        android:text="9999" />
+        <TextView
+            android:id="@+id/school_one_title"
+            style="@style/TextView_18sp_title"
+            android:text="在给孩子报名前记住这些，少走弯路" />
 
-</LinearLayout>
+        <ImageView
+            android:id="@+id/school_one_image"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:src="@drawable/school_movment_head"
+            android:visibility="gone" />
+
+        <com.shuyu.gsyvideoplayer.video.StandardGSYVideoPlayer
+            android:id="@+id/school_dynamics_video"
+            android:layout_width="match_parent"
+            android:layout_height="200dp"
+            android:layout_marginTop="10dp" />
+
+        <TextView
+            android:id="@+id/school_one_reader"
+            style="@style/TextView_15sp_Gray"
+            android:layout_marginTop="6dp"
+            android:drawableLeft="@drawable/topics_img_reade"
+            android:drawablePadding="5dp"
+            android:text="9999" />
+    </LinearLayout>
+</layout>

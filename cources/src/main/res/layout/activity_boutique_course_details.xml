@@ -43,13 +43,12 @@
             android:layout_weight="13">
 
 
-            <cn.jzvd.JZVideoPlayerStandard
+            <com.shuyu.gsyvideoplayer.video.StandardGSYVideoPlayer
                 android:id="@+id/boutique_jzvideo_standard"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:layout_weight="3"
-                android:visibility="gone"
-                tools:ignore="NestedWeights" />
+                android:visibility="gone"/>
 
             <ImageView
                 android:id="@+id/boutique_course_details_imageView"

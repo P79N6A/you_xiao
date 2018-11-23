@@ -1,11 +1,14 @@
 package com.runtoinfo.youxiao.activities;
 
 import android.annotation.SuppressLint;
+import android.content.pm.ActivityInfo;
+import android.content.res.Configuration;
 import android.databinding.DataBindingUtil;
 import android.graphics.PixelFormat;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
@@ -23,12 +26,15 @@ import com.runtoinfo.httpUtils.bean.SchoolDynamicsNewEntity;
 import com.runtoinfo.httpUtils.utils.HttpUtils;
 import com.runtoinfo.youxiao.R;
 import com.runtoinfo.youxiao.adapter.SchoolDynamicsRecyclerAdapter;
-import com.runtoinfo.youxiao.globalTools.utils.DialogMessage;
-import com.runtoinfo.youxiao.globalTools.utils.Entity;
 import com.runtoinfo.youxiao.databinding.SchoolMovmentBinding;
 import com.runtoinfo.youxiao.entity.SchoolDynamicsEntity;
+import com.runtoinfo.youxiao.globalTools.utils.DialogMessage;
+import com.runtoinfo.youxiao.globalTools.utils.Entity;
 import com.runtoinfo.youxiao.globalTools.utils.IntentDataType;
+import com.runtoinfo.youxiao.utils.ScrollCalculatorHelper;
 import com.runtoinfo.youxiao.utils.Utils;
+import com.shuyu.gsyvideoplayer.GSYVideoManager;
+import com.shuyu.gsyvideoplayer.utils.CommonUtil;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -48,6 +54,10 @@ public class SchoolDynamics extends BaseActivity {
     public HttpUtils httpUtils;
     public List<SchoolDynamicsNewEntity> newDataList;
 
+    boolean mFull = false;
+    ScrollCalculatorHelper scrollCalculatorHelper;
+    public LinearLayoutManager linearLayoutManager;
+
     public boolean isClickColl = false;
     public boolean isClickPraise = false;
 
@@ -56,6 +66,11 @@ public class SchoolDynamics extends BaseActivity {
         getWindow().setFormat(PixelFormat.TRANSLUCENT);
         binding = DataBindingUtil.setContentView(SchoolDynamics.this, R.layout.school_movment);
         httpUtils = new HttpUtils(this);
+
+        //限定范围为屏幕一半的上下偏移180
+        int playTop = CommonUtil.getScreenHeight(this) / 2 - CommonUtil.dip2px(this, 180);
+        int playBottom = CommonUtil.getScreenHeight(this) / 2 + CommonUtil.dip2px(this, 180);
+        scrollCalculatorHelper = new ScrollCalculatorHelper(R.id.school_dynamics_video, playTop, playBottom);
         changeView();
         initEvent();
     }
@@ -134,6 +149,28 @@ public class SchoolDynamics extends BaseActivity {
                 }
             }
         });
+
+        binding.schoolRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+
+            int firstVisibleItem, lastVisibleItem;
+            @Override
+            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+                super.onScrollStateChanged(recyclerView, newState);
+                scrollCalculatorHelper.onScrollStateChanged(recyclerView, newState);
+            }
+
+            @Override
+            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+                firstVisibleItem = linearLayoutManager.findFirstVisibleItemPosition();
+                lastVisibleItem = linearLayoutManager.findLastVisibleItemPosition();
+
+                //这是滑动自动播放的代码
+                if (!mFull) {
+                    scrollCalculatorHelper.onScroll(recyclerView, firstVisibleItem, lastVisibleItem, lastVisibleItem - firstVisibleItem);
+                }
+            }
+        });
     }
 
     public void changeView() {
@@ -172,7 +209,8 @@ public class SchoolDynamics extends BaseActivity {
 
     public void initRecyclerData() {
         adapter = new SchoolDynamicsRecyclerAdapter(SchoolDynamics.this, newDataList, handler);
-        binding.schoolRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+        linearLayoutManager = new LinearLayoutManager(this);
+        binding.schoolRecyclerView.setLayoutManager(linearLayoutManager);
         binding.schoolRecyclerView.setAdapter(adapter);
     }
 
@@ -188,6 +226,7 @@ public class SchoolDynamics extends BaseActivity {
     @Override
     public void onResume() {
         super.onResume();
+        GSYVideoManager.onResume();
     }
 
     @Override
@@ -256,7 +295,7 @@ public class SchoolDynamics extends BaseActivity {
                         }
                         binding.detailsCollectionImagView.setBackgroundResource(R.drawable.boutique_course_collectioned);
                         binding.detailsCollectionText.setText("已收藏");
-                    }catch (JsonSyntaxException e){
+                    } catch (JsonSyntaxException e) {
                         Log.e("SchoolDynamics", e.toString());
                     }
                     DialogMessage.showToast(SchoolDynamics.this, "收藏成功");
@@ -335,11 +374,38 @@ public class SchoolDynamics extends BaseActivity {
 
     @Override
     public void onBackPressed() {
+
+        if (GSYVideoManager.backFromWindowFull(this)) {
+            return;
+        }
         if (times == 0)
             super.onBackPressed();
         else {
             hideView(false);
             times = 0;
+        }
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        GSYVideoManager.onPause();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        GSYVideoManager.releaseAllVideos();
+    }
+
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+        //如果旋转了就全屏
+        if (newConfig.orientation != ActivityInfo.SCREEN_ORIENTATION_USER) {
+            mFull = false;
+        } else {
+            mFull = true;
         }
 
     }
