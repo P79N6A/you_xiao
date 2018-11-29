@@ -80,6 +80,10 @@ public class HttpEntity {
      */
     public final static String GET_COURSE_TYPE = "/api/services/app/DictItem/GetAll";
     /**
+     * 获取精品课二级分类（新接口）
+     */
+    public final static String GET_COURSE_SECOND_TYPE = "/api/services/app/ClassicCourse/GetAll";
+    /**
      * 课程分类 子类
      */
     public final static String GET_COURSE_CHILD_TYPE = "/api/services/app/CourseSubject/GetAll";

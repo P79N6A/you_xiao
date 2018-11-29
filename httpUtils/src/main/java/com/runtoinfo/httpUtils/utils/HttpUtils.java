@@ -1951,16 +1951,20 @@ public class HttpUtils<T> {
                                 if (success) {
                                     JSONObject result = json.getJSONObject("result");
                                     JSONArray items = result.getJSONArray("items");
-                                    for (int i = 0; i < items.length(); i++) {
-                                        JSONObject item = items.getJSONObject(i);
-                                        LearnTrackEntity trackEntity =
-                                                new Gson().fromJson(item.toString(), new TypeToken<LearnTrackEntity>() {
-                                                }.getType());
-                                        dataList.add(trackEntity);
+                                    if (items.length() > 0) {
+                                        for (int i = 0; i < items.length(); i++) {
+                                            JSONObject item = items.getJSONObject(i);
+                                            LearnTrackEntity trackEntity =
+                                                    new Gson().fromJson(item.toString(), new TypeToken<LearnTrackEntity>() {
+                                                    }.getType());
+                                            dataList.add(trackEntity);
+                                        }
+                                        handler.sendEmptyMessage(0);
+                                    }else{
+                                        handler.sendEmptyMessage(401);
                                     }
-                                    handler.sendEmptyMessage(0);
                                 } else {
-                                    handler.sendEmptyMessage(400);
+                                    handler.sendEmptyMessage(0);
                                 }
                             } catch (JSONException e) {
                                 e.printStackTrace();

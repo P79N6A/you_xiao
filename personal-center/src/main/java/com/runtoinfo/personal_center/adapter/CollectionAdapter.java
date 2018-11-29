@@ -5,9 +5,9 @@ import android.content.Context;
 import android.view.View;
 import android.widget.ImageView;
 
+import com.bumptech.glide.Glide;
 import com.runtoinfo.httpUtils.CenterEntity.CollectionEntity;
 import com.runtoinfo.httpUtils.HttpEntity;
-import com.runtoinfo.httpUtils.utils.HttpUtils;
 import com.runtoinfo.personal_center.R;
 import com.runtoinfo.youxiao.globalTools.adapter.BaseViewHolder;
 import com.runtoinfo.youxiao.globalTools.adapter.UniversalRecyclerAdapter;
@@ -22,13 +22,13 @@ public class CollectionAdapter extends UniversalRecyclerAdapter<CollectionEntity
 
     public Activity activity;
     public int type;
-    public HttpUtils httpUtils;
+    //public HttpUtils httpUtils;
     private OnDeleteClickLister mDeleteClickListener;
     public CollectionAdapter(Activity mContext, List<CollectionEntity> mDatas, int mLayoutId, int type) {
         super(mContext, mDatas, mLayoutId);
         this.activity = mContext;
         this.type = type;
-        httpUtils = new HttpUtils(mContext);
+        //httpUtils = new HttpUtils(mContext);
     }
 
     @Override
@@ -47,8 +47,8 @@ public class CollectionAdapter extends UniversalRecyclerAdapter<CollectionEntity
             });
         }
 
-        //Glide.with(activity).load(HttpEntity.IMAGE_HEAD + collectionEntity.getTargetCover()).into((ImageView) holder.getView(R.id.record_course_img));
-        httpUtils.postSrcPhoto(activity, HttpEntity.IMAGE_HEAD + collectionEntity.getTargetCover(), (ImageView) holder.getView(R.id.record_course_img));
+        Glide.with(mContext).load(HttpEntity.IMAGE_HEAD + collectionEntity.getTargetCover().get(0)).into((ImageView) holder.getView(R.id.record_course_img));
+        //httpUtils.postSrcPhoto(activity, HttpEntity.IMAGE_HEAD + collectionEntity.getTargetCover().get(0), (ImageView) holder.getView(R.id.record_course_img));
         holder.setText(R.id.record_title, collectionEntity.getTargetTitle());
         switch (type){
             case 0:

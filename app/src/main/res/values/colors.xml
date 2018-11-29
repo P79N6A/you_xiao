@@ -15,4 +15,10 @@
     <color name="color_line">#eeeeef</color>
     <color name="color_home_head">#5297F8</color>
     <color name="color_boutique_head">#148df1</color>
+
+    <color name="color_second_type_1">#339ef8</color>
+    <color name="color_second_type_2">#f45c53</color>
+    <color name="color_second_type_3">#48d3c0</color>
+    <color name="color_second_type_4">#c765c4</color>
+    <color name="color_second_type_5">#f7d000</color>
 </resources>

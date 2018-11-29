@@ -1,103 +1,93 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:padding="5dp">
 
     <LinearLayout
-        android:layout_width="match_parent"
+        android:id="@+id/home_img_linear"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        android:orientation="horizontal"
-        android:paddingBottom="10dp"
-        android:paddingEnd="5dp"
-        android:paddingStart="5dp">
+        android:orientation="vertical">
 
-        <LinearLayout
-            android:id="@+id/home_img_linear"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="3"
-            android:orientation="vertical">
+        <com.runtoinfo.youxiao.globalTools.views.RoundImagView
+            android:id="@+id/home_img_course"
+            android:layout_width="120dp"
+            android:layout_height="90dp"
+            android:scaleType="centerCrop"
+            android:src="@drawable/default_image"
+            app:type="round" />
 
-            <com.runtoinfo.youxiao.globalTools.views.RoundImagView
-                android:id="@+id/home_img_course"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:background="@drawable/home_taekwondo_img"
-                android:scaleType="fitXY"
-                app:type="round" />
+        <ProgressBar
+            android:id="@+id/progressBar_1"
+            style="?android:attr/progressBarStyleHorizontal"
+            android:layout_width="match_parent"
+            android:layout_height="10dp"
+            android:background="#333333"
+            android:visibility="gone" />
+    </LinearLayout>
 
-            <ProgressBar
-                android:id="@+id/progressBar_1"
-                style="?android:attr/progressBarStyleHorizontal"
-                android:layout_width="match_parent"
-                android:layout_height="10dp"
-                android:background="#333333"
-                android:visibility="gone" />
-        </LinearLayout>
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:layout_toEndOf="@+id/home_img_linear">
+
+        <TextView
+            android:id="@+id/home_course_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:singleLine="true"
+            android:text="布米童艺跆拳道班零基础教育"
+            android:textColor="#333333"
+            android:textSize="16sp" />
+
+        <TextView
+            android:id="@+id/home_course_time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/home_course_name"
+            android:layout_marginStart="2dp"
+            android:layout_marginTop="8dp"
+            android:drawableLeft="@drawable/home_course_sign_clock"
+            android:drawablePadding="5dp"
+            android:gravity="center"
+            android:text="08-05 09:30"
+            android:textColor="#999999"
+            android:textSize="14sp" />
 
         <RelativeLayout
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="10dp"
-            android:layout_weight="5"
-            android:orientation="vertical">
+            android:layout_width="wrap_content"
+            android:layout_height="30dp"
+            android:layout_below="@+id/home_course_time"
+            android:layout_marginTop="12dp">
 
             <TextView
-                android:id="@+id/home_course_name"
+                android:id="@+id/home_details"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="布米童艺跆拳道班零基础教育"
-                android:textColor="#333333"
-                android:textSize="16sp" />
-
-            <TextView
-                android:id="@+id/home_course_time"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="2dp"
-                android:layout_marginTop="8dp"
-                android:drawableLeft="@drawable/home_course_sign_clock"
+                android:layout_alignParentBottom="true"
+                android:layout_alignParentStart="true"
                 android:drawablePadding="5dp"
-                android:gravity="center"
-                android:layout_below="@+id/home_course_name"
-                android:text="08-05 09:30"
+                android:drawableRight="@drawable/home_detail"
+                android:text="查看详情"
                 android:textColor="#999999"
                 android:textSize="14sp" />
 
-            <RelativeLayout
-                android:layout_width="wrap_content"
-                android:layout_height="30dp"
-                android:layout_marginTop="8dp"
-                android:layout_below="@+id/home_course_time">
-
-                <TextView
-                    android:id="@+id/home_details"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentBottom="true"
-                    android:layout_alignParentStart="true"
-                    android:drawablePadding="5dp"
-                    android:drawableRight="@drawable/home_detail"
-                    android:text="查看详情"
-                    android:textColor="#999999"
-                    android:textSize="14sp" />
-
-                <TextView
-                    android:id="@+id/home_course_sign"
-                    android:layout_width="50dp"
-                    android:layout_height="28dp"
-                    android:layout_alignParentBottom="true"
-                    android:layout_alignParentEnd="true"
-                    android:background="@drawable/home_sign_in"
-                    android:gravity="center"
-                    android:text="签到"
-                    android:textColor="#fff"
-                    android:textSize="14sp" />
-            </RelativeLayout>
+            <TextView
+                android:id="@+id/home_course_sign"
+                android:layout_width="50dp"
+                android:layout_height="28dp"
+                android:layout_alignParentBottom="true"
+                android:layout_alignParentEnd="true"
+                android:background="@drawable/home_sign_in"
+                android:gravity="center"
+                android:text="签到"
+                android:textColor="#fff"
+                android:textSize="14sp" />
         </RelativeLayout>
-    </LinearLayout>
+    </RelativeLayout>
 
-</LinearLayout>
+</RelativeLayout>

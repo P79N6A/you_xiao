@@ -218,7 +218,6 @@ public class LoginActivity extends BaseActivity {
                 binding.loginGetVerification.setBackgroundResource(R.drawable.background_verification_wait);
                 binding.loginGetVerification.setEnabled(false);
                 timers();
-
                 httpUtils.get(HttpEntity.MAIN_URL + HttpEntity.GET_CAPTION_CODE, binding.loginMobilePhone.getText().toString());
             }
         });
@@ -452,12 +451,13 @@ public class LoginActivity extends BaseActivity {
         long nowTime = System.currentTimeMillis() / 1000;
         long oldTime = spUtils.getLong(Entity.OLD_TIME);
         long result = nowTime - oldTime;
-        if (result >= 7200){
-            spUtils.setLong(Entity.OLD_TIME, nowTime);
-            spUtils.removeKey(Entity.TOKEN);
-        } else {
-            if (!TextUtils.isEmpty(spUtils.getString(Entity.TOKEN)))
+        if (!TextUtils.isEmpty(spUtils.getString(Entity.TOKEN))) {
+            if (result >= 7200) {
+                spUtils.removeKey(Entity.TOKEN);
+                spUtils.setLong(Entity.OLD_TIME, nowTime);
+            } else {
                 ARouter.getInstance().build(Entity.MAIN_ACTIVITY_PATH).navigation();
+            }
         }
     }
 
@@ -474,7 +474,7 @@ public class LoginActivity extends BaseActivity {
         isLoadUserName = true;
         if (timer != null)
             timer.cancel();
-        if (task != null){
+        if (task != null) {
             task.cancel();
         }
     }

@@ -21,8 +21,8 @@ import com.runtoinfo.httpUtils.bean.RequestDataEntity;
 import com.runtoinfo.httpUtils.utils.HttpUtils;
 import com.runtoinfo.youxiao.R;
 import com.runtoinfo.youxiao.adapter.BoutiqueCourseChildPagerAdapter;
-import com.runtoinfo.youxiao.globalTools.utils.Entity;
 import com.runtoinfo.youxiao.databinding.FragmentBoutiqueCourseMusicBinding;
+import com.runtoinfo.youxiao.globalTools.utils.Entity;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -44,10 +44,12 @@ public class MusicFragment extends BaseFragment{
     public List<Fragment> fragmentList = new ArrayList<>();
     public List<String> iconPath = new ArrayList<>();
     public TextView textView;
-    public ImageView imageView;
+    public ImageView imageView, imageBack;
     public int type;
     public HttpUtils httpUtils;
     public List<FineClassCourseEntity> dataList = new ArrayList<>();
+    public int colors[] = {R.drawable.circle_image_view1, R.drawable.circle_image_view2,
+            R.drawable.circle_image_view3, R.drawable.circle_image_view4, R.drawable.circle_image_view5,};
 
     public MusicFragment(int type){
         this.type = type;
@@ -83,15 +85,18 @@ public class MusicFragment extends BaseFragment{
             map.put("CategoryId", 111);
 
             RequestDataEntity requestDataEntity = new RequestDataEntity();
-            requestDataEntity.setUrl(HttpEntity.MAIN_URL + HttpEntity.GET_COURSE_TYPE);
+            requestDataEntity.setUrl(HttpEntity.MAIN_URL + HttpEntity.GET_COURSE_SECOND_TYPE);
             requestDataEntity.setToken(spUtils.getString(Entity.TOKEN));
             requestDataEntity.setType(type);
 
-            httpUtils.getChildType(handler,requestDataEntity, map, dataList);
+            httpUtils.getChildType(handler, requestDataEntity, map, dataList);
         }
 
     }
 
+    /**
+     * 二级分类
+     */
     public void initTalLayoutData(){
 
         viewPagerAdapter = new BoutiqueCourseChildPagerAdapter(getChildFragmentManager(), fragmentList);
@@ -107,14 +112,14 @@ public class MusicFragment extends BaseFragment{
                 tab.getCustomView().findViewById(R.id.table_layout_item_textView).setSelected(true);
             }
             textView = tab.getCustomView().findViewById(R.id.table_layout_item_textView);
-            imageView = tab.getCustomView().findViewById(R.id.table_layout_item_imageView);
+            imageView = tab.getCustomView().findViewById(R.id.table_layout_item);
+            imageBack = tab.getCustomView().findViewById(R.id.table_layout_item_imageView);
             if (titles.size() > 0 && iconPath.size() > 0) {
                 textView.setText(titles.get(i));
-                httpUtils.postPhoto(getActivity(), iconPath.get(i), imageView);
+                imageBack.setBackgroundResource(colors[getIndexOfColors(i)]);
+                httpUtils.postPhoto(getActivity(), HttpEntity.FILE_HEAD + iconPath.get(i), imageView);
             }
         }
-
-
 
         binding.boutiqueCourseChildTablayout.setOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
@@ -143,12 +148,14 @@ public class MusicFragment extends BaseFragment{
 
                     if (dataList.size() > 0) {
                         for (int i = 0; i < dataList.size(); i++) {
-                            titles.add(dataList.get(i).getName());
+                            FineClassCourseEntity entity = dataList.get(i);
+                            titles.add(entity.getName());
+                            iconPath.add(entity.getTargetCover());
                             fragmentList.add(new BoutiqueCourseChildFragment( dataList.get(i).getId()));
-                            iconPath.add(dataList.get(i).getCategoryName());
                         }
                     }else{
                         fragmentList.add(new BoutiqueCourseChildFragment(-1));
+                        binding.boutiqueCourseChildTablayout.setVisibility(View.GONE);
                     }
                     initTalLayoutData();
                     break;
@@ -158,4 +165,12 @@ public class MusicFragment extends BaseFragment{
         }
     };
 
+
+    public int getIndexOfColors(int i){
+        if (i >= 5){
+            int index = i % 5;
+            return index;
+        }
+        return i;
+    }
 }

@@ -8,7 +8,6 @@ import android.graphics.PixelFormat;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
@@ -31,6 +30,7 @@ import com.runtoinfo.youxiao.entity.SchoolDynamicsEntity;
 import com.runtoinfo.youxiao.globalTools.utils.DialogMessage;
 import com.runtoinfo.youxiao.globalTools.utils.Entity;
 import com.runtoinfo.youxiao.globalTools.utils.IntentDataType;
+import com.runtoinfo.youxiao.globalTools.utils.RecyclerViewDecoration;
 import com.runtoinfo.youxiao.utils.ScrollCalculatorHelper;
 import com.runtoinfo.youxiao.utils.Utils;
 import com.shuyu.gsyvideoplayer.GSYVideoManager;
@@ -150,27 +150,27 @@ public class SchoolDynamics extends BaseActivity {
             }
         });
 
-        binding.schoolRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
-
-            int firstVisibleItem, lastVisibleItem;
-            @Override
-            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
-                super.onScrollStateChanged(recyclerView, newState);
-                scrollCalculatorHelper.onScrollStateChanged(recyclerView, newState);
-            }
-
-            @Override
-            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
-                super.onScrolled(recyclerView, dx, dy);
-                firstVisibleItem = linearLayoutManager.findFirstVisibleItemPosition();
-                lastVisibleItem = linearLayoutManager.findLastVisibleItemPosition();
-
-                //这是滑动自动播放的代码
-                if (!mFull) {
-                    scrollCalculatorHelper.onScroll(recyclerView, firstVisibleItem, lastVisibleItem, lastVisibleItem - firstVisibleItem);
-                }
-            }
-        });
+//        binding.schoolRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+//
+//            int firstVisibleItem, lastVisibleItem;
+//            @Override
+//            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+//                super.onScrollStateChanged(recyclerView, newState);
+//                scrollCalculatorHelper.onScrollStateChanged(recyclerView, newState);
+//            }
+//
+//            @Override
+//            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+//                super.onScrolled(recyclerView, dx, dy);
+//                firstVisibleItem = linearLayoutManager.findFirstVisibleItemPosition();
+//                lastVisibleItem = linearLayoutManager.findLastVisibleItemPosition();
+//
+//                //这是滑动自动播放的代码
+//                if (!mFull) {
+//                    scrollCalculatorHelper.onScroll(recyclerView, firstVisibleItem, lastVisibleItem, lastVisibleItem - firstVisibleItem);
+//                }
+//            }
+//        });
     }
 
     public void changeView() {
@@ -210,8 +210,9 @@ public class SchoolDynamics extends BaseActivity {
     public void initRecyclerData() {
         adapter = new SchoolDynamicsRecyclerAdapter(SchoolDynamics.this, newDataList, handler);
         linearLayoutManager = new LinearLayoutManager(this);
-        binding.schoolRecyclerView.setLayoutManager(linearLayoutManager);
+        binding.schoolRecyclerView.setLinearLayout();
         binding.schoolRecyclerView.setAdapter(adapter);
+        binding.schoolRecyclerView.addItemDecoration(new RecyclerViewDecoration(this, RecyclerViewDecoration.HORIZONTAL_LIST));
     }
 
     public void requestData(int type) {

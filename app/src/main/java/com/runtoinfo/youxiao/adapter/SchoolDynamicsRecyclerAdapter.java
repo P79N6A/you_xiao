@@ -10,6 +10,8 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
+import com.runtoinfo.httpUtils.HttpEntity;
 import com.runtoinfo.httpUtils.bean.SchoolDynamicsNewEntity;
 import com.runtoinfo.httpUtils.utils.HttpUtils;
 import com.runtoinfo.youxiao.R;
@@ -119,14 +121,16 @@ public class SchoolDynamicsRecyclerAdapter extends RecyclerView.Adapter {
             SecondViewHolder secondViewHolder = (SecondViewHolder) holder;
             secondViewHolder.secondTitle.setText(schoolDynamicsEntity.getTitle());
             secondViewHolder.secondMsg.setText(schoolDynamicsEntity.getSubtitle());
-            httpUtils.postAsynchronous(context, schoolDynamicsEntity.getCoverImgs().get(0), secondViewHolder.second_img);
+            //httpUtils.postAsynchronous(context, schoolDynamicsEntity.getCoverImgs().get(0), secondViewHolder.second_img);
+            Glide.with(context).load(HttpEntity.FILE_HEAD + schoolDynamicsEntity.getCoverImgs().get(0)).into(secondViewHolder.second_img);
             secondViewHolder.secondRead.setText(String.valueOf(schoolDynamicsEntity.getPageView()));
         } else {
             ThreeViewHolder threeViewHolder = (ThreeViewHolder) holder;
             threeViewHolder.threeTitle.setText(schoolDynamicsEntity.getTitle());
-            httpUtils.postAsynchronous(context, schoolDynamicsEntity.getCoverImgs().get(0), threeViewHolder.three_img1);
-            httpUtils.postAsynchronous(context, schoolDynamicsEntity.getCoverImgs().get(1), threeViewHolder.three_img2);
-            httpUtils.postAsynchronous(context, schoolDynamicsEntity.getCoverImgs().get(2), threeViewHolder.three_img3);
+            //httpUtils.postAsynchronous(context, schoolDynamicsEntity.getCoverImgs().get(0), threeViewHolder.three_img1);
+            Glide.with(context).load(HttpEntity.FILE_HEAD + schoolDynamicsEntity.getCoverImgs().get(0)).into(threeViewHolder.three_img1);
+            Glide.with(context).load(HttpEntity.FILE_HEAD + schoolDynamicsEntity.getCoverImgs().get(1)).into(threeViewHolder.three_img2);
+            Glide.with(context).load(HttpEntity.FILE_HEAD + schoolDynamicsEntity.getCoverImgs().get(2)).into(threeViewHolder.three_img3);
         }
     }
 

@@ -13,14 +13,14 @@ public class AddMemberBean {
     public String name;
     public String phoneNumber;
     public String age;
-    public int parentId;
+    public String parentId;
     public int index;
 
-    public int getParentId() {
+    public String getParentId() {
         return parentId;
     }
 
-    public void setParentId(int parentId) {
+    public void setParentId(String parentId) {
         this.parentId = parentId;
     }
 

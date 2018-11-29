@@ -34,6 +34,7 @@ public class ActivitiesEventDetails extends EventBaseActivity {
     public HttpUtils httpUtils;
     public int position;
     public boolean isSignIn;
+    public int signIn;
 
     @Override
     protected void initView() {
@@ -43,10 +44,10 @@ public class ActivitiesEventDetails extends EventBaseActivity {
     }
 
     @SuppressLint("SetTextI18n")
-    public void initData(){
+    public void initData() {
         String json = getIntent().getExtras().getString(IntentDataType.DATA);
         type = getIntent().getIntExtra(IntentDataType.TYPE, 0);
-        eventEntity = new Gson().fromJson(json, new TypeToken<MyEventEntity>(){}.getType());
+        eventEntity = new Gson().fromJson(json, new TypeToken<MyEventEntity>() {}.getType());
         position = getIntent().getExtras().getInt(IntentDataType.POSITION);
         binding.activityEventAddress.setText("地点: " + eventEntity.getLocation());
         binding.activityEventDescription.setText(eventEntity.getIntroduction());
@@ -54,26 +55,28 @@ public class ActivitiesEventDetails extends EventBaseActivity {
         binding.activityEventTime.setText("时间: " + eventEntity.getStartDate().concat("至").concat(eventEntity.getEndTime()));
         binding.activityEventName.setText(eventEntity.getName());
         isSignIn = eventEntity.isSignIn();
-        //if (isSignIn){
-            if (type == 1) {
-                binding.eventParticipant.setVisibility(View.VISIBLE);
-                binding.eventParticipant.setText("随行人员(" + eventEntity.getParticipantNumber() + "):" + eventEntity.getPrincipal());
-                binding.activitySignUpNow.setText("取消报名");
-                binding.activitySignUpNow.setTextColor(Color.parseColor("#999999"));
-                binding.activitySignUpNow.setBackgroundResource(R.drawable.background_button_cancel);
-            }else {
-                binding.eventParticipant.setVisibility(View.GONE);
-            }
-//        }else{
-//            binding.activitySignUpNow.setText("立即报名");
-//        }
+        signIn = String.valueOf(eventEntity.getSignInId()).equals("null") ? 0 : eventEntity.getSignInId();
+        /**
+         * isSignIn 为 null
+         * signIn 为null
+         */
+        if (/*signIn > 0 *//*&& */type == 1) {
+            binding.eventParticipant.setVisibility(View.VISIBLE);
+            binding.eventParticipant.setText("随行人员(" + eventEntity.getParticipantNumber() + "):" + eventEntity.getPrincipal());
+            binding.activitySignUpNow.setText("取消报名");
+            binding.activitySignUpNow.setTextColor(Color.parseColor("#999999"));
+            binding.activitySignUpNow.setBackgroundResource(R.drawable.background_button_cancel);
+        } else {
+            binding.activitySignUpNow.setText("立即报名");
+            binding.eventParticipant.setVisibility(View.GONE);
+        }
     }
 
-    public void initEvent(){
+    public void initEvent() {
         binding.activitySignUpNow.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (type == 1){
+                if (/*signIn > 0&&*/type == 1) {
                     cancelDialog = DialogMessage.showDialogWithLayout(ActivitiesEventDetails.this, R.layout.activity_cancel_layout);
                     cancelDialog.show();
                     cancelDialog.findViewById(R.id.cancel_sign).setOnClickListener(new View.OnClickListener() {
@@ -94,7 +97,7 @@ public class ActivitiesEventDetails extends EventBaseActivity {
                             cancelDialog.cancel();
                         }
                     });
-                }else {
+                } else {
                     ARouter.getInstance().build("/event/activitySignUp").withInt(IntentDataType.DATA, eventEntity.getId()).navigation();
                 }
             }
@@ -107,13 +110,13 @@ public class ActivitiesEventDetails extends EventBaseActivity {
         });
     }
 
-    public Handler handler = new Handler(Looper.getMainLooper()){
+    public Handler handler = new Handler(Looper.getMainLooper()) {
         @Override
         public void handleMessage(Message msg) {
-            if (msg.what == 200){
-                if (cancelDialog != null && cancelDialog.isShowing()){
+            if (msg.what == 200) {
+                if (cancelDialog != null && cancelDialog.isShowing()) {
                     cancelDialog.dismiss();
-                    Intent intent =new Intent(ActivitiesEventDetails.this, MineEventActivity.class);
+                    Intent intent = new Intent(ActivitiesEventDetails.this, MineEventActivity.class);
                     intent.putExtra(IntentDataType.POSITION, position);
                     setResult(2, intent);
                     ActivitiesEventDetails.this.finish();

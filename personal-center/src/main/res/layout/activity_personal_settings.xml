@@ -48,7 +48,8 @@
                     android:id="@+id/per_setting_avatar"
                     android:layout_width="70dp"
                     android:layout_height="70dp"
-                    app:civ_border_overlay="true"/>
+                    app:civ_border_overlay="true"
+                    android:src="@drawable/default_image"/>
 
                 <LinearLayout
                     android:layout_width="wrap_content"

@@ -13,6 +13,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.google.gson.Gson;
+import com.google.gson.JsonSyntaxException;
 import com.google.gson.reflect.TypeToken;
 import com.runtoinfo.httpUtils.CenterEntity.CollectionEntity;
 import com.runtoinfo.httpUtils.HttpEntity;
@@ -125,12 +126,15 @@ public class TopicsFragment extends BasePersonalFragment {
                         for (int i = 0; i < items.length(); i++) {
                             JSONObject item = items.getJSONObject(i);
                             CollectionEntity collectionEntity = new Gson().fromJson(item.toString(),
-                                    new TypeToken<CollectionEntity>() {
-                                    }.getType());
+                                    new TypeToken<CollectionEntity>() {}.getType());
                             list.add(collectionEntity);
                         }
                         setTitleNumber(items.length());
                     } catch (JSONException e) {
+                        e.printStackTrace();
+                    } catch (JsonSyntaxException e){
+                        e.printStackTrace();
+                    } catch (IllegalStateException e){
                         e.printStackTrace();
                     }
 

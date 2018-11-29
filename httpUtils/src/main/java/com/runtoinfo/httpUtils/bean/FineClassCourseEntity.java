@@ -16,7 +16,16 @@ public class FineClassCourseEntity {
     public boolean isHostData;
     public boolean isTenantData;
     public boolean isTemplateData;
+    public String targetCover;
     public int id;
+
+    public String getTargetCover() {
+        return targetCover;
+    }
+
+    public void setTargetCover(String targetCover) {
+        this.targetCover = targetCover;
+    }
 
     public String getCode() {
         return code;

@@ -23,7 +23,6 @@ import com.alibaba.sdk.android.man.MANServiceProvider;
 import com.alibaba.sdk.android.push.CloudPushService;
 import com.alibaba.sdk.android.push.CommonCallback;
 import com.alibaba.sdk.android.push.noonesdk.PushServiceFactory;
-import com.alibaba.sdk.android.push.register.GcmRegister;
 import com.alibaba.sdk.android.push.register.HuaWeiRegister;
 import com.alibaba.sdk.android.push.register.MiPushRegister;
 import com.runtoinfo.youxiao.globalTools.utils.Entity;
@@ -40,8 +39,6 @@ import org.json.JSONObject;
 import java.util.HashMap;
 import java.util.Stack;
 import java.util.concurrent.Callable;
-
-import static com.tencent.bugly.Bugly.applicationContext;
 
 /**
  * Created by Administrator on 2018/5/8 0008.
@@ -202,7 +199,7 @@ public class MyApplication extends Application {
          * 以下是设置UI
          */
         //设置默认联系方式
-        FeedbackAPI.setDefaultUserContactInfo("13800000000");
+        FeedbackAPI.setDefaultUserContactInfo("4009999226");
         //沉浸式任务栏，控制台设置为true之后此方法才能生效
         FeedbackAPI.setTranslucent(true);
         //设置返回按钮图标

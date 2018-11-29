@@ -1,8 +1,6 @@
 package com.runtoinfo.youxiao.globalTools.utils;
 
 
-import android.util.Log;
-
 import com.google.gson.internal.bind.util.ISO8601Utils;
 
 import java.text.ParseException;
@@ -51,6 +49,23 @@ public class TimeUtil {
         return null;
     }
 
+    public static String timeType(String time, int type){
+        int index = time.indexOf("T");
+        if (index >= 0){
+            return iso8601ToDate(time, type);
+        }
+        int dian = time.indexOf(".");
+        if (index < 0 && dian >= 0){
+            return time.substring(0, dian);
+        }
+        return time;
+    }
+
+    /**
+     * 与现在时间进行对比，获得是在多少分钟之前
+     * @param ISO1806
+     * @return
+     */
     public static String getTimeDif(String ISO1806) {
         try {
             //Date date = ISO8601Utils.parse(ISO1806, new ParsePosition(0));

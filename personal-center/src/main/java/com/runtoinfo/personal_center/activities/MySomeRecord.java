@@ -146,12 +146,15 @@ public class MySomeRecord extends BaseActivity {
             page = 1;
             switch (dataType) {
                 case "courseRecord":
+                    courseList.clear();
                     requestCourseRecord(page);
                     break;
                 case "leaveRecord":
+                    leaveEntityList.clear();
                     requestLeaveRecord(page);
                     break;
                 case "learnTrack":
+                    learnList.clear();
                     requestLearnTacks(page);
                     break;
             }
@@ -243,6 +246,7 @@ public class MySomeRecord extends BaseActivity {
     }
 
     public void hideNothingView(boolean flag, int drawableId, String msg) {
+        binding.myRecordRecycler.setVisibility(flag ? View.GONE : View.VISIBLE);
         binding.recordNothingLayout.setVisibility(flag ? View.VISIBLE : View.GONE);
         if (!TextUtils.isEmpty(msg))
             binding.recordNothingDetails.setText(msg);
@@ -253,10 +257,11 @@ public class MySomeRecord extends BaseActivity {
     public Handler handler = new Handler(Looper.getMainLooper()) {
         @Override
         public void handleMessage(Message msg) {
+            binding.myRecordRecycler.setPullLoadMoreCompleted();
             switch (msg.what) {
                 case 0:
-                    if (tempList != null){
-                        binding.myRecordRecycler.setPullLoadMoreCompleted();
+                    if (tempList != null && tempList.size() > 0){
+                        //binding.myRecordRecycler.setPullLoadMoreCompleted();
                         learnList.addAll(tempList);
                         if (learningTrackAdapter != null){
                             learningTrackAdapter.notifyDataSetChanged();
@@ -271,9 +276,8 @@ public class MySomeRecord extends BaseActivity {
                     }
                     break;
                 case 1:
-
-                    if (tempList != null){
-                        binding.myRecordRecycler.setPullLoadMoreCompleted();
+                    if (tempList != null && tempList.size() > 0){
+                        //binding.myRecordRecycler.setPullLoadMoreCompleted();
                         leaveEntityList.addAll(tempList);
                         if (leaveAdapter != null){
                             leaveAdapter.notifyDataSetChanged();
@@ -288,8 +292,8 @@ public class MySomeRecord extends BaseActivity {
                     }
                     break;
                 case 2:
-                    if (tempList != null){
-                        binding.myRecordRecycler.setPullLoadMoreCompleted();
+                    if (tempList != null && tempList.size() > 0){
+                        //binding.myRecordRecycler.setPullLoadMoreCompleted();
                         courseList.addAll(tempList);
                         if (courseRecordAdapter != null){
                             courseRecordAdapter.notifyDataSetChanged();
@@ -306,6 +310,8 @@ public class MySomeRecord extends BaseActivity {
                 case 500:
                     break;
                 case 400:
+                    break;
+                case 401:
                     break;
                 case 404:
                     break;

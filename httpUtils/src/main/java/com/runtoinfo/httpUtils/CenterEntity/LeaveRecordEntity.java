@@ -16,8 +16,17 @@ public class LeaveRecordEntity {
     public String to;
     public int status;
     public String courseName;
+    public String className;
     public String date;
     public int id;
+
+    public String getClassName() {
+        return className;
+    }
+
+    public void setClassName(String className) {
+        this.className = className;
+    }
 
     public int getTenantId() {
         return tenantId;

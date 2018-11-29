@@ -86,13 +86,13 @@ public class SystemMessageAdapter extends RecyclerView.Adapter {
             case 2:
                 SchoolNoticePic schoolNotice = (SchoolNoticePic) holder;
                 httpUtils.postSrcPhoto(context, HttpEntity.IMAGE_HEAD + messageEntity.getCover(), schoolNotice.imageView);
-                schoolNotice.time.setText(TimeUtil.iso8601ToDate(messageEntity.getCreationTime(), 0));
+                schoolNotice.time.setText(TimeUtil.timeType(messageEntity.getCreationTime(), 0));
                 schoolNotice.message.setText(messageEntity.getMessage());
                 break;
             case 3:
                 SchoolNoticeMessage schoolNoticeMessage = (SchoolNoticeMessage) holder;
                 schoolNoticeMessage.message.setText(messageEntity.getMessage());
-                schoolNoticeMessage.time.setText(TimeUtil.iso8601ToDate(messageEntity.getCreationTime(), 0));
+                schoolNoticeMessage.time.setText(TimeUtil.timeType(messageEntity.getCreationTime(), 0));
                 schoolNoticeMessage.title.setText(messageEntity.getTitle());
                 break;
         }

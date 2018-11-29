@@ -3,27 +3,16 @@ package com.youxiao.comment.adapter;
 import android.app.Activity;
 import android.content.Context;
 import android.os.Handler;
-import android.os.Looper;
-import android.os.Message;
-import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 
-import com.alibaba.android.arouter.launcher.ARouter;
 import com.bumptech.glide.Glide;
-import com.google.gson.Gson;
-import com.runtoinfo.httpUtils.CPRCBean.CPRCDataEntity;
-import com.runtoinfo.httpUtils.CPRCBean.CPRCTypeEntity;
 import com.runtoinfo.httpUtils.CPRCBean.CommentRequestResultEntity;
 import com.runtoinfo.httpUtils.HttpEntity;
-import com.runtoinfo.httpUtils.bean.RequestDataEntity;
 import com.runtoinfo.httpUtils.utils.HttpUtils;
 import com.runtoinfo.youxiao.globalTools.adapter.BaseViewHolder;
 import com.runtoinfo.youxiao.globalTools.adapter.UniversalRecyclerAdapter;
 import com.runtoinfo.youxiao.globalTools.utils.DensityUtil;
-import com.runtoinfo.youxiao.globalTools.utils.DialogMessage;
-import com.runtoinfo.youxiao.globalTools.utils.Entity;
-import com.runtoinfo.youxiao.globalTools.utils.IntentDataType;
 import com.runtoinfo.youxiao.globalTools.utils.SPUtils;
 import com.runtoinfo.youxiao.globalTools.utils.TimeUtil;
 import com.youxiao.comment.R;
@@ -38,7 +27,7 @@ import java.util.List;
 public class CommentPublishAdapter extends UniversalRecyclerAdapter<CommentRequestResultEntity> {
     public List<CommentRequestResultEntity> dataList = new ArrayList<>();
     public Activity activity;
-    public SPUtils spUtils ;
+    public SPUtils spUtils;
     public BaseViewHolder baseViewHolder;
     public boolean isPraise;
 
@@ -48,6 +37,7 @@ public class CommentPublishAdapter extends UniversalRecyclerAdapter<CommentReque
     public HttpUtils httpUtils;
     public onPraiseListener onPraiseListener;
     public onReplayListener onReplayListener;
+
     public CommentPublishAdapter(Handler handler, Activity mContext, List<CommentRequestResultEntity> mDatas, int mLayoutId) {
         super(handler, mContext, mDatas, mLayoutId);
         this.dataList = mDatas;
@@ -63,18 +53,18 @@ public class CommentPublishAdapter extends UniversalRecyclerAdapter<CommentReque
         holder.setText(R.id.comment_publish_name, commentPublishItemEntity.getNickName());
         //int targetType = commentPublishItemEntity.getTargetType();
         //if (commentPublishItemEntity.getCr() == 2 && targetType == 3){
-            String text = commentPublishItemEntity.getContent();// + " //@" + commentPublishItemEntity.getNickName() + ":" + commentPublishItemEntity.getContent();
-            holder.setText(R.id.comment_publish_details, DensityUtil.setStringColor(text));
+        String text = commentPublishItemEntity.getContent();// + " //@" + commentPublishItemEntity.getNickName() + ":" + commentPublishItemEntity.getContent();
+        holder.setText(R.id.comment_publish_details, DensityUtil.setStringColor(text));
         //}else {
-            //temResultEntity = null;
-            //holder.setText(R.id.comment_publish_details, commentPublishItemEntity.getContent());
+        //temResultEntity = null;
+        //holder.setText(R.id.comment_publish_details, commentPublishItemEntity.getContent());
         //}
         Glide.with(mContext).load(HttpEntity.IMAGE_HEAD + commentPublishItemEntity.getUserAvatar())
                 .into((ImageView) holder.getView(R.id.comment_publish_item_img));
         //String[] time = new String[2];
 
         if (commentPublishItemEntity.getApprovedTime() != null) {
-             //time = commentPublishItemEntity.getApprovedTime().split("T");
+            //time = commentPublishItemEntity.getApprovedTime().split("T");
             //时间格式要进行更改，改为“1分钟之前”，目前是显示的日期
             String time = TimeUtil.getTimeDif(commentPublishItemEntity.getApprovedTime());
             holder.setText(R.id.comment_publish_time, time /*+ "  " + time[1]*/);
@@ -84,16 +74,16 @@ public class CommentPublishAdapter extends UniversalRecyclerAdapter<CommentReque
         holder.setText(R.id.comment_publish_reply, String.valueOf(commentPublishItemEntity.getReplyNumber() + "回复"));
         if (commentPublishItemEntity.isHasPraise()) {
             holder.setBackgroundResource(R.id.comment_publish_praise, R.drawable.comment_praised);
-        }else {
+        } else {
             holder.setBackgroundResource(R.id.comment_publish_praise, R.drawable.comment_praise);
         }
         //赞的点击事件
-        final ImageView imageView =  holder.getView(R.id.comment_publish_praise);
+        final ImageView imageView = holder.getView(R.id.comment_publish_praise);
         imageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (onPraiseListener != null)
-                onPraiseListener.onPraiseClick(v, position, commentPublishItemEntity);
+                    onPraiseListener.onPraiseClick(v, position, commentPublishItemEntity);
             }
         });
 
@@ -101,24 +91,24 @@ public class CommentPublishAdapter extends UniversalRecyclerAdapter<CommentReque
             @Override
             public void onClick(View v) {
                 if (onReplayListener != null)
-                onReplayListener.onReplyClick(v, position, commentPublishItemEntity);
+                    onReplayListener.onReplyClick(v, position, commentPublishItemEntity);
             }
         });
     }
 
-    public interface onPraiseListener{
+    public interface onPraiseListener {
         void onPraiseClick(View v, int position, CommentRequestResultEntity entity);
     }
 
-    public void setOnPraiseListener(onPraiseListener onPraiseListener){
+    public void setOnPraiseListener(onPraiseListener onPraiseListener) {
         this.onPraiseListener = onPraiseListener;
     }
 
-    public interface onReplayListener{
+    public interface onReplayListener {
         void onReplyClick(View v, int position, CommentRequestResultEntity commentRequestResultEntity);
     }
 
-    public void setOnReplayListener(onReplayListener onReplayListener){
+    public void setOnReplayListener(onReplayListener onReplayListener) {
         this.onReplayListener = onReplayListener;
     }
 }

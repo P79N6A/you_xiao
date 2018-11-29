@@ -1,5 +1,7 @@
 package com.runtoinfo.httpUtils.CenterEntity;
 
+import java.util.List;
+
 /**
  * Created by QiaoJunChao on 2018/9/5.
  */
@@ -9,7 +11,7 @@ public class CollectionEntity {
     public int id;
     public int targetType;
     public int targetId;
-    public String targetCover;
+    public List<String> targetCover;
     public String targetTitle;
     public String targetPublisher;
     public String targetRemark;
@@ -39,11 +41,11 @@ public class CollectionEntity {
         this.targetId = targetId;
     }
 
-    public String getTargetCover() {
+    public List<String> getTargetCover() {
         return targetCover;
     }
 
-    public void setTargetCover(String targetCover) {
+    public void setTargetCover(List<String> targetCover) {
         this.targetCover = targetCover;
     }
 
