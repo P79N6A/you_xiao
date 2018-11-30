@@ -37,12 +37,20 @@ public class EnventActivity extends EventBaseActivity{
     public List<MyEventEntity> dataList = new ArrayList<>();
     public EventRecyclerAdapter adapter;
     public HttpUtils httpUtils;
+
+    /**
+     * 列表Item点击事件
+     */
     public UniversalRecyclerAdapter.OnItemClickListener onItemClickListener = new UniversalRecyclerAdapter.OnItemClickListener() {
         @Override
         public void onItemClick(View view, int position) {
             MyEventEntity eventEntity = dataList.get(position);
             String json = new Gson().toJson(eventEntity);
-            ARouter.getInstance().build("/event/eventDetails").withString(IntentDataType.DATA, json).withInt(IntentDataType.TYPE, 0).navigation();
+            ARouter.getInstance().build("/event/eventDetails")
+                    .withString(IntentDataType.DATA, json)
+                    .withInt(IntentDataType.TYPE, 0)
+                    .withInt(IntentDataType.ID, eventEntity.getId())
+                    .navigation();
         }
     };
 

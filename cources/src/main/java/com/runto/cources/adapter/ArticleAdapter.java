@@ -110,16 +110,16 @@ public class ArticleAdapter extends GroupRecyclerAdapter<String, CourseEntity> {
                 }
 
 
-                if (result < 0) {
+                if (result > 0) {
                     holder.getView(R.id.course_leave_layout).setEnabled(false);
                     holder.setTextColor(R.id.course_leave, Color.parseColor("#999999"));
-                } else if (result == 0) {
+                } else /*if (result == 0)*/ {
                     holder.getView(R.id.course_leave_layout).setEnabled(true);
                     holder.setTextColor(R.id.course_leave, Color.parseColor("#666666"));
-                } else {
+                } /*else {
                     holder.getView(R.id.course_leave_layout).setEnabled(false);
                     holder.setTextColor(R.id.course_leave, Color.parseColor("#999999"));
-                }
+                }*/
 
                 String homeWork = courseEntity.getHomeworkRequirement();
                 if (!TextUtils.isEmpty(homeWork)) {

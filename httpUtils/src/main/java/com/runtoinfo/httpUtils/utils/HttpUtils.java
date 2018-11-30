@@ -17,7 +17,7 @@ import com.google.gson.reflect.TypeToken;
 import com.runtoinfo.httpUtils.CPRCBean.CPRCDataEntity;
 import com.runtoinfo.httpUtils.CPRCBean.CommentRequestResultEntity;
 import com.runtoinfo.httpUtils.CenterEntity.LearnTrackEntity;
-import com.runtoinfo.httpUtils.CenterEntity.LeaveRecordEntity;
+import com.runtoinfo.httpUtils.CenterEntity.LeaveGroupEntity;
 import com.runtoinfo.httpUtils.CenterEntity.PersonalInformationEntity;
 import com.runtoinfo.httpUtils.HttpEntity;
 import com.runtoinfo.httpUtils.bean.AddMemberBean;
@@ -726,6 +726,52 @@ public class HttpUtils<T> {
         });
     }
 
+    /**
+     * 获取活动详情
+     */
+    public void getEventDetails(final Handler handler, final RequestDataEntity entity, final Map<String, Object> dataMap){
+        executorService.execute(new Runnable() {
+            @Override
+            public void run() {
+                Request request = new Request.Builder()
+                        .header(Authorization, Bearer + entity.getToken())
+                        .url(entity.getUrl() + setUrl(dataMap))
+                        .build();
+
+                getClient().newCall(request).enqueue(new Callback() {
+                    @Override
+                    public void onFailure(Call call, IOException e) {
+                        handler.sendEmptyMessage(500);
+                    }
+
+                    @Override
+                    public void onResponse(Call call, Response response) throws IOException {
+                        if (response.isSuccessful()){
+                            try{
+                                JSONObject json = new JSONObject(response.body().string());
+                                boolean success = json.getBoolean("success");
+                                if (success){
+                                    JSONObject result = json.getJSONObject("result");
+                                    if (result != null && !TextUtils.isEmpty(result.toString())) {
+                                        Message message = new Message();
+                                        message.what = 0;
+                                        message.obj = result.toString();
+                                        handler.sendMessage(message);
+                                    }else{
+                                        handler.sendEmptyMessage(400);
+                                    }
+                                }else{
+                                    handler.sendEmptyMessage(400);
+                                }
+                            }catch (JSONException e){
+                                handler.sendEmptyMessage(404);
+                            }
+                        }
+                    }
+                });
+            }
+        });
+    }
     /**
      * 获取我的报名
      */
@@ -1989,7 +2035,7 @@ public class HttpUtils<T> {
      * @param dataMap
      * @param dataList
      */
-    public void getLeaveRecord(final Handler handler, final RequestDataEntity requestDataEntity, final Map<String, Object> dataMap, final List<LeaveRecordEntity> dataList) {
+    public void getLeaveRecord(final Handler handler, final RequestDataEntity requestDataEntity, final Map<String, Object> dataMap, final List<LeaveGroupEntity> dataList) {
         executorService.execute(new Runnable() {
             @Override
             public void run() {
@@ -2014,9 +2060,8 @@ public class HttpUtils<T> {
                                     JSONArray itmes = result.getJSONArray("items");
                                     for (int i = 0; i < itmes.length(); i++) {
                                         JSONObject item = itmes.getJSONObject(i);
-                                        LeaveRecordEntity leaveRecordEntity =
-                                                new Gson().fromJson(item.toString(), new TypeToken<LeaveRecordEntity>() {
-                                                }.getType());
+                                        LeaveGroupEntity leaveRecordEntity =
+                                                new Gson().fromJson(item.toString(), new TypeToken<LeaveGroupEntity>() {}.getType());
                                         dataList.add(leaveRecordEntity);
                                     }
                                     handler.sendEmptyMessage(1);

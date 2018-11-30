@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout>
+
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#fff"
+        android:orientation="vertical"
+        android:paddingBottom="20dp"
+        android:paddingEnd="20dp"
+        android:paddingStart="20dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:text="我的请假"
+            android:textColor="#333333"
+            android:textSize="20sp" />
+
+        <TextView
+            android:id="@+id/leave_course_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="13dp"
+            android:text="请假课程: 小提琴阶梯音乐"
+            android:textColor="#999999"
+            android:textSize="15sp" />
+
+        <TextView
+            android:id="@+id/leave_type"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:text="请假类型: 病假"
+            android:textColor="#999999"
+            android:textSize="15sp" />
+
+        <TextView
+            android:id="@+id/leave_status"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:text="审核中"
+            android:textColor="#f08d00"
+            android:textSize="15sp" />
+
+    </LinearLayout>
+</layout>

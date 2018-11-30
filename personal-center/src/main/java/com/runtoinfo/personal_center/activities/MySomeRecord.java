@@ -12,7 +12,7 @@ import android.view.View;
 
 import com.alibaba.android.arouter.facade.annotation.Route;
 import com.runtoinfo.httpUtils.CenterEntity.LearnTrackEntity;
-import com.runtoinfo.httpUtils.CenterEntity.LeaveRecordEntity;
+import com.runtoinfo.httpUtils.CenterEntity.LeaveGroupEntity;
 import com.runtoinfo.httpUtils.HttpEntity;
 import com.runtoinfo.httpUtils.bean.CourseEntity;
 import com.runtoinfo.httpUtils.bean.RequestDataEntity;
@@ -43,7 +43,7 @@ public class MySomeRecord extends BaseActivity {
     public ContentMySomeRecordBinding binding;
     public String dataType;
     public List<LearnTrackEntity> learnList = new ArrayList<>();
-    public List<LeaveRecordEntity> leaveEntityList = new ArrayList<>();
+    public List<LeaveGroupEntity> leaveEntityList = new ArrayList<>();
     public List<CourseEntity> courseList = new ArrayList<>();
     public LearningTrackAdapter learningTrackAdapter;
     public LeaveAdapter leaveAdapter;
@@ -190,7 +190,7 @@ public class MySomeRecord extends BaseActivity {
 
     //请假记录
     public void requestLeaveRecord(int page) {
-        requestDataEntity.setUrl(HttpEntity.MAIN_URL + HttpEntity.GET_LEAVE_RECORD);
+        requestDataEntity.setUrl(HttpEntity.MAIN_URL + HttpEntity.GET_LEAVE_GROUP_RECORD);
 
         Map<String, Object> requestMap = new HashMap<>();
         requestMap.put("UserId", spUtils.getInt(Entity.USER_ID));
@@ -280,7 +280,7 @@ public class MySomeRecord extends BaseActivity {
                         //binding.myRecordRecycler.setPullLoadMoreCompleted();
                         leaveEntityList.addAll(tempList);
                         if (leaveAdapter != null){
-                            leaveAdapter.notifyDataSetChanged();
+                            leaveAdapter.notifyDataChanged();
                             return;
                         }
                     }

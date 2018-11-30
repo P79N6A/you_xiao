@@ -10,6 +10,7 @@ import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
 import android.support.v7.widget.LinearLayoutManager;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
@@ -165,8 +166,13 @@ public class ColorfulActivity extends BaseActivity implements
     public ArticleAdapter.setOnClickListeners leaveListener = new ArticleAdapter.setOnClickListeners() {
         @Override
         public void onLayoutClick(View view, int position, CourseEntity entity) {
+            Calendar calendar = binding.calendarView.getSelectedCalendar();
+            String from = String.valueOf(calendar.getYear()).concat(N).concat(String.valueOf(calendar.getMonth()))
+                    .concat(N).concat(String.valueOf(calendar.getDay()));
+            Log.e("LeaveStartDate", from);
             ARouter.getInstance().build("/course/leaveActivity")
-                    .withInt(IntentDataType.DATA, entity.getTeacherId()).navigation();
+                    .withInt(IntentDataType.DATA, entity.getTeacherId())
+                    .withString(IntentDataType.DATE, from).navigation();
         }
     };
 
@@ -195,7 +201,7 @@ public class ColorfulActivity extends BaseActivity implements
                 int year = calendar.getYear();
                 int day = calendar.getDay();
                 map.put("startDate", year + N + month + N + day);
-
+                map.put("studentId", 1);
                 map.put("endDate", year + N + month + N + dayCount);
                 monthDataList = new ArrayList<>();
                 httpUtils.getCouseAll(handler, requestDataEntity, map, monthDataList, type);
@@ -205,6 +211,7 @@ public class ColorfulActivity extends BaseActivity implements
                 int months = calendar.getMonth();
                 int years = calendar.getYear();
                 map.put("startDate", years + N + months + N + days);
+                map.put("studentId", 1);
                 map.put("endDate", years + N + months + N + days);
                 requestDataList = new ArrayList<>();
                 httpUtils.getCouseAll(handler, requestDataEntity, map, requestDataList, type);
@@ -254,6 +261,10 @@ public class ColorfulActivity extends BaseActivity implements
                     if (articleAdapter != null) {
                         articleAdapter = new ArticleAdapter(ColorfulActivity.this, dataList);
                         binding.recyclerView.setAdapter(articleAdapter);
+
+                        articleAdapter.setHandWorkListener(handHomeWork);
+                        articleAdapter.setLeaveListener(leaveListener);
+                        articleAdapter.setSignInListener(signInListener);
                     } else {
                         initAdapter();
                     }

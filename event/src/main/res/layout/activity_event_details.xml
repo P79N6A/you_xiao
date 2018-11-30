@@ -84,13 +84,30 @@
                         android:textColor="#999999"
                         android:textSize="15sp" />
 
-                    <TextView
-                        android:id="@+id/event_participant"
+                    <RelativeLayout
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="5dp"
-                        android:textColor="#999999"
-                        android:textSize="15sp" />
+                        android:layout_marginTop="5dp">
+                        <TextView
+                            android:id="@+id/event_participant"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textColor="#999999"
+                            android:textSize="15sp"
+                            android:text="已报人数："/>
+
+                        <TextView
+                            android:id="@+id/event_details_teacher"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_toEndOf="@+id/event_participant"
+                            android:layout_marginStart="50dp"
+                            android:textSize="15sp"
+                            android:textColor="#999999"
+                            android:text="负责老师："/>
+
+                    </RelativeLayout>
+
                 </LinearLayout>
 
 

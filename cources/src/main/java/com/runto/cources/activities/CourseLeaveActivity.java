@@ -35,10 +35,12 @@ public class CourseLeaveActivity extends BaseActivity {
     private DatePickerView leave_code;
     public HttpUtils httpUtils;
     public int teacherId;
+    public String fromDate;
 
     public void initView(){
         binding = DataBindingUtil.setContentView(this, R.layout.fragment_course_leave);
         teacherId = getIntent().getExtras().getInt(IntentDataType.DATA);
+        fromDate = getIntent().getExtras().getString(IntentDataType.DATE);
         //DensityUtil.setMargin(this, binding.leaveBarRelative);
         httpUtils = new HttpUtils(this);
         initDialog();
@@ -75,6 +77,8 @@ public class CourseLeaveActivity extends BaseActivity {
                 leaveEntity.setUserId(spUtils.getInt(Entity.USER_ID));
                 leaveEntity.setScheduledCourseId(spUtils.getInt(Entity.COURSE_ID));
                 leaveEntity.setReason(binding.courseLeaveComment.getText().toString());
+                leaveEntity.setFrom(fromDate);
+                leaveEntity.setTo(fromDate);
                 httpUtils.postLeave(handler, requestDataEntity, leaveEntity);
             }
         });

@@ -99,6 +99,8 @@ public class SignUpAddEntourage extends EventBaseActivity {
     public void upLoadMember(int requestType){
         AddMemberBean bean = adapter.getList().get(adapter.getItemCount() - 1);
         bean.setParentId(String.valueOf(resultBean.getId()));
+        bean.setCampaignId(resultBean.getCampusId());
+        bean.setUserId(resultBean.getUserId());
         if (TextUtils.isEmpty(bean.getMemberType()) || TextUtils.isEmpty(bean.getPhoneNumber()) || TextUtils.isEmpty(bean.getName())) {
             Toast.makeText(SignUpAddEntourage.this, "请完善随行人员信息", Toast.LENGTH_SHORT).show();
             return;

@@ -16,6 +16,8 @@ public class IntentDataType {
 
     public final static String DATA = "DATA";
 
+    public final static String DATE = "DATE";
+
     public final static String ARTICLE = "ARTICLE";
 
     public final static String TARGET_TYPE = "TARGET_TYPE";
@@ -25,4 +27,6 @@ public class IntentDataType {
     public final static String TYPE = "TYPE";
 
     public final static String POSITION = "POSITION";
+
+    public final static String ID = "ID";
 }

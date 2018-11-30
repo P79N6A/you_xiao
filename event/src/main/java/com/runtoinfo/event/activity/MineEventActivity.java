@@ -69,6 +69,7 @@ public class MineEventActivity extends EventBaseActivity {
                         .withString(IntentDataType.DATA, json)
                         .withInt(IntentDataType.TYPE, 1)
                         .withInt(IntentDataType.POSITION, position)
+                        .withInt(IntentDataType.ID, eventEntity.getId())
                         .navigation();
             }
         });

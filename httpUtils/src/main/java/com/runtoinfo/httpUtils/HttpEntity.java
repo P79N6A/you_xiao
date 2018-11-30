@@ -76,6 +76,10 @@ public class HttpEntity {
      */
     public final static String GET_CAMPAIGN_BY_USER = "/api/services/app/Campaign/GetCampaignByUser";
     /**
+     * 活动详情
+     */
+    public final static String GET_CAMPAIGN_DETAILS = "/api/services/app/Campaign/Get";
+    /**
      * 获取精品课类别
      */
     public final static String GET_COURSE_TYPE = "/api/services/app/DictItem/GetAll";
@@ -195,6 +199,10 @@ public class HttpEntity {
      * 检索请假
      */
     public final static String GET_LEAVE_RECORD = "/api/services/app/Leave/GetAll";
+    /**
+     * 检索分组请假记录
+     */
+    public final static String GET_LEAVE_GROUP_RECORD = "/api/services/app/Leave/GetGroupingLeaves";
     /**
      * 检测版本
      */
