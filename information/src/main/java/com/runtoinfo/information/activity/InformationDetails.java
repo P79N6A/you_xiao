@@ -1,6 +1,5 @@
 package com.runtoinfo.information.activity;
 
-import android.app.Dialog;
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
@@ -18,8 +17,13 @@ import com.google.gson.reflect.TypeToken;
 import com.runtoinfo.httpUtils.CPRCBean.CPRCDataEntity;
 import com.runtoinfo.httpUtils.CPRCBean.CPRCTypeEntity;
 import com.runtoinfo.httpUtils.CPRCBean.CommentRequestResultEntity;
+import com.runtoinfo.httpUtils.CPRCBean.MyCommentEntity;
 import com.runtoinfo.httpUtils.CPRCBean.PraiseEntity;
+import com.runtoinfo.httpUtils.HttpEntity;
+import com.runtoinfo.httpUtils.bean.RequestDataEntity;
 import com.runtoinfo.httpUtils.bean.SystemMessageEntity;
+import com.runtoinfo.httpUtils.bean.SystemMessageGroupEntity;
+import com.runtoinfo.httpUtils.utils.HttpUtils;
 import com.runtoinfo.information.R;
 import com.runtoinfo.information.adapter.MyCommentAdapter;
 import com.runtoinfo.information.adapter.PraiseAdapter;
@@ -29,10 +33,6 @@ import com.runtoinfo.information.databinding.CommentInformationBinding;
 import com.runtoinfo.information.databinding.PraiseInformationBinding;
 import com.runtoinfo.information.databinding.SchoolNoticeBinding;
 import com.runtoinfo.information.databinding.SystemInformationBinding;
-import com.runtoinfo.httpUtils.CPRCBean.MyCommentEntity;
-import com.runtoinfo.httpUtils.HttpEntity;
-import com.runtoinfo.httpUtils.bean.RequestDataEntity;
-import com.runtoinfo.httpUtils.utils.HttpUtils;
 import com.runtoinfo.youxiao.globalTools.utils.DensityUtil;
 import com.runtoinfo.youxiao.globalTools.utils.DialogMessage;
 import com.runtoinfo.youxiao.globalTools.utils.Entity;
@@ -65,7 +65,7 @@ public class InformationDetails extends BaseActivity {
 
     public List<MyCommentEntity> commentEntityList = new ArrayList<>();
     public List<PraiseEntity> praiseEntityList = new ArrayList<>();
-    public List<SystemMessageEntity> noticeList = new ArrayList<>();
+    public List<SystemMessageGroupEntity> noticeList = new ArrayList<>();
     public SystemMessageAdapter messageAdapter;
     public HttpUtils httpUtils;
     public boolean isReadInformation = false;//标记是否进入过页面，是否更改过消息状态
@@ -154,7 +154,7 @@ public class InformationDetails extends BaseActivity {
     public void request(String infoType) {
         RequestDataEntity entity = new RequestDataEntity();
         entity.setToken(spUtils.getString(Entity.TOKEN));
-        entity.setUrl(HttpEntity.MAIN_URL + HttpEntity.GET_USER_NOTIFICATION_UNREAD);
+        entity.setUrl(HttpEntity.MAIN_URL + HttpEntity.GET_USER_NOTIFICATION_GROUP_UNREAD);
         entity.setTenantId(spUtils.getInt(Entity.TENANT_ID));
         entity.setUserId(spUtils.getInt(Entity.USER_ID));
         entity.setMsg(infoType);
@@ -342,8 +342,13 @@ public class InformationDetails extends BaseActivity {
         List<String> idList = new ArrayList<>();
 
         for (int i = 0; i < noticeList.size(); i++){
-            SystemMessageEntity messageEntity = noticeList.get(i);
-            idList.add(messageEntity.getId());
+            SystemMessageGroupEntity messageEntity = noticeList.get(i);
+            List<SystemMessageEntity> list = messageEntity.getItems();
+            for (int j = 0; j < list.size(); j++) {
+                SystemMessageEntity entity = list.get(j);
+                idList.add(entity.getId());
+            }
+
         }
 
         dataMap.put("userNotificationIds", idList);

@@ -52,6 +52,7 @@ public class ActivitiesEventDetails extends EventBaseActivity {
     public void initData() {
         String json = getIntent().getExtras().getString(IntentDataType.DATA);
         type = getIntent().getIntExtra(IntentDataType.TYPE, 0);
+        eventId = getIntent().getExtras().getInt(IntentDataType.ID);
         position = getIntent().getExtras().getInt(IntentDataType.POSITION);
         requestEventDetails();
     }

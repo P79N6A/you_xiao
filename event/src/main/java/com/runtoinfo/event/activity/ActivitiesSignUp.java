@@ -124,7 +124,8 @@ public class ActivitiesSignUp extends EventBaseActivity {
                     }else{
                         EventAddResultBean resultBean = (EventAddResultBean) msg.obj;
                         String data = new Gson().toJson(resultBean);
-                        ARouter.getInstance().build("/event/signUpAddMember").withString(IntentDataType.DATA, data).navigation();
+                        ARouter.getInstance().build("/event/signUpAddMember").withString(IntentDataType.DATA, data)
+                                .withInt(IntentDataType.ID, campaignId).navigation();
                     }
                     break;
                 case 404:

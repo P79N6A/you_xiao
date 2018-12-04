@@ -453,7 +453,7 @@ public class LoginActivity extends BaseActivity {
         long result = nowTime - oldTime;
         if (!TextUtils.isEmpty(spUtils.getString(Entity.TOKEN))) {
             if (result >= 7200) {
-                spUtils.removeKey(Entity.TOKEN);
+                spUtils.setString(Entity.TOKEN, "");
                 spUtils.setLong(Entity.OLD_TIME, nowTime);
             } else {
                 ARouter.getInstance().build(Entity.MAIN_ACTIVITY_PATH).navigation();

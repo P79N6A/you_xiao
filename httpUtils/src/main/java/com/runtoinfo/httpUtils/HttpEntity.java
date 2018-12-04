@@ -168,6 +168,10 @@ public class HttpEntity {
      */
     public final static String GET_USER_NOTIFICATION_UNREAD = "/api/services/app/Notification/GetUserNotificationsAsync";
     /**
+     * 获取用户分组未读消息
+     */
+    public final static String GET_USER_NOTIFICATION_GROUP_UNREAD = "/api/services/app/Notification/GetGroupingUserNotificationsAsync";
+    /**
      * 更新消息状态 （单个）
      */
     public final static String UPDATE_USER_NOTIFICATION_STATUE = "/api/services/app/Notification/ReadUserNotification";

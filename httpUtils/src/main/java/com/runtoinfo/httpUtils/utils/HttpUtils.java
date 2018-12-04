@@ -35,7 +35,7 @@ import com.runtoinfo.httpUtils.bean.MyEventEntity;
 import com.runtoinfo.httpUtils.bean.PersonalCenterEntity;
 import com.runtoinfo.httpUtils.bean.RequestDataEntity;
 import com.runtoinfo.httpUtils.bean.SchoolDynamicsNewEntity;
-import com.runtoinfo.httpUtils.bean.SystemMessageEntity;
+import com.runtoinfo.httpUtils.bean.SystemMessageGroupEntity;
 import com.runtoinfo.httpUtils.bean.TopiceHttpResultEntity;
 import com.runtoinfo.httpUtils.bean.VersionEntity;
 import com.zhy.http.okhttp.OkHttpUtils;
@@ -902,13 +902,14 @@ public class HttpUtils<T> {
                         @Override
                         public void onResponse(Call call, Response response) throws IOException {
                             if (response.isSuccessful()) {
+                                String resultJson = response.body().string();
                                 switch (type) {
                                     case 0://单独报名
                                         handler.sendEmptyMessage(0);
                                         break;
                                     case 1://添加随行人员报名
                                         try {
-                                            JSONObject json = new JSONObject(response.body().string());
+                                            JSONObject json = new JSONObject(resultJson);
                                             JSONObject result = json.getJSONObject("result");
                                             EventAddResultBean resultBean = new Gson().fromJson(result.toString(),
                                                     new TypeToken<EventAddResultBean>(){}.getType());
@@ -924,6 +925,11 @@ public class HttpUtils<T> {
                                         handler.sendEmptyMessage(0);
                                         break;
                                     case 3://完成提交
+                                        try {
+                                            JSONObject json = new JSONObject(resultJson);
+                                        } catch (JSONException e) {
+                                            e.printStackTrace();
+                                        }
                                         handler.sendEmptyMessage(3);
                                         break;
                                 }
@@ -1751,7 +1757,7 @@ public class HttpUtils<T> {
      * @param handler
      * @param requestDataEntity 请求体
      */
-    public void getUserUnreadNotification(final Handler handler, final RequestDataEntity requestDataEntity, final List<SystemMessageEntity> dataList) {
+    public void getUserUnreadNotification(final Handler handler, final RequestDataEntity requestDataEntity, final List<SystemMessageGroupEntity> dataList) {
         executorService.execute(new Runnable() {
             @Override
             public void run() {
@@ -1768,7 +1774,6 @@ public class HttpUtils<T> {
                     @Override
                     public void onResponse(Call call, Response response) throws IOException {
                         if (response.isSuccessful()) {
-                            //Log.e("Notification", response.body().string());
                             try {
                                 JSONObject json = new JSONObject(response.body().string());
                                 boolean success = json.getBoolean("success");
@@ -1777,11 +1782,8 @@ public class HttpUtils<T> {
                                     JSONArray items = result.getJSONArray("items");
                                     for (int i = 0; i < items.length(); i++) {
                                         JSONObject item = items.getJSONObject(i);
-                                        SystemMessageEntity messageEntity =
-                                                new Gson().fromJson(item.toString(), new TypeToken<SystemMessageEntity>() {}.getType());
-                                        if (!isEmpty(item.getString("cover")))
-                                            messageEntity.setItemType(2);
-                                        else messageEntity.setItemType(3);
+                                        SystemMessageGroupEntity messageEntity =
+                                                new Gson().fromJson(item.toString(), new TypeToken<SystemMessageGroupEntity>() {}.getType());
                                         dataList.add(messageEntity);
                                     }
                                     handler.sendEmptyMessage(0);

@@ -45,6 +45,8 @@ public class SignUpAddEntourage extends EventBaseActivity {
     public HttpUtils httpUtils;
     public EventAddResultBean resultBean;
 
+    public int eventId;
+
     public void initView(){
         binding = DataBindingUtil.setContentView( SignUpAddEntourage.this, R.layout.activity_add_entourage);
         setStatusBar(binding.eventAddLayout);
@@ -56,8 +58,9 @@ public class SignUpAddEntourage extends EventBaseActivity {
 
     @Override
     protected void initData() {
-        //campaignId = getIntent().getExtras().getInt(IntentDataType.DATA);
+        eventId = getIntent().getExtras().getInt(IntentDataType.ID);
         String data = getIntent().getExtras().getString(IntentDataType.DATA);
+
         resultBean = new Gson().fromJson(data, new TypeToken<EventAddResultBean>(){}.getType());
         //添加一个
         dataList = new ArrayList<>();
@@ -99,7 +102,7 @@ public class SignUpAddEntourage extends EventBaseActivity {
     public void upLoadMember(int requestType){
         AddMemberBean bean = adapter.getList().get(adapter.getItemCount() - 1);
         bean.setParentId(String.valueOf(resultBean.getId()));
-        bean.setCampaignId(resultBean.getCampusId());
+        bean.setCampaignId(eventId);
         bean.setUserId(resultBean.getUserId());
         if (TextUtils.isEmpty(bean.getMemberType()) || TextUtils.isEmpty(bean.getPhoneNumber()) || TextUtils.isEmpty(bean.getName())) {
             Toast.makeText(SignUpAddEntourage.this, "请完善随行人员信息", Toast.LENGTH_SHORT).show();
