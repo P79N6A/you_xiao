@@ -7,17 +7,25 @@ package com.runtoinfo.httpUtils.CPRCBean;
 public class CPRCDataEntity {
     public int userId;
     public int type;
-    public int parentId;
+    public String parentId;
     public int parentType;
     public int target;
     public int targetType;
     public String content;
     public int level;
-
+    public String previousId;
     public String token;
 
     public String getToken() {
         return token;
+    }
+
+    public String getPreviousId() {
+        return previousId;
+    }
+
+    public void setPreviousId(String previousId) {
+        this.previousId = previousId;
     }
 
     public void setToken(String token) {
@@ -40,11 +48,11 @@ public class CPRCDataEntity {
         this.type = type;
     }
 
-    public int getParentId() {
+    public String getParentId() {
         return parentId;
     }
 
-    public void setParentId(int parentId) {
+    public void setParentId(String parentId) {
         this.parentId = parentId;
     }
 

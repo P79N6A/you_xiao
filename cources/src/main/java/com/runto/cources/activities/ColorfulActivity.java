@@ -172,6 +172,7 @@ public class ColorfulActivity extends BaseActivity implements
             Log.e("LeaveStartDate", from);
             ARouter.getInstance().build("/course/leaveActivity")
                     .withInt(IntentDataType.DATA, entity.getTeacherId())
+                    .withInt(IntentDataType.ID, entity.getCourseInstId())
                     .withString(IntentDataType.DATE, from).navigation();
         }
     };
@@ -201,7 +202,7 @@ public class ColorfulActivity extends BaseActivity implements
                 int year = calendar.getYear();
                 int day = calendar.getDay();
                 map.put("startDate", year + N + month + N + day);
-                map.put("studentId", 1);
+                //map.put("studentId", 1);
                 map.put("endDate", year + N + month + N + dayCount);
                 monthDataList = new ArrayList<>();
                 httpUtils.getCouseAll(handler, requestDataEntity, map, monthDataList, type);
@@ -211,7 +212,7 @@ public class ColorfulActivity extends BaseActivity implements
                 int months = calendar.getMonth();
                 int years = calendar.getYear();
                 map.put("startDate", years + N + months + N + days);
-                map.put("studentId", 1);
+                //map.put("studentId", 1);
                 map.put("endDate", years + N + months + N + days);
                 requestDataList = new ArrayList<>();
                 httpUtils.getCouseAll(handler, requestDataEntity, map, requestDataList, type);

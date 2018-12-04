@@ -380,7 +380,7 @@ public class InformationDetails extends BaseActivity {
                     if (myCommentEntity != null){
                         CPRCDataEntity entity = new CPRCDataEntity();
                         entity.setType(CPRCTypeEntity.REPLY);
-                        entity.setParentId(myCommentEntity.getReplyId());
+                        entity.setParentId(String.valueOf(myCommentEntity.getReplyId()));
                         entity.setParentType(CPRCTypeEntity.PARENT_REPLY);
                         entity.setTarget(myCommentEntity.getTargetId());
                         entity.setTargetType(CPRCTypeEntity.TARGET_REPLY);

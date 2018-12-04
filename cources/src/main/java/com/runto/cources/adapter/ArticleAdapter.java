@@ -84,11 +84,11 @@ public class ArticleAdapter extends GroupRecyclerAdapter<String, CourseEntity> {
                         .setText(R.id.course_progress_num, String.valueOf(courseEntity.getProgress()) + "%");
                 ((ProgressBar) holder.getView(R.id.course_progress)).setProgress(courseEntity.getProgress());
 
-                holder.setText(R.id.course_tv_time, "时间:")
-                        .setText(R.id.course_tv_address, "地点:")
-                        .setText(R.id.course_tv_homework, "作业:")
-                        .setText(R.id.course_tv_teacher, "老师:")
-                        .setText(R.id.course_tv_progress, "进度:");
+                holder.setText(R.id.course_tv_time, "时间: ")
+                        .setText(R.id.course_tv_address, "地点: ")
+                        .setText(R.id.course_tv_homework, "作业: ")
+                        .setText(R.id.course_tv_teacher, "老师: ")
+                        .setText(R.id.course_tv_progress, "进度: ");
 
                 String now = TimeUtil.getNowDate();
                 String time = courseEntity.getDate();

@@ -180,19 +180,20 @@ public class SchoolDynamics extends BaseActivity {
                 case IntentDataType.SCHOOL_DYNAMICS:
                     binding.schoolDynamicsActivityTitle.setText("学校动态");
                     targetType = 0;
+                    spUtils.setInt(Entity.TARGET_TYPE, 0);
                     requestData(0);
                     break;
                 case IntentDataType.HEAD_NEWS:
                     binding.schoolDynamicsActivityTitle.setText("新闻头条");
-                    targetType = 0;
+                    spUtils.setInt(Entity.TARGET_TYPE, 0);
                     requestData(1);
                     break;
                 case IntentDataType.TOPICS:
                     binding.schoolDynamicsActivityTitle.setText("专题详情");
-                    targetType = 1;
+                    spUtils.setInt(Entity.TARGET_TYPE, 1);
                     String result = getIntent().getStringExtra(IntentDataType.DATA);
                     try {
-                        schoolDynamicsEntity = new Gson().fromJson(result, new TypeToken<SchoolDynamicsEntity>() {
+                        schoolDynamicsEntity = new Gson().fromJson(result, new TypeToken<SchoolDynamicsNewEntity>() {
                         }.getType());
                     } catch (JsonSyntaxException e) {
                         Log.e("SchoolDynamic", e.toString());
@@ -235,14 +236,13 @@ public class SchoolDynamics extends BaseActivity {
         super.onStart();
         if (dataType != null && dataType.equals(IntentDataType.TOPICS)) {
             try {
-                SchoolDynamicsEntity schoolEntity =
+                SchoolDynamicsNewEntity schoolEntity =
                         new Gson().fromJson(getIntent().getExtras().getString(IntentDataType.DATA),
-                                new TypeToken<SchoolDynamicsEntity>() {
-                                }.getType());
+                                new TypeToken<SchoolDynamicsNewEntity>() {}.getType());
 
-                binding.dynamicsTitle.setText(schoolEntity.getTile());
+                binding.dynamicsTitle.setText(schoolEntity.getTitle());
                 binding.dynamicsTime.setText(schoolEntity.getPublishTime());
-                binding.dynamicsReadNumber.setText(schoolEntity.getReadNumber());
+                binding.dynamicsReadNumber.setText(schoolEntity.getPageView());
                 binding.dynamicsWebview.loadData(schoolEntity.getContent(), "text/html; charset=UTF-8", null);
                 //binding.dynamicsWebview.loadUrl("http://soft.imtt.qq.com/browser/tes/feedback.html");
             } catch (JsonSyntaxException e) {
@@ -268,6 +268,7 @@ public class SchoolDynamics extends BaseActivity {
                         hideView(true);
                         binding.dynamicsTitle.setText(schoolDynamicsEntity.getTitle());
                         binding.dynamicsTime.setText(schoolDynamicsEntity.getPublishTime());
+                        //binding.dynamicsReadNumber.setText(schoolDynamicsEntity.getPageView());
                         httpUtils.getNewsReadNumber(handler,
                                 HttpEntity.MAIN_URL + HttpEntity.NEWS_READ_NUMBER,
                                 spUtils.getString(Entity.TOKEN),
@@ -289,8 +290,7 @@ public class SchoolDynamics extends BaseActivity {
                     try {
                         SchoolDynamicsNewEntity dynamicsNewEntity =
                                 new Gson().fromJson(msg.obj.toString(),
-                                        new TypeToken<SchoolDynamicsNewEntity>() {
-                                        }.getType());
+                                        new TypeToken<SchoolDynamicsNewEntity>() {}.getType());
                         if (schoolDynamicsEntity != null) {
                             schoolDynamicsEntity.setUserFavoriteId(dynamicsNewEntity.getId());
                         }
@@ -308,6 +308,8 @@ public class SchoolDynamics extends BaseActivity {
                     break;
                 case 4:
                     binding.dynamicsReadNumber.setText(msg.obj.toString());
+                    schoolDynamicsEntity.setPageView(Integer.parseInt(msg.obj.toString()));
+                    if (adapter != null) adapter.notifyDataSetChanged();
                     break;
                 case 200:
                     if (returnType == 1) {
@@ -336,25 +338,29 @@ public class SchoolDynamics extends BaseActivity {
     public void setDataList(SchoolDynamicsNewEntity newEntity) {
         int coverType = newEntity.getCoverType();//childItem.getInt("coverType");
         List<String> imageList = newEntity.getCoverImgs();
-        int imageListSize = imageList.size();
-        switch (coverType) {
-            case 0://图片
-                switch (imageListSize) {
-                    case 1:
-                    case 2:
-                        newEntity.setDataType(1);
-                        break;
-                    case 3:
-                    default:
-                        newEntity.setDataType(2);
-                        break;
-                }
-                break;
-            case 1://视频
-                newEntity.setDataType(0);
-                break;
+        if (imageList == null) {
+            imageList = new ArrayList<>();
         }
-
+            int imageListSize = imageList.size();
+            switch (coverType) {
+                case 0://图片
+                    switch (imageListSize) {
+                        case 1:
+                        case 2:
+                            newEntity.setDataType(1);
+                            break;
+                        case 3:
+                            newEntity.setDataType(2);
+                            break;
+                        default:
+                            newEntity.setDataType(1);
+                            break;
+                    }
+                    break;
+                case 1://视频
+                    newEntity.setDataType(0);
+                    break;
+            }
     }
 
     public void hideView(boolean flag) {

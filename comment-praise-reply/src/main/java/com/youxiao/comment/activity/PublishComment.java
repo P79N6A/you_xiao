@@ -13,6 +13,7 @@ import android.widget.ImageView;
 import com.alibaba.android.arouter.facade.annotation.Route;
 import com.alibaba.android.arouter.launcher.ARouter;
 import com.google.gson.Gson;
+import com.google.gson.JsonSyntaxException;
 import com.google.gson.reflect.TypeToken;
 import com.jaeger.library.StatusBarUtil;
 import com.runtoinfo.httpUtils.CPRCBean.CPRCDataEntity;
@@ -126,18 +127,16 @@ public class PublishComment extends BaseActivity {
     public Handler mHandler = new Handler(Looper.getMainLooper()) {
         @Override
         public void handleMessage(Message msg) {
-
+            //String result = msg.obj.toString();
             switch (msg.what) {
                 case 0:
                     String result = msg.obj.toString();
-                    //DialogMessage.showToast(PublishComment.this, "评论成功");
-
                     CommentRequestResultEntity resultEntity =
                             new Gson().fromJson(result,
                                     new TypeToken<CommentRequestResultEntity>() {}.getType());
                     mAdapter.addItem(resultEntity, 0);
                     break;
-                case 10:
+                case 10://直接评论
                     String result1 = msg.obj.toString();
                     DialogMessage.showBottomDialog(mHandler, 0, PublishComment.this, false);
 //                    CommentRequestResultEntity resultEntity1 =
@@ -146,6 +145,9 @@ public class PublishComment extends BaseActivity {
                     cprcDataEntity.setType(CPRCTypeEntity.COMMENT);
                     cprcDataEntity.setTarget(articleId);
                     cprcDataEntity.setTargetType(targetType);
+                    cprcDataEntity.setParentType(CPRCTypeEntity.PARENT_COMMENT);
+                    cprcDataEntity.setPreviousId("");
+                    cprcDataEntity.setParentId("");
                     cprcDataEntity.setUserId(spUtils.getInt(Entity.USER_ID));
                     cprcDataEntity.setContent(result1);
                     cprcDataEntity.setToken(spUtils.getString(Entity.TOKEN));
@@ -167,8 +169,19 @@ public class PublishComment extends BaseActivity {
                     //DialogMessage.showToast(PublishComment.this, "请求失败");
                     break;
                 case 2:
-                    commentRequestResultEntity.setHasPraise(true);
-                    imageView.setBackgroundResource(R.drawable.comment_praised);
+                    try {
+                        String result2 = msg.obj.toString();
+                        CommentRequestResultEntity requestResultEntity = new Gson().fromJson(result2, new TypeToken<CommentRequestResultEntity>() {}.getType());
+                        commentRequestResultEntity.setPraiseId(requestResultEntity.getId());
+                        commentRequestResultEntity.setHasPraise(true);
+                        imageView.setBackgroundResource(R.drawable.comment_praised);
+                    }catch (JsonSyntaxException e){
+                        e.printStackTrace();
+                    }catch (IllegalStateException e){
+                        e.printStackTrace();
+                    }catch (NullPointerException e){
+                        e.printStackTrace();
+                    }
                     //DialogMessage.showToast(activity, "点赞成功");
                     break;
                 case 200:

@@ -280,9 +280,10 @@ public class ReplyComment extends BaseActivity {
                     CPRCDataEntity cprcDataEntity = new CPRCDataEntity();
                     cprcDataEntity.setType(CPRCTypeEntity.REPLY);
                     cprcDataEntity.setTarget(resultEntity.getTarget());
-                    cprcDataEntity.setTargetType(CPRCTypeEntity.TARGET_COMMENT);
-                    cprcDataEntity.setParentId(resultEntity.getId());
+                    cprcDataEntity.setTargetType(spUtils.getInt(Entity.TARGET_TYPE));
+                    cprcDataEntity.setParentId(String.valueOf(resultEntity.getId()));
                     cprcDataEntity.setParentType(CPRCTypeEntity.PARENT_REPLY);
+                    cprcDataEntity.setPreviousId(String.valueOf(resultEntity.getId()));
                     cprcDataEntity.setUserId(spUtils.getInt(Entity.USER_ID));
                     cprcDataEntity.setContent(json);
                     cprcDataEntity.setToken(spUtils.getString(Entity.TOKEN));
@@ -294,19 +295,20 @@ public class ReplyComment extends BaseActivity {
                     String content = msg.obj.toString();
                     CPRCDataEntity replyReply = new CPRCDataEntity();
                     replyReply.setType(CPRCTypeEntity.REPLY);
-                    replyReply.setTargetType(CPRCTypeEntity.TARGET_REPLY);
+                    replyReply.setTargetType(spUtils.getInt(Entity.TARGET_TYPE));
                     replyReply.setParentType(CPRCTypeEntity.PARENT_REPLY);
                     replyReply.setTarget(dialogEntity.getTarget());
-                    replyReply.setParentId(dialogEntity.getParentId());
+                    replyReply.setParentId(String.valueOf(resultEntity.getId()));
+                    replyReply.setPreviousId(String.valueOf(dialogEntity.getId()));
                     replyReply.setContent(content.concat("//@").concat(dialogEntity.getNickName()).concat(":").concat(dialogEntity.getContent()));
                     replyReply.setUserId(spUtils.getInt(Entity.USER_ID));
                     replyReply.setToken(spUtils.getString(Entity.TOKEN));
                     httpUtils.postComment(handler, replyReply);
                     break;
-                case 13://来自mAdapter 回复按钮
+               /* case 13://来自mAdapter 回复按钮
                     dialogEntity = new Gson().fromJson(msg.obj.toString(), new TypeToken<CommentRequestResultEntity>(){}.getType());
                     DialogMessage.showBottomDialog(handler, 2, ReplyComment.this, true);
-                    break;
+                    break;*/
                 case 200:
                     switch (clickType){
                         case 0:

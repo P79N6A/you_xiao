@@ -36,10 +36,12 @@ public class CourseLeaveActivity extends BaseActivity {
     public HttpUtils httpUtils;
     public int teacherId;
     public String fromDate;
+    public int courseInsId;
 
     public void initView(){
         binding = DataBindingUtil.setContentView(this, R.layout.fragment_course_leave);
         teacherId = getIntent().getExtras().getInt(IntentDataType.DATA);
+        courseInsId = getIntent().getExtras().getInt(IntentDataType.ID);
         fromDate = getIntent().getExtras().getString(IntentDataType.DATE);
         //DensityUtil.setMargin(this, binding.leaveBarRelative);
         httpUtils = new HttpUtils(this);
@@ -75,7 +77,7 @@ public class CourseLeaveActivity extends BaseActivity {
                 LeaveEntity leaveEntity = new LeaveEntity();
                 leaveEntity.setAskTo(teacherId);
                 leaveEntity.setUserId(spUtils.getInt(Entity.USER_ID));
-                leaveEntity.setScheduledCourseId(spUtils.getInt(Entity.COURSE_ID));
+                leaveEntity.setScheduledCourseId(courseInsId);
                 leaveEntity.setReason(binding.courseLeaveComment.getText().toString());
                 leaveEntity.setFrom(fromDate);
                 leaveEntity.setTo(fromDate);
@@ -95,6 +97,7 @@ public class CourseLeaveActivity extends BaseActivity {
             switch (msg.what){
                 case 0:
                     DialogMessage.showToast(CourseLeaveActivity.this, "提交成功");
+                    CourseLeaveActivity.this.finish();
                     break;
                 case 404:
                     DialogMessage.showToast(CourseLeaveActivity.this, "提交失败");
@@ -130,6 +133,7 @@ public class CourseLeaveActivity extends BaseActivity {
         codeList.add("今天家里有事");
         codeList.add("身体不舒服");
         codeList.add("就想请个假");
+        codeList.add("生病了，需要输液");
         codeList.add("其他");
 
         leave_code.setData(codeList);
@@ -137,6 +141,7 @@ public class CourseLeaveActivity extends BaseActivity {
         leave_code.setCanScroll(true);
         leave_code.setSelected(0);
         leave_code.setIsLoop(false);
+        binding.courseLeaveComment.setText(codeList.get(0));
         leave_code.setOnSelectListener(new DatePickerView.onSelectListener() {
             @Override
             public void onSelect(String text) {

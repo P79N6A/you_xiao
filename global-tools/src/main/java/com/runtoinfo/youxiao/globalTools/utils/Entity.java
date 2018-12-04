@@ -27,4 +27,5 @@ public class Entity {
     public final static String GENDER = "GENDER";
     public final static String BIRTHDAY = "BIRTHDAY";
     public final static String OLD_TIME = "OLD_TIME";
+    public final static String TARGET_TYPE = "TARGET_TYPE";
  }

@@ -23,6 +23,9 @@ public class MyMessageReceiver extends MessageReceiver {
     public void onNotification(Context context, String title, String summary, Map<String, String> extraMap) {
         // TODO 处理推送通知
         Log.e("MyMessageReceiver", "Receive notification, title: " + title + ", summary: " + summary + ", extraMap: " + extraMap);
+        Intent intent = new Intent();
+        intent.setAction(IntentDataType.DATA);
+        LocalBroadcastManager.getInstance(context).sendBroadcast(intent);
     }
     @Override
     public void onMessage(Context context, CPushMessage cPushMessage) {

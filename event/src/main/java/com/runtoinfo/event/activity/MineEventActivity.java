@@ -70,7 +70,7 @@ public class MineEventActivity extends EventBaseActivity {
                         .withInt(IntentDataType.TYPE, 1)
                         .withInt(IntentDataType.POSITION, position)
                         .withInt(IntentDataType.ID, eventEntity.getId())
-                        .navigation();
+                        .navigation(MineEventActivity.this, 1);
             }
         });
     }
@@ -101,6 +101,7 @@ public class MineEventActivity extends EventBaseActivity {
             switch (resultCode){
                 case 2:
                     mAdapter.removeItem(data.getExtras().getInt(IntentDataType.POSITION));
+                    mAdapter.notifyItemRemoved(data.getExtras().getInt(IntentDataType.POSITION));
                     break;
             }
         }

@@ -610,8 +610,7 @@ public class HttpUtils<T> {
                                     for (int item = 0; item < items.length(); item++) {
                                         JSONObject childItem = items.getJSONObject(item);
                                         SchoolDynamicsNewEntity entity = new Gson().fromJson(childItem.toString(),
-                                                new TypeToken<SchoolDynamicsNewEntity>() {
-                                                }.getType());
+                                                new TypeToken<SchoolDynamicsNewEntity>() {}.getType());
                                         dataList.add(entity);
                                     }
                                     handler.sendEmptyMessage(5);
@@ -653,8 +652,7 @@ public class HttpUtils<T> {
                     RequestBody requestBody = RequestBody.create(JSON, jsonObject.toString());
                     final Request request = new Request.Builder()
                             .header("Authorization", "Bearer " + token)
-                            .url(url)
-                            .post(requestBody)
+                            .url(url + "?newsId=" + id)
                             .build();
                     getClient().newCall(request).enqueue(new Callback() {
 
@@ -1951,7 +1949,6 @@ public class HttpUtils<T> {
                                         CourseEntity courseEntity = new Gson().fromJson(item.toString(), new TypeToken<CourseEntity>() {}.getType());
                                         dataList.add(courseEntity);
                                     }
-
                                     handler.sendEmptyMessage(type);
                                 } else {
                                     handler.sendEmptyMessage(400);
@@ -2173,8 +2170,7 @@ public class HttpUtils<T> {
                                 if (success) {
                                     JSONObject result = json.getJSONObject("result");
                                     GetSchoolSettingEntity settingEntity =
-                                            new Gson().fromJson(result.toString(), new TypeToken<GetSchoolSettingEntity>() {
-                                            }.getType());
+                                            new Gson().fromJson(result.toString(), new TypeToken<GetSchoolSettingEntity>() {}.getType());
                                     Message msg = new Message();
                                     msg.what = 10;
                                     msg.obj = settingEntity;
