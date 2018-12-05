@@ -54,7 +54,7 @@ public class ReplyComment extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        binding = DataBindingUtil.setContentView(ReplyComment.this,R.layout.activity_reply_comment);
+        binding = DataBindingUtil.setContentView(ReplyComment.this, R.layout.activity_reply_comment);
         StatusBarUtil.setColor(this, 0xffffff, 80);
         httpUtils = new HttpUtils(this);
         initView();
@@ -63,25 +63,26 @@ public class ReplyComment extends BaseActivity {
         initEvent();
     }
 
-    public void initView(){
+    public void initView() {
         String result = getIntent().getStringExtra(IntentDataType.DATA);
-        resultEntity = new Gson().fromJson(result, new TypeToken<CommentRequestResultEntity>(){}.getType());
+        resultEntity = new Gson().fromJson(result, new TypeToken<CommentRequestResultEntity>() {
+        }.getType());
     }
 
-    public void initData(){
+    public void initData() {
         binding.replyPublishName.setText(resultEntity.getNickName());
         Glide.with(this).load(HttpEntity.IMAGE_HEAD + resultEntity.getUserAvatar()).into(binding.replyCommentAvatar);
         binding.replyPublishDetails.setText(resultEntity.getContent());
-        if (resultEntity.isHasPraise()){
+        if (resultEntity.isHasPraise()) {
             binding.replyPublishPraise.setBackgroundResource(R.drawable.comment_praised);
-        }else{
+        } else {
             binding.replyPublishPraise.setBackgroundResource(R.drawable.comment_praise);
         }
         if (!TextUtils.isEmpty(resultEntity.getApprovedTime()))
-        binding.replyPublishTime.setText(resultEntity.getApprovedTime().split("T")[0]);
+            binding.replyPublishTime.setText(resultEntity.getApprovedTime().split("T")[0]);
     }
 
-    public void initEvent(){
+    public void initEvent() {
         binding.replyPublishLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -108,7 +109,7 @@ public class ReplyComment extends BaseActivity {
                     entity.setTarget(resultEntity.getId());
                     entity.setTargetType(CPRCTypeEntity.TARGET_COMMENT);
                     httpUtils.postComment(handler, entity);
-                }else{
+                } else {
                     RequestDataEntity requestDataEntity = new RequestDataEntity();
                     requestDataEntity.setToken(spUtils.getString(Entity.TOKEN));
                     requestDataEntity.setUrl(HttpEntity.MAIN_URL + HttpEntity.DELETE_COMMENT_CREATE);
@@ -119,7 +120,7 @@ public class ReplyComment extends BaseActivity {
         });
     }
 
-    public void initRecyclerData(){
+    public void initRecyclerData() {
         if (mAdapter != null) {
             mAdapter.notifyDataSetChanged();
             return;
@@ -148,7 +149,7 @@ public class ReplyComment extends BaseActivity {
                 entity.setTarget(commentPublishItemEntity.getId());
                 entity.setTargetType(CPRCTypeEntity.TARGET_COMMENT);
                 httpUtils.postComment(handler, entity);
-            }else{
+            } else {
                 RequestDataEntity requestDataEntity = new RequestDataEntity();
                 requestDataEntity.setToken(spUtils.getString(Entity.TOKEN));
                 requestDataEntity.setUrl(HttpEntity.MAIN_URL + HttpEntity.DELETE_COMMENT_CREATE);
@@ -183,9 +184,10 @@ public class ReplyComment extends BaseActivity {
 
     /**
      * 获取评论
+     *
      * @param page 用于计算偏移量
      */
-    public void requestAll(int page){
+    public void requestAll(int page) {
         Map<String, Object> map = new HashMap<>();
         map.put("token", spUtils.getString(Entity.TOKEN));
         map.put("ParentId", resultEntity.getId());
@@ -198,13 +200,13 @@ public class ReplyComment extends BaseActivity {
 
     /**
      * 用户获取回复的回复
-     *
+     * <p>
      * 回复的回复 根据评论下的回复而请求
      */
-    public void requestReplayAll(CommentRequestResultEntity commentRequestResultEntity){
+    public void requestReplayAll(CommentRequestResultEntity commentRequestResultEntity) {
         Map<String, Object> map = new HashMap<>();
         map.put("token", spUtils.getString(Entity.TOKEN));
-        map.put("ParentId",commentRequestResultEntity.getId());
+        map.put("ParentId", commentRequestResultEntity.getId());
         map.put("MaxResultCount", 10);
         map.put("SkipCount", DensityUtil.getOffSet(page));
         map.put("Sorting", "approvedTime desc");
@@ -213,16 +215,16 @@ public class ReplyComment extends BaseActivity {
         httpUtils.getCommentAll(handler, map, 2, replayList);
     }
 
-    public void requestReplayReplay(){
-        for (int i = 0; i < dataList.size(); i++){
+    public void requestReplayReplay() {
+        for (int i = 0; i < dataList.size(); i++) {
             requestReplayAll(dataList.get(i));
         }
     }
 
-    public Handler handler = new Handler(Looper.getMainLooper()){
+    public Handler handler = new Handler(Looper.getMainLooper()) {
         @Override
         public void handleMessage(Message msg) {
-            switch (msg.what){
+            switch (msg.what) {
                 case 20://获取全部回复 结果
                     binding.replyRecycler.setPullLoadMoreCompleted();
                     if (dataList.size() <= 0) {
@@ -233,15 +235,18 @@ public class ReplyComment extends BaseActivity {
                     //requestReplayReplay();
                     break;
                 case 30://获取回复的回复结果
-                    if (replayList.size() > 0){
-                        for (int i = 0; i < replayList.size(); i++){
+                    if (replayList.size() > 0) {
+                        for (int i = 0; i < replayList.size(); i++) {
                             replayList.get(i).setCr(2);
                         }
                         mAdapter.addAll(replayList);
                     }
                     break;
                 case 1://回复的评论 结果
-                    String result = msg.obj.toString();
+                    /**
+                     * 回复成功后的结果。最好的解决方式是重新请求一下数据
+                     */
+                   /* String result = msg.obj.toString();
                     CommentRequestResultEntity requestResultEntity = new Gson().fromJson(result,
                             new TypeToken<CommentRequestResultEntity>(){}.getType());
                     if (mAdapter == null){
@@ -252,9 +257,14 @@ public class ReplyComment extends BaseActivity {
                         binding.replyRecycler.setOnPullLoadMoreListener(pullLoadMoreListener);
                     }
                     mAdapter.addItem(requestResultEntity, 0);
+                    mAdapter.notifyItemInserted(0);
+                    mAdapter.setOnPraiseListener(onPraiseListener);
+                    mAdapter.setOnReplayListener(onReplayListener);*/
+                    dataList.clear();
+                    requestAll(1);
                     break;
                 case 2:
-                    switch (clickType){
+                    switch (clickType) {
                         case 0:
                             clickType = -1;
                             resultEntity.setHasPraise(true);
@@ -268,14 +278,15 @@ public class ReplyComment extends BaseActivity {
                         default:
                             String json1 = msg.obj.toString();
                             CommentRequestResultEntity requestEntity = new Gson().fromJson(json1,
-                                    new TypeToken<CommentRequestResultEntity>(){}.getType());
+                                    new TypeToken<CommentRequestResultEntity>() {
+                                    }.getType());
                             requestEntity.setCr(2);
                             mAdapter.addItem(requestEntity, 0);
                             break;
                     }
                     break;
                 case 11://回复的评论 请求
-                    DialogMessage.showBottomDialog(handler, 1,ReplyComment.this, false);
+                    DialogMessage.showBottomDialog(handler, 1, ReplyComment.this, false);
                     String json = msg.obj.toString();
                     CPRCDataEntity cprcDataEntity = new CPRCDataEntity();
                     cprcDataEntity.setType(CPRCTypeEntity.REPLY);
@@ -291,7 +302,7 @@ public class ReplyComment extends BaseActivity {
                     httpUtils.postComment(handler, cprcDataEntity);
                     break;
                 case 12://来自dialogMessage中发送按钮 回复回复请求
-                    DialogMessage.showBottomDialog(handler, 2,ReplyComment.this, false);
+                    DialogMessage.showBottomDialog(handler, 2, ReplyComment.this, false);
                     String content = msg.obj.toString();
                     CPRCDataEntity replyReply = new CPRCDataEntity();
                     replyReply.setType(CPRCTypeEntity.REPLY);
@@ -310,7 +321,7 @@ public class ReplyComment extends BaseActivity {
                     DialogMessage.showBottomDialog(handler, 2, ReplyComment.this, true);
                     break;*/
                 case 200:
-                    switch (clickType){
+                    switch (clickType) {
                         case 0:
                             resultEntity.setHasPraise(false);
                             binding.replyPublishPraise.setBackgroundResource(R.drawable.comment_praise);

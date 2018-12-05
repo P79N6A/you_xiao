@@ -61,8 +61,8 @@ public class BoutiqueCourseInChildFragment extends BaseFragment {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_boutique_course_in_child, container, false);
         httpUtils = new HttpUtils(getContext());
         /**注释原因，测试数据，使用假数据，等回复后恢复*/
-        //initCourseData(page);
-        initRecyclerData();//测试时，将初始化数据放在此处运行，后期将放在请求参数后。
+        initCourseData(page);
+        //initRecyclerData();//测试时，将初始化数据放在此处运行，后期将放在请求参数后。
         return binding.getRoot();
     }
 
@@ -94,17 +94,17 @@ public class BoutiqueCourseInChildFragment extends BaseFragment {
     }
     public void initRecyclerData(){
 
-//        if (tempList != null && tempList.size() > 0 ){
-//            dataList.addAll(tempList);
-//            if (adapter != null) {
-//                adapter.notifyDataSetChanged();
-//                return;
-//            }
-//        }
+        if (tempList != null && tempList.size() > 0 ){
+            dataList.addAll(tempList);
+            if (adapter != null) {
+                adapter.notifyDataSetChanged();
+                return;
+            }
+        }
 
         binding.boutiqueInChildRecycler.setLayoutManager(new GridLayoutManager(getContext(), 2));
         binding.boutiqueInChildRecycler.addItemDecoration(new GridSpacesItemDecoration(30, true));
-        adapter = new BoutiqueInChildRecyclerAdapter(getContext(), courseDataList, R.layout.boutique_in_child_recycler_item);
+        adapter = new BoutiqueInChildRecyclerAdapter(getContext(), dataList, R.layout.boutique_in_child_recycler_item);
         binding.boutiqueInChildRecycler.setAdapter(adapter);
 
         /**
@@ -112,7 +112,7 @@ public class BoutiqueCourseInChildFragment extends BaseFragment {
          * 具体原因需要考证，目前只为使用假数据进行测试使用
          * 后期会恢复
          */
-        //binding.boutiqueInChildRecycler.setNestedScrollingEnabled(false);
+        binding.boutiqueInChildRecycler.setNestedScrollingEnabled(false);
         //binding.boutiqueInChildRecycler.setOnPullLoadMoreListener(pullLoadMoreListener);
         adapter.setOnItemClickListener(onItemClickListener);
     }
@@ -120,7 +120,7 @@ public class BoutiqueCourseInChildFragment extends BaseFragment {
     public PullLoadMoreRecyclerView.PullLoadMoreListener pullLoadMoreListener = new PullLoadMoreRecyclerView.PullLoadMoreListener() {
         @Override
         public void onRefresh() {
-            page = 0;
+            page = 1;
             initCourseData(page);
         }
 

@@ -305,6 +305,8 @@ public class LoginActivity extends BaseActivity {
         spUtils.setInt(Entity.CAMPUS_ID, dynamics.getId());
         loginHead.setTenancyName(dynamics.getTenancyName());
         loginHead.setTenantId(dynamics.getTenantId());
+        loginHead.setClient("student");
+        loginHead.setRememberClient(true);
         spUtils.setInt(Entity.TENANT_ID, Integer.parseInt(dynamics.getTenantId()));
         DialogMessage.createDialog(LoginActivity.this, progressDialog, "正在接收数据，请稍后...");
         mHandler.sendEmptyMessage(0);
@@ -372,7 +374,6 @@ public class LoginActivity extends BaseActivity {
                 case 0:
                     switch (binding.loginBt.getTag().toString()) {
                         case "PASS_WORD":
-
                             httpUtils.post(mHandler, HttpEntity.MAIN_URL + HttpEntity.LOGIN_URL_AUTH, loginHead);
                             break;
                         case "VER_CODE":

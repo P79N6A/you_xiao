@@ -16,8 +16,17 @@ public class MyCommentEntity {
     public String targetCover;
     public String targetTitle;
     public String targetPublisher;
+    public String parentId;
     public int replyId;
     public int type;
+
+    public String getParentId() {
+        return parentId;
+    }
+
+    public void setParentId(String parentId) {
+        this.parentId = parentId;
+    }
 
     public int getReplyId() {
         return replyId;

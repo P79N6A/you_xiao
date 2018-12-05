@@ -3,12 +3,12 @@ package com.runtoinfo.personal_center.activities;
 import android.content.Context;
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
+import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
-import android.os.Bundle;
+import android.support.v7.widget.LinearLayoutManager;
 import android.view.View;
-import android.widget.AdapterView;
 
 import com.alibaba.android.arouter.facade.annotation.Route;
 import com.runtoinfo.httpUtils.HttpEntity;
@@ -18,6 +18,7 @@ import com.runtoinfo.httpUtils.utils.HttpUtils;
 import com.runtoinfo.personal_center.R;
 import com.runtoinfo.personal_center.databinding.ActivityGeoAreaBinding;
 import com.runtoinfo.youxiao.globalTools.adapter.ListViewAdapter;
+import com.runtoinfo.youxiao.globalTools.adapter.UniversalRecyclerAdapter;
 import com.runtoinfo.youxiao.globalTools.utils.DialogMessage;
 import com.runtoinfo.youxiao.globalTools.utils.Entity;
 
@@ -53,7 +54,6 @@ public class GeoAreaActivity extends BaseActivity {
         setStatusBar(binding.geoAreaTitleLayout);
         context = GeoAreaActivity.this;
         httpUtils = new HttpUtils(context);
-        initRequestData();
         initRequestData();
         requestServer("0");
         initEvent();
@@ -109,12 +109,14 @@ public class GeoAreaActivity extends BaseActivity {
     }
 
     public void initListViewData(final List<GeoAreaEntity> list){
-        listViewAdapter = new ListViewAdapter(GeoAreaActivity.this, list);
+        binding.geoAreaListView.setLayoutManager(new LinearLayoutManager(this));
+        listViewAdapter = new ListViewAdapter(GeoAreaActivity.this, list, R.layout.activity_geoarea_item);
         binding.geoAreaListView.setAdapter(listViewAdapter);
         listViewAdapter.notifyDataSetChanged();
-        binding.geoAreaListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+
+        listViewAdapter.setOnItemClickListener(new UniversalRecyclerAdapter.OnItemClickListener() {
             @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+            public void onItemClick(View view, int position) {
                 GeoAreaEntity geoAreaEntity = listViewAdapter.getDataList().get(position);
                 addressName.add(geoAreaEntity.getName());
                 code = geoAreaEntity.getCode();
@@ -123,6 +125,8 @@ public class GeoAreaActivity extends BaseActivity {
                 requestServer(code);
             }
         });
+
+
     }
 
     public void requestServer(String code){

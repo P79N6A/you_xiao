@@ -26,7 +26,7 @@ import com.runtoinfo.httpUtils.utils.HttpUtils;
 import com.runtoinfo.youxiao.R;
 import com.runtoinfo.youxiao.adapter.SchoolDynamicsRecyclerAdapter;
 import com.runtoinfo.youxiao.databinding.SchoolMovmentBinding;
-import com.runtoinfo.youxiao.entity.SchoolDynamicsEntity;
+import com.runtoinfo.youxiao.globalTools.utils.DensityUtil;
 import com.runtoinfo.youxiao.globalTools.utils.DialogMessage;
 import com.runtoinfo.youxiao.globalTools.utils.Entity;
 import com.runtoinfo.youxiao.globalTools.utils.IntentDataType;
@@ -35,6 +35,7 @@ import com.runtoinfo.youxiao.utils.ScrollCalculatorHelper;
 import com.runtoinfo.youxiao.utils.Utils;
 import com.shuyu.gsyvideoplayer.GSYVideoManager;
 import com.shuyu.gsyvideoplayer.utils.CommonUtil;
+import com.wuxiaolong.pullloadmorerecyclerview.PullLoadMoreRecyclerView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -43,7 +44,6 @@ import java.util.List;
 public class SchoolDynamics extends BaseActivity {
 
     public SchoolMovmentBinding binding;
-    public List<SchoolDynamicsEntity> schoolDynamicsList = new ArrayList<>();
     public SchoolDynamicsRecyclerAdapter adapter;
     public String dataType;
     public int times = 0;
@@ -52,7 +52,8 @@ public class SchoolDynamics extends BaseActivity {
     public int targetType;
     public int returnType;
     public HttpUtils httpUtils;
-    public List<SchoolDynamicsNewEntity> newDataList;
+    public List<SchoolDynamicsNewEntity> newDataList = new ArrayList<>();
+    public List<SchoolDynamicsNewEntity> tempDataList;
 
     boolean mFull = false;
     ScrollCalculatorHelper scrollCalculatorHelper;
@@ -60,6 +61,8 @@ public class SchoolDynamics extends BaseActivity {
 
     public boolean isClickColl = false;
     public boolean isClickPraise = false;
+
+    public int page;
 
     @Override
     protected void initView() {
@@ -101,6 +104,9 @@ public class SchoolDynamics extends BaseActivity {
                         .withInt(IntentDataType.TARGET_TYPE, targetType).navigation();
             }
         });
+        /**
+         * 收藏点击事件
+         */
         binding.detailsCollection.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -126,6 +132,9 @@ public class SchoolDynamics extends BaseActivity {
             }
         });
 
+        /**
+         * 文章下面点赞
+         */
         binding.detailsPraise.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -179,22 +188,22 @@ public class SchoolDynamics extends BaseActivity {
             switch (dataType) {
                 case IntentDataType.SCHOOL_DYNAMICS:
                     binding.schoolDynamicsActivityTitle.setText("学校动态");
-                    targetType = 0;
                     spUtils.setInt(Entity.TARGET_TYPE, 0);
-                    requestData(0);
+                    type = 0;
+                    requestData(type, 1);
                     break;
                 case IntentDataType.HEAD_NEWS:
                     binding.schoolDynamicsActivityTitle.setText("新闻头条");
                     spUtils.setInt(Entity.TARGET_TYPE, 0);
-                    requestData(1);
+                    type = 1;
+                    requestData(type, 1);
                     break;
                 case IntentDataType.TOPICS:
                     binding.schoolDynamicsActivityTitle.setText("专题详情");
                     spUtils.setInt(Entity.TARGET_TYPE, 1);
                     String result = getIntent().getStringExtra(IntentDataType.DATA);
                     try {
-                        schoolDynamicsEntity = new Gson().fromJson(result, new TypeToken<SchoolDynamicsNewEntity>() {
-                        }.getType());
+                        schoolDynamicsEntity = new Gson().fromJson(result, new TypeToken<SchoolDynamicsNewEntity>() {}.getType());
                     } catch (JsonSyntaxException e) {
                         Log.e("SchoolDynamic", e.toString());
                     }
@@ -209,20 +218,41 @@ public class SchoolDynamics extends BaseActivity {
     }
 
     public void initRecyclerData() {
-        adapter = new SchoolDynamicsRecyclerAdapter(SchoolDynamics.this, newDataList, handler);
-        linearLayoutManager = new LinearLayoutManager(this);
-        binding.schoolRecyclerView.setLinearLayout();
-        binding.schoolRecyclerView.setAdapter(adapter);
-        binding.schoolRecyclerView.addItemDecoration(new RecyclerViewDecoration(this, RecyclerViewDecoration.HORIZONTAL_LIST));
+        if (adapter != null){
+            adapter.notifyDataSetChanged();
+        }else {
+            adapter = new SchoolDynamicsRecyclerAdapter(SchoolDynamics.this, newDataList, handler);
+            linearLayoutManager = new LinearLayoutManager(this);
+            binding.schoolRecyclerView.setLinearLayout();
+            binding.schoolRecyclerView.setAdapter(adapter);
+            binding.schoolRecyclerView.addItemDecoration(new RecyclerViewDecoration(this, RecyclerViewDecoration.HORIZONTAL_LIST));
+            binding.schoolRecyclerView.setOnPullLoadMoreListener(pullLoadMoreListener);
+        }
     }
 
-    public void requestData(int type) {
+    public PullLoadMoreRecyclerView.PullLoadMoreListener pullLoadMoreListener = new PullLoadMoreRecyclerView.PullLoadMoreListener() {
+        @Override
+        public void onRefresh() {
+            page = 1;
+            newDataList.clear();
+            requestData(type, page);
+        }
+
+        @Override
+        public void onLoadMore() {
+            page ++;
+            requestData(type, page);
+        }
+    };
+
+    public void requestData(int type, int page) {
         RequestDataEntity dataEntity = new RequestDataEntity();
         dataEntity.setUrl(HttpEntity.MAIN_URL + HttpEntity.SCHOOL_NEWS_ALL);
         dataEntity.setType(type);
+        dataEntity.setId(DensityUtil.getOffSet(page));
         dataEntity.setToken(spUtils.getString(Entity.TOKEN));
-        newDataList = new ArrayList<>();
-        httpUtils.getSchoolNewsAll(handler, dataEntity, newDataList);
+        tempDataList = new ArrayList<>();
+        httpUtils.getSchoolNewsAll(handler, dataEntity, tempDataList);
     }
 
     @Override
@@ -238,7 +268,8 @@ public class SchoolDynamics extends BaseActivity {
             try {
                 SchoolDynamicsNewEntity schoolEntity =
                         new Gson().fromJson(getIntent().getExtras().getString(IntentDataType.DATA),
-                                new TypeToken<SchoolDynamicsNewEntity>() {}.getType());
+                                new TypeToken<SchoolDynamicsNewEntity>() {
+                                }.getType());
 
                 binding.dynamicsTitle.setText(schoolEntity.getTitle());
                 binding.dynamicsTime.setText(schoolEntity.getPublishTime());
@@ -258,35 +289,36 @@ public class SchoolDynamics extends BaseActivity {
             switch (msg.what) {
                 case 0:
                 case 1:
-                case 2:
+                case 2://赞，根据请求type决定
                     if (returnType == 1) {
                         binding.detailsPraiseImagView.setBackgroundResource(R.drawable.comment_praised);
                         returnType = 0;
-                    } else {
-                        schoolDynamicsEntity = (SchoolDynamicsNewEntity) msg.obj;
-                        times++;
-                        hideView(true);
-                        binding.dynamicsTitle.setText(schoolDynamicsEntity.getTitle());
-                        binding.dynamicsTime.setText(schoolDynamicsEntity.getPublishTime());
-                        //binding.dynamicsReadNumber.setText(schoolDynamicsEntity.getPageView());
-                        httpUtils.getNewsReadNumber(handler,
-                                HttpEntity.MAIN_URL + HttpEntity.NEWS_READ_NUMBER,
-                                spUtils.getString(Entity.TOKEN),
-                                schoolDynamicsEntity.getId());
-                        binding.dynamicsWebview.loadData(schoolDynamicsEntity.getContent(), "text/html; charset=UTF-8", null);
-                        //binding.dynamicsWebview.loadUrl("http://soft.imtt.qq.com/browser/tes/feedback.html");
-                        if (schoolDynamicsEntity.isHasFavorited()) {
-                            isClickColl = true;
-                            binding.detailsCollectionImagView.setBackgroundResource(R.drawable.boutique_course_collectioned);
-                            binding.detailsCollectionText.setText("已收藏");
-                        }
-                        if (schoolDynamicsEntity.isHasPraised()) {
-                            isClickPraise = true;
-                            binding.detailsPraiseImagView.setBackgroundResource(R.drawable.comment_praised);
-                        }
                     }
                     break;
-                case 3:
+                case 6:
+                    schoolDynamicsEntity = (SchoolDynamicsNewEntity) msg.obj;
+                    times++;
+                    hideView(true);
+                    binding.dynamicsTitle.setText(schoolDynamicsEntity.getTitle());
+                    binding.dynamicsTime.setText(schoolDynamicsEntity.getPublishTime());
+                    //binding.dynamicsReadNumber.setText(schoolDynamicsEntity.getPageView());
+                    httpUtils.getNewsReadNumber(handler,
+                            HttpEntity.MAIN_URL + HttpEntity.NEWS_READ_NUMBER,
+                            spUtils.getString(Entity.TOKEN),
+                            schoolDynamicsEntity.getId());
+                    binding.dynamicsWebview.loadData(schoolDynamicsEntity.getContent(), "text/html; charset=UTF-8", null);
+                    //binding.dynamicsWebview.loadUrl("http://soft.imtt.qq.com/browser/tes/feedback.html");
+                    if (schoolDynamicsEntity.isHasFavorited()) {
+                        isClickColl = true;
+                        binding.detailsCollectionImagView.setBackgroundResource(R.drawable.boutique_course_collectioned);
+                        binding.detailsCollectionText.setText("已收藏");
+                    }
+                    if (schoolDynamicsEntity.isHasPraised()) {
+                        isClickPraise = true;
+                        binding.detailsPraiseImagView.setBackgroundResource(R.drawable.comment_praised);
+                    }
+                    break;
+                case 3://收藏，根据请求参数type值获取
                     try {
                         SchoolDynamicsNewEntity dynamicsNewEntity =
                                 new Gson().fromJson(msg.obj.toString(),
@@ -303,8 +335,9 @@ public class SchoolDynamics extends BaseActivity {
                     break;
 
                 case 5:
+                    binding.schoolRecyclerView.setPullLoadMoreCompleted();
                     fromJson();
-                    initRecyclerData();
+                    //initRecyclerData();
                     break;
                 case 4:
                     binding.dynamicsReadNumber.setText(msg.obj.toString());
@@ -327,11 +360,17 @@ public class SchoolDynamics extends BaseActivity {
     };
 
     public void fromJson() {
-        int size = newDataList.size();
+        int size = tempDataList.size();
         if (size > 0) {
             for (int i = 0; i < size; i++) {
-                setDataList(newDataList.get(i));
+                setDataList(tempDataList.get(i));
             }
+            newDataList.addAll(tempDataList);
+        }
+        if (newDataList.size() > 0){
+            initRecyclerData();
+        }else{
+            Utils.showToast(SchoolDynamics.this, "没有数据");
         }
     }
 
@@ -341,26 +380,26 @@ public class SchoolDynamics extends BaseActivity {
         if (imageList == null) {
             imageList = new ArrayList<>();
         }
-            int imageListSize = imageList.size();
-            switch (coverType) {
-                case 0://图片
-                    switch (imageListSize) {
-                        case 1:
-                        case 2:
-                            newEntity.setDataType(1);
-                            break;
-                        case 3:
-                            newEntity.setDataType(2);
-                            break;
-                        default:
-                            newEntity.setDataType(1);
-                            break;
-                    }
-                    break;
-                case 1://视频
-                    newEntity.setDataType(0);
-                    break;
-            }
+        int imageListSize = imageList.size();
+        switch (coverType) {
+            case 0://图片
+                switch (imageListSize) {
+                    case 1:
+                    case 2:
+                        newEntity.setDataType(1);
+                        break;
+                    case 3:
+                        newEntity.setDataType(2);
+                        break;
+                    default:
+                        newEntity.setDataType(1);
+                        break;
+                }
+                break;
+            case 1://视频
+                newEntity.setDataType(0);
+                break;
+        }
     }
 
     public void hideView(boolean flag) {

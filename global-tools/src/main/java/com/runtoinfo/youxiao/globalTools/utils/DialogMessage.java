@@ -12,6 +12,7 @@ import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.runtoinfo.youxiao.globalTools.R;
@@ -68,8 +69,9 @@ public class DialogMessage {
             bottomDialog.setContentView(R.layout.dialog_comment_layout);
             setWindowBottom(bottomDialog, context);
             bottomDialog.show();
+            TextView textView = bottomDialog.findViewById(R.id.comment_submit);
 
-            bottomDialog.findViewById(R.id.comment_submit).setOnClickListener(new View.OnClickListener() {
+            textView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     EditText editText = (EditText) bottomDialog.findViewById(R.id.comment_msg_edit);

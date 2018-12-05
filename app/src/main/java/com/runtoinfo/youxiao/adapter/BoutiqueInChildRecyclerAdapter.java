@@ -1,6 +1,7 @@
 package com.runtoinfo.youxiao.adapter;
 
 import android.content.Context;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.widget.ImageView;
 
@@ -41,7 +42,9 @@ public class BoutiqueInChildRecyclerAdapter extends UniversalRecyclerAdapter<Cou
         holder.setText(R.id.boutique_recycler_title, courseDataEntity.getName());
         //holder.setText(R.id.boutique_recycler_time, String.valueOf(courseDataEntity.getStartTime().split("T")[0]));
         holder.setText(R.id.boutique_recycler_price, "¥" + String.valueOf(courseDataEntity.getPrice()));
-        holder.setText(R.id.boutique_recycler_number, String.valueOf(courseDataEntity.getPurchasedNumber()) + "人购买");
+        String purchaseNumber = TextUtils.isEmpty(String.valueOf(courseDataEntity.getPurchasedNumber())) ? courseDataEntity.getPurchasedNumber() : "0";
+        holder.setText(R.id.boutique_recycler_number, purchaseNumber + " 人购买");
+        holder.setText(R.id.boutique_recycler_time, courseDataEntity.getStartTime());
         Glide.with(context).load(courseDataEntity.getCover()).into((ImageView) holder.getView(R.id.in_child_recycler_imageView));
     }
 

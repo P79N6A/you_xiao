@@ -2,13 +2,11 @@ package com.runtoinfo.youxiao.activities;
 
 import android.Manifest;
 import android.app.Dialog;
-import android.app.FragmentTransaction;
 import android.content.ComponentName;
 import android.content.Intent;
 import android.content.ServiceConnection;
 import android.databinding.DataBindingUtil;
 import android.os.Build;
-import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
 import android.os.Looper;
@@ -80,7 +78,7 @@ public class MainActivity extends BaseActivity implements ViewPager.OnPageChange
     @Override
     protected void initView() {
         binding = DataBindingUtil.setContentView(MainActivity.this, R.layout.activity_main);
-        fragmentManager = getSupportFragmentManager();
+            fragmentManager = getSupportFragmentManager();
         ((MyApplication) getApplication()).initPushService(MyApplication.getInstance());
         ((MyApplication) getApplication()).initPushAuxiliaryChannel();
         httpUtils = new HttpUtils(this);

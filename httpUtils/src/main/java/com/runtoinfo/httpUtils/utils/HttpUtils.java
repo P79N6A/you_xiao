@@ -416,12 +416,12 @@ public class HttpUtils<T> {
                             imgList.add(JSON.getString("logo"));
                             JSONArray object = JSON.getJSONArray("campuses");
                             loginHead.setTenancyName(JSON.getString("tenancyName"));
-                            loginHead.setCampusId(JSON.getInt("id"));
                             loginHead.setTenantId(JSON.getString("tenantId"));
                             List<String> schoolName = new ArrayList<>();
                             for (int j = 0; j < object.length(); j++) {
                                 JSONObject object1 = object.getJSONObject(j);
                                 String name = object1.getString("name");
+                                loginHead.setCampusId(object1.getInt("id"));
                                 schoolName.add(name);
                             }
                             schoolList.add(schoolName);
@@ -586,7 +586,7 @@ public class HttpUtils<T> {
                 Map<String, Object> object = new HashMap<>();
                 object.put("type", requestDataEntity.getType());
                 object.put("MaxResultCount", 10);
-                object.put("SkipCount", 0);
+                object.put("SkipCount", requestDataEntity.getId());
                 object.put("Sorting", "publishTime desc");
                 Request request = new Request.Builder()
                         .header(Authorization, Bearer + requestDataEntity.getToken())
@@ -1498,8 +1498,8 @@ public class HttpUtils<T> {
                                 if (success) {
                                     JSONObject result = json.getJSONObject("result");
                                     Message msg = new Message();
-                                    if (cprcDataEntity.getType() == 1 && cprcDataEntity.getTargetType() == 3)
-                                        msg.what = 2;
+                                    if (cprcDataEntity.getType() == 1 || cprcDataEntity.getType() == 0)
+                                        msg.what = 1;
                                     else msg.what = cprcDataEntity.getType();
                                     msg.obj = result;
                                     handler.sendMessage(msg);
@@ -1510,6 +1510,8 @@ public class HttpUtils<T> {
                                 e.printStackTrace();
                                 handler.sendEmptyMessage(404);
                             }
+                        } else {
+                            Log.e("sss", "sss");
                         }
                     }
                 });
@@ -2259,7 +2261,7 @@ public class HttpUtils<T> {
             public void run() {
                 Request request = new Request.Builder()
                         .header(Authorization, Bearer + entity.getToken())
-                        .url(entity.getUrl() + "?ParentId=" + entity.getCode())
+                        .url(entity.getUrl() + "?ParentId=" + entity.getCode() + "&MaxResultCount=10000")
                         .build();
                 getClient().newCall(request).enqueue(new Callback() {
                     @Override
@@ -2280,8 +2282,7 @@ public class HttpUtils<T> {
                                     for (int i = 0; i < array.length(); i++) {
                                         JSONObject item = array.getJSONObject(i);
                                         GeoAreaEntity geoAreaEntity = new Gson().fromJson(item.toString(),
-                                                new TypeToken<GeoAreaEntity>() {
-                                                }.getType());
+                                                new TypeToken<GeoAreaEntity>() {}.getType());
                                         dataList.add(geoAreaEntity);
                                     }
                                     handler.sendEmptyMessage(1);
@@ -2443,9 +2444,9 @@ public class HttpUtils<T> {
     }
 
     public OkHttpClient getClient() {
-        OkHttpClient newClient;
-        newClient = HttpsSettings.setCertificates(context);
-        return newClient;
+        OkHttpClient.Builder builder = new OkHttpClient.Builder();
+
+        return HttpsSettings.setCertificates(context);
     }
 
     public static boolean isEmpty(String flag) {

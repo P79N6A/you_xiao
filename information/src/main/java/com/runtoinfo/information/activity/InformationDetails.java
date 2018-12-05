@@ -16,7 +16,6 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.runtoinfo.httpUtils.CPRCBean.CPRCDataEntity;
 import com.runtoinfo.httpUtils.CPRCBean.CPRCTypeEntity;
-import com.runtoinfo.httpUtils.CPRCBean.CommentRequestResultEntity;
 import com.runtoinfo.httpUtils.CPRCBean.MyCommentEntity;
 import com.runtoinfo.httpUtils.CPRCBean.PraiseEntity;
 import com.runtoinfo.httpUtils.HttpEntity;
@@ -38,7 +37,6 @@ import com.runtoinfo.youxiao.globalTools.utils.DialogMessage;
 import com.runtoinfo.youxiao.globalTools.utils.Entity;
 import com.runtoinfo.youxiao.globalTools.utils.IntentDataType;
 import com.runtoinfo.youxiao.globalTools.utils.RecyclerViewDecoration;
-import com.runtoinfo.youxiao.globalTools.utils.TimeUtil;
 import com.wuxiaolong.pullloadmorerecyclerview.PullLoadMoreRecyclerView;
 
 import org.json.JSONArray;
@@ -209,25 +207,34 @@ public class InformationDetails extends BaseActivity {
         @Override
         public void onRefresh() {
             page = 1;
-            refreshData();
+            switch (layoutType){
+                case "comment":
+                    commentEntityList.clear();
+                    setCommentRequestData(page);
+                    break;
+                case "praise":
+                    praiseEntityList.clear();
+                    requestPraiseData(page);
+                    break;
+            }
         }
 
         @Override
         public void onLoadMore() {
             page++;
-            refreshData();
+            switch (layoutType){
+                case "comment":
+                    setCommentRequestData(page);
+                    break;
+                case "praise":
+                    requestPraiseData(page);
+                    break;
+            }
         }
     };
 
     public void refreshData() {
-        switch (layoutType){
-            case "comment":
-                setCommentRequestData(page);
-                break;
-            case "praise":
-                requestPraiseData(page);
-                break;
-        }
+
     }
 
     //获取评论
@@ -380,10 +387,12 @@ public class InformationDetails extends BaseActivity {
                     if (myCommentEntity != null){
                         CPRCDataEntity entity = new CPRCDataEntity();
                         entity.setType(CPRCTypeEntity.REPLY);
-                        entity.setParentId(String.valueOf(myCommentEntity.getReplyId()));
-                        entity.setParentType(CPRCTypeEntity.PARENT_REPLY);
+                        entity.setParentId(String.valueOf(myCommentEntity.getParentId()));
+                        entity.setParentType(myCommentEntity.getReplyedType());
                         entity.setTarget(myCommentEntity.getTargetId());
-                        entity.setTargetType(CPRCTypeEntity.TARGET_REPLY);
+                        entity.setTargetType(/*CPRCTypeEntity.TARGET_REPLY*/myCommentEntity.getTargetType());
+                        entity.setPreviousId(String.valueOf(myCommentEntity.getTargetId()));
+                        entity.setToken(spUtils.getString(Entity.TOKEN));
                         entity.setUserId(spUtils.getInt(Entity.USER_ID));
                         entity.setContent(content.concat("//@")
                                 .concat(myCommentEntity.getReplyer() == null ? "" :myCommentEntity.getReplyer())
@@ -391,9 +400,9 @@ public class InformationDetails extends BaseActivity {
                         httpUtils.postComment(handler, entity);
                     }
                     break;
-                case 2:
+                case 1:
                     DialogMessage.showBottomDialog(handler, -1, InformationDetails.this, false);
-                    CommentRequestResultEntity resultEntity = new Gson().fromJson(msg.obj.toString(), new TypeToken<CommentRequestResultEntity>(){}.getType());
+                    /*CommentRequestResultEntity resultEntity = new Gson().fromJson(msg.obj.toString(), new TypeToken<CommentRequestResultEntity>(){}.getType());
                     MyCommentEntity commentEntity = new MyCommentEntity();
                     //String rContent = resultEntity.getContent() + "//@" + resultEntity.getNickName() + ":";
                     commentEntity.setReplyContent(myCommentEntity.getReplyContent());
@@ -402,18 +411,28 @@ public class InformationDetails extends BaseActivity {
                     commentEntity.setTargetCover(myCommentEntity.getTargetCover());
                     commentEntity.setTargetTitle(myCommentEntity.getTargetTitle());
                     commentEntity.setTargetPublisher(myCommentEntity.getTargetPublisher());
-                    commentAdapter.addItem(commentEntity, 0);
+                    commentAdapter.addItem(commentEntity, 0);*/
+                    switch (layoutType){
+                        case "comment":
+                            setCommentRequestData(1);
+                            break;
+                        case "praise":
+                            requestPraiseData(1);
+                            break;
+                    }
                     break;
                 case 30:
                     switch (layoutType) {
                         case "comment":
                             JSONArray items = (JSONArray) msg.obj;
+                            if (!commentEntityList.isEmpty()) commentEntityList.clear();
                             commentEntityList.addAll(setListPraiseOrComment(items, "comment"));
                             commentBinding.infoCommentRecycler.setPullLoadMoreCompleted();
                             initCommentRecycleData();
                             break;
                         case "praise":
                             JSONArray result = (JSONArray) msg.obj;
+                            if (!praiseEntityList.isEmpty()) praiseEntityList.clear();
                             praiseEntityList = setListPraiseOrComment(result, "praise");
                             praiseBinding.praiseRecycler.setPullLoadMoreCompleted();
                             initPraiseRecycler();

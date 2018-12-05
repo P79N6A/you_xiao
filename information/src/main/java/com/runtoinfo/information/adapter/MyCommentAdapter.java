@@ -3,25 +3,17 @@ package com.runtoinfo.information.adapter;
 import android.app.Activity;
 import android.content.Context;
 import android.os.Handler;
-import android.os.Looper;
-import android.os.Message;
 import android.view.View;
 import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
-import com.runtoinfo.information.R;
-import com.runtoinfo.httpUtils.CPRCBean.CPRCDataEntity;
-import com.runtoinfo.httpUtils.CPRCBean.CPRCTypeEntity;
-import com.runtoinfo.httpUtils.CPRCBean.CommentRequestResultEntity;
 import com.runtoinfo.httpUtils.CPRCBean.MyCommentEntity;
 import com.runtoinfo.httpUtils.HttpEntity;
 import com.runtoinfo.httpUtils.utils.HttpUtils;
+import com.runtoinfo.information.R;
 import com.runtoinfo.youxiao.globalTools.adapter.BaseViewHolder;
 import com.runtoinfo.youxiao.globalTools.adapter.UniversalRecyclerAdapter;
-import com.runtoinfo.youxiao.globalTools.utils.DialogMessage;
-import com.runtoinfo.youxiao.globalTools.utils.TimeUtil;
+import com.runtoinfo.youxiao.globalTools.utils.DensityUtil;
 
 import java.util.List;
 
@@ -49,7 +41,7 @@ public class MyCommentAdapter extends UniversalRecyclerAdapter<MyCommentEntity> 
         holder.setText(R.id.reply_user_name, myCommentEntity.getReplyer());
         holder.setText(R.id.reply_time, myCommentEntity.getReplyTime());
         Glide.with(mContext).load(HttpEntity.IMAGE_HEAD + myCommentEntity.getReplyerAvatar()).into((ImageView) holder.getView(R.id.infor_praise_user_ava));
-        holder.setText(R.id.reply_details, myCommentEntity.getReplyContent());
+        holder.setText(R.id.reply_details, DensityUtil.setStringColor(myCommentEntity.getReplyContent()));
         Glide.with(mContext).load(HttpEntity.IMAGE_HEAD + myCommentEntity.getTargetCover()).into((ImageView) holder.getView(R.id.reply_image));
 
         holder.setText(R.id.target_title, myCommentEntity.getTargetTitle());

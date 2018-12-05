@@ -263,14 +263,14 @@ public class MySomeRecord extends BaseActivity {
                     if (tempList != null && tempList.size() > 0){
                         //binding.myRecordRecycler.setPullLoadMoreCompleted();
                         learnList.addAll(tempList);
-                        if (learningTrackAdapter != null){
-                            learningTrackAdapter.notifyDataSetChanged();
-                            return;
-                        }
                     }
                     if (learnList.size() > 0) {
-                        hideNothingView(false, 0, "");
-                        initLearnAdapter();
+                        if (learningTrackAdapter != null){
+                            learningTrackAdapter.notifyDataSetChanged();
+                        }else {
+                            hideNothingView(false, 0, "");
+                            initLearnAdapter();
+                        }
                     } else {
                         hideNothingView(true, R.drawable.record_course_null, "暂时没有学习记录哦");
                     }
@@ -279,14 +279,14 @@ public class MySomeRecord extends BaseActivity {
                     if (tempList != null && tempList.size() > 0){
                         //binding.myRecordRecycler.setPullLoadMoreCompleted();
                         leaveEntityList.addAll(tempList);
-                        if (leaveAdapter != null){
-                            leaveAdapter.notifyDataChanged();
-                            return;
-                        }
                     }
                     if (leaveEntityList.size() > 0){
-                        hideNothingView(false, 0, "");
-                        initLeaveAdapter();
+                        if (leaveAdapter != null){
+                            leaveAdapter.notifyDataChanged();
+                        }else {
+                            hideNothingView(false, 0, "");
+                            initLeaveAdapter();
+                        }
                     }else{
                         hideNothingView(true, R.drawable.record_leave_null, "暂时没有请假记录哦");
                     }
@@ -295,14 +295,14 @@ public class MySomeRecord extends BaseActivity {
                     if (tempList != null && tempList.size() > 0){
                         //binding.myRecordRecycler.setPullLoadMoreCompleted();
                         courseList.addAll(tempList);
-                        if (courseRecordAdapter != null){
-                            courseRecordAdapter.notifyDataSetChanged();
-                            return;
-                        }
                     }
                     if (courseList.size() > 0) {
-                        hideNothingView(false, 0, "");
-                        initCourseAdapter();
+                        if (courseRecordAdapter != null){
+                            courseRecordAdapter.notifyDataSetChanged();
+                        }else {
+                            hideNothingView(false, 0, "");
+                            initCourseAdapter();
+                        }
                     }else{
                         hideNothingView(true, R.drawable.record_course_null, "暂时没有上课记录哦");
                     }

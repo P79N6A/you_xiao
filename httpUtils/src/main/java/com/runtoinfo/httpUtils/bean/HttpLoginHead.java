@@ -12,10 +12,19 @@ public class HttpLoginHead {
     private String tenancyName;
     private String client;
     private int campusId;
+    private boolean rememberClient;
     private String userName;
     private String passWord;
     private String tenantId;
     private String newPassWord;
+
+    public boolean isRememberClient() {
+        return rememberClient;
+    }
+
+    public void setRememberClient(boolean rememberClient) {
+        this.rememberClient = rememberClient;
+    }
 
     public String getNewPassWord() {
         return newPassWord;

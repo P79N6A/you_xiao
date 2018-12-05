@@ -129,7 +129,7 @@ public class PublishComment extends BaseActivity {
         public void handleMessage(Message msg) {
             //String result = msg.obj.toString();
             switch (msg.what) {
-                case 0:
+                case 1:
                     String result = msg.obj.toString();
                     CommentRequestResultEntity resultEntity =
                             new Gson().fromJson(result,

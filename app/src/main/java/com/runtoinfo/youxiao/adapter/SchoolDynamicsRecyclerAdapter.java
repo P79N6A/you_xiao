@@ -13,7 +13,6 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.runtoinfo.httpUtils.HttpEntity;
 import com.runtoinfo.httpUtils.bean.SchoolDynamicsNewEntity;
-import com.runtoinfo.httpUtils.utils.HttpUtils;
 import com.runtoinfo.youxiao.R;
 import com.runtoinfo.youxiao.holder.RecyclerItemNormalHolder;
 import com.shuyu.gsyvideoplayer.video.StandardGSYVideoPlayer;
@@ -37,7 +36,6 @@ public class SchoolDynamicsRecyclerAdapter extends RecyclerView.Adapter {
     public Activity context;
     public int type;
     public Handler handler;
-    public HttpUtils httpUtils;
 
     public OnItemClickListener oneItemClickListener = new OnItemClickListener() {
         @Override
@@ -67,7 +65,6 @@ public class SchoolDynamicsRecyclerAdapter extends RecyclerView.Adapter {
         this.dataList = mDatas;
         this.context = mContext;
         this.handler = handler;
-        httpUtils = new HttpUtils(context);
     }
 
     public void setOneOnItemClickListener(OnItemClickListener listener) {
@@ -227,9 +224,8 @@ public class SchoolDynamicsRecyclerAdapter extends RecyclerView.Adapter {
 
     public void listener(int position, int type) {
         SchoolDynamicsNewEntity dynamicsEntity = dataList.get(position);
-        //String html = dataList.get(position).getContent();
         Message message = new Message();
-        message.what = type;
+        message.what = 6;
         message.obj = dynamicsEntity;
         handler.sendMessage(message);
     }
