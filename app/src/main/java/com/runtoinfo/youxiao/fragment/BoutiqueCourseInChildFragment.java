@@ -42,25 +42,29 @@ public class BoutiqueCourseInChildFragment extends BaseFragment {
     public FragmentBoutiqueCourseInChildBinding binding;
     public BoutiqueInChildRecyclerAdapter adapter;
     public List<CourseDataEntity> tempList;
-    public int type;
+    public String type;
     public List<CourseDataEntity> dataList = new ArrayList<>();
     public HttpUtils httpUtils;
     public int offset = 0, page = 1;
     public RequestDataEntity requestDataEntity;
     public Map<String, Object> requestMap = new HashMap<>();
+    public String subject, mediaType;
 
-    public BoutiqueCourseInChildFragment(int type){
-        this.type = type;
+    public BoutiqueCourseInChildFragment(String courseType, String subject, String mediaType) {
+        Entity.courseType = courseType;
+        Entity.subject = subject;
+        Entity.medialType = mediaType;
     }
-    public BoutiqueCourseInChildFragment(){
+
+    public BoutiqueCourseInChildFragment() {
         super();
     }
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_boutique_course_in_child, container, false);
         httpUtils = new HttpUtils(getContext());
-        /**注释原因，测试数据，使用假数据，等回复后恢复*/
         initCourseData(page);
         //initRecyclerData();//测试时，将初始化数据放在此处运行，后期将放在请求参数后。
         return binding.getRoot();
@@ -76,25 +80,29 @@ public class BoutiqueCourseInChildFragment extends BaseFragment {
 
     }
 
-    public void initCourseData(int offSet){
+    public void refreshView(){
+        initCourseData(1);
+    }
+
+    public void initCourseData(int offSet) {
         requestDataEntity = new RequestDataEntity();
         requestDataEntity.setToken(spUtils.getString(Entity.TOKEN));
         requestDataEntity.setUrl(HttpEntity.MAIN_URL + HttpEntity.GET_COURSE_CHILD_ALL);
 
         requestMap = new HashMap<>();
-        if (type != -1) {
-            courseTypeEntity.setMediaType(String.valueOf(type));
-            requestMap.put("CourseType", courseTypeEntity.getCourseType());
-            requestMap.put("CourseSubject", courseTypeEntity.getCourseSubject());
-            requestMap.put("MediaType", courseTypeEntity.getMediaType());
-            requestMap.put("SkipCount", DensityUtil.getOffSet(page));
-        }
-        tempList = new ArrayList<>();
-        httpUtils.getInChildData(handler,requestDataEntity, requestMap, tempList);
-    }
-    public void initRecyclerData(){
 
-        if (tempList != null && tempList.size() > 0 ){
+        requestMap.put("CourseType", Entity.courseType);
+        requestMap.put("CourseSubject", Entity.subject);
+        requestMap.put("MediaType", Entity.subject);
+        requestMap.put("SkipCount", DensityUtil.getOffSet(page));
+
+        tempList = new ArrayList<>();
+        httpUtils.getInChildData(handler, requestDataEntity, requestMap, tempList);
+    }
+
+    public void initRecyclerData() {
+
+        if (tempList != null && tempList.size() > 0) {
             dataList.addAll(tempList);
             if (adapter != null) {
                 adapter.notifyDataSetChanged();
@@ -134,9 +142,9 @@ public class BoutiqueCourseInChildFragment extends BaseFragment {
     public UniversalRecyclerAdapter.OnItemClickListener onItemClickListener = new UniversalRecyclerAdapter.OnItemClickListener() {
         @Override
         public void onItemClick(View view, int position) {
-            CourseDataEntity entity = courseDataList.get(position);
+            CourseDataEntity entity = dataList.get(position);
             String json = new Gson().toJson(entity);
-            switch (entity.getMediaType()){
+            switch (entity.getMediaType()) {
                 case 0:
                 case 1:
                     ARouter.getInstance().build("/course/boutiqueCourseDetails").withString("json", json).navigation();
@@ -148,10 +156,10 @@ public class BoutiqueCourseInChildFragment extends BaseFragment {
         }
     };
 
-    public Handler handler = new Handler(Looper.getMainLooper()){
+    public Handler handler = new Handler(Looper.getMainLooper()) {
         @Override
         public void handleMessage(Message msg) {
-            switch (msg.what){
+            switch (msg.what) {
                 case 0:
                     initRecyclerData();
                     break;

@@ -143,7 +143,12 @@ public class GeoAreaActivity extends BaseActivity {
                     if (dataList.size() > 0){
                         AnalyticalDataList();
                     }else{
-                        DialogMessage.showToast(context, "没有更多数据");
+                        //DialogMessage.showToast(context, "没有更多数据");
+                        Intent intent = new Intent(GeoAreaActivity.this, PersonalMainActivity.class);
+                        intent.putStringArrayListExtra("code", areaCode);
+                        intent.putStringArrayListExtra("name", addressName);
+                        setResult(1002, intent);
+                        GeoAreaActivity.this.finish();
                     }
                     break;
                 case 400:

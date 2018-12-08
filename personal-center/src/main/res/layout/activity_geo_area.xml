@@ -29,7 +29,13 @@
                 android:layout_height="wrap_content"
                 android:text="取消"
                 android:textColor="#333333"
-                android:textSize="18sp" />
+                android:textSize="18sp"
+                android:visibility="gone"/>
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/geoarea_back"
+                android:background="@drawable/activity_black_back"/>
 
             <TextView
                 android:id="@+id/geoArea_title"
@@ -48,7 +54,8 @@
                 android:layout_alignParentEnd="true"
                 android:text="保存"
                 android:textColor="#999999"
-                android:textSize="18sp" />
+                android:textSize="18sp"
+                android:visibility="gone"/>
         </RelativeLayout>
 
 

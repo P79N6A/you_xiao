@@ -15,6 +15,7 @@ import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
 import com.google.gson.reflect.TypeToken;
 import com.runtoinfo.httpUtils.CPRCBean.CPRCDataEntity;
+import com.runtoinfo.httpUtils.CPRCBean.CollectOrPraiseEntity;
 import com.runtoinfo.httpUtils.CPRCBean.CommentRequestResultEntity;
 import com.runtoinfo.httpUtils.CenterEntity.LearnTrackEntity;
 import com.runtoinfo.httpUtils.CenterEntity.LeaveGroupEntity;
@@ -36,7 +37,6 @@ import com.runtoinfo.httpUtils.bean.PersonalCenterEntity;
 import com.runtoinfo.httpUtils.bean.RequestDataEntity;
 import com.runtoinfo.httpUtils.bean.SchoolDynamicsNewEntity;
 import com.runtoinfo.httpUtils.bean.SystemMessageGroupEntity;
-import com.runtoinfo.httpUtils.bean.TopiceHttpResultEntity;
 import com.runtoinfo.httpUtils.bean.VersionEntity;
 import com.zhy.http.okhttp.OkHttpUtils;
 import com.zhy.http.okhttp.https.HttpsUtils;
@@ -72,7 +72,7 @@ import okhttp3.Response;
 @SuppressWarnings("all")
 public class HttpUtils<T> {
 
-    public static final ExecutorService executorService = Executors.newScheduledThreadPool(7);
+    public static final ExecutorService executorService = Executors.newScheduledThreadPool(15);
     public static final MediaType JSON = MediaType.parse("application/json; charset=utf-8");
     private static final MediaType PICTURE = MediaType.parse("text/x-markdown; charset=utf-8");
     public static final OkHttpClient client = new OkHttpClient();
@@ -610,7 +610,8 @@ public class HttpUtils<T> {
                                     for (int item = 0; item < items.length(); item++) {
                                         JSONObject childItem = items.getJSONObject(item);
                                         SchoolDynamicsNewEntity entity = new Gson().fromJson(childItem.toString(),
-                                                new TypeToken<SchoolDynamicsNewEntity>() {}.getType());
+                                                new TypeToken<SchoolDynamicsNewEntity>() {
+                                                }.getType());
                                         dataList.add(entity);
                                     }
                                     handler.sendEmptyMessage(5);
@@ -620,12 +621,63 @@ public class HttpUtils<T> {
                             } catch (JSONException e) {
                                 e.printStackTrace();
                                 handler.sendEmptyMessage(404);
-                            } catch (IllegalStateException e){
+                            } catch (IllegalStateException e) {
                                 e.printStackTrace();
-                            } catch (JsonSyntaxException e){
+                            } catch (JsonSyntaxException e) {
                                 handler.sendEmptyMessage(303);
                             }
 
+                        }
+                    }
+                });
+            }
+        });
+    }
+
+    /**
+     * 获取新闻内容
+     */
+
+    public void getNewsDetails(final Handler handler, final RequestDataEntity requestDataEntity) {
+        executorService.execute(new Runnable() {
+            @Override
+            public void run() {
+                Map<String, Object> dataMap = new HashMap<>();
+                dataMap.put("TargetType", requestDataEntity.getType());
+                dataMap.put("Id", requestDataEntity.getId());
+                dataMap.put("UserId", requestDataEntity.getUserId());
+
+                Request request = new Request.Builder()
+                        .header(Authorization, Bearer + requestDataEntity.getToken())
+                        .url(requestDataEntity.getUrl() + setUrl(dataMap))
+                        .build();
+
+                getClient().newCall(request).enqueue(new Callback() {
+                    @Override
+                    public void onFailure(Call call, IOException e) {
+                        handler.sendEmptyMessage(500);
+                    }
+
+                    @Override
+                    public void onResponse(Call call, Response response) throws IOException {
+                        if (response.isSuccessful()) {
+                            try {
+                                JSONObject jsonObject = new JSONObject(response.body().string());
+                                JSONObject result = jsonObject.getJSONObject("result");
+                                SchoolDynamicsNewEntity newEntity = new Gson().fromJson(result.toString(),
+                                        new TypeToken<SchoolDynamicsNewEntity>() {
+                                        }.getType());
+                                Message message = new Message();
+                                message.what = 7;
+                                message.obj = newEntity;
+                                handler.sendMessage(message);
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            } catch (JsonSyntaxException e) {
+                                e.printStackTrace();
+                            } catch (IllegalStateException e) {
+                                e.printStackTrace();
+                            }
                         }
                     }
                 });
@@ -651,7 +703,7 @@ public class HttpUtils<T> {
                     jsonObject.put("newsId", id);
                     RequestBody requestBody = RequestBody.create(JSON, jsonObject.toString());
                     final Request request = new Request.Builder()
-                            .header("Authorization", "Bearer " + token)
+                            .header(Authorization, Bearer + token)
                             .url(url + "?newsId=" + id)
                             .build();
                     getClient().newCall(request).enqueue(new Callback() {
@@ -680,6 +732,57 @@ public class HttpUtils<T> {
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
+            }
+        });
+    }
+
+    /**
+     * 获取是否点赞是否收藏
+     */
+
+    public void getIsCollectionOrIsPraise(final Handler handler, final RequestDataEntity entity, final CPRCDataEntity dataEntity) {
+        executorService.execute(new Runnable() {
+            @Override
+            public void run() {
+                Map<String, Object> dataMap = new HashMap<>();
+                dataMap.put("userId", entity.getUserId());
+                dataMap.put("Type", dataEntity.getType());
+                dataMap.put("targetId", entity.getId());
+                dataMap.put("targetType", dataEntity.getTargetType());
+                Request request = new Request.Builder()
+                        .header(Authorization, Bearer + entity.getToken())
+                        .url(entity.getUrl() + setUrl(dataMap))
+                        .build();
+
+                getClient().newCall(request).enqueue(new Callback() {
+                    @Override
+                    public void onFailure(Call call, IOException e) {
+                        handler.sendEmptyMessage(500);
+                    }
+
+                    @Override
+                    public void onResponse(Call call, Response response) throws IOException {
+                        if (response.isSuccessful()) {
+                            try {
+                                JSONObject json = new JSONObject(response.body().string());
+                                JSONObject result = json.getJSONObject("result");
+                                CollectOrPraiseEntity collectOrPraiseEntity = new Gson().fromJson(result.toString(),
+                                        new TypeToken<CollectOrPraiseEntity>() {
+                                        }.getType());
+                                Message message = new Message();
+                                message.what = 0;
+                                message.obj = collectOrPraiseEntity;
+                                handler.sendMessage(message);
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            } catch (JsonSyntaxException e) {
+                                e.printStackTrace();
+                            } catch (IllegalStateException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    }
+                });
             }
         });
     }
@@ -727,7 +830,7 @@ public class HttpUtils<T> {
     /**
      * 获取活动详情
      */
-    public void getEventDetails(final Handler handler, final RequestDataEntity entity, final Map<String, Object> dataMap){
+    public void getEventDetails(final Handler handler, final RequestDataEntity entity, final Map<String, Object> dataMap) {
         executorService.execute(new Runnable() {
             @Override
             public void run() {
@@ -744,24 +847,24 @@ public class HttpUtils<T> {
 
                     @Override
                     public void onResponse(Call call, Response response) throws IOException {
-                        if (response.isSuccessful()){
-                            try{
+                        if (response.isSuccessful()) {
+                            try {
                                 JSONObject json = new JSONObject(response.body().string());
                                 boolean success = json.getBoolean("success");
-                                if (success){
+                                if (success) {
                                     JSONObject result = json.getJSONObject("result");
                                     if (result != null && !TextUtils.isEmpty(result.toString())) {
                                         Message message = new Message();
                                         message.what = 0;
                                         message.obj = result.toString();
                                         handler.sendMessage(message);
-                                    }else{
+                                    } else {
                                         handler.sendEmptyMessage(400);
                                     }
-                                }else{
+                                } else {
                                     handler.sendEmptyMessage(400);
                                 }
-                            }catch (JSONException e){
+                            } catch (JSONException e) {
                                 handler.sendEmptyMessage(404);
                             }
                         }
@@ -770,6 +873,7 @@ public class HttpUtils<T> {
             }
         });
     }
+
     /**
      * 获取我的报名
      */
@@ -807,9 +911,9 @@ public class HttpUtils<T> {
                                 }
                             } catch (JSONException e) {
                                 e.printStackTrace();
-                            } catch (IllegalStateException e){
+                            } catch (IllegalStateException e) {
                                 e.printStackTrace();
-                            } catch (JsonSyntaxException e){
+                            } catch (JsonSyntaxException e) {
                                 handler.sendEmptyMessage(303);
                             }
                         }
@@ -861,9 +965,9 @@ public class HttpUtils<T> {
                                 }
                             } catch (JSONException e) {
                                 handler.sendEmptyMessage(500);
-                            } catch (IllegalStateException e){
+                            } catch (IllegalStateException e) {
                                 handler.sendEmptyMessage(500);
-                            } catch (JsonSyntaxException e){
+                            } catch (JsonSyntaxException e) {
                                 handler.sendEmptyMessage(303);
                             }
                         }
@@ -910,7 +1014,8 @@ public class HttpUtils<T> {
                                             JSONObject json = new JSONObject(resultJson);
                                             JSONObject result = json.getJSONObject("result");
                                             EventAddResultBean resultBean = new Gson().fromJson(result.toString(),
-                                                    new TypeToken<EventAddResultBean>(){}.getType());
+                                                    new TypeToken<EventAddResultBean>() {
+                                                    }.getType());
                                             Message msg = new Message();
                                             msg.what = 0;
                                             msg.obj = resultBean;
@@ -932,12 +1037,12 @@ public class HttpUtils<T> {
                                         break;
                                 }
 
-                            }else{
+                            } else {
                                 handler.sendEmptyMessage(404);
                             }
                         }
                     });
-                }catch (IllegalStateException e){
+                } catch (IllegalStateException e) {
                     e.printStackTrace();
                     handler.sendEmptyMessage(500);
                 }
@@ -979,12 +1084,12 @@ public class HttpUtils<T> {
                                 handler.sendEmptyMessage(0);
                             } catch (JSONException e) {
                                 e.printStackTrace();
-                            } catch (IllegalStateException e){
+                            } catch (IllegalStateException e) {
                                 handler.sendEmptyMessage(500);
-                            } catch (JsonSyntaxException e){
+                            } catch (JsonSyntaxException e) {
                                 handler.sendEmptyMessage(303);
                             }
-                        }else{
+                        } else {
                             handler.sendEmptyMessage(404);
                         }
                     }
@@ -1025,19 +1130,19 @@ public class HttpUtils<T> {
                                 for (int i = 0; i < items.length(); i++) {
                                     JSONObject childItem = items.getJSONObject(i);
                                     CourseDataEntity courseDataEntity = new Gson().fromJson(childItem.toString(),
-                                            new TypeToken<CourseDataEntity>() {}.getType());
+                                            new TypeToken<CourseDataEntity>() {
+                                            }.getType());
                                     list.add(courseDataEntity);
-
                                 }
                                 handler.sendEmptyMessage(0);
                             } catch (JSONException e) {
                                 handler.sendEmptyMessage(404);
-                            } catch (IllegalStateException e){
+                            } catch (IllegalStateException e) {
                                 handler.sendEmptyMessage(500);
-                            } catch (JsonSyntaxException e){
+                            } catch (JsonSyntaxException e) {
                                 handler.sendEmptyMessage(303);
                             }
-                        }else{
+                        } else {
                             handler.sendEmptyMessage(404);
                         }
                     }
@@ -1217,8 +1322,8 @@ public class HttpUtils<T> {
             public void run() {
                 MultipartBody.Builder body = new MultipartBody.Builder();
                 body.setType(MultipartBody.FORM);
-                File file  = entity.getFile();
-                body.addFormDataPart("file", file.getPath(),  RequestBody.create(MediaType.parse("application/octet-stream"), file));
+                File file = entity.getFile();
+                body.addFormDataPart("file", file.getPath(), RequestBody.create(MediaType.parse("application/octet-stream"), file));
                 MultipartBody multipartBody = body.build();
                 Request request = new Request.Builder()
                         .url(entity.getUrl())
@@ -1398,7 +1503,7 @@ public class HttpUtils<T> {
      * @param handler
      * @param dataEntity
      */
-    public void getTopics(final Handler handler, final RequestDataEntity dataEntity, final List<TopiceHttpResultEntity> resultList) {
+    public void getTopics(final Handler handler, final RequestDataEntity dataEntity, final List<SchoolDynamicsNewEntity> resultList) {
         executorService.execute(new Runnable() {
             @Override
             public void run() {
@@ -1423,36 +1528,66 @@ public class HttpUtils<T> {
                                 Gson gson = new Gson();
                                 for (int i = 0; i < items.length(); i++) {
                                     JSONObject childItem = items.getJSONObject(i);
-                                    TopiceHttpResultEntity entity = new TopiceHttpResultEntity();//gson.fromJson(childItem.toString(), new TypeToken<TopiceHttpResultEntity>(){}.getType());
-                                    entity.setCampusId(String.valueOf(childItem.get("campusId")));
-                                    entity.setCommentNumber(childItem.getString("commentNumber"));
-                                    entity.setContentpublic(childItem.getString("content"));
-                                    entity.setCoverType(childItem.getString("coverType"));
-                                    List<String> imgList = new ArrayList<>();
-                                    JSONArray paths = childItem.getJSONArray("coverImgs");
-                                    for (int j = 0; j < paths.length(); j++) {
-                                        imgList.add(paths.get(j).toString());
-                                    }
-                                    entity.setCoverImgs(imgList);
-                                    entity.setPageView(childItem.getString("pageView"));
-                                    entity.setId(childItem.getInt("id"));
-                                    entity.setPraiseNumber(childItem.getString("praiseNumber"));
-                                    entity.setPublisher(childItem.getString("publisher"));
-                                    entity.setPublishTime(childItem.getString("publishTime"));
-                                    entity.setReplyNumber(childItem.getString("replyNumber"));
-                                    entity.setTitle(childItem.getString("title"));
-                                    //entity.setSubtitle(childItem.getString("subTitle"));
-                                    resultList.add(entity);
+                                    SchoolDynamicsNewEntity dynamicsNewEntity = new Gson().fromJson(childItem.toString(),
+                                            new TypeToken<SchoolDynamicsNewEntity>() {
+                                            }.getType());
+
+                                    resultList.add(dynamicsNewEntity);
                                 }
                                 handler.sendEmptyMessage(200);
                             } catch (JSONException e) {
                                 handler.sendEmptyMessage(400);
                                 e.printStackTrace();
-                            } catch (IllegalStateException e){
+                            } catch (IllegalStateException e) {
                                 handler.sendEmptyMessage(500);
-                            } catch (JsonSyntaxException e){
+                            } catch (JsonSyntaxException e) {
                                 handler.sendEmptyMessage(303);
                             }
+                        }
+                    }
+                });
+            }
+        });
+    }
+
+    /**
+     * 获取专题
+     */
+
+    public void getTipocDetails(final Handler handler, final RequestDataEntity requestDataEntity) {
+        executorService.execute(new Runnable() {
+            @Override
+            public void run() {
+                Request request = new Request.Builder()
+                        .header(Authorization, Bearer + requestDataEntity.getToken())
+                        .url(requestDataEntity.getUrl() + "?Id=" + requestDataEntity.getId())
+                        .build();
+
+                getClient().newCall(request).enqueue(new Callback() {
+                    @Override
+                    public void onFailure(Call call, IOException e) {
+                        handler.sendEmptyMessage(500);
+                    }
+
+                    @Override
+                    public void onResponse(Call call, Response response) throws IOException {
+                        if (response.code() == 200) {
+                            if (response.isSuccessful()) {
+                                try {
+                                    JSONObject json = new JSONObject(response.body().string());
+                                    JSONObject result = json.getJSONObject("result");
+                                    SchoolDynamicsNewEntity dynamicsNewEntity = new Gson().fromJson(result.toString(),
+                                            new TypeToken<SchoolDynamicsNewEntity>(){}.getType());
+                                    Message message = new Message();
+                                    message.what = 0;
+                                    message.obj = dynamicsNewEntity;
+                                    handler.sendMessage(message);
+                                } catch (JSONException e) {
+                                    e.printStackTrace();
+                                }
+                            }
+                        } else if (response.code() == 403){
+
                         }
                     }
                 });
@@ -1521,6 +1656,7 @@ public class HttpUtils<T> {
 
     /**
      * 获取全部评论或者回复
+     *
      * @param handler
      * @param cpc
      * @param requestType 请求类型，0，评论，1，评论的回复，2，回复的回复
@@ -1561,7 +1697,8 @@ public class HttpUtils<T> {
                                     for (int i = 0; i < array.length(); i++) {
                                         String item = array.getJSONObject(i).toString();
                                         CommentRequestResultEntity requestResultEntity = new Gson().fromJson(item,
-                                                new TypeToken<CommentRequestResultEntity>() {}.getType());
+                                                new TypeToken<CommentRequestResultEntity>() {
+                                                }.getType());
                                         dataList.add(requestResultEntity);
                                     }
                                 }
@@ -1571,9 +1708,9 @@ public class HttpUtils<T> {
                                     handler.sendEmptyMessage(30);
                             } catch (JSONException e) {
                                 e.printStackTrace();
-                            } catch (IllegalStateException e){
+                            } catch (IllegalStateException e) {
                                 handler.sendEmptyMessage(500);
-                            }catch (JsonSyntaxException e){
+                            } catch (JsonSyntaxException e) {
                                 handler.sendEmptyMessage(303);
                             }
                         }
@@ -1585,6 +1722,7 @@ public class HttpUtils<T> {
 
     /**
      * 获取单条评论
+     *
      * @param handler
      * @param requestDataEntity
      * @param dataList
@@ -1613,7 +1751,8 @@ public class HttpUtils<T> {
                                 if (success) {
                                     JSONObject result = json.getJSONObject("result");
                                     CommentRequestResultEntity resultEntity = new Gson().fromJson(result.toString(),
-                                            new TypeToken<CommentRequestResultEntity>(){}.getType());
+                                            new TypeToken<CommentRequestResultEntity>() {
+                                            }.getType());
                                     Message message = new Message();
                                     message.obj = resultEntity;
                                     message.what = 50;
@@ -1624,9 +1763,9 @@ public class HttpUtils<T> {
                             } catch (JSONException e) {
                                 e.printStackTrace();
                                 handler.sendEmptyMessage(404);
-                            } catch (IllegalStateException e){
+                            } catch (IllegalStateException e) {
                                 handler.sendEmptyMessage(500);
-                            } catch (JsonSyntaxException e){
+                            } catch (JsonSyntaxException e) {
                                 handler.sendEmptyMessage(303);
                             }
                         }
@@ -1783,7 +1922,8 @@ public class HttpUtils<T> {
                                     for (int i = 0; i < items.length(); i++) {
                                         JSONObject item = items.getJSONObject(i);
                                         SystemMessageGroupEntity messageEntity =
-                                                new Gson().fromJson(item.toString(), new TypeToken<SystemMessageGroupEntity>() {}.getType());
+                                                new Gson().fromJson(item.toString(), new TypeToken<SystemMessageGroupEntity>() {
+                                                }.getType());
                                         dataList.add(messageEntity);
                                     }
                                     handler.sendEmptyMessage(0);
@@ -1793,9 +1933,9 @@ public class HttpUtils<T> {
                             } catch (JSONException e) {
                                 e.printStackTrace();
                                 handler.sendEmptyMessage(404);
-                            } catch (IllegalStateException e){
+                            } catch (IllegalStateException e) {
                                 handler.sendEmptyMessage(500);
-                            } catch (JsonSyntaxException e){
+                            } catch (JsonSyntaxException e) {
                                 handler.sendEmptyMessage(303);
                             }
                         } else {
@@ -1887,7 +2027,8 @@ public class HttpUtils<T> {
                                     for (int i = 0; i < items.length(); i++) {
                                         JSONObject item = items.getJSONObject(i);
                                         VersionEntity versionEntity =
-                                                new Gson().fromJson(item.toString(), new TypeToken<VersionEntity>() {}.getType());
+                                                new Gson().fromJson(item.toString(), new TypeToken<VersionEntity>() {
+                                                }.getType());
                                         versionList.add(versionEntity);
                                     }
                                     if (versionList.size() <= 0) {
@@ -1903,9 +2044,9 @@ public class HttpUtils<T> {
                             } catch (JSONException e) {
                                 e.printStackTrace();
                                 handler.sendEmptyMessage(404);
-                            } catch (IllegalStateException e){
+                            } catch (IllegalStateException e) {
                                 handler.sendEmptyMessage(500);
-                            } catch (JsonSyntaxException e){
+                            } catch (JsonSyntaxException e) {
                                 handler.sendEmptyMessage(303);
                             }
                         }
@@ -1917,11 +2058,12 @@ public class HttpUtils<T> {
 
     /**
      * 检索课程
+     *
      * @param handler
-     * @param entity 请求类
-     * @param dataMap 参数
+     * @param entity   请求类
+     * @param dataMap  参数
      * @param dataList 结果集
-     * @param type 结果类型0，年；1，月；2，日
+     * @param type     结果类型0，年；1，月；2，日
      */
     public void getCouseAll(final Handler handler, final RequestDataEntity entity, final Map<String, Object> dataMap, final List<CourseEntity> dataList, final int type) {
         executorService.execute(new Runnable() {
@@ -1948,7 +2090,8 @@ public class HttpUtils<T> {
                                     JSONArray result = json.getJSONArray("result");
                                     for (int i = 0; i < result.length(); i++) {
                                         JSONObject item = result.getJSONObject(i);
-                                        CourseEntity courseEntity = new Gson().fromJson(item.toString(), new TypeToken<CourseEntity>() {}.getType());
+                                        CourseEntity courseEntity = new Gson().fromJson(item.toString(), new TypeToken<CourseEntity>() {
+                                        }.getType());
                                         dataList.add(courseEntity);
                                     }
                                     handler.sendEmptyMessage(type);
@@ -1957,9 +2100,9 @@ public class HttpUtils<T> {
                                 }
                             } catch (JSONException e) {
                                 e.printStackTrace();
-                            } catch (IllegalStateException e){
+                            } catch (IllegalStateException e) {
                                 handler.sendEmptyMessage(500);
-                            } catch (JsonSyntaxException e){
+                            } catch (JsonSyntaxException e) {
                                 handler.sendEmptyMessage(303);
                             }
                         }
@@ -2007,7 +2150,7 @@ public class HttpUtils<T> {
                                             dataList.add(trackEntity);
                                         }
                                         handler.sendEmptyMessage(0);
-                                    }else{
+                                    } else {
                                         handler.sendEmptyMessage(401);
                                     }
                                 } else {
@@ -2016,9 +2159,9 @@ public class HttpUtils<T> {
                             } catch (JSONException e) {
                                 e.printStackTrace();
                                 handler.sendEmptyMessage(404);
-                            } catch (IllegalStateException e){
+                            } catch (IllegalStateException e) {
                                 handler.sendEmptyMessage(500);
-                            } catch (JsonSyntaxException e){
+                            } catch (JsonSyntaxException e) {
                                 handler.sendEmptyMessage(303);
                             }
                         }
@@ -2062,7 +2205,8 @@ public class HttpUtils<T> {
                                     for (int i = 0; i < itmes.length(); i++) {
                                         JSONObject item = itmes.getJSONObject(i);
                                         LeaveGroupEntity leaveRecordEntity =
-                                                new Gson().fromJson(item.toString(), new TypeToken<LeaveGroupEntity>() {}.getType());
+                                                new Gson().fromJson(item.toString(), new TypeToken<LeaveGroupEntity>() {
+                                                }.getType());
                                         dataList.add(leaveRecordEntity);
                                     }
                                     handler.sendEmptyMessage(1);
@@ -2072,9 +2216,9 @@ public class HttpUtils<T> {
                             } catch (JSONException e) {
                                 e.printStackTrace();
                                 handler.sendEmptyMessage(404);
-                            } catch (IllegalStateException e){
+                            } catch (IllegalStateException e) {
                                 handler.sendEmptyMessage(500);
-                            } catch (JsonSyntaxException e){
+                            } catch (JsonSyntaxException e) {
                                 handler.sendEmptyMessage(303);
                             }
                         }
@@ -2130,9 +2274,9 @@ public class HttpUtils<T> {
                             } catch (JSONException e) {
                                 e.printStackTrace();
                                 handler.sendEmptyMessage(404);
-                            } catch (IllegalStateException e){
+                            } catch (IllegalStateException e) {
                                 handler.sendEmptyMessage(500);
-                            } catch (JsonSyntaxException e){
+                            } catch (JsonSyntaxException e) {
                                 handler.sendEmptyMessage(303);
                             }
                         }
@@ -2172,7 +2316,8 @@ public class HttpUtils<T> {
                                 if (success) {
                                     JSONObject result = json.getJSONObject("result");
                                     GetSchoolSettingEntity settingEntity =
-                                            new Gson().fromJson(result.toString(), new TypeToken<GetSchoolSettingEntity>() {}.getType());
+                                            new Gson().fromJson(result.toString(), new TypeToken<GetSchoolSettingEntity>() {
+                                            }.getType());
                                     Message msg = new Message();
                                     msg.what = 10;
                                     msg.obj = settingEntity;
@@ -2183,9 +2328,9 @@ public class HttpUtils<T> {
                             } catch (JSONException e) {
                                 e.printStackTrace();
                                 handler.sendEmptyMessage(404);
-                            } catch (IllegalStateException e){
+                            } catch (IllegalStateException e) {
                                 handler.sendEmptyMessage(500);
-                            } catch (JsonSyntaxException e){
+                            } catch (JsonSyntaxException e) {
                                 handler.sendEmptyMessage(303);
                             }
 
@@ -2282,7 +2427,8 @@ public class HttpUtils<T> {
                                     for (int i = 0; i < array.length(); i++) {
                                         JSONObject item = array.getJSONObject(i);
                                         GeoAreaEntity geoAreaEntity = new Gson().fromJson(item.toString(),
-                                                new TypeToken<GeoAreaEntity>() {}.getType());
+                                                new TypeToken<GeoAreaEntity>() {
+                                                }.getType());
                                         dataList.add(geoAreaEntity);
                                     }
                                     handler.sendEmptyMessage(1);
@@ -2292,9 +2438,9 @@ public class HttpUtils<T> {
                             } catch (JSONException e) {
                                 e.printStackTrace();
                                 handler.sendEmptyMessage(404);
-                            } catch (IllegalStateException e){
+                            } catch (IllegalStateException e) {
                                 handler.sendEmptyMessage(500);
-                            } catch (JsonSyntaxException e){
+                            } catch (JsonSyntaxException e) {
                                 handler.sendEmptyMessage(303);
                             }
                         } else {
@@ -2499,9 +2645,9 @@ public class HttpUtils<T> {
                             } catch (JSONException e) {
                                 e.printStackTrace();
                                 handler.sendEmptyMessage(404);
-                            } catch (IllegalStateException e){
+                            } catch (IllegalStateException e) {
                                 handler.sendEmptyMessage(500);
-                            } catch (JsonSyntaxException e){
+                            } catch (JsonSyntaxException e) {
                                 handler.sendEmptyMessage(303);
                             }
                         }

@@ -191,8 +191,9 @@ public class InformationDetails extends BaseActivity {
 
     //为赞准备展现数据
     public PraiseAdapter praiseAdapter;
+
     public void initPraiseRecycler() {
-        if (praiseAdapter != null){
+        if (praiseAdapter != null) {
             praiseAdapter.notifyDataSetChanged();
             return;
         }
@@ -207,7 +208,7 @@ public class InformationDetails extends BaseActivity {
         @Override
         public void onRefresh() {
             page = 1;
-            switch (layoutType){
+            switch (layoutType) {
                 case "comment":
                     commentEntityList.clear();
                     setCommentRequestData(page);
@@ -222,7 +223,7 @@ public class InformationDetails extends BaseActivity {
         @Override
         public void onLoadMore() {
             page++;
-            switch (layoutType){
+            switch (layoutType) {
                 case "comment":
                     setCommentRequestData(page);
                     break;
@@ -256,12 +257,13 @@ public class InformationDetails extends BaseActivity {
     public List setListPraiseOrComment(JSONArray items, String type) {
         try {
             List list = new ArrayList();
-            switch (type){
+            switch (type) {
                 case "comment":
                     for (int i = 0; i < items.length(); i++) {
                         JSONObject item = items.getJSONObject(i);
                         MyCommentEntity myCommentEntity =
-                                new Gson().fromJson(item.toString(), new TypeToken<MyCommentEntity>() {}.getType());
+                                new Gson().fromJson(item.toString(), new TypeToken<MyCommentEntity>() {
+                                }.getType());
                         list.add(myCommentEntity);
                     }
                     break;
@@ -269,7 +271,8 @@ public class InformationDetails extends BaseActivity {
                     for (int i = 0; i < items.length(); i++) {
                         JSONObject item = items.getJSONObject(i);
                         PraiseEntity praiseEntity =
-                                new Gson().fromJson(item.toString(), new TypeToken<PraiseEntity>() {}.getType());
+                                new Gson().fromJson(item.toString(), new TypeToken<PraiseEntity>() {
+                                }.getType());
                         list.add(praiseEntity);
                     }
                     break;
@@ -283,15 +286,16 @@ public class InformationDetails extends BaseActivity {
 
     //加载我的评论
     public MyCommentAdapter commentAdapter;
+
     public void initCommentRecycleData() {
-        if (commentAdapter == null){
+        if (commentAdapter == null) {
             commentAdapter = new MyCommentAdapter(handler, InformationDetails.this, commentEntityList, R.layout.info_comment_item_layout);
             commentBinding.infoCommentRecycler.setLinearLayout();
             commentBinding.infoCommentRecycler.setAdapter(commentAdapter);
             commentBinding.infoCommentRecycler.addItemDecoration(new RecyclerViewDecoration(this, RecyclerViewDecoration.HORIZONTAL_LIST));
             commentBinding.infoCommentRecycler.setOnPullLoadMoreListener(pullLoadMoreListener);
             commentAdapter.setCommentListener(commentListener);
-        }else{
+        } else {
             commentAdapter.notifyDataSetChanged();
         }
     }
@@ -338,7 +342,7 @@ public class InformationDetails extends BaseActivity {
     }
 
     //将消息状态更改为已读
-    public void setNoticeReaded(){
+    public void setNoticeReaded() {
         RequestDataEntity dataEntity = new RequestDataEntity();
         dataEntity.setUrl(HttpEntity.MAIN_URL + HttpEntity.UPDATE_USER_NOTIFICATION_STATUE_ALL);
         dataEntity.setToken(spUtils.getString(Entity.TOKEN));
@@ -348,7 +352,7 @@ public class InformationDetails extends BaseActivity {
         dataMap.put("tenantId", spUtils.getInt(Entity.TENANT_ID));
         List<String> idList = new ArrayList<>();
 
-        for (int i = 0; i < noticeList.size(); i++){
+        for (int i = 0; i < noticeList.size(); i++) {
             SystemMessageGroupEntity messageEntity = noticeList.get(i);
             List<SystemMessageEntity> list = messageEntity.getItems();
             for (int j = 0; j < list.size(); j++) {
@@ -384,18 +388,18 @@ public class InformationDetails extends BaseActivity {
                     break;
                 case 20:
                     String content = msg.obj.toString();
-                    if (myCommentEntity != null){
+                    if (myCommentEntity != null) {
                         CPRCDataEntity entity = new CPRCDataEntity();
                         entity.setType(CPRCTypeEntity.REPLY);
                         entity.setParentId(String.valueOf(myCommentEntity.getParentId()));
                         entity.setParentType(myCommentEntity.getReplyedType());
                         entity.setTarget(myCommentEntity.getTargetId());
                         entity.setTargetType(/*CPRCTypeEntity.TARGET_REPLY*/myCommentEntity.getTargetType());
-                        entity.setPreviousId(String.valueOf(myCommentEntity.getTargetId()));
+                        entity.setPreviousId(String.valueOf(myCommentEntity.getReplyId()));
                         entity.setToken(spUtils.getString(Entity.TOKEN));
                         entity.setUserId(spUtils.getInt(Entity.USER_ID));
                         entity.setContent(content.concat("//@")
-                                .concat(myCommentEntity.getReplyer() == null ? "" :myCommentEntity.getReplyer())
+                                .concat(myCommentEntity.getReplyer() == null ? "" : myCommentEntity.getReplyer())
                                 .concat(":").concat(myCommentEntity.getReplyContent() == null ? "" : myCommentEntity.getReplyContent()));
                         httpUtils.postComment(handler, entity);
                     }
@@ -412,12 +416,14 @@ public class InformationDetails extends BaseActivity {
                     commentEntity.setTargetTitle(myCommentEntity.getTargetTitle());
                     commentEntity.setTargetPublisher(myCommentEntity.getTargetPublisher());
                     commentAdapter.addItem(commentEntity, 0);*/
-                    switch (layoutType){
+                    switch (layoutType) {
                         case "comment":
                             setCommentRequestData(1);
+                            if (!commentEntityList.isEmpty()) commentEntityList.clear();
                             break;
                         case "praise":
                             requestPraiseData(1);
+                            if (!praiseEntityList.isEmpty()) praiseEntityList.clear();
                             break;
                     }
                     break;
@@ -425,14 +431,14 @@ public class InformationDetails extends BaseActivity {
                     switch (layoutType) {
                         case "comment":
                             JSONArray items = (JSONArray) msg.obj;
-                            if (!commentEntityList.isEmpty()) commentEntityList.clear();
+
                             commentEntityList.addAll(setListPraiseOrComment(items, "comment"));
                             commentBinding.infoCommentRecycler.setPullLoadMoreCompleted();
                             initCommentRecycleData();
                             break;
                         case "praise":
                             JSONArray result = (JSONArray) msg.obj;
-                            if (!praiseEntityList.isEmpty()) praiseEntityList.clear();
+
                             praiseEntityList = setListPraiseOrComment(result, "praise");
                             praiseBinding.praiseRecycler.setPullLoadMoreCompleted();
                             initPraiseRecycler();
@@ -457,7 +463,7 @@ public class InformationDetails extends BaseActivity {
 
     @Override
     public void onBackPressed() {
-        if (isReadInformation){
+        if (isReadInformation) {
             setResult(RESULT_OK, new Intent(InformationDetails.this, InformationMainActivity.class));
             isReadInformation = false;
         }

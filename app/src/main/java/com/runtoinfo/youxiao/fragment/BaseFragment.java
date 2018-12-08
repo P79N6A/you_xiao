@@ -13,9 +13,7 @@ import com.alibaba.sdk.android.man.MANServiceProvider;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.runtoinfo.httpUtils.bean.CourseDataEntity;
-import com.runtoinfo.youxiao.R;
 import com.runtoinfo.youxiao.entity.CourseTypeEntity;
-import com.runtoinfo.youxiao.globalTools.utils.DensityUtil;
 import com.runtoinfo.youxiao.globalTools.utils.SPUtils;
 
 import org.json.JSONArray;
@@ -54,8 +52,8 @@ public abstract class BaseFragment extends Fragment {
         spUtils = new SPUtils(getContext());
         courseTypeEntity = new CourseTypeEntity();
         //测试代码用，属于假数据
-        jsonResult = DensityUtil.getRawFiles(getActivity(), R.raw.json);
-        getRawFileJson();
+        //jsonResult = DensityUtil.getRawFiles(getActivity(), R.raw.json);
+        //getRawFileJson();
     }
 
     @Nullable

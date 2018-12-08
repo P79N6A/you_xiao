@@ -109,8 +109,8 @@ public class ArticleAdapter extends GroupRecyclerAdapter<String, CourseEntity> {
                     }
                 }
 
-
-                if (result > 0) {
+                boolean isLeave = courseEntity.isLeave();
+                if (isLeave) {
                     holder.getView(R.id.course_leave_layout).setEnabled(false);
                     holder.setTextColor(R.id.course_leave, Color.parseColor("#999999"));
                 } else /*if (result == 0)*/ {

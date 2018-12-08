@@ -5,7 +5,11 @@ import android.content.res.Configuration;
 import android.databinding.DataBindingUtil;
 import android.hardware.SensorManager;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
+import android.os.Message;
 import android.support.v4.app.Fragment;
+import android.text.TextUtils;
 import android.view.View;
 
 import com.alibaba.android.arouter.facade.annotation.Route;
@@ -15,9 +19,16 @@ import com.runto.cources.R;
 import com.runto.cources.databinding.ActivityBoutiqueCourseDetailsBinding;
 import com.runto.cources.fragment.CourseIntroductionFragment;
 import com.runto.cources.fragment.CourseListFragment;
+import com.runtoinfo.httpUtils.CPRCBean.CPRCDataEntity;
+import com.runtoinfo.httpUtils.CPRCBean.CPRCTypeEntity;
+import com.runtoinfo.httpUtils.CPRCBean.CollectOrPraiseEntity;
+import com.runtoinfo.httpUtils.HttpEntity;
 import com.runtoinfo.httpUtils.bean.CourseDataEntity;
+import com.runtoinfo.httpUtils.bean.RequestDataEntity;
 import com.runtoinfo.httpUtils.utils.HttpUtils;
 import com.runtoinfo.youxiao.globalTools.adapter.CommonViewPagerAdapter;
+import com.runtoinfo.youxiao.globalTools.utils.DialogMessage;
+import com.runtoinfo.youxiao.globalTools.utils.Entity;
 import com.shuyu.gsyvideoplayer.GSYVideoManager;
 import com.shuyu.gsyvideoplayer.builder.GSYVideoOptionBuilder;
 import com.shuyu.gsyvideoplayer.listener.GSYSampleCallBack;
@@ -46,6 +57,8 @@ public class BoutiqueCourseDetails extends BaseActivity {
     public OrientationUtils orientationUtils;
     public boolean isPlay;
     public boolean isPause;
+
+    public CollectOrPraiseEntity collectOrPraiseEntity;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -56,12 +69,58 @@ public class BoutiqueCourseDetails extends BaseActivity {
         binding = DataBindingUtil.setContentView(this, R.layout.activity_boutique_course_details);
         httpUtils = new HttpUtils(this);
         courseDataEntity = new Gson().fromJson(getIntent().getExtras().getString("json"), new TypeToken<CourseDataEntity>(){}.getType());
+        initCollectionStatus();
     }
 
     @Override
     public void setStatusBar() {
         super.setStatusBar();
     }
+
+    public void initCollectionStatus(){
+        RequestDataEntity requestDataEntity = new RequestDataEntity();
+        requestDataEntity.setToken(spUtils.getString(com.runtoinfo.youxiao.globalTools.utils.Entity.TOKEN));
+        requestDataEntity.setUrl(HttpEntity.MAIN_URL + HttpEntity.GET_COLLECT_OR_PRAISE_STATUS);
+        requestDataEntity.setId(courseDataEntity.getId());
+        requestDataEntity.setUserId(spUtils.getInt(Entity.USER_ID));
+
+        CPRCDataEntity cprcDataEntity = new CPRCDataEntity();
+        cprcDataEntity.setType(CPRCTypeEntity.COLLECTION);
+        cprcDataEntity.setTargetType(5);
+
+        httpUtils.getIsCollectionOrIsPraise(handler, requestDataEntity, cprcDataEntity);
+    }
+
+    public Handler handler = new Handler(Looper.getMainLooper()){
+        @Override
+        public void handleMessage(Message msg) {
+            switch (msg.what){
+                case 0:
+                    collectOrPraiseEntity = (CollectOrPraiseEntity) msg.obj;
+                    if (collectOrPraiseEntity != null){
+                        if (collectOrPraiseEntity.getHasFavorite()){
+                            binding.boutiqueCourseCollectionImage.setImageResource(R.drawable.boutique_course_collectioned);
+                            binding.courseDetailsTextview.setText("已收藏");
+                        }else{
+                            binding.boutiqueCourseCollectionImage.setImageResource(R.drawable.boutique_course_collection);
+                            binding.courseDetailsTextview.setText("收藏");
+                        }
+                    }
+                    break;
+                case 3:
+                    collectOrPraiseEntity.setHasFavorite(true);
+                    binding.boutiqueCourseCollectionImage.setImageResource(R.drawable.boutique_course_collectioned);
+                    binding.courseDetailsTextview.setText("已收藏");
+                    DialogMessage.showToast(BoutiqueCourseDetails.this, "收藏成功");
+                    break;
+                case 200:
+                    collectOrPraiseEntity.setHasFavorite(false);
+                    binding.boutiqueCourseCollectionImage.setImageResource(R.drawable.boutique_course_collection);
+                    binding.courseDetailsTextview.setText("收藏");
+                    break;
+            }
+        }
+    };
 
     @SuppressLint("SetTextI18n")
     public void initData(){
@@ -73,7 +132,8 @@ public class BoutiqueCourseDetails extends BaseActivity {
             binding.boutiqueCourseName.setText(courseDataEntity.getName());
             httpUtils.postPhoto(this, courseDataEntity.getCover(), binding.boutiqueCourseDetailsImageView);
             //binding.boutiqueCourseOpenTime.setText(courseDataEntity.getStartTime().split("T")[0] + "开课");
-            binding.boutiqueCoursePurchaseNumber.setText(courseDataEntity.getPurchasedNumber() + "人购买");
+            String number = TextUtils.isEmpty(courseDataEntity.getPurchasedNumber()) ? "0" : courseDataEntity.getPurchasedNumber();
+            binding.boutiqueCoursePurchaseNumber.setText(number + " 人购买");
             binding.boutiqueCoursePrice.setText("¥" + courseDataEntity.getPrice());
         }
 
@@ -90,12 +150,21 @@ public class BoutiqueCourseDetails extends BaseActivity {
         binding.collectionLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (clickCount == 0) {
-                    clickCount++;
-                    binding.boutiqueCourseCollectionImage.setImageResource(R.drawable.boutique_course_collectioned);
+                if (collectOrPraiseEntity.getHasFavorite()) {
+                    //取消收藏
+                    RequestDataEntity requestDataEntity = new RequestDataEntity();
+                    requestDataEntity.setToken(spUtils.getString(Entity.TOKEN));
+                    requestDataEntity.setUrl(HttpEntity.MAIN_URL + HttpEntity.DELETE_COMMENT_CREATE);
+                    requestDataEntity.setId(collectOrPraiseEntity.getFavoriteId());
+                    httpUtils.delectColleciton(handler, requestDataEntity);
                 }else{
-                    clickCount = 0;
-                    binding.boutiqueCourseCollectionImage.setImageResource(R.drawable.boutique_course_collection);
+                    CPRCDataEntity dataEntity = new CPRCDataEntity();
+                    dataEntity.setToken(spUtils.getString(Entity.TOKEN));
+                    dataEntity.setType(CPRCTypeEntity.COLLECTION);
+                    dataEntity.setTarget(courseDataEntity.getId());
+                    dataEntity.setTargetType(5);
+                    dataEntity.setUserId(spUtils.getInt(Entity.USER_ID));
+                    httpUtils.postComment(handler, dataEntity);
                 }
             }
         });

@@ -16,16 +16,14 @@ import com.alibaba.android.arouter.launcher.ARouter;
 import com.google.gson.Gson;
 import com.runtoinfo.httpUtils.HttpEntity;
 import com.runtoinfo.httpUtils.bean.RequestDataEntity;
-import com.runtoinfo.httpUtils.bean.TopiceHttpResultEntity;
+import com.runtoinfo.httpUtils.bean.SchoolDynamicsNewEntity;
 import com.runtoinfo.httpUtils.utils.HttpUtils;
 import com.runtoinfo.youxiao.R;
 import com.runtoinfo.youxiao.adapter.TopicsArticleAdapter;
 import com.runtoinfo.youxiao.adapter.ViewPageAdapter;
 import com.runtoinfo.youxiao.databinding.FragmentTopicsBinding;
-import com.runtoinfo.youxiao.entity.SchoolDynamicsEntity;
 import com.runtoinfo.youxiao.globalTools.adapter.UniversalRecyclerAdapter;
 import com.runtoinfo.youxiao.globalTools.utils.DensityUtil;
-import com.runtoinfo.youxiao.globalTools.utils.DialogMessage;
 import com.runtoinfo.youxiao.globalTools.utils.Entity;
 import com.runtoinfo.youxiao.globalTools.utils.IntentDataType;
 import com.runtoinfo.youxiao.ui.ImageViewLoadModel;
@@ -45,7 +43,7 @@ import java.util.concurrent.ScheduledExecutorService;
 public class TopicsFragment extends BaseFragment {
 
     public List<View> listView = new ArrayList<>();
-    public List<TopiceHttpResultEntity> resultList = new ArrayList<>();
+    public List<SchoolDynamicsNewEntity> resultList = new ArrayList<>();
     public ScheduledExecutorService scheduledExecutorService = Executors.newSingleThreadScheduledExecutor();
     public FragmentTopicsBinding binding;
     public ViewPageAdapter adapter;
@@ -140,23 +138,17 @@ public class TopicsFragment extends BaseFragment {
         articleAdapter.setOnItemClickListener(new UniversalRecyclerAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(View view, int position) {
-                TopiceHttpResultEntity topics = articleAdapter.getList().get(position);
-                String coverType = topics.getCoverType();
+                SchoolDynamicsNewEntity topics = articleAdapter.getList().get(position);
+                int coverType = topics.getCoverType();
                 switch (coverType){
-                    case "0":
-                        SchoolDynamicsEntity schoolEntity = new SchoolDynamicsEntity();
-                        schoolEntity.setPublishTime(topics.getPublishTime());
-                        schoolEntity.setContent(topics.getContentpublic());
-                        schoolEntity.setReadNumber(Integer.valueOf(topics.getReplyNumber()));
-                        schoolEntity.setTile(topics.getTitle());
-                        String data = new Gson().toJson(schoolEntity);
-
-                        ARouter.getInstance().build("/main/schoolDynamics").withString(IntentDataType.INTENT_KEY, IntentDataType.TOPICS)
-                        .withString(IntentDataType.DATA, data);
+                    case 0:
+                        String data = new Gson().toJson(topics);
+                        ARouter.getInstance().build("/main/topicDetails").withString(IntentDataType.INTENT_KEY, IntentDataType.TOPICS)
+                        .withString(IntentDataType.DATA, data).navigation();
                         break;
-                    case "1"://视频
+                    case 1://视频
                         break;
-                    case "null":
+                    /*case "null":
                         SchoolDynamicsEntity schoolEntity1 = new SchoolDynamicsEntity();
                         schoolEntity1.setPublishTime(topics.getPublishTime());
                         schoolEntity1.setContent(topics.getContentpublic());
@@ -167,7 +159,7 @@ public class TopicsFragment extends BaseFragment {
 
                         ARouter.getInstance().build("/main/schoolDynamics").withString(IntentDataType.INTENT_KEY, IntentDataType.TOPICS)
                                 .withString(IntentDataType.DATA, data1).navigation();
-                        break;
+                        break;*/
                 }
             }
         });

@@ -453,7 +453,7 @@ public class LoginActivity extends BaseActivity {
         long oldTime = spUtils.getLong(Entity.OLD_TIME);
         long result = nowTime - oldTime;
         if (!TextUtils.isEmpty(spUtils.getString(Entity.TOKEN))) {
-            if (result >= 7200) {
+            if (result >= 3600*24*7) {
                 spUtils.setString(Entity.TOKEN, "");
                 spUtils.setLong(Entity.OLD_TIME, nowTime);
             } else {

@@ -35,6 +35,7 @@
             android:layout_height="wrap_content"
             android:text="每天七分钟，教你更好提高自己"
             android:textColor="#333333"
+            android:singleLine="true"
             android:textSize="15sp" />
 
         <TextView

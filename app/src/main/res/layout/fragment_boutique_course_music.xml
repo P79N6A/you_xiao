@@ -42,7 +42,6 @@
                     android:layout_marginTop="10dp"
                     app:tabBackground="@android:color/transparent"
                     app:tabMode="scrollable"
-                    app:tabSelectedTextColor="#339ef8"
                     app:tabTextAppearance="@style/Table_text_style"
                     app:tabTextColor="#666666" />
 

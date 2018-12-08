@@ -2,6 +2,7 @@ package com.runtoinfo.youxiao.fragment;
 
 import android.annotation.SuppressLint;
 import android.databinding.DataBindingUtil;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
@@ -9,6 +10,8 @@ import android.os.Message;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
+import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -45,14 +48,16 @@ public class MusicFragment extends BaseFragment{
     public List<String> iconPath = new ArrayList<>();
     public TextView textView;
     public ImageView imageView, imageBack;
-    public int type;
+    public String type;
     public HttpUtils httpUtils;
     public List<FineClassCourseEntity> dataList = new ArrayList<>();
-    public int colors[] = {R.drawable.circle_image_view1, R.drawable.circle_image_view2,
+    public int backgrounds[] = {R.drawable.circle_image_view1, R.drawable.circle_image_view2,
             R.drawable.circle_image_view3, R.drawable.circle_image_view4, R.drawable.circle_image_view5,};
+    public int colors[] = {Color.parseColor("#339ef8"), Color.parseColor("#f45c53"),
+            Color.parseColor("#48d3c0"), Color.parseColor("#c765c4"), Color.parseColor("#f7d000")};
 
-    public MusicFragment(int type){
-        this.type = type;
+    public MusicFragment(String type){
+        Entity.courseType = type;
     }
     public MusicFragment(){
         super();
@@ -73,21 +78,19 @@ public class MusicFragment extends BaseFragment{
 
     public void initTalLayoutView(){
 
-        if (type == -1) {
+        if (TextUtils.isEmpty(Entity.courseType)) {
             binding.boutiqueCourseChildTablayout.setVisibility(View.GONE);
-            fragmentList.add(new BoutiqueCourseChildFragment(-1));
+            fragmentList.add(new BoutiqueCourseChildFragment("", ""));
             initTalLayoutData();
         } else {
             binding.boutiqueCourseChildTablayout.setVisibility(View.VISIBLE);
-            courseTypeEntity.setCourseType(String.valueOf(type));
             Map<String, Object> map = new HashMap<>();
-            map.put("ParentId", type);
+            map.put("ParentId", Entity.courseType);
             map.put("CategoryId", 111);
 
             RequestDataEntity requestDataEntity = new RequestDataEntity();
             requestDataEntity.setUrl(HttpEntity.MAIN_URL + HttpEntity.GET_COURSE_SECOND_TYPE);
             requestDataEntity.setToken(spUtils.getString(Entity.TOKEN));
-            requestDataEntity.setType(type);
 
             httpUtils.getChildType(handler, requestDataEntity, map, dataList);
         }
@@ -101,8 +104,9 @@ public class MusicFragment extends BaseFragment{
 
         viewPagerAdapter = new BoutiqueCourseChildPagerAdapter(getChildFragmentManager(), fragmentList);
         binding.boutiqueMusicChildViewpager.setAdapter(viewPagerAdapter);
-        binding.boutiqueMusicChildViewpager.setOffscreenPageLimit(titles.size());
+        binding.boutiqueMusicChildViewpager.setOffscreenPageLimit(0);
         binding.boutiqueCourseChildTablayout.setupWithViewPager(binding.boutiqueMusicChildViewpager);
+        binding.boutiqueMusicChildViewpager.setCurrentItem(0,false);
 
         for (int i = 0; i < titles.size(); i++) {
             TabLayout.Tab tab = binding.boutiqueCourseChildTablayout.getTabAt(i);
@@ -116,21 +120,30 @@ public class MusicFragment extends BaseFragment{
             imageBack = tab.getCustomView().findViewById(R.id.table_layout_item_imageView);
             if (titles.size() > 0 && iconPath.size() > 0) {
                 textView.setText(titles.get(i));
-                imageBack.setBackgroundResource(colors[getIndexOfColors(i)]);
+                imageBack.setBackgroundResource(backgrounds[getIndexOfColors(i)]);
                 httpUtils.postPhoto(getActivity(), HttpEntity.FILE_HEAD + iconPath.get(i), imageView);
             }
         }
 
         binding.boutiqueCourseChildTablayout.setOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
+            @SuppressLint("ResourceAsColor")
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
                 tab.getCustomView().findViewById(R.id.table_layout_item_textView).setSelected(true);
+                ((TextView) tab.getCustomView().findViewById(R.id.table_layout_item_textView)).setTextColor(colors[tab.getPosition()]);
                 binding.boutiqueMusicChildViewpager.setCurrentItem(tab.getPosition());
+                Log.e("Position",String.valueOf(tab.getPosition()));
+
+                FineClassCourseEntity courseEntity = dataList.get(tab.getPosition());
+                Entity.subject = String.valueOf(courseEntity.getId());
+
+                BoutiqueCourseInChildFragment fragment = new BoutiqueCourseInChildFragment();
+                fragment.refreshView();
             }
 
             @Override
             public void onTabUnselected(TabLayout.Tab tab) {
-
+                ((TextView) tab.getCustomView().findViewById(R.id.table_layout_item_textView)).setTextColor(Color.parseColor("#666666"));
             }
 
             @Override
@@ -151,10 +164,10 @@ public class MusicFragment extends BaseFragment{
                             FineClassCourseEntity entity = dataList.get(i);
                             titles.add(entity.getName());
                             iconPath.add(entity.getTargetCover());
-                            fragmentList.add(new BoutiqueCourseChildFragment( dataList.get(i).getId()));
+                            fragmentList.add(new BoutiqueCourseChildFragment(type, String.valueOf(dataList.get(i).getId())));
                         }
                     }else{
-                        fragmentList.add(new BoutiqueCourseChildFragment(-1));
+                        //fragmentList.add(new BoutiqueCourseChildFragment("", ""));
                         binding.boutiqueCourseChildTablayout.setVisibility(View.GONE);
                     }
                     initTalLayoutData();

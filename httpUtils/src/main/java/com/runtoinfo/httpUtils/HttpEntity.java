@@ -124,6 +124,10 @@ public class HttpEntity {
      */
     public final static String COURSE_TOPICS = "/api/services/app/SpecialTopic/GetAll";
     /**
+     * 获取专题详情
+     */
+    public final static String TOPICS_DETAILS = "/api/services/app/SpecialTopic/Get";
+    /**
      * 创建评论、回复、赞、收藏
      */
     public final static String COURSE_COMMENT_CREATE = "/api/services/app/Comment/Create";
@@ -159,6 +163,10 @@ public class HttpEntity {
      * 获取用户未读消息数量
      */
     public final static String GET_NOTIFICATION_COUNT = "/api/services/app/Notification/GetUserNotificationCount";
+    /**
+     * 获取用户收藏点赞
+     */
+    public final static String GET_COLLECT_OR_PRAISE_STATUS = "/api/services/app/Comment/GetPraiseAndFavoriteStatus";
     /**
      * 获取指定的消息
      */

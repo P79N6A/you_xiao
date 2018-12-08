@@ -41,7 +41,9 @@ public class MyCommentAdapter extends UniversalRecyclerAdapter<MyCommentEntity> 
         holder.setText(R.id.reply_user_name, myCommentEntity.getReplyer());
         holder.setText(R.id.reply_time, myCommentEntity.getReplyTime());
         Glide.with(mContext).load(HttpEntity.IMAGE_HEAD + myCommentEntity.getReplyerAvatar()).into((ImageView) holder.getView(R.id.infor_praise_user_ava));
-        holder.setText(R.id.reply_details, DensityUtil.setStringColor(myCommentEntity.getReplyContent()));
+        String content = myCommentEntity.getReplyContent();
+        if (content.indexOf("(null)") > 0) content = content.replaceAll("\\(null\\)", "");
+        holder.setText(R.id.reply_details, DensityUtil.setStringColor(content));
         Glide.with(mContext).load(HttpEntity.IMAGE_HEAD + myCommentEntity.getTargetCover()).into((ImageView) holder.getView(R.id.reply_image));
 
         holder.setText(R.id.target_title, myCommentEntity.getTargetTitle());

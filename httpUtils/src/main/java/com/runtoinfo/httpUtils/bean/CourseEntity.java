@@ -24,7 +24,25 @@ public class CourseEntity {
     public String coverPhoto;
     public boolean isSignIn;
     public String courseMessage;
+    public boolean isLeave;
+    public String homework;
     public int type;
+
+    public boolean isLeave() {
+        return isLeave;
+    }
+
+    public void setLeave(boolean leave) {
+        isLeave = leave;
+    }
+
+    public String getHomework() {
+        return homework;
+    }
+
+    public void setHomework(String homework) {
+        this.homework = homework;
+    }
 
     public int getType() {
         return type;

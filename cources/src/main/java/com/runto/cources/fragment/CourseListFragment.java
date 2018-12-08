@@ -14,6 +14,7 @@ import com.runto.cources.R;
 import com.runto.cources.activities.BoutiqueCourseDetails;
 import com.runto.cources.adapter.ListViewAdapter;
 import com.runto.cources.databinding.FragmentCourseListBinding;
+import com.runtoinfo.httpUtils.HttpEntity;
 import com.runtoinfo.httpUtils.bean.ChildContent;
 import com.runtoinfo.httpUtils.bean.CourseChildData;
 
@@ -56,7 +57,7 @@ public class CourseListFragment extends Fragment {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 //ARouter.getInstance().build("/electronic/electronicScore").navigation();
                 BoutiqueCourseDetails details = (BoutiqueCourseDetails) getActivity();
-                details.initGSYVideoView("http://pic.ibaotu.com/00/20/08/96e888piCHck.mp4"/*HttpEntity.FILE_HEAD + childContents.get(position).getTarget()*/);
+                details.initGSYVideoView(/*"http://pic.ibaotu.com/00/20/08/96e888piCHck.mp4"*/HttpEntity.FILE_HEAD + childContents.get(position).getTarget());
             }
         });
     }

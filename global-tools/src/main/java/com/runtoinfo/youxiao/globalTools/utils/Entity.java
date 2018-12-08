@@ -28,4 +28,7 @@ public class Entity {
     public final static String BIRTHDAY = "BIRTHDAY";
     public final static String OLD_TIME = "OLD_TIME";
     public final static String TARGET_TYPE = "TARGET_TYPE";
+    public static String courseType = "";
+    public static String subject = "";
+    public static String medialType = "";
  }

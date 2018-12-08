@@ -51,6 +51,7 @@ public class InformationMainActivity extends BaseActivity {
         for (int i = 0; i < notificationNames.length; i++){
             requestDataEntity.setType(i + 1);
             map.put("notificationName", notificationNames[i]);
+            map.put("state", 0);
             httpUtils.getNotificationCount(handler, requestDataEntity, map);
         }
     }

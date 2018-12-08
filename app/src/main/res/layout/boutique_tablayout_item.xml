@@ -15,11 +15,13 @@
             android:layout_width="45dp"
             android:layout_height="45dp"
             android:layout_gravity="center"
+            android:layout_centerVertical="true"
+            android:layout_centerHorizontal="true"
             android:contentDescription="@string/app_name" />
 
         <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="45dp"
+            android:layout_height="45dp"
             android:id="@+id/table_layout_item"
             android:layout_centerVertical="true"
             android:layout_centerHorizontal="true"/>

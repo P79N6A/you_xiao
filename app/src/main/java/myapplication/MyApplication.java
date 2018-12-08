@@ -25,6 +25,7 @@ import com.alibaba.sdk.android.push.CommonCallback;
 import com.alibaba.sdk.android.push.noonesdk.PushServiceFactory;
 import com.alibaba.sdk.android.push.register.HuaWeiRegister;
 import com.alibaba.sdk.android.push.register.MiPushRegister;
+import com.runtoinfo.youxiao.ActivityCallBack;
 import com.runtoinfo.youxiao.globalTools.utils.Entity;
 import com.runtoinfo.youxiao.globalTools.utils.SPUtils;
 import com.squareup.leakcanary.LeakCanary;
@@ -76,6 +77,7 @@ public class MyApplication extends Application {
         initBackgoundCallBack();
         initQbSdk();
         //initPushAuxiliaryChannel();
+        MyApplication.this.registerActivityLifecycleCallbacks(new ActivityCallBack());
         CrashReport.initCrashReport(getApplicationContext(), "446920bced", true);
     }
 

@@ -6,6 +6,7 @@ import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
 import android.support.annotation.Nullable;
+import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -18,10 +19,9 @@ import com.runtoinfo.httpUtils.bean.RequestDataEntity;
 import com.runtoinfo.httpUtils.utils.HttpUtils;
 import com.runtoinfo.youxiao.R;
 import com.runtoinfo.youxiao.adapter.BoutiqueCourseViewPagerAdapter;
-import com.runtoinfo.youxiao.globalTools.utils.DensityUtil;
-import com.runtoinfo.youxiao.globalTools.utils.DialogMessage;
-import com.runtoinfo.youxiao.globalTools.utils.Entity;
 import com.runtoinfo.youxiao.databinding.FragmentFineClassBinding;
+import com.runtoinfo.youxiao.globalTools.utils.DensityUtil;
+import com.runtoinfo.youxiao.globalTools.utils.Entity;
 import com.runtoinfo.youxiao.ui.SetTabLayoutWidth;
 
 import java.util.ArrayList;
@@ -65,6 +65,25 @@ public class FineClassFragment extends BaseFragment {
         binding.boutiqueCourseViewpager.setAdapter(viewPagerAdapter);
         binding.boutiqueCourseViewpager.setOffscreenPageLimit(titles.size());
         binding.boutiqueCourseTablayout.setupWithViewPager(binding.boutiqueCourseViewpager);
+
+        binding.boutiqueCourseTablayout.setOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
+            @Override
+            public void onTabSelected(TabLayout.Tab tab) {
+                if (tab.getPosition() != 0){
+                    Entity.courseType = String.valueOf(dataList.get(tab.getPosition()).getId());
+                }
+            }
+
+            @Override
+            public void onTabUnselected(TabLayout.Tab tab) {
+
+            }
+
+            @Override
+            public void onTabReselected(TabLayout.Tab tab) {
+
+            }
+        });
     }
 
     //请求大分类
@@ -81,11 +100,11 @@ public class FineClassFragment extends BaseFragment {
             switch (msg.what){
                 case 0:
                     titles.add("全部");
-                    fragments.add(new MusicFragment(-1));
+                    fragments.add(new MusicFragment(""));
                     if (dataList.size() > 0){
                         for (int i = 0; i < dataList.size(); i++) {
                             titles.add(String.valueOf(dataList.get(i).getName()));
-                            fragments.add(new MusicFragment(dataList.get(i).getId()));
+                            fragments.add(new MusicFragment(String.valueOf(dataList.get(i).getId())));
                         }
                     }
                     initTableData();

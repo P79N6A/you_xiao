@@ -22,6 +22,15 @@ public class CourseDataEntity {
     public String introduction;
     public CourseChildData courseContents;
     public int mediaType;
+    public int id;
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
 
     public int getTenantId() {
         return tenantId;

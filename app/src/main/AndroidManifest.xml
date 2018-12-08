@@ -66,6 +66,8 @@
         <activity android:name=".activities.SchoolDynamics"
             android:configChanges="orientation|screenSize|keyboardHidden"/>
 
+        <activity android:name=".activities.TopicDetailsActivity"/>
+
         <provider
             android:name="android.support.v4.content.FileProvider"
             android:authorities="${applicationId}.fileprovider"
